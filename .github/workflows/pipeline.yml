@@ -24,6 +24,5 @@ jobs:
     steps:
       - name: Unity - Builder
         uses: game-ci/unity-builder@v4.7.0
-        #with:
-          #projectPath: # optional, default is 
-          # Path to the build profile to activate, relative to the project root.
+        with:
+          projectPath: .\UnityProject\While You're Here
