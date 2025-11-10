@@ -5,6 +5,7 @@ on:
     branches: [ "pipelineTest" ]
   pull_request:
     branches: [ "development" ]
+    tags: [ "Programming", "Integration" ]
 
   workflow_dispatch:
 
@@ -17,13 +18,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
     
-      # - uses: actions/cache@v3
-      #   with:
-      #     path: ./UnityProject/WhileYoureHere/Library
-      #     key: Library-WhileYoureHere-WebGL
-      #     restore-keys: |
-      #       Library-WhileYoureHere-
-      #       Library-
+      - uses: actions/cache@v3
+        with:
+          path: ./UnityProject/WhileYoureHere/Library
+          key: Library-WhileYoureHere-WebGL
+          restore-keys: |
+            Library-WhileYoureHere-
+            Library-
     
       - name: Build
         uses: game-ci/unity-builder@v4
@@ -35,7 +36,7 @@ jobs:
           targetPlatform: WebGL
           projectPath: ./UnityProject/WhileYoureHere
 
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: Build
-      #     path: build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Build
+          path: build
