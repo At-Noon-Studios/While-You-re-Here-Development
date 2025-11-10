@@ -1,8 +1,6 @@
 name: Unity Pipeline
 
 on:
-  push:
-    branches: [ "pipelineTest" ]
   pull_request:
     branches: [ "development" ]
     tags: [ "Programming", "Integration" ]
@@ -20,10 +18,9 @@ jobs:
     
       - uses: actions/cache@v3
         with:
-          path: ./UnityProject/WhileYoureHere/Library
-          key: Library-WhileYoureHere-WebGL
+          path: UnityProject/WhileYoureHere/Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-WhileYoureHere-
             Library-
     
       - name: Build
@@ -40,3 +37,16 @@ jobs:
         with:
           name: Build
           path: build
+
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
