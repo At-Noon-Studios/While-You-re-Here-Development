@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cache
-      - uses: actions/cache@v3
-        with:
-          path: ./UnityProject/WhileYoureHere/Library
-          key: Library-WhileYoureHere-WebGL
-          restore-keys: |
-            Library-WhileYoureHere-
-            Library-
+      # - name: Cache
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ./UnityProject/WhileYoureHere/Library
+      #     key: Library-WhileYoureHere-WebGL
+      #     restore-keys: |
+      #       Library-WhileYoureHere-
+      #       Library-
     
       - name: Build
       - uses: game-ci/unity-builder@v4
@@ -32,8 +32,8 @@ jobs:
           targetPlatform: WebGL
           projectPath: ./UnityProject/WhileYoureHere
 
-      - name: Upload
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Build
-          path: build
+      # - name: Upload
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Build
+      #     path: build
