@@ -1,0 +1,40 @@
+name: Build Pipeline
+
+on:
+  push:
+    branches: [ "development" ]
+    tags: [ "Programming", "Integration" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+    
+      - uses: actions/cache@v3
+        with:
+          path: UnityProject/WhileYoureHere/Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+    
+      - name: Build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+          projectPath: ./UnityProject/WhileYoureHere
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Build
+          path: build
+          
