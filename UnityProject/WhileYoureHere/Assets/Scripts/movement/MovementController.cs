@@ -7,21 +7,19 @@ using Vector3 = UnityEngine.Vector3;
 [RequireComponent(typeof(CharacterController))]
 public class MovementController : MonoBehaviour
 {
-    [Header("Movement Variables")]
     private float _moveX;
     private float _moveY;
     private readonly bool _isInput;
 
-    [SerializeField] private float _movementSpeed = 2.2f;
+    [SerializeField] private float movementSpeed = 2.2f;
 
-    [Header("Components for animation & character controller")]
     Animator _animator;
     CharacterController _controller;
 
     [Header("Variables for the headbob")]
-    private float _timer;
     public float walkBobSpeed = 5.0f;
     public float walkBobAmount = 0.05f;
+    private float _timer;
 
     private Camera _mainCamera;
     private readonly float _defaultYPos;
@@ -60,6 +58,6 @@ public class MovementController : MonoBehaviour
         _animator.SetBool("isStrafingRight", _moveX > 0);
 
         Vector3 movementFinal = new(_moveX, 0.0f, _moveY);
-        _controller.Move(_movementSpeed * Time.deltaTime * movementFinal);
+        _controller.Move(movementSpeed * Time.deltaTime * movementFinal);
     }    
 }
