@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("UI References")]
     public TextMeshProUGUI speakerText;
     public TextMeshProUGUI dialogueText;
     public Transform choicesContainer;
@@ -17,14 +18,24 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueNodes.Clear();
         foreach (var node in nodes)
-            dialogueNodes[node.nodeID] = node;
+        {
+            if (!dialogueNodes.ContainsKey(node.nodeID))
+                dialogueNodes[node.nodeID] = node;
+        }
 
         DisplayNode(startingNodeID);
     }
 
     private void DisplayNode(string nodeID)
     {
+        if (!dialogueNodes.ContainsKey(nodeID))
+        {
+            Debug.LogError($"Dialogue node with ID '{nodeID}' not found!");
+            return;
+        }
+
         currentNode = dialogueNodes[nodeID];
+
         speakerText.text = currentNode.speakerName;
         dialogueText.text = currentNode.dialogueText;
 
