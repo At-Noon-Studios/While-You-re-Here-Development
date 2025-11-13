@@ -9,9 +9,10 @@ public class MovementController : MonoBehaviour
 {
     private float _moveX;
     private float _moveY;
-    private readonly bool _isInput;
+    private bool _isInput;
 
-    [SerializeField] private float movementSpeed = 2.2f;
+    
+[SerializeField] private float movementSpeed = 2.2f;
 
     Animator _animator;
     CharacterController _controller;
