@@ -15,7 +15,6 @@ public class MovementTest : MonoBehaviour
 
 
     int layerMask = 1 << 6;
-    public MovementController movementTest;
 
     public float time;
     public float footstepOffset = 0.5f;
@@ -24,7 +23,6 @@ public class MovementTest : MonoBehaviour
     {
         _audioSource = GetComponent<AudioSource>();
         _audioSource.playOnAwake = false;
-        movementTest = GetComponent<MovementController>();
     }
 
     void Update()

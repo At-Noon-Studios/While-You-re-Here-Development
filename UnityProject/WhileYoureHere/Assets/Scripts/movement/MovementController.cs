@@ -11,8 +11,12 @@ public class MovementController : MonoBehaviour
     private float _moveY;
     private bool _isInput;
 
-    
-[SerializeField] private float movementSpeed = 2.2f;
+    public bool IsInput
+    {
+        get { return _isInput; }
+    }
+
+    [SerializeField] private float movementSpeed = 2.2f;
 
     Animator _animator;
     CharacterController _controller;
@@ -31,7 +35,7 @@ public class MovementController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _mainCamera = GetComponentInChildren<Camera>();
     }
-    
+
     void OnMove(InputValue value)
     {
         Vector2 movement = value.Get<Vector2>();
@@ -42,7 +46,7 @@ public class MovementController : MonoBehaviour
     void HeadBob()
     {
         bool _isInput = _moveY != 0 || _moveX != 0;
-        if(_isInput)
+        if (_isInput)
         {
             _timer += Time.deltaTime * walkBobSpeed;
             _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, _defaultYPos + Mathf.Sin(_timer) * walkBobAmount, _mainCamera.transform.localPosition.z);
@@ -60,5 +64,5 @@ public class MovementController : MonoBehaviour
 
         Vector3 movementFinal = new(_moveX, 0.0f, _moveY);
         _controller.Move(movementSpeed * Time.deltaTime * movementFinal);
-    }    
+    }
 }
