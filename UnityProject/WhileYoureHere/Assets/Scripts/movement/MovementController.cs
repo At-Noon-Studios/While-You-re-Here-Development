@@ -9,12 +9,7 @@ public class MovementController : MonoBehaviour
 {
     private float _moveX;
     private float _moveY;
-    private bool _isInput;
-
-    public bool IsInput
-    {
-        get { return _isInput; }
-    }
+    public bool _isInput;
 
     [SerializeField] private float movementSpeed = 2.2f;
 

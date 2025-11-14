@@ -14,12 +14,10 @@ public class FootstepsSound : MonoBehaviour
     [SerializeField] AudioClip[] snow;
     [SerializeField] AudioClip[] grass;
     [SerializeField] AudioClip[] floor;
-
     // Camera mainCamera;
+    // [SerializeField] Transform raycastHelper;
 
-    [SerializeField] Transform raycastHelper;
-
-
+    [SerializeField] MovementController player;
 
     [Header("Variables for footstep frequency")]
     public float time;
@@ -29,7 +27,6 @@ public class FootstepsSound : MonoBehaviour
     {
         _audioSource = GetComponent<AudioSource>();
         _audioSource.playOnAwake = false;
-        // mainCamera = Camera.main;
     }
 
     void Update()
@@ -39,16 +36,16 @@ public class FootstepsSound : MonoBehaviour
 
     void HandleFootsteps()
     {
-        int layerMask = 1 << 6;
-        layerMask = ~layerMask;
-
+        //int layerMask = 1 << 6;
+        //layerMask = ~layerMask;
         time -= Time.deltaTime;
+
         if (time < 0.0f)
         {
-            if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out RaycastHit hit, 1f, layerMask))
+            if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
             {
-                Debug.Log("I am hitting: " + hit.collider.name);
-                Debug.DrawRay(raycastHelper.transform.position, Vector3.down * .01f, Color.red, 60);
+                //Debug.Log("I am hitting: " + hit.collider.name);
+                //Debug.DrawRay(transform.position, Vector3.down * .01f, Color.red, 60);
                 switch (hit.collider.tag)
                 {
                     case "GROUND/snow":
