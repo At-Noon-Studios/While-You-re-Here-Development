@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Interactable
 {
     [RequireComponent(typeof(Renderer))]
-    [RequireComponent(typeof(Collider))] //Not used in this script but it also makes no sense to add this component without having a collider
+    [RequireComponent(typeof(Collider))] //Not used in this script, but it also makes no sense to add this component without having a collider
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
         [SerializeField] private Material outlineMaterial;

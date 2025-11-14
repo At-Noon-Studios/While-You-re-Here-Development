@@ -1,5 +1,4 @@
-﻿using EventChannels;
-using Interactable;
+﻿using Interactable;
 using JetBrains.Annotations;
 using ScriptableObjects;
 using UnityEngine;
@@ -22,18 +21,18 @@ namespace PlayerControls
         private void RefreshCurrentTarget()
         {
             var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            
-            Debug.DrawRay(ray.origin, ray.direction.normalized * data.InteractionReach, Color.red, 0.01f);
-            
             if (!Physics.Raycast(ray, out var hit, data.InteractionReach))
             {
-                _currentTarget?.OnHoverExit();
-                _currentTarget = null;
+                UpdateCurrentTarget(null);
                 return;
             }
-            
             hit.collider.TryGetComponent(out IInteractable newTarget);
             if (newTarget == _currentTarget) return;
+            UpdateCurrentTarget(newTarget);
+        }
+
+        private void UpdateCurrentTarget(IInteractable newTarget)
+        {
             _currentTarget?.OnHoverExit();
             _currentTarget = newTarget;
             newTarget?.OnHoverEnter();
