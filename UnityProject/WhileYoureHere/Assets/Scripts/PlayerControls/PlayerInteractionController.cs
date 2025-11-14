@@ -1,46 +1,48 @@
 ﻿using EventChannels;
+using Interactable;
 using JetBrains.Annotations;
+using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerControls
 {
     public class PlayerInteractionController : MonoBehaviour
     {
-        [Header("Listen to")]
-        [SerializeField] private Vector2EventChannel look;
-
-        [SerializeField] private Material outlineMaterial;
+        [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
-        [CanBeNull] private Collider _currentHit;
-        [CanBeNull] private IInteractable _currentHitInteractable;
+        
+        [CanBeNull] private IInteractable _currentTarget;
 
-        private void OnEnable()
+        private void Update()
         {
-            look.OnRaise += OnLook;
+            RefreshCurrentTarget();
+        }
+
+        private void RefreshCurrentTarget()
+        {
+            var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             
+            Debug.DrawRay(ray.origin, ray.direction.normalized * data.InteractionReach, Color.red, 0.01f);
+            
+            if (!Physics.Raycast(ray, out var hit, data.InteractionReach))
+            {
+                _currentTarget?.OnHoverExit();
+                _currentTarget = null;
+                return;
+            }
+            
+            hit.collider.TryGetComponent(out IInteractable newTarget);
+            if (newTarget == _currentTarget) return;
+            _currentTarget?.OnHoverExit();
+            _currentTarget = newTarget;
+            newTarget?.OnHoverEnter();
         }
-
-        private void OnDisable()
-        {
-            look.OnRaise -= OnLook;
-        }
-
-        private void OnLook(Vector2 _)
-        {
-            var ray = playerCamera.ScreenPointToRay(Vector3.zero);
-            if (!Physics.Raycast(ray, out var hit)) return;
-            var hitCollider = hit.collider;
-            if (_currentHit == hitCollider) return;
-            // _currentHit.GetComponent<Renderer>().materials REMOVE OUTLINE MATERIAL FROM ARRAY
-            _currentHit = hitCollider;
-            // _currentHit.GetComponent<Renderer>().materials ADD OUTLINE MATERIAL TO ARRAY
-            _currentHitInteractable = hitCollider.GetComponent<IInteractable>();
-        }
-
+        
         //Action input callback
         private void OnInteract()
         {
-            _currentHitInteractable?.Interact();
+            _currentTarget?.Interact();
         }
     }
 }
