@@ -5,8 +5,8 @@ namespace picking_up_objects
 {
     public class Pickable : MonoBehaviour, IWeighted
     {
-        [Header("Pickable Data")] [SerializeField]
-        private PickableData pickableData;
+        [Header("Pickable Data")] 
+        [SerializeField] private PickableData pickableData;
         
         private const float FollowSpeed = 5f;
         private bool _isHolding;

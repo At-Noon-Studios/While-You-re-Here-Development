@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6106415085218588324}
   - component: {fileID: 6106415085221979780}
   - component: {fileID: 6106415085221012548}
+  - component: {fileID: 5146929578181964008}
+  - component: {fileID: 4013203532216729545}
   - component: {fileID: 8373487752942539269}
   m_Layer: 0
   m_Name: Donuts
@@ -29,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -3.621977e-15, y: 1, z: -0.00000008146034, w: -0.00000004371139}
   m_LocalPosition: {x: 1.3940909, y: -0.00000005265274, z: -4.7132344}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,6 +92,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5146929578181964008
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106415085218822788}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.24015893, y: 0.22004955, z: 0.19081734}
+  m_Center: {x: 7.1273457e-23, y: 0.11002476, z: -0.000000022351742}
+--- !u!54 &4013203532216729545
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106415085218822788}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8373487752942539269
 MonoBehaviour:
   m_ObjectHideFlags: 0

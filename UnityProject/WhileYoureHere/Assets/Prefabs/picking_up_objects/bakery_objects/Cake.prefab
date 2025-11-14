@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2340576307083320059}
   - component: {fileID: 2340576307082025691}
   - component: {fileID: 2340576307080894491}
+  - component: {fileID: 6485616668581117578}
+  - component: {fileID: 1202450271293480128}
   - component: {fileID: 618004668563423891}
   m_Layer: 0
   m_Name: Cake
@@ -29,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -3.621977e-15, y: 1, z: -0.00000008146034, w: -0.00000004371139}
   m_LocalPosition: {x: 1.4969867, y: -0.000000039437797, z: -4.3414936}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,6 +92,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6485616668581117578
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2340576307083085531}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.21168444, y: 0.22603473, z: 0.16077477}
+  m_Center: {x: 0.000000018626451, y: 0.113017336, z: -0.000000011175871}
+--- !u!54 &1202450271293480128
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2340576307083085531}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &618004668563423891
 MonoBehaviour:
   m_ObjectHideFlags: 0

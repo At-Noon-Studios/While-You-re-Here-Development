@@ -19,11 +19,6 @@ public class PlayerController : MonoBehaviour
     
     private IWeighted _heldObject;
     
-    void Awake()
-    {
-        _speedModifier = moveSpeed;
-    }
-    
     void Update()
     {
         MovePlayer();
@@ -51,13 +46,13 @@ public class PlayerController : MonoBehaviour
     private void MovePlayer()
     {
         _speedModifier = moveSpeed;
-
+        
         if (_heldObject != null)
         {
-            _speedModifier = moveSpeed / (_heldObject.Weight + 1f);
+            _speedModifier = moveSpeed * (1f - Mathf.Clamp01(_heldObject.Weight / 100f));
             _speedModifier = Mathf.Max(_speedModifier, 1f);
         }
-
+        
         transform.Translate(0f, 0f, _movementY * _speedModifier * Time.deltaTime);
     }
     
@@ -72,7 +67,4 @@ public class PlayerController : MonoBehaviour
         cameraTransform.localRotation = Quaternion.Euler(_mouseLookRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
     }
-    
-
-
 }

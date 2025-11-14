@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6192361383335664253}
   - component: {fileID: 6192361383336991325}
   - component: {fileID: 6192361383337957533}
+  - component: {fileID: 5469650253176125998}
+  - component: {fileID: 6453421133853459113}
   - component: {fileID: 7104138114123183528}
   m_Layer: 0
   m_Name: IceCream
@@ -29,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -3.621977e-15, y: 1, z: -0.00000008146034, w: -0.00000004371139}
   m_LocalPosition: {x: 0.9125478, y: 0.00000000825259, z: -7.1016064}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,6 +92,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5469650253176125998
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192361383335954013}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.20100369, y: 0.23799272, z: 0.20100367}
+  m_Center: {x: 7.70852e-23, y: 0.118996345, z: -0.000000026077032}
+--- !u!54 &6453421133853459113
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192361383335954013}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &7104138114123183528
 MonoBehaviour:
   m_ObjectHideFlags: 0
