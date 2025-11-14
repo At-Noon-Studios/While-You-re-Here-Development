@@ -9,7 +9,14 @@ namespace picking_up_objects
         [SerializeField] private Camera playerCamera;
         [SerializeField] private Transform holdPoint;
         [SerializeField] private Transform placeObjectPoint;
+        
         private Pickable _pickAbleObject;
+        private PlayerController _playerController;
+        
+        private void Awake()
+        {
+            _playerController = GetComponent<PlayerController>();
+        }
         
         void OnHold(InputValue input)
         {
@@ -18,12 +25,20 @@ namespace picking_up_objects
         
         void OnDrop(InputValue input)
         {
-            _pickAbleObject.DropObject();
+            if (_pickAbleObject != null)
+            {
+                _pickAbleObject.DropObject();
+                _playerController.SetHeldObject(null);
+                _pickAbleObject = null;
+            }
         }
         
         void OnPlace(InputValue input)
         {
-            _pickAbleObject.PlaceObject(placeObjectPoint);
+            if (_pickAbleObject != null)
+            {
+                _pickAbleObject.PlaceObject(placeObjectPoint);
+            }
         }
 
         void Update()
@@ -31,6 +46,7 @@ namespace picking_up_objects
             if (_pickAbleObject && Mouse.current.rightButton.wasPressedThisFrame)
             {
                 _pickAbleObject = null;
+                _playerController.SetHeldObject(null);
             }
         }
 
@@ -41,10 +57,13 @@ namespace picking_up_objects
             if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
             {
                 Pickable pickup = hit.collider.GetComponent<Pickable>();
-                pickup.HoldObject(holdPoint);
-                _pickAbleObject = pickup;
+                if (pickup != null)
+                {
+                    pickup.HoldObject(holdPoint);
+                    _pickAbleObject = pickup;
+                    _playerController.SetHeldObject(pickup);
+                }
             }
         }
-        
     }
 }
