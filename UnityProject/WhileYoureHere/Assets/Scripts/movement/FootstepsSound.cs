@@ -16,8 +16,10 @@ public class FootstepsSound : MonoBehaviour
     [SerializeField] AudioClip[] floor;
     // Camera mainCamera;
     // [SerializeField] Transform raycastHelper;
+    //[SerializeField] MovementController player;
+    //[SerializeField] PlayerInput playerInput;
 
-    [SerializeField] MovementController player;
+    [SerializeField] MovementController movementController;
 
     [Header("Variables for footstep frequency")]
     public float time;
@@ -27,6 +29,8 @@ public class FootstepsSound : MonoBehaviour
     {
         _audioSource = GetComponent<AudioSource>();
         _audioSource.playOnAwake = false;
+        // playerInput = ScriptableObject.CreateInstance<PlayerInput>();
+        movementController = GetComponent<MovementController>();
     }
 
     void Update()
@@ -39,33 +43,35 @@ public class FootstepsSound : MonoBehaviour
         //int layerMask = 1 << 6;
         //layerMask = ~layerMask;
         time -= Time.deltaTime;
-
-        if (time < 0.0f)
+        if (movementController.IsInput)
         {
-            if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
+            if (time < 0.0f)
             {
-                //Debug.Log("I am hitting: " + hit.collider.name);
-                //Debug.DrawRay(transform.position, Vector3.down * .01f, Color.red, 60);
-                switch (hit.collider.tag)
+                if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
                 {
-                    case "GROUND/snow":
-                        _audioSource.PlayOneShot(snow[Random.Range(0, snow.Length - 1)]);
-                        break;
-                    case "GROUND/leaves":
-                        _audioSource.PlayOneShot(leaves[Random.Range(0, leaves.Length - 1)]);
-                        break;
-                    case "GROUND/floor":
-                        _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
-                        break;
-                    case "GROUND/grass":
-                        _audioSource.PlayOneShot(grass[Random.Range(0, grass.Length - 1)]);
-                        break;
-                    default:
-                        _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
-                        break;
+                    //Debug.Log("I am hitting: " + hit.collider.name);
+                    //Debug.DrawRay(transform.position, Vector3.down * .01f, Color.red, 60);
+                    switch (hit.collider.tag)
+                    {
+                        case "GROUND/snow":
+                            _audioSource.PlayOneShot(snow[Random.Range(0, snow.Length - 1)]);
+                            break;
+                        case "GROUND/leaves":
+                            _audioSource.PlayOneShot(leaves[Random.Range(0, leaves.Length - 1)]);
+                            break;
+                        case "GROUND/floor":
+                            _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
+                            break;
+                        case "GROUND/grass":
+                            _audioSource.PlayOneShot(grass[Random.Range(0, grass.Length - 1)]);
+                            break;
+                        default:
+                            _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
+                            break;
+                    }
                 }
+                time = footstepOffset;
             }
-            time = footstepOffset;
         }
     }
 }
