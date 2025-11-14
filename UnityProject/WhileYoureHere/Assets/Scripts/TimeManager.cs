@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
 
     [Header("Current Time")]
     [Range(1, 8)] [SerializeField] private int days = 1;
-    [Range(0, 23)] [SerializeField] private int hours = 0;
+    [Range(0, 23)] [SerializeField] private int hours = 5;
 
     [Header("Transitions")]
     [SerializeField] private List<TimeTransition> transitions = new List<TimeTransition>();
@@ -25,6 +25,11 @@ public class TimeManager : MonoBehaviour
             _lastHour = hours;
             TryStartTransition(days, hours);
         }
+    }
+    
+    private void Start()
+    {
+        TryStartTransition(days, hours);
     }
 
     private void TryStartTransition(int day, int hour)
