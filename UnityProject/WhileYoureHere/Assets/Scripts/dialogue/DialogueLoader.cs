@@ -19,7 +19,7 @@ public class DialogueLoader : MonoBehaviour
         }
     }
 
-    void Start()
+    public void StartDialogue()
     {
         if (dialogueManager != null && dialogueNodes.Count > 0)
         {

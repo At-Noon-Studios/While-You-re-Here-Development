@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour
 
     private float _xRotation;
     private float _yRotation;
+    
+    public bool canLook = true;
 
     private void Start()
     {
@@ -32,6 +34,8 @@ public class CameraController : MonoBehaviour
     
     private void OnLookInput(Vector2 mouseDelta)
     {
+        if (!canLook) return; 
+        
         _yRotation += (mouseDelta.x * data.Sensitivity) % CircleDegrees;
         _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
         _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
@@ -39,5 +43,15 @@ public class CameraController : MonoBehaviour
         var rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
         transform.rotation = rotation;
         OnRotate?.Invoke(rotation);
+    }
+
+    public void PauseCameraMovement()
+    {
+        canLook = false;
+    }
+
+    public void ResumeCameraMovement()
+    {
+        canLook = true;
     }
 }

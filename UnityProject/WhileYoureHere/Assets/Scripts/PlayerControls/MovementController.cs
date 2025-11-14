@@ -27,6 +27,8 @@ public class MovementController : MonoBehaviour
     private Camera _mainCamera;
     private CameraController _cameraController;
     private float _defaultYPos;
+    
+    public bool canMove = true;
 
     void Awake()
     {
@@ -67,6 +69,8 @@ public class MovementController : MonoBehaviour
 
     void Update()
     {
+        if (!canMove) return;
+        
         HeadBob();
 
         _animator.SetBool("isWalking", _moveY > 0);
@@ -83,4 +87,20 @@ public class MovementController : MonoBehaviour
         var currentRotation = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(currentRotation.x, rotation.eulerAngles.y, currentRotation.z);
     }
+    
+    public void PauseMovement()
+    {
+        canMove = false;
+
+        _animator.SetBool("isWalking", false);
+        _animator.SetBool("isWalkingBackwards", false);
+        _animator.SetBool("isStrafingLeft", false);
+        _animator.SetBool("isStrafingRight", false);
+    }
+
+    public void ResumeMovement()
+    {
+        canMove = true;
+    }
+
 }
