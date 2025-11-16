@@ -9,24 +9,22 @@ public class MovementController : MonoBehaviour
 {
     private float _moveX;
     private float _moveY;
-    //public bool _isInput;
     public bool IsInput { get; private set; }
-
-    [SerializeField] private float movementSpeed = 2.2f;
 
     Animator _animator;
     CharacterController _controller;
 
     [Header("Variables for the headbob")]
+    // Might move these 4 variables into a player-data Scriptable Object... >.>
     public float walkBobSpeed = 5.0f;
     public float walkBobAmount = 0.05f;
     private float _timer;
+    [SerializeField] private float movementSpeed = 2.2f;
 
     private Camera _mainCamera;
     private readonly float _defaultYPos;
 
-
-    [SerializeField] PlayerInput playerInput;
+    //[SerializeField] PlayerInput playerInput;
 
     void Awake()
     {
@@ -34,16 +32,6 @@ public class MovementController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _mainCamera = GetComponentInChildren<Camera>();
     }
-
-    // void OnEnable()
-    // {
-    //     playerInput.MovementEvent += MovePlayer;
-    // }
-
-    // void OnDisable()
-    // {
-    //     playerInput.MovementEvent -= MovePlayer;
-    // }
 
     void MovePlayer()
     {

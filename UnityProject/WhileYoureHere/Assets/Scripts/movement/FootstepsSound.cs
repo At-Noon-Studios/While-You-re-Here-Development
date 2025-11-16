@@ -28,7 +28,7 @@ public class FootstepsSound : MonoBehaviour
     void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.playOnAwake = false;
+        //_audioSource.playOnAwake = false;
         // playerInput = ScriptableObject.CreateInstance<PlayerInput>();
         movementController = GetComponent<MovementController>();
     }
