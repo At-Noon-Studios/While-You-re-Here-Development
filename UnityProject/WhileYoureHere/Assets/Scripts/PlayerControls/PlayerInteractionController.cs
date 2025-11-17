@@ -23,15 +23,15 @@ namespace PlayerControls
             var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out var hit, data.InteractionReach))
             {
-                UpdateCurrentTarget(null);
+                SetCurrentTarget(null);
                 return;
             }
             hit.collider.TryGetComponent(out IInteractable newTarget);
             if (newTarget == _currentTarget) return;
-            UpdateCurrentTarget(newTarget);
+            SetCurrentTarget(newTarget);
         }
 
-        private void UpdateCurrentTarget(IInteractable newTarget)
+        private void SetCurrentTarget(IInteractable newTarget)
         {
             _currentTarget?.OnHoverExit();
             _currentTarget = newTarget;
