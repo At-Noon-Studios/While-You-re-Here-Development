@@ -1,4 +1,6 @@
-﻿using Interactable;
+﻿using System;
+using EventChannels;
+using Interactable;
 using JetBrains.Annotations;
 using ScriptableObjects;
 using UnityEngine;
@@ -10,12 +12,24 @@ namespace PlayerControls
     {
         [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
+        [Header("Listen to")]
+        [SerializeField] private EventChannel interact;
         
         [CanBeNull] private IInteractable _currentTarget;
 
         private void Update()
         {
             RefreshCurrentTarget();
+        }
+
+        private void OnEnable()
+        {
+            interact.OnRaise += OnInteract;
+        }
+
+        private void OnDisable()
+        {
+            interact.OnRaise -= OnInteract;
         }
 
         private void RefreshCurrentTarget()
@@ -38,7 +52,6 @@ namespace PlayerControls
             newTarget?.OnHoverEnter();
         }
         
-        //Action input callback
         private void OnInteract()
         {
             _currentTarget?.Interact();
