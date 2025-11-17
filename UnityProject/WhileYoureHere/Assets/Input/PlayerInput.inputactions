@@ -29,7 +29,7 @@
                     "type": "Button",
                     "id": "1969a082-ce20-47e5-94eb-807bf920e450",
                     "expectedControlType": "",
-                    "processors": "",
+                    "processors": "Normalize",
                     "interactions": "",
                     "initialStateCheck": false
                 }
@@ -43,6 +43,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ded2e65d-565e-49af-a8f8-60eae69eb220",
+                    "path": "<Mouse>/delta",
+                    "interactions": "Hold,Hold,Hold",
+                    "processors": "Invert,Invert,Invert,AxisDeadzone,Invert,Normalize,Normalize,Normalize,Normalize,Normalize",
+                    "groups": ";Keyboard&Mouse;Touch",
+                    "action": "Swing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -100,17 +111,6 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "38cc908c-56f2-4d19-b835-394c0536cbe8",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Swing",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         }

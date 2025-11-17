@@ -5,33 +5,30 @@ namespace controller.axe
 {
     public class AxeController : MonoBehaviour
     {
-
-        [Header("Weapon State")]
+        [Header("Weapon State")] 
         [SerializeField] private bool isHoldingAxe;
-        private Animator _currentAnimator;
-        private Animator _axeAnimator;
         [SerializeField] private float swipeThreshold = 0.5f;
 
-        private void Start()
+        [SerializeField] private Animator axeAnimator;
+
+        // Called every frame while mouse moves
+        public void OnSwing(InputValue value)
         {
-            _currentAnimator = GetComponent<Animator>();
-        }
+            if (!isHoldingAxe)
+                return;
 
-        public void OnSwing(InputValue inputValue)
-        {
-            if (!isHoldingAxe || !inputValue.isPressed) return;
+            var delta = value.Get<Vector2>();
+            
+            delta.Normalize();
 
-            var delta = inputValue.Get<Vector2>();
-
-            // Detect vertical swipe
+            // Detect vertical stroke motion
             if (Mathf.Abs(delta.y) > swipeThreshold)
             {
-                _currentAnimator = _axeAnimator;
-                _currentAnimator.SetTrigger("Swing");
+                axeAnimator.SetTrigger("Swing");
+                Debug.Log("Axe swing triggered!");
             }
             
-            Debug.Log("Swinging axe with delta: " + delta);
+            Debug.Log("Animation played");
         }
-
     }
 }
