@@ -1,5 +1,6 @@
 using System;
 using dialogue;
+using EventChannels;
 using UnityEngine;
 
 namespace Dialogue
@@ -17,7 +18,7 @@ namespace Dialogue
         
         [Header("Player Settings")]
         [SerializeField] private Transform player;
-        [SerializeField] private VoidEventChannel interactEvent;
+        [SerializeField] private EventChannel interactEvent;
 
         [Obsolete("Obsolete")]
         private void OnEnable()

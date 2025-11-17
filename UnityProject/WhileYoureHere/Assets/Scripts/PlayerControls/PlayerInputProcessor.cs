@@ -26,12 +26,4 @@ namespace PlayerControls
             interact.Raise();
         }
     }
-    
-    private void OnInteract(InputValue inputValue)
-    {
-        if (inputValue.isPressed)
-        {
-            interact.Raise();
-        }
-    }
 }
