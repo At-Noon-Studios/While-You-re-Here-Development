@@ -7,22 +7,15 @@ using Vector3 = UnityEngine.Vector3;
 [RequireComponent(typeof(CharacterController))]
 public class MovementController : MonoBehaviour
 {
+    [Header("Player SO for Movement")]
+    [SerializeField] private PlayerData playerData;
+
     private float _moveX;
     private float _moveY;
     public bool IsInput { get; private set; }
 
-    [Header("Player SO for Movement")]
-    [SerializeField] private PlayerData playerData;
-
     Animator _animator;
     CharacterController _controller;
-
-    //[Header("Variables for the headbob")]
-    // Might move these 4 variables into a player-data Scriptable Object... >.>
-    //public float walkBobSpeed = 5.0f;
-    //public float walkBobAmount = 0.05f;
-    //[SerializeField] private float movementSpeed = 2.2f;
-    //[SerializeField] PlayerInput playerInput;
 
     private float _timer;
     private Camera _mainCamera;

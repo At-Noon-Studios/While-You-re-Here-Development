@@ -6,7 +6,7 @@ using Vector3 = UnityEngine.Vector3;
 public class FootstepsSound : MonoBehaviour
 {
     [SerializeField] AudioSource _audioSource;
-    [SerializeField] FootStepsSO fs;
+    [SerializeField] FootStepsData fs;
 
     private MovementController movementController;
 
