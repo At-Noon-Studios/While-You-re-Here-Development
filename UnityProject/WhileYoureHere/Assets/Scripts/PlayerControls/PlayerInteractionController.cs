@@ -24,12 +24,12 @@ namespace PlayerControls
 
         private void OnEnable()
         {
-            interact.OnRaise += OnInteract;
+            interact.OnRaise += Interact;
         }
 
         private void OnDisable()
         {
-            interact.OnRaise -= OnInteract;
+            interact.OnRaise -= Interact;
         }
 
         private void RefreshCurrentTarget()
@@ -52,7 +52,7 @@ namespace PlayerControls
             newTarget?.OnHoverEnter();
         }
         
-        private void OnInteract()
+        private void Interact()
         {
             _currentTarget?.Interact();
         }
