@@ -9,9 +9,7 @@ public class FootstepsSound : MonoBehaviour
     [SerializeField] FootStepsData fs;
 
     private MovementController movementController;
-
-    [Header("Variables for footstep frequency")]
-    public float time;
+    private float time;
 
     void Awake()
     {
