@@ -25,11 +25,11 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Swing",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "1969a082-ce20-47e5-94eb-807bf920e450",
+                    "id": "6cda3419-8f9c-469b-ab8a-ad4bc0e988ff",
                     "expectedControlType": "",
-                    "processors": "Normalize",
+                    "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 }
@@ -43,17 +43,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ded2e65d-565e-49af-a8f8-60eae69eb220",
-                    "path": "<Mouse>/delta",
-                    "interactions": "Hold,Hold,Hold",
-                    "processors": "Invert,Invert,Invert,AxisDeadzone,Invert,Normalize,Normalize,Normalize,Normalize,Normalize",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Swing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -111,6 +100,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a002a1d3-c3fb-4a32-90d3-18ca3af479d0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
