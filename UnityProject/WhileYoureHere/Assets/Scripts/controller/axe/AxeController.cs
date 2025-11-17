@@ -1,24 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//This is where axe logic takes place, and to see if the player is holding the axe
-public class AxeController : MonoBehaviour
+namespace controller.axe
 {
-
-    private static bool HoldingAxe => true; // Placeholder for actual holding axe logic
-    private Animator _currentAnimator;
-
-    private void Start()
+    public class AxeController : MonoBehaviour
     {
-        _currentAnimator = GetComponent<Animator>();
-    }
+        private static bool HoldingAxe => true;
+        private Animator _currentAnimator;
 
-    public void OnSwing(InputValue context)
-    {
-        if (context.isPressed && HoldingAxe)
+        private void Start()
         {
-            _currentAnimator.SetTrigger("Swing");
+            _currentAnimator = GetComponent<Animator>();
+        }
+
+        public void OnSwing(InputValue context)
+        {
+            if (context.isPressed && HoldingAxe)
+            {
+                _currentAnimator.SetTrigger("Swing");
+            }
         }
     }
 }
-
