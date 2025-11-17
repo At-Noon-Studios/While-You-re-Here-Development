@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Interactable
 {
     [RequireComponent(typeof(Renderer))]
-    [RequireComponent(typeof(Collider))] //Not used in this script, but it also makes no sense to add this component without having a collider
+    [RequireComponent(typeof(Collider))] //Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
         private Material _outlineMaterial;
