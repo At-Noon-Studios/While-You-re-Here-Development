@@ -11,16 +11,19 @@ public class MovementController : MonoBehaviour
     private float _moveY;
     public bool IsInput { get; private set; }
 
+    [Header("Player SO for Movement")]
+    [SerializeField] private PlayerData playerData;
+
     Animator _animator;
     CharacterController _controller;
 
-    [Header("Variables for the headbob")]
+    //[Header("Variables for the headbob")]
     // Might move these 4 variables into a player-data Scriptable Object... >.>
-    public float walkBobSpeed = 5.0f;
-    public float walkBobAmount = 0.05f;
-    private float _timer;
-    [SerializeField] private float movementSpeed = 2.2f;
+    //public float walkBobSpeed = 5.0f;
+    //public float walkBobAmount = 0.05f;
+    //[SerializeField] private float movementSpeed = 2.2f;
 
+    private float _timer;
     private Camera _mainCamera;
     private readonly float _defaultYPos;
 
@@ -36,7 +39,7 @@ public class MovementController : MonoBehaviour
     void MovePlayer()
     {
         Vector3 movementFinal = new(_moveX, 0.0f, _moveY);
-        _controller.Move(movementSpeed * Time.deltaTime * movementFinal);
+        _controller.Move(playerData.MovementSpeed * Time.deltaTime * movementFinal);
     }
 
     void OnMove(InputValue value)
@@ -50,8 +53,8 @@ public class MovementController : MonoBehaviour
     {
         if (IsInput)
         {
-            _timer += Time.deltaTime * walkBobSpeed;
-            _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, _defaultYPos + Mathf.Sin(_timer) * walkBobAmount, _mainCamera.transform.localPosition.z);
+            _timer += Time.deltaTime * playerData.WalkBobSpeed;
+            _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, _defaultYPos + Mathf.Sin(_timer) * playerData.WalkBobAmount, _mainCamera.transform.localPosition.z);
         }
     }
 

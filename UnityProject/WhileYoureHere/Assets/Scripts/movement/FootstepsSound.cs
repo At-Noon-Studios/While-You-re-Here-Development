@@ -1,8 +1,4 @@
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using Vector3 = UnityEngine.Vector3;
 
 [RequireComponent(typeof(AudioSource))]
@@ -10,16 +6,19 @@ using Vector3 = UnityEngine.Vector3;
 public class FootstepsSound : MonoBehaviour
 {
     [SerializeField] AudioSource _audioSource;
-    [SerializeField] AudioClip[] leaves;
-    [SerializeField] AudioClip[] snow;
-    [SerializeField] AudioClip[] grass;
-    [SerializeField] AudioClip[] floor;
+    // //[SerializeField] AudioClip[] leaves;
+    // [SerializeField] AudioClip[] snow;
+    // [SerializeField] AudioClip[] grass;
+    // [SerializeField] AudioClip[] floor;
+
+    [SerializeField] public FootStepsSO fs;
+
     // Camera mainCamera;
     // [SerializeField] Transform raycastHelper;
     //[SerializeField] MovementController player;
     //[SerializeField] PlayerInput playerInput;
 
-    [SerializeField] MovementController movementController;
+    private MovementController movementController;
 
     [Header("Variables for footstep frequency")]
     public float time;
@@ -54,19 +53,19 @@ public class FootstepsSound : MonoBehaviour
                     switch (hit.collider.tag)
                     {
                         case "GROUND/snow":
-                            _audioSource.PlayOneShot(snow[Random.Range(0, snow.Length - 1)]);
+                            _audioSource.PlayOneShot(fs.Snow[Random.Range(0, fs.Snow.Length - 1)]);
                             break;
                         case "GROUND/leaves":
-                            _audioSource.PlayOneShot(leaves[Random.Range(0, leaves.Length - 1)]);
+                            _audioSource.PlayOneShot(fs.Leaves[Random.Range(0, fs.Leaves.Length - 1)]);
                             break;
                         case "GROUND/floor":
-                            _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
+                            _audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
                             break;
                         case "GROUND/grass":
-                            _audioSource.PlayOneShot(grass[Random.Range(0, grass.Length - 1)]);
+                            _audioSource.PlayOneShot(fs.Grass[Random.Range(0, fs.Grass.Length - 1)]);
                             break;
                         default:
-                            _audioSource.PlayOneShot(floor[Random.Range(0, floor.Length - 1)]);
+                            _audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
                             break;
                     }
                 }
