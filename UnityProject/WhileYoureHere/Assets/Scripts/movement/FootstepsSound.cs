@@ -6,29 +6,16 @@ using Vector3 = UnityEngine.Vector3;
 public class FootstepsSound : MonoBehaviour
 {
     [SerializeField] AudioSource _audioSource;
-    // //[SerializeField] AudioClip[] leaves;
-    // [SerializeField] AudioClip[] snow;
-    // [SerializeField] AudioClip[] grass;
-    // [SerializeField] AudioClip[] floor;
-
-    [SerializeField] public FootStepsSO fs;
-
-    // Camera mainCamera;
-    // [SerializeField] Transform raycastHelper;
-    //[SerializeField] MovementController player;
-    //[SerializeField] PlayerInput playerInput;
+    [SerializeField] FootStepsSO fs;
 
     private MovementController movementController;
 
     [Header("Variables for footstep frequency")]
     public float time;
-    public float footstepOffset = 0.5f;
 
     void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        //_audioSource.playOnAwake = false;
-        // playerInput = ScriptableObject.CreateInstance<PlayerInput>();
         movementController = GetComponent<MovementController>();
     }
 
@@ -39,8 +26,6 @@ public class FootstepsSound : MonoBehaviour
 
     void HandleFootsteps()
     {
-        //int layerMask = 1 << 6;
-        //layerMask = ~layerMask;
         time -= Time.deltaTime;
         if (movementController.IsInput)
         {
@@ -48,8 +33,6 @@ public class FootstepsSound : MonoBehaviour
             {
                 if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
                 {
-                    //Debug.Log("I am hitting: " + hit.collider.name);
-                    //Debug.DrawRay(transform.position, Vector3.down * .01f, Color.red, 60);
                     switch (hit.collider.tag)
                     {
                         case "GROUND/snow":
@@ -69,7 +52,7 @@ public class FootstepsSound : MonoBehaviour
                             break;
                     }
                 }
-                time = footstepOffset;
+                time = fs.FootStepOffset;
             }
         }
     }

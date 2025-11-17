@@ -22,12 +22,11 @@ public class MovementController : MonoBehaviour
     //public float walkBobSpeed = 5.0f;
     //public float walkBobAmount = 0.05f;
     //[SerializeField] private float movementSpeed = 2.2f;
+    //[SerializeField] PlayerInput playerInput;
 
     private float _timer;
     private Camera _mainCamera;
     private readonly float _defaultYPos;
-
-    //[SerializeField] PlayerInput playerInput;
 
     void Awake()
     {
