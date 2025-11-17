@@ -1,29 +1,37 @@
+using System;
 using System.Collections.Generic;
+using ScriptableObjects.Dialogue;
 using UnityEngine;
 
-public class DialogueLoader : MonoBehaviour
+namespace dialogue
 {
-    [Header("Dialogue Configuration")]
-    public List<DialogueNode> dialogueNodes;
-    public string startingNodeID = "start";
-
-    private DialogueManager dialogueManager;
-
-    void Awake()
+    public class DialogueLoader : MonoBehaviour
     {
-        dialogueManager = FindObjectOfType<DialogueManager>();
+        [Header("Dialogue Configuration")]
+        [SerializeField] private List<DialogueNode> dialogueNodes;
 
-        if (dialogueManager == null)
+        [SerializeField] private string startingNodeId = "start";
+
+        private DialogueManager _dialogueManager;
+
+        [Obsolete("Obsolete")]
+        private void Awake()
         {
-            Debug.LogError("DialogueManager not found in the scene!");
+            _dialogueManager = FindObjectOfType<DialogueManager>();
+
+            if (_dialogueManager == null)
+            {
+                Debug.LogError("DialogueManager not found in the scene!");
+            }
         }
-    }
 
-    public void StartDialogue()
-    {
-        if (dialogueManager != null && dialogueNodes.Count > 0)
+        [Obsolete("Obsolete")]
+        public void StartDialogue()
         {
-            dialogueManager.StartDialogue(dialogueNodes, startingNodeID);
+            if (_dialogueManager != null && dialogueNodes.Count > 0)
+            {
+                _dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
+            }
         }
     }
 }

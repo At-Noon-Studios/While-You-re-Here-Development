@@ -1,84 +1,90 @@
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using Dialogue;
+using ScriptableObjects.Dialogue;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class DialogueManager : MonoBehaviour
+namespace dialogue
 {
-    public TextMeshProUGUI speakerText;
-    public TextMeshProUGUI dialogueText;
-    public Transform choicesContainer;
-    public GameObject choiceButtonPrefab;
-
-    private Dictionary<string, DialogueNode> dialogueNodes = new Dictionary<string, DialogueNode>();
-    private DialogueNode currentNode;
-
-    public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
+    public class DialogueManager : MonoBehaviour
     {
-        EventSystem.current?.SetSelectedGameObject(null);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        dialogueNodes.Clear();
-        foreach (var n in nodes) dialogueNodes[n.nodeID] = n;
-        gameObject.SetActive(true);
-        DisplayNode(startingNodeID);
-    }
+        [Header("UI References")] 
+        [SerializeField] private TextMeshProUGUI speakerText;
+        [SerializeField] private TextMeshProUGUI dialogueText;
+        [SerializeField] private Transform choicesContainer;
+        [SerializeField] private GameObject choiceButtonPrefab;
 
-    private void DisplayNode(string nodeID)
-    {
-        if (!dialogueNodes.ContainsKey(nodeID))
+        private Dictionary<string, DialogueNode> dialogueNodes = new Dictionary<string, DialogueNode>();
+        private DialogueNode currentNode;
+
+        public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
         {
+            EventSystem.current?.SetSelectedGameObject(null);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            dialogueNodes.Clear();
+            foreach (var n in nodes) dialogueNodes[n.nodeID] = n;
+            gameObject.SetActive(true);
+            DisplayNode(startingNodeID);
+        }
+
+        private void DisplayNode(string nodeID)
+        {
+            if (!dialogueNodes.ContainsKey(nodeID))
+            {
+                EndDialogue();
+                return;
+            }
+
+            currentNode = dialogueNodes[nodeID];
+            speakerText.text = currentNode.speakerName;
+            dialogueText.text = currentNode.dialogueText;
+
+            foreach (Transform child in choicesContainer)
+                Destroy(child.gameObject);
+
+            bool hasText = !string.IsNullOrWhiteSpace(currentNode.dialogueText);
+            bool hasChoices = currentNode.choices != null && currentNode.choices.Count > 0;
+
+            if (!hasText && !hasChoices)
+            {
+                EndDialogue();
+                return;
+            }
+
+            if (hasText && !hasChoices)
+            {
+                StartCoroutine(AutoContinue());
+                return;
+            }
+
+            foreach (var choice in currentNode.choices)
+            {
+                var button = Instantiate(choiceButtonPrefab, choicesContainer);
+                button.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
+                button.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
+            }
+
+            EventSystem.current?.SetSelectedGameObject(null);
+        }
+
+        private IEnumerator AutoContinue()
+        {
+            yield return new WaitForSeconds(2f);
             EndDialogue();
-            return;
         }
 
-        currentNode = dialogueNodes[nodeID];
-        speakerText.text = currentNode.speakerName;
-        dialogueText.text = currentNode.dialogueText;
-
-        foreach (Transform child in choicesContainer)
-            Destroy(child.gameObject);
-
-        bool hasText = !string.IsNullOrWhiteSpace(currentNode.dialogueText);
-        bool hasChoices = currentNode.choices != null && currentNode.choices.Count > 0;
-
-        if (!hasText && !hasChoices)
+        public void EndDialogue()
         {
-            EndDialogue();
-            return;
+            gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            FindObjectOfType<MovementController>()?.ResumeMovement();
+            FindObjectOfType<CameraController>()?.ResumeCameraMovement();
+            FindObjectOfType<InteractPrompt>()?.EndInteraction();
         }
-
-        if (hasText && !hasChoices)
-        {
-            StartCoroutine(AutoContinue());
-            return;
-        }
-
-        foreach (var choice in currentNode.choices)
-        {
-            var button = Instantiate(choiceButtonPrefab, choicesContainer);
-            button.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
-            button.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
-        }
-
-        EventSystem.current?.SetSelectedGameObject(null);
-    }
-
-    private IEnumerator AutoContinue()
-    {
-        yield return new WaitForSeconds(2f);
-        EndDialogue();
-    }
-
-    public void EndDialogue()
-    {
-        gameObject.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        FindObjectOfType<MovementController>()?.ResumeMovement();
-        FindObjectOfType<CameraController>()?.ResumeCameraMovement();
-        FindObjectOfType<InteractPrompt>()?.EndInteraction();
     }
 }

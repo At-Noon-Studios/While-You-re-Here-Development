@@ -1,40 +1,56 @@
+using System;
+using dialogue;
 using UnityEngine;
 
-public class DialogueTrigger : MonoBehaviour
+namespace Dialogue
 {
-    [Header("Dialogue Settings")]
-    public DialogueLoader dialogueLoader;
-    public float interactDistance = 2f;
-    public GameObject dialogueUI;
-
-    [Header("Player Reference")]
-    public Transform player;
-    public VoidEventChannel interactEvent;
-
-    private void OnEnable()
+    public class DialogueTrigger : MonoBehaviour
     {
-        interactEvent.OnRaise += TryTriggerDialogue;
-    }
+        [Header("Dialogue Settings")]
+        [SerializeField] private DialogueLoader dialogueLoader;
 
-    private void OnDisable()
-    {
-        interactEvent.OnRaise -= TryTriggerDialogue;
-    }
+        [Header("UI Settings")]
+        [SerializeField] private GameObject dialogueUI;
 
-    private void TryTriggerDialogue()
-    {
-        if (Vector3.Distance(player.position, transform.position) <= interactDistance)
+        [Header("Interaction Settings")]
+        [SerializeField] private float interactDistance;
+        
+        [Header("Player Settings")]
+        [SerializeField] private Transform player;
+        [SerializeField] private VoidEventChannel interactEvent;
+
+        [Obsolete("Obsolete")]
+        private void OnEnable()
         {
-            GetComponent<InteractPrompt>()?.BeginInteraction();
+            interactEvent.OnRaise += TryTriggerDialogue;
+        }
 
-            dialogueUI?.SetActive(true);
-            dialogueLoader?.StartDialogue();
+        [Obsolete("Obsolete")]
+        private void OnDisable()
+        {
+            interactEvent.OnRaise -= TryTriggerDialogue;
+        }
 
-            player.GetComponent<MovementController>()?.PauseMovement();
-            player.GetComponentInChildren<CameraController>().PauseCameraMovement();
+        [Obsolete("Obsolete")]
+        private void TryTriggerDialogue()
+        {
+            if (Vector3.Distance(player.position, transform.position) <= interactDistance)
+            {
+                var interactPrompt = GetComponent<InteractPrompt>();
+                interactPrompt?.BeginInteraction();
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+                dialogueUI?.SetActive(true);
+                dialogueLoader?.StartDialogue();
+
+                var movementController = player.GetComponent<MovementController>();
+                movementController?.PauseMovement();
+
+                var cameraController = player.GetComponentInChildren<CameraController>();
+                cameraController?.PauseCameraMovement();
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 }

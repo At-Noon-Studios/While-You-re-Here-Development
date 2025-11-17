@@ -1,8 +1,9 @@
-using UnityEngine;
-
-[System.Serializable]
-public class DialogueChoice
+namespace dialogue
 {
-    public string choiceText;
-    public string targetNodeID;
+    [System.Serializable]
+    public class DialogueChoice
+    {
+        public string choiceText;
+        public string targetNodeID;
+    }
 }

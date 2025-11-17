@@ -1,50 +1,56 @@
 using UnityEngine;
 
-public class InteractPrompt : MonoBehaviour
+namespace Dialogue
 {
-    public Transform player;
-    public float interactDistance = 2f;
-    public GameObject promptUI;
-
-    private bool isInteracting;
-    private bool isVisible;
-
-    void Update()
+    public class InteractPrompt : MonoBehaviour
     {
-        if (isInteracting) return;
+        [Header("Player Settings")]
+        [SerializeField] private Transform player;
 
-        float dist = Vector3.Distance(player.position, transform.position);
+        [Header("Interaction Settings")]
+        [SerializeField] private float interactDistance;
 
-        if (dist <= interactDistance && !isVisible)
+        [Header("UI Settings")]
+        [SerializeField] private GameObject promptUI;
+
+        private bool _isInteracting;
+        private bool _isVisible;
+
+        private void Update()
         {
-            ShowPrompt();
+            if (_isInteracting) 
+                return;
+
+            var distance = Vector3.Distance(player.position, transform.position);
+
+            if (distance <= interactDistance && !_isVisible)
+            {
+                ShowPrompt();
+            }
+            else if (distance > interactDistance && _isVisible)
+            {
+                HidePrompt();
+            }
         }
-        else if (dist > interactDistance && isVisible)
+
+        public void BeginInteraction()
         {
+            _isInteracting = true;
             HidePrompt();
         }
-    }
 
-    public void BeginInteraction()
-    {
-        isInteracting = true;
-        HidePrompt();
-    }
+        public void EndInteraction() => _isInteracting = false;
 
-    public void EndInteraction()
-    {
-        isInteracting = false;
-    }
+        private void ShowPrompt()
+        {
+            promptUI.SetActive(true);
+            _isVisible = true;
+        }
 
-    private void ShowPrompt()
-    {
-        promptUI.SetActive(true);
-        isVisible = true;
-    }
-
-    private void HidePrompt()
-    {
-        promptUI.SetActive(false);
-        isVisible = false;
+        private void HidePrompt()
+        {
+            promptUI.SetActive(false);
+            _isVisible = false;
+        }
     }
 }
