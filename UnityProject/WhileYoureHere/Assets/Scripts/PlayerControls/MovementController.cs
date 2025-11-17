@@ -7,10 +7,13 @@ using Vector3 = UnityEngine.Vector3;
 [RequireComponent(typeof(CharacterController))]
 public class MovementController : MonoBehaviour
 {
+    [Header("Player SO for Movement")]
+    [SerializeField] private PlayerData playerData;
+
     private float _moveX;
     private float _moveY;
-    private readonly bool _isInput;
-    
+    public bool IsInput { get; private set; }
+
     [Header("Listen to")]
     [SerializeField] private Vector2EventChannel move;
 
@@ -19,11 +22,7 @@ public class MovementController : MonoBehaviour
     Animator _animator;
     CharacterController _controller;
 
-    [Header("Variables for the headbob")]
-    public float walkBobSpeed = 5.0f;
-    public float walkBobAmount = 0.05f;
     private float _timer;
-
     private Camera _mainCamera;
     private CameraController _cameraController;
     private float _defaultYPos;
@@ -48,7 +47,7 @@ public class MovementController : MonoBehaviour
         _cameraController.OnRotate -= RotatePlayerBody;
         move.OnRaise -= OnMoveInput;
     }
-    
+
     private void OnMoveInput(Vector2 movementVector)
     {
         _moveX = movementVector.x;
@@ -57,16 +56,17 @@ public class MovementController : MonoBehaviour
 
     void HeadBob()
     {
-        bool _isInput = _moveY != 0 || _moveX != 0;
-        if(_isInput)
+        if (IsInput)
         {
-            _timer += Time.deltaTime * walkBobSpeed;
-            _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, _defaultYPos + Mathf.Sin(_timer) * walkBobAmount, _mainCamera.transform.localPosition.z);
+            _timer += Time.deltaTime * playerData.WalkBobSpeed;
+            _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, _defaultYPos + Mathf.Sin(_timer) * playerData.WalkBobAmount, _mainCamera.transform.localPosition.z);
         }
     }
 
     void Update()
     {
+        IsInput = _moveY != 0 || _moveX != 0;
+
         HeadBob();
 
         _animator.SetBool("isWalking", _moveY > 0);
@@ -76,8 +76,8 @@ public class MovementController : MonoBehaviour
 
         Vector3 movementFinal = transform.right * _moveX + transform.forward * _moveY;
         _controller.Move(movementSpeed * Time.deltaTime * movementFinal);
-    }  
-    
+    }
+
     private void RotatePlayerBody(Quaternion rotation)
     {
         var currentRotation = transform.rotation.eulerAngles;
