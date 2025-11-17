@@ -1,4 +1,5 @@
 using System;
+using EventChannels;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
