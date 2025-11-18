@@ -17,6 +17,7 @@ namespace controller.axe
 
         private float _previousMouseY;
         private float _lastSwingTime;
+        private bool _isSwingPaused;
 
 
         private void Start()
@@ -32,19 +33,30 @@ namespace controller.axe
             if (!isHoldingAxe)
             {
                 axeAnimator.SetBool(IsHoldingAxeParam, false);
-                axeAnimator.ResetTrigger("Swing");
+                axeAnimator.ResetTrigger(SwingTrigger);
+                axeAnimator.speed = 1f;
+                _isSwingPaused = false;
                 return;
             }
+
+            if (Mouse.current == null) return;
 
             var currentMouseY = Mouse.current.position.ReadValue().y;
             var deltaY = currentMouseY - _previousMouseY;
 
-            if (Mathf.Abs(deltaY) > swipeThreshold && Time.time - _lastSwingTime > swingCooldown)
+            if (deltaY > swipeThreshold && Time.time - _lastSwingTime > swingCooldown && !_isSwingPaused)
             {
-                axeAnimator.SetTrigger(SwingTrigger);
+                axeAnimator.Play("Swing", 0, 0f);
+                axeAnimator.speed = 0f;
+                _isSwingPaused = true;
                 _lastSwingTime = Time.time;
             }
-
+            
+            if (deltaY < -swipeThreshold && _isSwingPaused)
+            {
+                axeAnimator.speed = 1f;
+                _isSwingPaused = false;
+            }
 
             _previousMouseY = currentMouseY;
         }
