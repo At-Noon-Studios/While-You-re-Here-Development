@@ -1,15 +1,17 @@
+using Interactable;
 using ScriptableObjects.picking_up_objects;
 using UnityEngine;
 
 namespace picking_up_objects
 {
-    public class Pickable : MonoBehaviour, IWeighted
+    public class Pickable : InteractableBehaviour, IHeldObject
     {
-        [Header("Pickable Data")] 
         [SerializeField] private PickableData pickableData;
-        
-        private const float FollowSpeed = 5f;
+        [SerializeField] private Transform holdPoint;
+       
         private bool _isHolding;
+        private const float FollowSpeed = 5f;
+   
         private Rigidbody _rb;
         private Transform _currentTargetPoint;
 
@@ -17,13 +19,19 @@ namespace picking_up_objects
         {
             _rb = GetComponent<Rigidbody>();
         }
-
+        
         private void Update()
         {
             if (_isHolding && _currentTargetPoint)
             {
                 MoveTowardsHoldPoint();
             }
+        }
+        
+        public override void Interact()
+        {
+            Debug.Log("Interact"); 
+            Hold();
         }
         
         public float Weight => pickableData.weight;
@@ -35,25 +43,23 @@ namespace picking_up_objects
             _rb.linearVelocity = direction * FollowSpeed;
         }
 
-        public void HoldObject(Transform holdPoint)
+        public void Hold()
         {
             _isHolding = true;
-            _currentTargetPoint = holdPoint;
             _rb.useGravity = false;
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
         }
-
-        public void DropObject()
+        
+        public void Drop()
         {
             _isHolding = false;
-            _currentTargetPoint = null;
             _rb.useGravity = true;
             _rb.linearDamping = 1f;
             _rb.angularDamping = 0.05f;
         }
-
-        public void PlaceObject(Transform targetPoint)
+        
+        public void Place(Transform targetPoint)
         {
             _isHolding = true;
             _currentTargetPoint = targetPoint;
@@ -61,7 +67,5 @@ namespace picking_up_objects
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
         }
-        
-  
     }
 }

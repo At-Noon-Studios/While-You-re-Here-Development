@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private float _speedModifier;
     private float _mouseLookRotation;
     
-    private IWeighted _heldObject;
+    private IHeldObject _heldObject;
     
     void Update()
     {
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         _movementY = movementVector.y;
     }
     
-    public void SetHeldObject(IWeighted heldObject)
+    public void SetHeldObject(IHeldObject heldObject)
     {
         _heldObject = heldObject;
     }
