@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 181599097}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.255, y: -0.67831004, z: 0.825}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -337,6 +337,10 @@ PrefabInstance:
       propertyPath: interact
       value: 
       objectReference: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+    - target: {fileID: 9081291284711311923, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0fd41880fcfee4b388cb3f6b483da46d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -373,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d969558043d245d99ecd638378d6874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeldObjectController
-  placeObjectPoint: {fileID: 181599098}
+  placeObjectPoint: {fileID: 1405337417}
 --- !u!114 &212046679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,6 +534,10 @@ PrefabInstance:
       propertyPath: pickableData
       value: 
       objectReference: {fileID: 11400000, guid: 30636d7329ee7452f99d6c98040c1158, type: 2}
+    - target: {fileID: 2338155294786656799, guid: fba0cf2c2f20f4143bf8c288513c8fe9, type: 3}
+      propertyPath: heldObjectController
+      value: 
+      objectReference: {fileID: 212046670}
     - target: {fileID: 8478524748113621400, guid: fba0cf2c2f20f4143bf8c288513c8fe9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1464119

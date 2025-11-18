@@ -25,14 +25,12 @@ namespace Interactable
         
         public virtual void OnHoverEnter()
         {
-            print("base hover enter");
             AddOutlineMaterialToRenderer();
             _uiManager?.ShowInteractPrompt(gameObject.name);
         }
 
         public virtual void OnHoverExit()
         {
-            print("base hover exit");
             RemoveOutlineMaterialFromRenderer();
             _uiManager?.HideInteractPrompt();
         }

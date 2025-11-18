@@ -6,7 +6,7 @@ namespace picking_up_objects
     {
         public void Drop();
 
-        public void Place(Transform transform);
+        public void Place();
         
         float Weight { get; }
     }

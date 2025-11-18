@@ -33,10 +33,10 @@ public class PlayerController : MonoBehaviour
         _movementY = movementVector.y;
     }
     
-    public void SetHeldObject(IHeldObject heldObject)
-    {
-        _heldObject = heldObject;
-    }
+    // public void SetHeldObject(IHeldObject heldObject)
+    // {
+    //     _heldObject = heldObject;
+    // }
     
     private void MoveSideways()
     {

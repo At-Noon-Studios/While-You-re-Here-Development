@@ -7,6 +7,7 @@ namespace picking_up_objects
     public class Pickable : InteractableBehaviour, IHeldObject, IInteractable
     {
         [SerializeField] private PickableData pickableData;
+        [SerializeField] private Transform placeObjectPoint;
         [SerializeField] private Transform holdPoint;
 
         private bool _isHolding;
@@ -15,10 +16,13 @@ namespace picking_up_objects
         private Rigidbody _rb;
         private Transform _currentTargetPoint;
 
+        private HeldObjectController _heldObjectController;
+
         private new void Awake()
         {
             _rb = GetComponent<Rigidbody>();
             base.Awake();
+            _heldObjectController = FindObjectOfType<HeldObjectController>();
         }
 
         private void Update()
@@ -34,41 +38,43 @@ namespace picking_up_objects
             if (!_isHolding)
             {
                 Hold();
+
+                _heldObjectController?.SetHeldObject(this);
             }
         }
 
-
         public override void OnHoverEnter()
         {
-            print("hover enter");
-            if (!_isHolding) base.OnHoverEnter();
+            if (!_isHolding)
+            {
+                base.OnHoverEnter();
+            }
         }
 
         public override void OnHoverExit()
         {
-            print("hover exit");
-            if (!_isHolding) base.OnHoverExit();
-           
+            if (!_isHolding)
+            {
+                base.OnHoverExit();
+            }
         }
 
         public float Weight => pickableData.weight;
 
         private void MoveTowardsHoldPoint()
         {
-            var targetPosition = _currentTargetPoint.position;
-            var direction = (targetPosition - transform.position);
+            var direction = _currentTargetPoint.position - transform.position;
             _rb.linearVelocity = direction * FollowSpeed;
         }
 
-        public void Hold()
+        private void Hold()
         {
             _isHolding = true;
-            print("Maakt niet uit wat");
-            base.OnHoverExit();
             _currentTargetPoint = holdPoint;
             _rb.useGravity = false;
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
+            base.OnHoverExit();
         }
 
         public void Drop()
@@ -79,13 +85,25 @@ namespace picking_up_objects
             _rb.angularDamping = 0.05f;
         }
 
-        public void Place(Transform targetPoint)
+        // public void Place()
+        // {
+        //     transform.position = placeObjectPoint.position;
+        //     _isHolding = false;
+        //     _currentTargetPoint = placeObjectPoint;
+        //     _rb.useGravity = false;
+        //     _rb.linearDamping = 10f;
+        //     _rb.angularDamping = 10f;
+        // }
+
+        public void Place()
         {
-            _isHolding = true;
-            _currentTargetPoint = targetPoint;
-            _rb.useGravity = false;
+            transform.position = placeObjectPoint.position;
+            transform.rotation = placeObjectPoint.rotation;
+            _rb.angularVelocity = Vector3.zero;
+            _rb.useGravity = true;
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
+            _isHolding = false;
         }
     }
 }

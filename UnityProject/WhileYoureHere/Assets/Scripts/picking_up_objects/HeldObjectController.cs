@@ -5,36 +5,31 @@ namespace picking_up_objects
 {
     public class HeldObjectController : MonoBehaviour
     {
-        [SerializeField] private Transform placeObjectPoint;
-        
-        private PlayerController _playerController;
+        // [SerializeField] private Transform placeObjectPoint;
+       // public IHeldObject HeldObject => _heldObject;
         private IHeldObject _heldObject;
         
-        private Pickable _pickable;
-
-
-        private void Update()
+        public void SetHeldObject(IHeldObject heldObject)
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
-            {
-                _heldObject = null;
-                _playerController.SetHeldObject(null);
-            }
+            _heldObject = heldObject;
         }
-
+        
         private void OnDrop()
         {
             if (_heldObject != null)
             {
-                _pickable.Drop();
-                _playerController.SetHeldObject(null);
+                _heldObject.Drop(); 
                 _heldObject = null;
             }
         }
 
         private void OnPlace()
         {
-            _pickable?.Place(placeObjectPoint);
+            if (_heldObject != null)
+            {
+                _heldObject.Place();
+                _heldObject = null;
+            }
         }
     }
 }
