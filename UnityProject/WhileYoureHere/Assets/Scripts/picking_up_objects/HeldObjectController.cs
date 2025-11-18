@@ -1,21 +1,32 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace picking_up_objects
 {
     public class HeldObjectController : MonoBehaviour
     {
         [SerializeField] private Transform placeObjectPoint;
-
-        // private Pickable _pickAbleObject; <-- not sure if I stil need this or _heldObject
+        
         private PlayerController _playerController;
-    
         private IHeldObject _heldObject;
-    
+        
+        private Pickable _pickable;
+
+
+        private void Update()
+        {
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                _heldObject = null;
+                _playerController.SetHeldObject(null);
+            }
+        }
+
         private void OnDrop()
         {
             if (_heldObject != null)
             {
-                _heldObject.Drop();
+                _pickable.Drop();
                 _playerController.SetHeldObject(null);
                 _heldObject = null;
             }
@@ -23,7 +34,7 @@ namespace picking_up_objects
 
         private void OnPlace()
         {
-            _heldObject?.Place(placeObjectPoint);
+            _pickable?.Place(placeObjectPoint);
         }
     }
 }
