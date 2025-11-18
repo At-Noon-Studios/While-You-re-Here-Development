@@ -5,6 +5,5 @@ namespace dialogue
     {
         public string choiceText;
         public string targetNodeID;
-        public string targetNodeName;
     }
 }
