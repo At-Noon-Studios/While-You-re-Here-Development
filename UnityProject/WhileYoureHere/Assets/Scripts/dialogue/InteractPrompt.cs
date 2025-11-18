@@ -39,7 +39,10 @@ namespace Dialogue
             HidePrompt();
         }
 
-        public void EndInteraction() => _isInteracting = false;
+        public void EndInteraction()
+        {
+            _isInteracting = false;
+        }
 
         private void ShowPrompt()
         {

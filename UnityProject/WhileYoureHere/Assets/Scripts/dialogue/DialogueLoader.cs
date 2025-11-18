@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
@@ -9,28 +8,24 @@ namespace dialogue
     {
         [Header("Dialogue Configuration")]
         [SerializeField] private List<DialogueNode> dialogueNodes;
-
         [SerializeField] private string startingNodeId = "start";
 
-        private DialogueManager _dialogueManager;
+        [Header("Dialogue References")]
+        [SerializeField] private DialogueManager dialogueManager;
 
-        [Obsolete("Obsolete")]
         private void Awake()
         {
-            _dialogueManager = FindObjectOfType<DialogueManager>();
-
-            if (_dialogueManager == null)
+            if (dialogueManager == null)
             {
                 Debug.LogError("DialogueManager not found in the scene!");
             }
         }
 
-        [Obsolete("Obsolete")]
         public void StartDialogue()
         {
-            if (_dialogueManager != null && dialogueNodes.Count > 0)
+            if (dialogueManager != null && dialogueNodes.Count > 0)
             {
-                _dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
+                dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
             }
         }
     }

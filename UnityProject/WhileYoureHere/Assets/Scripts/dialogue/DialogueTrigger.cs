@@ -1,4 +1,3 @@
-using System;
 using dialogue;
 using EventChannels;
 using UnityEngine;
@@ -20,19 +19,16 @@ namespace Dialogue
         [SerializeField] private Transform player;
         [SerializeField] private EventChannel interactEvent;
 
-        [Obsolete("Obsolete")]
         private void OnEnable()
         {
             interactEvent.OnRaise += TryTriggerDialogue;
         }
 
-        [Obsolete("Obsolete")]
         private void OnDisable()
         {
             interactEvent.OnRaise -= TryTriggerDialogue;
         }
 
-        [Obsolete("Obsolete")]
         private void TryTriggerDialogue()
         {
             if (Vector3.Distance(player.position, transform.position) <= interactDistance)

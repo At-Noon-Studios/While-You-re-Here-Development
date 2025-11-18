@@ -1,53 +1,68 @@
-using System.Collections;
+using System.Collections; 
 using System.Collections.Generic;
 using Dialogue;
 using ScriptableObjects.Dialogue;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UI;
 
 namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI References")] 
-        [SerializeField] private TextMeshProUGUI speakerText;
-        [SerializeField] private TextMeshProUGUI dialogueText;
+        [Header("UI References")]
         [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
+        
+        [Header("Controller References")]
+        [SerializeField] private MovementController movementController;
+        [SerializeField] private CameraController cameraController;
+        
+        [Header("Interaction References")]
+        [SerializeField] private InteractPrompt interactPrompt;
 
-        private Dictionary<string, DialogueNode> dialogueNodes = new Dictionary<string, DialogueNode>();
-        private DialogueNode currentNode;
+        private const float WaitingTime = 2f;
+        private UIManager _uiManager;
+
+        private readonly Dictionary<string, DialogueNode> _dialogueNodes = new Dictionary<string, DialogueNode>();
+        private DialogueNode _currentNode;
+
+        private void Awake()
+        {
+            _uiManager = UIManager.Instance;
+        }
 
         public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
         {
             EventSystem.current?.SetSelectedGameObject(null);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            dialogueNodes.Clear();
-            foreach (var n in nodes) dialogueNodes[n.nodeID] = n;
+
+            _dialogueNodes.Clear();
+            foreach (var n in nodes) _dialogueNodes[n.nodeID] = n;
+
             gameObject.SetActive(true);
             DisplayNode(startingNodeID);
         }
 
         private void DisplayNode(string nodeID)
         {
-            if (!dialogueNodes.ContainsKey(nodeID))
+            if (!_dialogueNodes.TryGetValue(nodeID, out var node))
             {
                 EndDialogue();
                 return;
             }
 
-            currentNode = dialogueNodes[nodeID];
-            speakerText.text = currentNode.speakerName;
-            dialogueText.text = currentNode.dialogueText;
+            _currentNode = node;
+
+            _uiManager?.ShowDialogue(_currentNode.speakerName, _currentNode.dialogueText);
 
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
-            bool hasText = !string.IsNullOrWhiteSpace(currentNode.dialogueText);
-            bool hasChoices = currentNode.choices != null && currentNode.choices.Count > 0;
+            bool hasText = !string.IsNullOrWhiteSpace(_currentNode.dialogueText);
+            bool hasChoices = _currentNode.choices is { Count: > 0 };
 
             if (!hasText && !hasChoices)
             {
@@ -61,10 +76,10 @@ namespace dialogue
                 return;
             }
 
-            foreach (var choice in currentNode.choices)
+            foreach (var choice in _currentNode.choices)
             {
                 var button = Instantiate(choiceButtonPrefab, choicesContainer);
-                button.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
+                button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = choice.choiceText;
                 button.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
             }
 
@@ -73,18 +88,21 @@ namespace dialogue
 
         private IEnumerator AutoContinue()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(WaitingTime);
             EndDialogue();
         }
-
-        public void EndDialogue()
+        
+        private void EndDialogue()
         {
+            _uiManager?.HideDialogue();
+
             gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            FindObjectOfType<MovementController>()?.ResumeMovement();
-            FindObjectOfType<CameraController>()?.ResumeCameraMovement();
-            FindObjectOfType<InteractPrompt>()?.EndInteraction();
+        
+            movementController?.ResumeMovement();
+            cameraController?.ResumeCameraMovement();
+            interactPrompt?.EndInteraction();
         }
     }
 }
