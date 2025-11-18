@@ -1,52 +1,48 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerBorderController : MonoBehaviour
 {
-    [Header("Distance from border settings")] 
-    [SerializeField] private int distanceToTriggerEffects;
+    [Header("Border effect settings")] 
+    [SerializeField] private int distanceToTriggerEffects = 5;
+    [SerializeField] private int timeBeforeRetrigger = 10;
     
     [Header("Audio clips")]
     [SerializeField] private AudioClip tooFarFromCabinVoiceLine;
     
     private GameObject _player;
+    private Vignette _vignette;
     private Collider _collider;
+    private AudioSource _audioSource;
     private bool _blockEffectRetrigger;
-    private bool _fogApplied;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _collider =  GetComponent<Collider>();
         _player =  GameObject.Find("Player");
-        if (_player == null)
-        {
-            Debug.LogError("Player not found");
-        }
+        _audioSource = _player.GetComponent<AudioSource>(); 
+        GameObject.FindWithTag("BlurEffect").GetComponent<Volume>().profile.TryGet(out _vignette);
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3 distanceVector = _player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider, _collider.transform.position, _collider.transform.rotation);
-        if (distanceVector.sqrMagnitude < distanceToTriggerEffects)
+        if (distanceVector.sqrMagnitude < distanceToTriggerEffects * distanceToTriggerEffects)
         {
-            if (!_blockEffectRetrigger) StartCoroutine(ApplyBlurEffects());
-        }
-        else
-        {
-            _fogApplied = true;
+            if (!_blockEffectRetrigger) StartCoroutine(PlayVoiceLine());
+            _vignette.intensity.value = 1 - distanceVector.sqrMagnitude / (distanceToTriggerEffects * distanceToTriggerEffects);
         }
     }
 
-    private IEnumerator ApplyBlurEffects()
+    private IEnumerator PlayVoiceLine()
     {
         _blockEffectRetrigger = true;
-        _fogApplied = true;
-        _player.TryGetComponent<AudioSource>(out var audioSource);
-        audioSource.PlayOneShot(tooFarFromCabinVoiceLine);
-        //apply blur somehow
-        yield return new WaitForSeconds(5);
+        _audioSource.PlayOneShot(tooFarFromCabinVoiceLine);
+        yield return new WaitForSeconds(timeBeforeRetrigger);
         _blockEffectRetrigger = false;
     }
 }
