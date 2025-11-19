@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
-  m_Name: response3
+  m_Name: radio_start
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  nodeID: response3
-  speakerName: 'Stranger:'
-  dialogueText: ... That's clearly a fake name... LET ME OUT!
+  nodeID: radio_start
+  speakerName: 
+  dialogueText: Nora reaches over to switch on the radio.
   choices:
-  - choiceText: "It\u2019s not fake! I swear!"
-    targetNodeID: response3a
-  - choiceText: You got me...
-    targetNodeID: response3b
+  - choiceText: Turn on radio
+    targetNodeID: radio_intro
+  - choiceText: Walk away
+    targetNodeID: nora_turns_off

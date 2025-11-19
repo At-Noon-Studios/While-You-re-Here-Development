@@ -4,12 +4,17 @@ using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-namespace PlayerControls
+namespace player_controls
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(CharacterController))]
     public class MovementController : MonoBehaviour
     {
+        private static readonly int IsWalkingBackwards = Animator.StringToHash("isWalkingBackwards");
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
+        private static readonly int IsStrafingLeft = Animator.StringToHash("isStrafingLeft");
+        private static readonly int IsStrafingRight = Animator.StringToHash("isStrafingRight");
+
         [Header("Player SO for Movement")]
         [SerializeField] private PlayerData playerData;
 
@@ -86,10 +91,10 @@ namespace PlayerControls
             IsInput = _moveY != 0 || _moveX != 0;
             HeadBob();
 
-            _animator.SetBool("isWalking", _moveY > 0);
-            _animator.SetBool("isWalkingBackwards", _moveY < 0);
-            _animator.SetBool("isStrafingLeft", _moveX < 0);
-            _animator.SetBool("isStrafingRight", _moveX > 0);
+            _animator.SetBool(IsWalking, _moveY > 0);
+            _animator.SetBool(IsWalkingBackwards, _moveY < 0);
+            _animator.SetBool(IsStrafingLeft, _moveX < 0);
+            _animator.SetBool(IsStrafingRight, _moveX > 0);
 
             float speed = movementSpeed * _speedModifier;
             var movementFinal = transform.right * _moveX + transform.forward * _moveY + Physics.gravity;
@@ -105,10 +110,10 @@ namespace PlayerControls
         public void PauseMovement()
         {
             canMove = false;
-            _animator.SetBool("isWalking", false);
-            _animator.SetBool("isWalkingBackwards", false);
-            _animator.SetBool("isStrafingLeft", false);
-            _animator.SetBool("isStrafingRight", false);
+            _animator.SetBool(IsWalking, false);
+            _animator.SetBool(IsWalkingBackwards, false);
+            _animator.SetBool(IsStrafingLeft, false);
+            _animator.SetBool(IsStrafingRight, false);
         }
 
         public void ResumeMovement()

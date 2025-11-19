@@ -1,7 +1,7 @@
 using System.Collections; 
 using System.Collections.Generic;
 using Dialogue;
-using PlayerControls;
+using player_controls;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,10 +31,13 @@ namespace dialogue
         private void Start()
         {
             _uiManager = UIManager.Instance;
+
             GameObject player = GameObject.FindWithTag("Player");
+
             _movementController = player.GetComponent<MovementController>();
-            _cameraController =  player.GetComponent<CameraController>();
+            _cameraController = player.GetComponentInChildren<CameraController>();
         }
+
 
         public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
         {

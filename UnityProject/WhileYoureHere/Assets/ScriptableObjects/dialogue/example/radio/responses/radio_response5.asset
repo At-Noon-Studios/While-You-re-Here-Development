@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
-  m_Name: response1b
+  m_Name: radio_response5
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  nodeID: response1b
-  speakerName: 'Stranger:'
-  dialogueText: ...At least you're honest. But seriously, open the door. Now.
+  nodeID: radio_rant
+  speakerName: 'Radio Host:'
+  dialogueText: "We sure have a lot of hiking accidents lately, don\u2019t we? ........
+    If I were the police, I\u2019d stop pretending and call it what it is\u2014"
   choices:
-  - choiceText: "Fine, fine. I\u2019ll open it."
-    targetNodeID: end_good
-  - choiceText: Not until you tell me who YOU are.
-    targetNodeID: response2
+  - choiceText: Keep listening
+    targetNodeID: radio_shout
+  - choiceText: Walk away
+    targetNodeID: nora_turns_off

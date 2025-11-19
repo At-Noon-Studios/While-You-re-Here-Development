@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
-  m_Name: response2
+  m_Name: radio_response4
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  nodeID: response2
-  speakerName: 'Stranger:'
-  dialogueText: DO NOT ANSWER A QUESTION WITH ANOTHER QUESTION!
+  nodeID: radio_transition_accidents
+  speakerName: 'Radio Host:'
+  dialogueText: "Speaking of accidents\u2014did you hear the police? They\u2019ve
+    labeled the disappearance of [previous victim name] as a 'hiking accident'."
   choices:
-  - choiceText: Okay! I'm sorry, jeez...
-    targetNodeID: response2a
-  - choiceText: You sound like a teacher.
-    targetNodeID: response2b
+  - choiceText: Keep listening
+    targetNodeID: radio_rant
+  - choiceText: Walk away
+    targetNodeID: nora_turns_off
