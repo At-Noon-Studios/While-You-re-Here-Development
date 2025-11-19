@@ -49,7 +49,6 @@ public class PlayerBorderController : MonoBehaviour
             if (!_blockEffectRetrigger) StartCoroutine(PlayVoiceLine());
             _vignette.intensity.value = Mathf.Clamp(1 - closestBorder / (distanceToTriggerEffects * distanceToTriggerEffects), 0f, 0.5f);
             _colorAdjustments.saturation.value = Mathf.Clamp((distanceToTriggerEffects * distanceToTriggerEffects - closestBorder) / (distanceToTriggerEffects * distanceToTriggerEffects) * -100, -100, 0);
-            Debug.Log(closestBorder + " : " + _colorAdjustments.saturation.value);
         }
         else
         {
