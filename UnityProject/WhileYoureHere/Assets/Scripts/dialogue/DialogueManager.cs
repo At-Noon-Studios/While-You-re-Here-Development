@@ -28,7 +28,7 @@ namespace dialogue
         private readonly Dictionary<string, DialogueNode> _dialogueNodes = new Dictionary<string, DialogueNode>();
         private DialogueNode _currentNode;
 
-        private void Awake()
+        private void Start()
         {
             _uiManager = UIManager.Instance;
         }
