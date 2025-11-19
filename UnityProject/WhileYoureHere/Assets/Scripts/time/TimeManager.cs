@@ -7,8 +7,7 @@ namespace time
 {
     public class TimeManager : MonoBehaviour
     {
-        [Header("Lighting")]
-        [SerializeField] private Light globalLight;
+        private Light _sunLight;
 
         [Header("Current Time")]
         [Range(1, 8)] [SerializeField] private int days;
@@ -23,6 +22,11 @@ namespace time
         private static readonly int Texture1 = Shader.PropertyToID("_Texture1");
         private static readonly int Texture2 = Shader.PropertyToID("_Texture2");
         private static readonly int Blend = Shader.PropertyToID("_Blend");
+
+        private void Awake()
+        {
+            _sunLight = GameObject.Find("Sun").GetComponent<Light>();
+        }
 
         private void Start()
         {
@@ -74,25 +78,25 @@ namespace time
 
             for (float i = 0; i < time; i += Time.deltaTime)
             {
-                globalLight.color = lightGradient.Evaluate(i / time);
-                RenderSettings.fogColor = globalLight.color;
+                _sunLight.color = lightGradient.Evaluate(i / time);
+                RenderSettings.fogColor = _sunLight.color;
                 yield return null;
             }
         }
 
         private IEnumerator LerpSunRotation(float startAngle, float endAngle, float time)
         {
-            var initialRotation = globalLight.transform.rotation.eulerAngles;
+            var initialRotation = _sunLight.transform.rotation.eulerAngles;
 
             for (float t = 0; t < time; t += Time.deltaTime)
             {
                 var angle = Mathf.Lerp(startAngle, endAngle, t / time);
                 var newRotation = new Vector3(angle, initialRotation.y, initialRotation.z);
-                globalLight.transform.rotation = Quaternion.Euler(newRotation);
+                _sunLight.transform.rotation = Quaternion.Euler(newRotation);
                 yield return null;
             }
 
-            globalLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
+            _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FootStepsSO", menuName = "ScriptableObjects/FootStepsSO")]
+[CreateAssetMenu(fileName = "FootStepsSO", menuName = "Scriptable Objects/FootStepsSO")]
 public class FootStepsData : ScriptableObject
 {
     [Header("Footstep Sound Effects")]
