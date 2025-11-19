@@ -6,7 +6,7 @@ namespace controller.axe
     public class AxeController : MonoBehaviour
     {
         [Header("Weapon State")] 
-        [SerializeField] private bool isHoldingAxe;
+        private bool _isHoldingAxe;
         [SerializeField] private float swingCooldown = 0.5f;
         [SerializeField] private float swipeThreshold = 0.5f;
 
@@ -19,7 +19,6 @@ namespace controller.axe
         private float _lastSwingTime;
         private bool _isSwingPaused;
 
-
         private void Start()
         {
             if (axeAnimator == null)
@@ -30,7 +29,7 @@ namespace controller.axe
 
         private void OnSwing()
         {
-            if (!isHoldingAxe)
+            if (!_isHoldingAxe)
             {
                 axeAnimator.SetBool(IsHoldingAxeParam, false);
                 axeAnimator.ResetTrigger(SwingTrigger);
@@ -60,5 +59,12 @@ namespace controller.axe
 
             _previousMouseY = currentMouseY;
         }
+        
+        public void SetHoldingAxe(bool isHolding)
+        {
+            _isHoldingAxe = isHolding;
+            axeAnimator.SetBool(IsHoldingAxeParam, isHolding);
+        }
+        
     }
 }

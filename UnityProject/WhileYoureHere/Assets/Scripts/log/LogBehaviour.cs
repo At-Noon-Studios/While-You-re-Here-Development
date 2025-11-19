@@ -1,5 +1,6 @@
 using Interactable;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace log
 {
@@ -10,25 +11,23 @@ namespace log
         {
             base.Awake();
         }
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
 
         public override void Interact()
         {
-           // Logic
-           print("Interact");
+           
         }
 
         public void LogBehaviourUpdate()
         {
             
+        }
+
+        private void OnPickUp(InputValue value)
+        {
+            var position =  value.Get<Vector2>();
+            
+            position.y  *= -1;
+            position.x *= -1;
         }
     }
 }
