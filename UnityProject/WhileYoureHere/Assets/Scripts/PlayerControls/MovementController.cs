@@ -88,7 +88,7 @@ namespace PlayerControls
             _animator.SetBool("isStrafingRight", _moveX > 0);
 
             float speed = movementSpeed * _speedModifier;
-            var movementFinal = transform.right * _moveX + transform.forward * _moveY;
+            var movementFinal = transform.right * _moveX + transform.forward * _moveY + Physics.gravity;
             _controller.Move(speed * Time.deltaTime * movementFinal);
         }
 
