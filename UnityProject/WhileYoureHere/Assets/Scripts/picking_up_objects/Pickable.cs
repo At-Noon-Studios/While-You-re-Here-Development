@@ -1,3 +1,4 @@
+using System;
 using Interactable;
 using ScriptableObjects.picking_up_objects;
 using UnityEngine;
@@ -9,22 +10,20 @@ namespace picking_up_objects
         [SerializeField] private PickableData pickableData;
         [SerializeField] private Transform placeObjectPoint;
         [SerializeField] private Transform holdPoint;
-
+        [SerializeField] private HeldObjectController heldObjectController;
+        
         private bool _isHolding;
         private const float FollowSpeed = 5f;
 
         private Rigidbody _rb;
         private Transform _currentTargetPoint;
-
-        private HeldObjectController _heldObjectController;
-
+        
         private new void Awake()
         {
             _rb = GetComponent<Rigidbody>();
             base.Awake();
-            _heldObjectController = FindObjectOfType<HeldObjectController>();
         }
-
+        
         private void Update()
         {
             if (_isHolding && _currentTargetPoint)
@@ -39,7 +38,7 @@ namespace picking_up_objects
             {
                 Hold();
 
-                _heldObjectController?.SetHeldObject(this);
+                heldObjectController?.SetHeldObject(this);
             }
         }
 
@@ -85,25 +84,14 @@ namespace picking_up_objects
             _rb.angularDamping = 0.05f;
         }
 
-        // public void Place()
-        // {
-        //     transform.position = placeObjectPoint.position;
-        //     _isHolding = false;
-        //     _currentTargetPoint = placeObjectPoint;
-        //     _rb.useGravity = false;
-        //     _rb.linearDamping = 10f;
-        //     _rb.angularDamping = 10f;
-        // }
-
         public void Place()
         {
+            _isHolding = false;
             transform.position = placeObjectPoint.position;
-            transform.rotation = placeObjectPoint.rotation;
             _rb.angularVelocity = Vector3.zero;
             _rb.useGravity = true;
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
-            _isHolding = false;
         }
     }
 }
