@@ -6,6 +6,11 @@ namespace log
 {
     public class LogBehaviour : InteractableBehaviour
     {
+        
+        [SerializeField] private float damageAmount = 10f;
+        [SerializeField] private float maxHits = 3f;
+        
+        private float _currentHits;
 
         private void Awake()
         {
@@ -19,7 +24,16 @@ namespace log
 
         public void LogBehaviourUpdate()
         {
-            
+            if (_currentHits >= maxHits)
+            {
+                //Split the log
+                Destroy(gameObject);
+            }
+        }
+        
+        private void PhysicsUpdate()
+        {
+         // Handle physics-relatedupdates here (How the logs fall/split)
         }
 
         private void OnPickUp(InputValue value)
