@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 167946695169208818}
-  - component: {fileID: 626221807380651032}
   - component: {fileID: 6638429459522799484}
   m_Layer: 0
   m_Name: MapBorder
@@ -33,21 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &626221807380651032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4646945862026328373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1868a08c65e506e4d84b09bdf1a45b7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBorderController
-  distanceToTriggerEffects: 5
-  timeBeforeRetrigger: 10
-  tooFarFromCabinVoiceLine: {fileID: 8300000, guid: a15ae0a33438bf2439c60f37a3465da7, type: 3}
 --- !u!65 &6638429459522799484
 BoxCollider:
   m_ObjectHideFlags: 0

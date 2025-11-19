@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -14,30 +16,48 @@ public class PlayerBorderController : MonoBehaviour
     
     private GameObject _player;
     private Vignette _vignette;
+    private ColorAdjustments _colorAdjustments;
     private Collider _collider;
     private AudioSource _audioSource;
     private bool _blockEffectRetrigger;
+    private GameObject[] _borderObjects;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _collider =  GetComponent<Collider>();
         _player =  GameObject.Find("Player");
-        _audioSource = _player.GetComponent<AudioSource>(); 
-        GameObject.FindWithTag("BlurEffect").GetComponent<Volume>().profile.TryGet(out _vignette);
+        _audioSource = _player.GetComponent<AudioSource>();
+        Volume volume = GetComponent<Volume>();
+        volume.profile.TryGet(out _vignette);
+        volume.profile.TryGet(out _colorAdjustments);
+        _borderObjects = GameObject.FindGameObjectsWithTag("MapBorder");
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 distanceVector = _player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider, _collider.transform.position, _collider.transform.rotation);
-        if (distanceVector.sqrMagnitude < distanceToTriggerEffects * distanceToTriggerEffects)
+        var distances = new List<float>();
+        foreach (GameObject borderObject in _borderObjects)
+        {
+            borderObject.TryGetComponent<Collider>(out  _collider);
+            distances.Add((_player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider, _collider.transform.position, _collider.transform.rotation)).sqrMagnitude);
+        }
+
+        var closestBorder = distances.Min();
+        if (closestBorder < distanceToTriggerEffects * distanceToTriggerEffects)
         {
             if (!_blockEffectRetrigger) StartCoroutine(PlayVoiceLine());
-            _vignette.intensity.value = 1 - distanceVector.sqrMagnitude / (distanceToTriggerEffects * distanceToTriggerEffects);
+            _vignette.intensity.value = Mathf.Clamp(1 - closestBorder / (distanceToTriggerEffects * distanceToTriggerEffects), 0f, 0.5f);
+            _colorAdjustments.saturation.value = Mathf.Clamp((distanceToTriggerEffects * distanceToTriggerEffects - closestBorder) / (distanceToTriggerEffects * distanceToTriggerEffects) * -100, -100, 0);
+            Debug.Log(closestBorder + " : " + _colorAdjustments.saturation.value);
+        }
+        else
+        {
+            _vignette.intensity.value = 0f;
+            _colorAdjustments.saturation.value = 0;
         }
     }
-
+    
     private IEnumerator PlayVoiceLine()
     {
         _blockEffectRetrigger = true;
