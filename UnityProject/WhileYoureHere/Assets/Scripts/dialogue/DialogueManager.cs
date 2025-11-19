@@ -1,6 +1,7 @@
 using System.Collections; 
 using System.Collections.Generic;
 using Dialogue;
+using PlayerControls;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
 using UnityEngine.EventSystems;
