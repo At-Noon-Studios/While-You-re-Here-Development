@@ -649,13 +649,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1941477672436412524}
-  - component: {fileID: 6481783414444595259}
+  - component: {fileID: 7150500588459087160}
   - component: {fileID: 9081291284711311923}
   - component: {fileID: 4754024356005632818}
   - component: {fileID: 493095879689672428}
   - component: {fileID: 212858616541186272}
   - component: {fileID: 6642764398237555488}
-  - component: {fileID: -5759056920773023490}
+  - component: {fileID: 9119809993727751880}
   - component: {fileID: 6356298079816266959}
   - component: {fileID: 7490628096710059750}
   m_Layer: 0
@@ -682,7 +682,7 @@ Transform:
   - {fileID: 44206506668727}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &6481783414444595259
+--- !u!143 &7150500588459087160
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   playerData: {fileID: 11400000, guid: 2c5a59fe1595d4392814fc10f921f100, type: 2}
   move: {fileID: 11400000, guid: 7b473b0c5380b4d4f99c071879fc0b02, type: 2}
-  movementSpeed: 2.2
+  movementSpeed: 3
 --- !u!114 &493095879689672428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -910,7 +910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78e043506a284920b7d143848d29704, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FootstepsSound
-  _audioSource: {fileID: -5759056920773023490}
+  _audioSource: {fileID: 9119809993727751880}
   fs: {fileID: 11400000, guid: f95f4b7ba546a479d8a6526933cb85a7, type: 2}
 --- !u!114 &7490628096710059750
 MonoBehaviour:
@@ -2291,7 +2291,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
