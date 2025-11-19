@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UI;
 using UnityEngine;
 
@@ -24,13 +23,13 @@ namespace Interactable
         
         public abstract void Interact();
         
-        void IInteractable.OnHoverEnter()
+        public virtual void OnHoverEnter()
         {
             AddOutlineMaterialToRenderer();
             _uiManager?.ShowInteractPrompt(gameObject.name);
         }
 
-        void IInteractable.OnHoverExit()
+        public virtual void OnHoverExit()
         {
             RemoveOutlineMaterialFromRenderer();
             _uiManager?.HideInteractPrompt();
@@ -40,15 +39,17 @@ namespace Interactable
         {
             if (!_renderer || !_outlineMaterial) return;
             var materials = _renderer.materials;
-            if (materials.Contains(_outlineMaterial)) return;
+            if (materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
+                return;
             _renderer.materials = materials.Append(_outlineMaterial).ToArray();
         }
 
         private void RemoveOutlineMaterialFromRenderer() {
             if (!_renderer || !_outlineMaterial) return;
             var materials = _renderer.materials;
-            if (!materials.Contains(_outlineMaterial)) return;
-            _renderer.materials = materials.Where(m => !m.Equals(_outlineMaterial)).ToArray();
+            if (!materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
+                return;
+            _renderer.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
         }
     }
 }
