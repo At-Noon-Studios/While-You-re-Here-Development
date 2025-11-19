@@ -11,14 +11,24 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
         add script to player if already exists
         
     */
+    
+    [SerializeField] private LayerMask dialLayer;
+    [SerializeField] private LayerMask buttonLayer;
     [SerializeField] private LayerMask radioLayerMask;
     [SerializeField] private Camera cam;
     [SerializeField] private float lookDistance = 100f;
+    [SerializeField] private Transform startButtonLocation;
+    [SerializeField] private Transform sliderLocation;
     // [SerializeField] private GameObject onSwitch;
     // [SerializeField] private GameObject offSwitch;
     [SerializeField] private GameObject canvas;
     private bool _isOn;
     private bool interacted;
+    private RadioController radioController;
+    private bool isDragging;
+    private float tuneValue;
+    private Vector3 startMousePos;
+
     // private Interactible interactible;
     void Start()
     {
@@ -29,50 +39,70 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
     void Update()
     {
         // Interact();
-        
+        HandleMouseInput();
+
     }
     private void OnInteract(InputValue inputValue)
     {
         // Interact();
+        interacted = true;
     }
 
     public override void Interact()
     {
-        //wat gebeudrd er wanneer je e drukt op een radio
-        
-        var mousePos = Mouse.current.position.ReadValue(); 
-        Ray ray = cam.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, lookDistance,radioLayerMask))
-        {
-
-            Debug.Log(hit.collider.gameObject.name + " was hit");
-            canvas.SetActive(true);
-            // if (hit.collider.GetComponent<IInteractible>())
-            // {
-            // if (hit.collider.gameObject == onSwitch)
-            // {
-            //         _isOn = true;
-            //         
-            //         // optional add a light gameObject and toggle it on and off 
-            //         
-            // }
-            // if (hit.collider.gameObject == offSwitch)
-            // {
-            //     _isOn = false;
-            //     Debug.Log("Object" + hit.collider.gameObject.name + "is hitten");
-            // }
-
-            // handleOnOffSwitch();
-            // }
-        }
-        else canvas.SetActive(false);
-        
-        
-        Debug.DrawRay(ray.origin, ray.direction*100f, Color.red);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+     
     }
     
+    private void HandleMouseInput()
+    {
+        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (interacted)
+        {
+            if (Physics.Raycast(ray, out RaycastHit hit, 100, dialLayer))
+            {
+                if (hit.transform == sliderLocation)
+                {
+                    isDragging = true;
+                    startMousePos = Mouse.current.position.ReadValue();
+                }
+            }
+        }
+        // On mouse drag
+        if (interacted && isDragging)
+        {
+            Vector2 currentMousePos = Mouse.current.position.ReadValue();
+            float deltaX = currentMousePos.x - startMousePos.x;
 
+            // Convert horizontal drag into tune value
+            float sensitivity = 0.002f; // adjust to your liking
+            tuneValue = Mathf.Clamp01(tuneValue + deltaX * sensitivity);
+
+            startMousePos = currentMousePos; // update for smooth drag
+        }
+
+        // On mouse up, stop dragging
+        if (!interacted)
+        {
+            isDragging = false;
+        }
+        
+       
+        if (Physics.Raycast(ray, out RaycastHit hitc, 100, buttonLayer))
+        {
+            if (interacted)
+            {
+                radioController.TurnRadioOn();
+                Debug.Log("Radio turned ON");
+            }
+        }
+        
+
+    }
+
+    
+    
     // private void handleOnOffSwitch()
     // {
     //     Renderer OnRenderer = onSwitch.GetComponent<Renderer>();
@@ -93,5 +123,7 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
     //         Debug.Log("off switch is off");
     //     }
     // }
+    
+    
 
 }

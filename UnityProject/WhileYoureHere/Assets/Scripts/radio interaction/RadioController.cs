@@ -1,23 +1,31 @@
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 
 public class RadioController : MonoBehaviour
 {
     [SerializeField] private RadioTracks[] radioTracks;
     [SerializeField] private AudioClip staticClip;
-    [SerializeField] private Slider tuneSlider;
-    [SerializeField] private Button startButton;
+    // [SerializeField] private Slider tuneSlider;
+    // [SerializeField] private Button startButton;
+    [SerializeField] private Transform startButtonLocation;
+    [SerializeField] private Transform sliderLocation;
+    [SerializeField] private Camera cam;
+    [SerializeField] private LayerMask dialLayer;
+    [SerializeField] private LayerMask buttonLayer;
     private AudioSource audioSource;
     private int currentRadioIndex = -1;
     private float tuneThreshold = 0.1f;
     private bool radioOn;
     private bool previousRadioState;
-    
+    private bool isDragging;
+    private float tuneValue;
+    private Vector3 startMousePos;
     
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        startButton.onClick.AddListener(TurnRadioOn);
+        
 
     }
 
@@ -26,7 +34,7 @@ public class RadioController : MonoBehaviour
 
         if (radioOn)
         {
-            TuneRadio();
+            TuneRadio(tuneValue);
         }
 
         // Detect when radio was turned off
@@ -39,15 +47,17 @@ public class RadioController : MonoBehaviour
 
         previousRadioState = radioOn;
     }
-
-    private void TurnRadioOn()
+    
+    
+   
+    public void TurnRadioOn()
     {
         radioOn=!radioOn;
     }
 
-    private void TuneRadio()
+    private void TuneRadio(float value)
     {
-        var value = tuneSlider.value;
+         // value = tuneSlider.value;
         var stationSpacing = 1f / radioTracks.Length;
 
         var newIndex = Mathf.FloorToInt(value / stationSpacing);
