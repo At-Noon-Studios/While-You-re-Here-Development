@@ -30,6 +30,8 @@ namespace PlayerControls
         private CameraController _cameraController;
         private float _defaultYPos;
         private float _speedModifier = 1f;
+
+        public bool canMove = true;
         
         public void SetMovementModifier(float modifier)
         {
@@ -79,6 +81,8 @@ namespace PlayerControls
 
         void Update()
         {
+            if (!canMove) return;
+
             IsInput = _moveY != 0 || _moveX != 0;
             HeadBob();
 
@@ -96,6 +100,20 @@ namespace PlayerControls
         {
             var currentRotation = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(currentRotation.x, rotation.eulerAngles.y, currentRotation.z);
+        }
+
+        public void PauseMovement()
+        {
+            canMove = false;
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isWalkingBackwards", false);
+            _animator.SetBool("isStrafingLeft", false);
+            _animator.SetBool("isStrafingRight", false);
+        }
+
+        public void ResumeMovement()
+        {
+            canMove = true;
         }
     }
 }
