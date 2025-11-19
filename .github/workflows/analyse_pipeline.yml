@@ -3,13 +3,14 @@ name: Analyse Pipeline
 on:
   pull_request:
     branches: [ "development" ]
-    tags: [ "Programming", "Integration" ]
-
+    
   workflow_dispatch:
 
 jobs:
+
   sonarqube:
     name: SonarQube
+    if: ${{ github.event.label.name == 'Programming' || github.event.label.name == 'Integration'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
