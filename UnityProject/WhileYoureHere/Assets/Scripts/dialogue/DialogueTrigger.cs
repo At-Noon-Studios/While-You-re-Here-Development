@@ -1,6 +1,6 @@
 using dialogue;
 using EventChannels;
-using PlayerControls;
+using player_controls;
 using UnityEngine;
 
 namespace Dialogue

@@ -9,8 +9,8 @@ namespace picking_up_objects
     {
         [SerializeField] private PickableData pickableData;
         [SerializeField] private Transform placeObjectPoint;
-        [SerializeField] private Transform holdPoint;
-        [SerializeField] private HeldObjectController heldObjectController;
+        private Transform _holdPoint;
+        private HeldObjectController _heldObjectController;
         
         private bool _isHolding;
         private const float FollowSpeed = 5f;
@@ -21,6 +21,9 @@ namespace picking_up_objects
         private new void Awake()
         {
             _rb = GetComponent<Rigidbody>();
+            GameObject player = GameObject.FindWithTag("Player");
+            _holdPoint = player.transform.Find("Main Camera/HoldObjectPoint");
+            _heldObjectController = player.GetComponent<HeldObjectController>();
             base.Awake();
         }
         
@@ -38,7 +41,7 @@ namespace picking_up_objects
             {
                 Hold();
 
-                heldObjectController?.SetHeldObject(this);
+                _heldObjectController?.SetHeldObject(this);
             }
         }
 
@@ -69,7 +72,7 @@ namespace picking_up_objects
         private void Hold()
         {
             _isHolding = true;
-            _currentTargetPoint = holdPoint;
+            _currentTargetPoint = _holdPoint;
             _rb.useGravity = false;
             _rb.linearDamping = 10f;
             _rb.angularDamping = 10f;
@@ -87,7 +90,7 @@ namespace picking_up_objects
         public void Place()
         {
             _isHolding = false;
-            transform.position = placeObjectPoint.position;
+            if (placeObjectPoint) transform.position = placeObjectPoint.position;
             _rb.angularVelocity = Vector3.zero;
             _rb.useGravity = true;
             _rb.linearDamping = 10f;

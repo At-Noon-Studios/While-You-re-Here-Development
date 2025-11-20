@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
@@ -23,10 +24,18 @@ namespace dialogue
 
         public void StartDialogue()
         {
-            if (dialogueManager != null && dialogueNodes.Count > 0)
-            {
-                dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
-            }
+            if (dialogueManager == null || dialogueNodes.Count == 0) return;
+
+            // Wacht 1 frame zodat UI & EventSystem klaar zijn
+            StartCoroutine(StartDialogueNextFrame());
         }
+
+        private IEnumerator StartDialogueNextFrame()
+        {
+            yield return null; // wacht tot einde van frame
+
+            dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
+        }
+
     }
 }
