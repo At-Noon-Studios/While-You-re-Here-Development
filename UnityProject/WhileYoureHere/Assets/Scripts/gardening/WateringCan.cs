@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class WateringCan : MonoBehaviour
+namespace gardening
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class WateringCan : MonoBehaviour
     {
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
+        {
         
-    }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
+        // Update is called once per frame
+        void Update()
+        {
         
+        }
     }
 }

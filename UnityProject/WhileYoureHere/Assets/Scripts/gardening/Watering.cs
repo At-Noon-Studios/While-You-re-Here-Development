@@ -1,25 +1,28 @@
 using UnityEngine;
 
-public class Watering : MonoBehaviour
+namespace gardening
 {
-    public ParticleSystem WaterParticleSystem;
+    public class Watering : MonoBehaviour
+    {
+        [SerializeField] private ParticleSystem waterParticleSystem;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        WaterParticleSystem = GetComponent<ParticleSystem>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Vector3.Angle(Vector3.down, transform.forward) <= 90f)
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            WaterParticleSystem.Play();
+            waterParticleSystem = GetComponent<ParticleSystem>();
         }
-        else
+
+        // Update is called once per frame
+        void Update()
         {
-            WaterParticleSystem.Stop();
+            if (Vector3.Angle(Vector3.down, transform.forward) <= 90f)
+            {
+                waterParticleSystem.Play();
+            }
+            else
+            {
+                waterParticleSystem.Stop();
+            }
         }
     }
 }
