@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
+  m_Name: door_response2b
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: response2b
+  speakerName: 'Stranger:'
+  dialogueText: "A TEACHER?! I swear if you don\u2019t unlock this door\u2014"
+  choices:
+  - choiceText: "Okay, okay! I\u2019ll unlock it."
+    targetNodeID: end_good
+  - choiceText: Try to break it then.
+    targetNodeID: end_bad

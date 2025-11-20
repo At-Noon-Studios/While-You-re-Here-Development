@@ -1,7 +1,7 @@
 using System.Collections; 
 using System.Collections.Generic;
 using Dialogue;
-using PlayerControls;
+using player_controls;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,9 +16,8 @@ namespace dialogue
         [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
         
-        [Header("Controller References")]
-        [SerializeField] private MovementController movementController;
-        [SerializeField] private CameraController cameraController;
+        private MovementController _movementController;
+        private CameraController _cameraController;
         
         [Header("Interaction References")]
         [SerializeField] private InteractPrompt interactPrompt;
@@ -32,7 +31,13 @@ namespace dialogue
         private void Start()
         {
             _uiManager = UIManager.Instance;
+
+            GameObject player = GameObject.FindWithTag("Player");
+
+            _movementController = player.GetComponent<MovementController>();
+            _cameraController = player.GetComponentInChildren<CameraController>();
         }
+
 
         public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
         {
@@ -101,8 +106,8 @@ namespace dialogue
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         
-            movementController?.ResumeMovement();
-            cameraController?.ResumeCameraMovement();
+            _movementController?.ResumeMovement();
+            _cameraController?.ResumeCameraMovement();
             interactPrompt?.EndInteraction();
         }
     }

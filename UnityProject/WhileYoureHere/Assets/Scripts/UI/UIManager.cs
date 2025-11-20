@@ -24,7 +24,6 @@ namespace UI
             else if (Instance != this)
             {
                 Destroy(gameObject);
-                return;
             }
         }
 
