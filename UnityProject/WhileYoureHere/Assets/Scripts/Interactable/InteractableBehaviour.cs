@@ -17,7 +17,7 @@ namespace Interactable
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
         /// <remarks>
-        /// Be sure to call <c>base.Awake();</c> when overriding this function. Not doing so will prevent outlines from being rendered.
+        /// Be sure to call <c>base.Awake();</c> when overriding this method. Not doing so will prevent outlines from being rendered.
         /// </remarks>
         protected void Awake()
         {
@@ -28,7 +28,7 @@ namespace Interactable
         }
 
         /// <remarks>
-        /// Be sure to call <c>base.Start();</c> when overriding this function. Not doing so will prevent the default interaction prompt from showing up.
+        /// Be sure to call <c>base.Start();</c> when overriding this method. Not doing so will prevent the default interaction prompt from showing up.
         /// </remarks>
         protected void Start()
         {
