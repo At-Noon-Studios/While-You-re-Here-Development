@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class RadioInteraction : InteractableBehaviour//, IInteractible
+public class RadioInteraction : InteractableBehaviour
 {
     /* TODO:: add a raycast that detects when objects are hitting when E is pressed
         add a layer mask var in both unity and code
@@ -23,7 +23,7 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
     // [SerializeField] private GameObject offSwitch;
     [SerializeField] private GameObject canvas;
     private bool _isOn;
-    private bool interacted;
+    private bool isOnClicked;
     private RadioController radioController;
     private bool isDragging;
     private float tuneValue;
@@ -34,18 +34,27 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
     {
         // interactible = GetComponent<IInteractible>()
         _isOn = false;
+        radioController = GetComponent<RadioController>();
     }
 
     void Update()
     {
         // Interact();
         HandleMouseInput();
+        Debug.Log("is dragging in the update state = "+isDragging);
 
     }
     private void OnInteract(InputValue inputValue)
     {
-        // Interact();
-        interacted = true;
+            Debug.Log("Pressed");
+            isOnClicked = inputValue.isPressed;
+        Debug.Log("interacted = "+isOnClicked );
+    }
+
+    private void OnClick(InputValue inputValue)
+    {
+        isDragging = inputValue.isPressed;
+        Debug.Log(isDragging);
     }
 
     public override void Interact()
@@ -54,44 +63,50 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
         Cursor.lockState = CursorLockMode.None;
      
     }
-    
+
+
     private void HandleMouseInput()
     {
-        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (interacted)
-        {
-            if (Physics.Raycast(ray, out RaycastHit hit, 100, dialLayer))
+        RaycastHit hit;
+        Vector3 center = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+        Ray ray = cam.ScreenPointToRay(center);
+        Debug.DrawRay(ray.origin, ray.direction, Color.red);
+        
+            if (Physics.Raycast(ray, out  hit, 100, dialLayer))
             {
-                if (hit.transform == sliderLocation)
-                {
-                    isDragging = true;
-                    startMousePos = Mouse.current.position.ReadValue();
-                }
+                Debug.Log("dialouge is hitten");
+                
+                 if (hit.transform == sliderLocation)
+                 {
+                     isDragging = true;
+                     startMousePos = Mouse.current.position.ReadValue();
+                 }
+                
             }
-        }
         // On mouse drag
-        if (interacted && isDragging)
+        if (isOnClicked && isDragging)
         {
             Vector2 currentMousePos = Mouse.current.position.ReadValue();
             float deltaX = currentMousePos.x - startMousePos.x;
-
+        
             // Convert horizontal drag into tune value
             float sensitivity = 0.002f; // adjust to your liking
             tuneValue = Mathf.Clamp01(tuneValue + deltaX * sensitivity);
-
+        
             startMousePos = currentMousePos; // update for smooth drag
         }
-
+        
         // On mouse up, stop dragging
-        if (!interacted)
+        if (!isOnClicked)
         {
             isDragging = false;
         }
         
        
-        if (Physics.Raycast(ray, out RaycastHit hitc, 100, buttonLayer))
+        if (Physics.Raycast(ray, out  hit, 100, buttonLayer))
         {
-            if (interacted)
+            Debug.Log("button is hitten");
+            if (isOnClicked)
             {
                 radioController.TurnRadioOn();
                 Debug.Log("Radio turned ON");
@@ -124,6 +139,4 @@ public class RadioInteraction : InteractableBehaviour//, IInteractible
     //     }
     // }
     
-    
-
 }
