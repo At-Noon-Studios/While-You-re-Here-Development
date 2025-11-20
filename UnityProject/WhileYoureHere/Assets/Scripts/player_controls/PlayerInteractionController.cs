@@ -1,5 +1,4 @@
-﻿using System;
-using EventChannels;
+﻿using EventChannels;
 using Interactable;
 using JetBrains.Annotations;
 using ScriptableObjects;
