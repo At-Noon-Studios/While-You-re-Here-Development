@@ -136,6 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63e02e2efcd8c08499a4b20a82792e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::log.LogBehaviour
+  damageAmount: 10
+  maxHits: 3
 --- !u!64 &42499341
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -174,6 +176,27 @@ MonoBehaviour:
   placeObjectPoint: {fileID: 0}
   holdPoint: {fileID: 0}
   heldObjectController: {fileID: 0}
+--- !u!114 &42499346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42499336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6fa9721c1a4bb4185fdc842494556b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopController
+  _heldObjectController: {fileID: 0}
+  stump: {fileID: 0}
+  axeAnimator: {fileID: 0}
+  audioSource: {fileID: 0}
+  placeSound: {fileID: 0}
+  impactSound: {fileID: 0}
+  swingSound: {fileID: 0}
+  gruntSound: {fileID: 0}
+  chopSound: {fileID: 0}
 --- !u!20 &105694789 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5352190178679778564, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
@@ -260,6 +283,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c796f952ccfedd648bd4254b133e87b6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 42499345}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c796f952ccfedd648bd4254b133e87b6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 42499346}
   m_SourcePrefab: {fileID: 100100000, guid: c796f952ccfedd648bd4254b133e87b6, type: 3}
 --- !u!4 &381430784 stripped
 Transform:
@@ -438,9 +464,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c19622fba07abe4d90f6a02be5f31cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::controller.axe.AxeController
+  _isHoldingAxe: 0
   swingCooldown: 0.5
   swipeThreshold: 0.5
   axeAnimator: {fileID: 897115490}
+  _previousMouseY: 0
+  _lastSwingTime: 0
+  _isSwingPaused: 0
 --- !u!1001 &874881961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -571,6 +601,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0bf3ddcfd16cc34faa3eb23971f21b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AxeBehaviour
+  _outlineMaterial: {fileID: 0}
+  _uiManager: {fileID: 0}
+  _renderer: {fileID: 0}
   axeController: {fileID: 815177731}
   axeVolume: {fileID: 0}
 --- !u!114 &897115492
@@ -611,23 +644,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.98
+      value: 5.899
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.025505217
+      value: 1.16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.54
+      value: -3.892
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6783608
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7347289
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalRotation.y
@@ -639,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 94.569
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be67c679b515fab438c759bb8727c1f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -780,8 +813,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de01aae190ea2ab4788cb080651396ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1957878216}
   m_SourcePrefab: {fileID: 100100000, guid: de01aae190ea2ab4788cb080651396ea, type: 3}
+--- !u!1 &1957878215 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de01aae190ea2ab4788cb080651396ea, type: 3}
+  m_PrefabInstance: {fileID: 1957878214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1957878216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957878215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c2ab104d18588499a92552d99bbe53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.Stump
 --- !u!1 &2005301626
 GameObject:
   m_ObjectHideFlags: 0

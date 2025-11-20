@@ -1,3 +1,4 @@
+using axe;
 using PlayerControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ namespace picking_up_objects
     {
         private IHeldObject _heldObject;
         private MovementController _movementController;
+        private bool _hasAxe;
 
         private void Awake()
         {
@@ -17,6 +19,7 @@ namespace picking_up_objects
         public void SetHeldObject(IHeldObject heldObject)
         {
             _heldObject = heldObject;
+            _hasAxe = heldObject is AxePickable;
             UpdateMovementSpeed();
         }
         
