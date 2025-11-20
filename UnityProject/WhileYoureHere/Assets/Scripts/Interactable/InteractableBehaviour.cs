@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Interactable
 {
+    /// <summary>
+    /// A generic implementation of <see cref="IInteractable"></see>. A script should inherit from this class if you wish to create an interactable that already implements some standard visual feedback.
+    /// </summary>
     [RequireComponent(typeof(Collider))] //Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
@@ -13,11 +16,22 @@ namespace Interactable
 
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
+        /// <remarks>
+        /// Be sure to call <c>base.Awake();</c> when overriding this function. Not doing so will prevent outlines from being rendered.
+        /// </remarks>
         protected void Awake()
         {
+            if (GetComponent<Collider>() == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
             _renderers = GetComponentsInChildren<Renderer>();
             if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
+        }
+
+        /// <remarks>
+        /// Be sure to call <c>base.Start();</c> when overriding this function. Not doing so will prevent the default interaction prompt from showing up.
+        /// </remarks>
+        protected void Start()
+        {
             _uiManager = UIManager.Instance;
         }
         
@@ -26,13 +40,21 @@ namespace Interactable
         public virtual void OnHoverEnter()
         {
             AddOutlineMaterialToRenderers();
-            _uiManager?.ShowInteractPrompt(gameObject.name);
+            _uiManager?.ShowInteractPrompt(InteractionText());
         }
-
+        
         public virtual void OnHoverExit()
         {
             RemoveOutlineMaterialFromRenderers();
             _uiManager?.HideInteractPrompt();
+        }
+        
+        /// <summary>
+        /// <returns>A string that will be used to indicate what you are interacting with.</returns>> Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.
+        /// </summary>
+        protected virtual string InteractionText()
+        {
+            return gameObject.name;
         }
         
         private void AddOutlineMaterialToRenderers()
