@@ -39,7 +39,7 @@ namespace gardening
         {
             if (_isWatering && _currentStage < plant.MaxStage)
             {
-                _currentWaterTime += Time.deltaTime;
+                _currentWaterTime += Time.deltaTime * 10;
                 Debug.Log(_currentWaterTime);
 
                 if (_currentWaterTime >= plant.wateringTime)
