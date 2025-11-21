@@ -3,7 +3,7 @@ name: Build Pipeline
 on:
   push:
     branches: [ "development" ]
-    tags: [ "Programming", "Integration" ]
+    paths: 'UnityProject/**'
 
   workflow_dispatch:
 
