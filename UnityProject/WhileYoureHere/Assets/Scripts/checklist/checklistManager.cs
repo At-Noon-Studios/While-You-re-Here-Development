@@ -14,20 +14,23 @@ namespace CheckList
         [Header("Data")]
         [SerializeField] private ChecklistData checklistData;
 
-        private void Start()
+        private void Awake()
         {
-            if (checklistPanel != null && checklistItemPrefab != null && checklistData != null)
-            {
-                foreach (string task in checklistData.tasks)
-                {
-                    GameObject item = Instantiate(checklistItemPrefab, checklistPanel);
-                    TextMeshProUGUI text = item.GetComponentInChildren<TextMeshProUGUI>();
+            PopulateChecklist();
+        }
 
-                    if (text != null)
-                        text.text = task;
-                }
+        private void PopulateChecklist()
+        {
+            foreach (string task in checklistData.tasks)
+            {
+                GameObject item = Instantiate(checklistItemPrefab, checklistPanel);
+                TextMeshProUGUI text = item.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (text != null)
+                    text.text = task;
             }
         }
+
 
         public void OnCheckList()
         {
