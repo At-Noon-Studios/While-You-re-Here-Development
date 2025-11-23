@@ -1,6 +1,7 @@
 using ScriptableObjects.CheckList;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 namespace CheckList
 {
@@ -28,9 +29,21 @@ namespace CheckList
 
                 if (text != null)
                     text.text = task;
+
+                Transform checkmark = item.transform.Find("Background/Checkmark");
+                if (checkmark != null)
+                {
+                    checkmark.gameObject.SetActive(false);
+                    StartCoroutine(EnableCheckmarkAfterSeconds(checkmark.gameObject, 3f));
+                }
             }
         }
 
+        private IEnumerator EnableCheckmarkAfterSeconds(GameObject checkmark, float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            checkmark.SetActive(true);
+        }
 
         public void OnCheckList()
         {
