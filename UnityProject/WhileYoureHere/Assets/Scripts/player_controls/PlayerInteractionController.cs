@@ -53,6 +53,7 @@ namespace PlayerControls
         
         private void Interact()
         {
+            Debug.Log("Interact is called in playerinteraction controller   ");
             _currentTarget?.Interact();
         }
     }

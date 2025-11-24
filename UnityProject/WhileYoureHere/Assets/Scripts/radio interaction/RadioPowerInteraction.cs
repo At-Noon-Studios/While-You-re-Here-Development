@@ -14,13 +14,14 @@ public class RadioPowerInteraction : InteractableBehaviour
     public override void Interact()
     {
         print("interacted with RadioPowerInteraction");
-        if (!radioController.radioOn)
+        switch (radioController.radioOn)
         {
-            radioController.TurnRadioOn();
-        }else if (radioController.radioOn)
-        {
-            // radioController.TurnRadioOff();
-            print("radio on");
+            case false:
+                radioController.TurnRadioOn();
+                break;
+            case true:
+                radioController.TurnRadioOff();
+                break;
         }
         print(radioController.radioOn);
     }

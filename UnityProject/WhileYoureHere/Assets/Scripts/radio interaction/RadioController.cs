@@ -1,3 +1,4 @@
+using EventChannels;
 using player_controls;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,30 +9,49 @@ public class RadioController : MonoBehaviour
 {
     [SerializeField] private RadioTracks[] radioTracks;
     [SerializeField] private AudioClip staticClip;
-    [SerializeField] private Transform startButtonLocation;
     [SerializeField] private Transform player;
+    [SerializeField] private EventChannel clickTune;
+
     private AudioSource audioSource;
     private int currentRadioIndex = -1;
     private float tuneThreshold = 0.1f;
     public bool radioOn;
     private bool previousRadioState;
-    private bool isDragging;
     private float tuneValue;
-    private Vector3 startMousePos;
     private bool isTuning;
     private Vector2 lastMousePos;
     public float sensitivity = 0.002f;
     private bool leftMouseButtonPressed;
+    MovementController movementController;
+    CameraController cameraController;
+
+
+    public void OnEnable()
+    {
+        clickTune.OnClick += mouseDown;
+    }
+    
+    public void OnDisable()
+    {
+        clickTune.OnClick -= mouseDown;
+
+    }
+
+    public void mouseDown(bool isPressed)
+    {
+        leftMouseButtonPressed=isPressed;
+    }
+    
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        movementController = player.GetComponent<MovementController>();
+        cameraController = player.GetComponentInChildren<CameraController>();
+        isTuning = false;
     }
 
-    public void OnClick(InputValue inputValue)
-    {
-        leftMouseButtonPressed = inputValue.isPressed;
-        
-    }
+
+
     private void Update()
     {
         // Handle tuning mode input
@@ -44,13 +64,10 @@ public class RadioController : MonoBehaviour
 
                 tuneValue = Mathf.Clamp01(tuneValue + deltaX * sensitivity);
 
+                
                 lastMousePos = current;
             }
-
-            if (!leftMouseButtonPressed)
-            {
-                ExitTuningMode();
-            }
+            
         }
 
         // Perform radio tuning while on
@@ -70,26 +87,26 @@ public class RadioController : MonoBehaviour
         previousRadioState = radioOn;
     }
 
+    public bool tuning()=>isTuning;
+   
     public void EnterTuningMode()
     {
         if (!radioOn)
         {
-            Debug.Log("Radio is off, cannot tune.");
             return;
         }
-
-        var movementController = player.GetComponent<MovementController>();
-        movementController?.PauseMovement();
-
-        var cameraController = player.GetComponentInChildren<CameraController>();
-        cameraController?.PauseCameraMovement();
+        
+        if (isTuning) return;
         isTuning = true;
+        //pause screen
+        movementController?.PauseMovement();
+        cameraController?.PauseCameraMovement();
+        
         lastMousePos = Mouse.current.position.ReadValue();
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        Debug.Log("Entered tuning mode.");
     }
 
     public void ExitTuningMode()
@@ -98,8 +115,10 @@ public class RadioController : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
-        Debug.Log("Exited tuning mode.");
+        
+        //unpause screen
+        movementController?.ResumeMovement();
+        cameraController?.ResumeCameraMovement();
     }
    
     public void TurnRadioOn()
@@ -113,7 +132,6 @@ public class RadioController : MonoBehaviour
     }
     private void TuneRadio(float value)
     {
-         // value = tuneSlider.value;
         var stationSpacing = 1f / radioTracks.Length;
 
         var newIndex = Mathf.FloorToInt(value / stationSpacing);
