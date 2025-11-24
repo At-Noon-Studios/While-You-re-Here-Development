@@ -34,21 +34,21 @@ namespace Interactable
         {
             _uiManager = UIManager.Instance;
         }
-        
+
         public abstract void Interact();
-        
+
         public virtual void OnHoverEnter()
         {
             AddOutlineMaterialToRenderers();
             _uiManager?.ShowInteractPrompt(InteractionText());
         }
-        
+
         public virtual void OnHoverExit()
         {
             RemoveOutlineMaterialFromRenderers();
             _uiManager?.HideInteractPrompt();
         }
-        
+
         /// <summary>
         /// <returns>A string that will be used to indicate what you are interacting with.</returns>> Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.
         /// </summary>
@@ -56,7 +56,7 @@ namespace Interactable
         {
             return gameObject.name;
         }
-        
+
         private void AddOutlineMaterialToRenderers()
         {
             foreach (var rendererComponent in _renderers)
@@ -73,7 +73,7 @@ namespace Interactable
                 return;
             rendererComponent.materials = materials.Append(_outlineMaterial).ToArray();
         }
-        
+
 
         private void RemoveOutlineMaterialFromRenderers()
         {
