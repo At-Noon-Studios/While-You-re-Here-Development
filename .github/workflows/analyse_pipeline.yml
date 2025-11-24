@@ -3,11 +3,12 @@ name: Analyse Pipeline
 on:
   pull_request:
     branches: [ "development" ]
-    tags: [ "Programming", "Integration" ]
-
+    paths: 'UnityProject/**'
+    
   workflow_dispatch:
 
 jobs:
+
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
