@@ -17,6 +17,13 @@ namespace chopping_logs
         private Vector2 _swipeStart;
         private bool _swipeReady;
         
+        private LogBehaviour _logBehaviour;
+        
+        private void Start()
+        {
+            _swipeReady = false;
+        }
+        
         
         private void Update()
         {
@@ -38,12 +45,13 @@ namespace chopping_logs
             }
         }
 
-        // private void ChopLog()
-        // {
-        //     axeAnimator.SetTrigger("Chop");
-        //     audioSource.PlayOneShot(chopSound);
-        //     SplitLog(stump.GetLog());
-        //     stump.ClearLog();
-        // }
+        private void ChopLog()
+        {
+            axeAnimator.SetTrigger("Chop");
+            audioSource.PlayOneShot(chopSound);
+            _logBehaviour.SplitLog(stump.GetLog());
+            stump.ClearLog();
+        }
+        
     }
 }

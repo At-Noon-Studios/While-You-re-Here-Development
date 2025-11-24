@@ -2,7 +2,7 @@ using Interactable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace log
+namespace chopping_logs
 {
     public class LogBehaviour : InteractableBehaviour
     {
@@ -42,6 +42,16 @@ namespace log
             
             position.y  *= -1;
             position.x *= -1;
+        }
+        
+        public void GetLogHit()
+        {
+            _currentHits += damageAmount;
+        }
+
+        protected void SplitLog()
+        {
+            // Logic to split the log into smaller pieces
         }
     }
 }

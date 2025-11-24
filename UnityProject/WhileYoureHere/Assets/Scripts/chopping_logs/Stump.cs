@@ -5,20 +5,33 @@ namespace chopping_logs
 {
     public class Stump : MonoBehaviour
     {
+        
+        private bool _isLogPlacedOnStump;
         private Pickable _currentLog;
 
-        public void RecieveLog(Pickable log)
+        private void Update()
+        {
+            if (_isLogPlacedOnStump)
+            {
+                ReceiveLog(_currentLog);
+            }
+        }
+        
+        private void ReceiveLog(Pickable log)
         {
             _currentLog = log;
             // Stump logic
         }
-        
-        public bool HasLog => _currentLog != null;
-        public Pickable GetLog() => _currentLog;
 
         public void ClearLog()
         {
             _currentLog = null;
+        }
+        
+        public Pickable GetLog()
+        {
+            return _currentLog;
+            Debug.Log("Stump received log");
         }
     }
 }

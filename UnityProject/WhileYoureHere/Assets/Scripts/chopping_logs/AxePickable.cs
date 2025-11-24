@@ -9,6 +9,8 @@ namespace axe
     {
 
         private bool _isHolding;
+        private bool _madeContact;
+        
         
         private void Awake()
         {
@@ -20,11 +22,19 @@ namespace axe
             Debug.Log("Interacting with Axe Pickable");
             if (!_isHolding)
             {
+                _isHolding = true;
                 Hold();
-
-                Debug.Log("Axe is now being held");
-
-                // You can add additional logic here specific to the axe
+                
+            }
+        }
+        
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!_madeContact)
+            {
+                _madeContact = true;
+                Debug.Log("Axe made contact with log");
+                // Additional logic for when the axe makes contact while being held
             }
         }
         
