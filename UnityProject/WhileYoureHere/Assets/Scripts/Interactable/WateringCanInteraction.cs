@@ -1,17 +1,23 @@
-using Interactable;
-using UnityEngine;
-
-public class WateringCanInteraction : InteractableBehaviour
+namespace Interactable
 {
-   public GameObject WateringCan;
-   
-   private void Awake()
-   {
-      
-   }
+    public class WateringCanInteraction : InteractableBehaviour
+    {
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
+        {
+        
+        }
 
-   public override void Interact()
-   {
-      throw new System.NotImplementedException();
-   }
+        // Update is called once per frame
+        void Update()
+        {
+        
+        }
+
+        public override void Interact()
+        {
+            // Implement interaction
+            print("Interact with watering can");
+        }
+    }
 }
