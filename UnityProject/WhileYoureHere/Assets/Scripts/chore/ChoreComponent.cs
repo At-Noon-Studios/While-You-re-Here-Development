@@ -8,7 +8,8 @@ namespace chore
         public enum ChoreComponentType
         {
             EnemyKilled,
-            ItemCollected
+            ItemCollected,
+            ChoppedWood
         }
 
         public event Action<ChoreComponent> OnComponentCompleted;
