@@ -1,6 +1,6 @@
 namespace Interactable
 {
-    public class WateringCanInteraction : InteractableBehaviour
+    /*public class WateringCanInteraction : InteractableBehaviour
     {
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -19,5 +19,5 @@ namespace Interactable
             // Implement interaction
             print("Interact with watering can");
         }
-    }
+    }*/
 }
