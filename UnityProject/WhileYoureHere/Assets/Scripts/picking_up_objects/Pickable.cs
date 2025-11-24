@@ -69,7 +69,7 @@ namespace picking_up_objects
             _rb.linearVelocity = direction * FollowSpeed;
         }
 
-        private void Hold()
+        protected void Hold()
         {
             _isHolding = true;
             _currentTargetPoint = _holdPoint;
