@@ -10,7 +10,7 @@ namespace entity
 
         private void OnMouseDown()
         {
-            ChoreEvents.TriggerEnemyKilled(plantsID);
+            ChoreEvents.TriggerPlantCollected(plantsID);
             Destroy(gameObject);
         }
     }
