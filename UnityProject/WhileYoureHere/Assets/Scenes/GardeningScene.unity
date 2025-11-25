@@ -419,14 +419,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275551057}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2b6ee82884737d4abef7cd8d2c3c56e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _outlineMaterial: {fileID: 0}
-  _uiManager: {fileID: 0}
-  _renderers: []
 --- !u!114 &275551066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +431,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275551057}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
   m_Name: 
@@ -504,51 +501,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1330900128}
-    - targetCorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1330900141}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
---- !u!1 &1330900126 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
-  m_PrefabInstance: {fileID: 1330900125}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &1330900127 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 5352190178679778564, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
-  m_PrefabInstance: {fileID: 1330900125}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1330900128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1330900126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b875712e8fd14f02b5f9170e46c2218d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls.PlayerInteractionController
-  data: {fileID: 11400000, guid: 09bfd3ba5260bc542a2615e67084a739, type: 2}
-  playerCamera: {fileID: 1330900127}
-  interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
---- !u!114 &1330900141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1330900126}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d969558043d245d99ecd638378d6874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::picking_up_objects.HeldObjectController
 --- !u!1 &1336800528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,7 +1111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3008915905619095231, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3020329612402148971, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalScale.z
@@ -1293,7 +1247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.25
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalPosition.z

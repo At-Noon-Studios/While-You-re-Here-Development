@@ -9,7 +9,7 @@ namespace ScriptableObjects
         public string plantName;
         public List<GameObject> plantPrefabs;
 
-        public int wateringTime = 3;
+        public float wateringTime = 3;
         
         public int MaxStage => plantPrefabs.Count;
 
