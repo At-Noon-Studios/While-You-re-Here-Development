@@ -4,6 +4,6 @@ using UnityEngine;
 public class ScavengingChore : ScriptableObject
 {
     [Header("Sound which plays after collecting a plant")]
-    [SerializeField] AudioClip pickupPlants;
-    public AudioClip PickupPlants => pickupPlants;
+    [SerializeField] AudioClip pickupPlantsSound;
+    public AudioClip PickupPlants => pickupPlantsSound;
 }

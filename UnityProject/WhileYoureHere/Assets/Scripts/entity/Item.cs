@@ -8,7 +8,9 @@ namespace entity
     public class Item : InteractableBehaviour
     {
         private AudioSource _audioSource;
-        [SerializeField] AudioClip pickupSound;
+        // [SerializeField] AudioClip pickupSound;
+
+        [SerializeField] ScavengingChore sc;
 
         [Header("Item")]
         [SerializeField] private int itemID;
@@ -22,10 +24,12 @@ namespace entity
         public override void Interact()
         {
             ChoreEvents.TriggerItemCollected(itemID);
-            _audioSource.clip = pickupSound;
-            _audioSource.PlayOneShot(pickupSound);
+            _audioSource.clip = sc.PickupPlants;
+            _audioSource.Play();
             Debug.Log("Audioclip " + _audioSource.clip + " was played just now!");
-            Destroy(gameObject);
+
+            // this line here is my enemy :(
+            // Destroy(gameObject);
         }
     }
 }
