@@ -1,104 +1,126 @@
-using Interactable;
-using picking_up_objects;
 using UnityEngine;
 
 namespace chopping_logs
 {
-    public class LogBehaviour : Pickable
+    public class LogBehaviour : MonoBehaviour
     {
         [Header("Log Settings")]
-        [SerializeField] private float damagePerHit = 1f;
         [SerializeField] private int maxHits = 3;
+        [SerializeField] private float splitForce = 3f;
+        [SerializeField] private float upwardForce = 2f;
         [SerializeField] private GameObject splitLogPrefab;
 
         [Header("Audio")]
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioClip crackSound;
-        [SerializeField] private AudioClip chopSound;
+        [SerializeField] private AudioClip crackSound;    // cracking when splitting
+        [SerializeField] private AudioClip chopSound;     // chop impact sound per hit
 
-        private int _currentHits;
-        private bool _isOnStump;
+        private int _currentHits = 0;
+        private bool _isOnStump = false;
+        private Stump _stump;
+
+        private Rigidbody _rb;
 
         private void Awake()
         {
-            base.Awake();
-            _currentHits = 0;
+            _rb = GetComponent<Rigidbody>();
         }
 
         /// <summary>
-        /// Called when player interacts directly with the log (e.g. pickup).
+        /// Called by stump when log is snapped onto it.
         /// </summary>
-        public override void Interact()
+        public void PlaceOnStump(Stump stump)
         {
-            Debug.Log("Interacted with log");
-            base.Interact();
-            // Could trigger pickup logic here if desired
-        }
+            _isOnStump = true;
+            _stump = stump;
 
-        /// <summary>
-        /// Called when the axe hits the log.
-        /// </summary>
-        public void GetLogHit()
-        {
-            _currentHits++;
-            Debug.Log($"Log hit! Current hits: {_currentHits}");
-
-            if (audioSource != null && chopSound != null)
-                audioSource.PlayOneShot(chopSound);
-
-            if (_currentHits >= maxHits)
+            // Freeze log when properly placed
+            if (_rb != null)
             {
-                SplitLog();
+                _rb.linearVelocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+                _rb.useGravity = false;
+                _rb.constraints = RigidbodyConstraints.FreezeAll;
             }
         }
 
         /// <summary>
-        /// Splits the log into two smaller pieces with physics forces.
+        /// Called when axe correctly hits log.
+        /// </summary>
+        public void GetLogHit()
+        {
+            _currentHits++;
+
+            // Chop sound for each hit
+            if (audioSource != null && chopSound != null)
+                audioSource.PlayOneShot(chopSound);
+
+            Debug.Log($"Log hit ({_currentHits}/{maxHits})");
+
+            if (_currentHits >= maxHits)
+                SplitLog();
+        }
+
+        /// <summary>
+        /// Splits the log into two halves with physics forces.
         /// </summary>
         private void SplitLog()
         {
             if (splitLogPrefab == null)
             {
-                Debug.LogWarning("No splitLogPrefab assigned!");
+                Debug.LogWarning("Split log prefab missing!");
                 Destroy(gameObject);
                 return;
             }
 
-            // Left piece
-            GameObject leftLog = Instantiate(splitLogPrefab, transform.position + Vector3.left * 0.3f, Quaternion.identity);
-            Rigidbody rbLeft = leftLog.GetComponent<Rigidbody>();
-            if (rbLeft != null)
-                rbLeft.AddForce(Vector3.left * 3f + Vector3.up * 2f, ForceMode.Impulse);
+            // Unfreeze the original log (so halves can fly correctly)
+            if (_rb != null)
+                _rb.constraints = RigidbodyConstraints.None;
 
-            // Right piece
-            GameObject rightLog = Instantiate(splitLogPrefab, transform.position + Vector3.right * 0.3f, Quaternion.identity);
-            Rigidbody rbRight = rightLog.GetComponent<Rigidbody>();
-            if (rbRight != null)
-                rbRight.AddForce(Vector3.right * 3f + Vector3.up * 2f, ForceMode.Impulse);
+            // Tell stump the log is gone
+            if (_stump != null)
+                _stump.ClearLog();
 
             // Play crack sound
             if (audioSource != null && crackSound != null)
                 audioSource.PlayOneShot(crackSound);
 
-            Debug.Log("Log split into two pieces!");
+            Debug.Log("LOG SPLITTING!");
+
+            // Create left piece
+            var leftPiece = Instantiate(
+                splitLogPrefab,
+                transform.position + Vector3.left * 0.3f,
+                Quaternion.identity
+            );
+            var leftRb = leftPiece.GetComponent<Rigidbody>();
+            if (leftRb != null)
+            {
+                leftRb.AddForce(
+                    Vector3.left * splitForce + Vector3.up * upwardForce,
+                    ForceMode.Impulse
+                );
+            }
+
+            // Create right piece
+            var rightPiece = Instantiate(
+                splitLogPrefab,
+                transform.position + Vector3.right * 0.3f,
+                Quaternion.identity
+            );
+            var rightRb = rightPiece.GetComponent<Rigidbody>();
+            if (rightRb != null)
+            {
+                rightRb.AddForce(
+                    Vector3.right * splitForce + Vector3.up * upwardForce,
+                    ForceMode.Impulse
+                );
+            }
 
             // Destroy original log
             Destroy(gameObject);
         }
 
-        /// <summary>
-        /// Marks the log as placed on stump.
-        /// </summary>
-        public void PlaceOnStump(Vector3 position, Quaternion rotation)
-        {
-            transform.position = position;
-            transform.rotation = rotation;
-            _isOnStump = true;
-        }
-
-        /// <summary>
-        /// Returns whether the log is currently placed on stump.
-        /// </summary>
         public bool IsOnStump => _isOnStump;
     }
 }

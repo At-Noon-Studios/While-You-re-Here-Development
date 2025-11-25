@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace picking_up_objects
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class Pickable : InteractableBehaviour, IHeldObject, IInteractable
     {
         [SerializeField] private PickableData pickableData;

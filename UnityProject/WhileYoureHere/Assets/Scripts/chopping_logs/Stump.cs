@@ -7,8 +7,13 @@ namespace chopping_logs
     public class Stump : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Transform playerHoldPoint;   // assign the player's hold transform here
-        [SerializeField] private Transform logPlacementPoint; // where the log sits on the stump
+        [SerializeField] private Transform playerHoldPoint;       // player's hold slot
+        [SerializeField] private Transform logPlacementPoint;     // where placed logs snap
+
+        [Header("Placement Settings")]
+        [SerializeField] private float snapRadius = 0.4f;         // how close log must be to snap
+
+        [Header("Audio")]
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip placeSound;
 
@@ -20,72 +25,103 @@ namespace chopping_logs
         }
 
         /// <summary>
-        /// Press E to place the held log onto the stump.
+        /// Handles pressing E to place log onto stump.
         /// </summary>
         private void HandlePlacement()
         {
             if (!Keyboard.current.eKey.wasPressedThisFrame)
                 return;
 
+            // Stump already has a log
             if (_currentLog != null)
-                return; // stump already occupied
+                return;
 
-            // Find a Pickable currently under the player's hold point
             if (playerHoldPoint == null)
             {
-                Debug.LogWarning("Stump: playerHoldPoint is not assigned.");
+                Debug.LogWarning("Stump: playerHoldPoint not assigned.");
                 return;
             }
 
+            // Check if player is actually holding something
             var heldPickable = playerHoldPoint.GetComponentInChildren<Pickable>();
             if (heldPickable == null)
-                return; // nothing is being held
+                return;
 
-            // Release from being held using Pickable's own API
-            heldPickable.Place();
+            // Distance check for snapping
+            float distToStump = Vector3.Distance(
+                heldPickable.transform.position,
+                logPlacementPoint.position
+            );
 
-            // Snap log to stump placement point
-            var t = heldPickable.transform;
-            t.position = logPlacementPoint != null ? logPlacementPoint.position : transform.position;
-            t.rotation = logPlacementPoint != null ? logPlacementPoint.rotation : transform.rotation;
-
-            // Optional: ensure it sits stable
-            var rb = heldPickable.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (distToStump > snapRadius)
             {
-                rb.angularVelocity = Vector3.zero;
-                rb.linearVelocity = Vector3.zero;
-                rb.useGravity = true;
+                Debug.Log("Log too far from stump, dropping.");
+                heldPickable.Drop();
+                return;
             }
 
-            _currentLog = heldPickable;
-
-            // Play placement sound
-            if (audioSource != null && placeSound != null)
-                audioSource.PlayOneShot(placeSound);
-
-            Debug.Log("Log placed on stump");
+            // VALID placement → snap into position
+            PlaceLogOnStump(heldPickable);
         }
 
         /// <summary>
-        /// Clears the stump (after chopping).
+        /// Performs the snapping & stabilization.
+        /// </summary>
+        private void PlaceLogOnStump(Pickable log)
+        {
+            Transform t = log.transform;
+
+            // Snap to designated point
+            t.position = logPlacementPoint.position;
+            t.rotation = logPlacementPoint.rotation;
+
+            // Tell the pickable it's placed (detaches from hand)
+            log.Place();
+
+            // Freeze physics to keep log steady
+            Rigidbody rb = log.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.useGravity = false;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
+
+            // Notify the log behaviour
+            var logBehaviour = log.GetComponent<LogBehaviour>();
+            if (logBehaviour != null)
+                logBehaviour.PlaceOnStump(this);
+
+            _currentLog = log;
+
+            // Play wood placement sound
+            if (audioSource != null && placeSound != null)
+                audioSource.PlayOneShot(placeSound);
+
+            Debug.Log("Log placed & snapped on stump.");
+        }
+
+        /// <summary>
+        /// Clears the stump reference when log splits/destroys.
         /// </summary>
         public void ClearLog()
         {
             _currentLog = null;
         }
 
-        /// <summary>
-        /// Returns the log currently on the stump.
-        /// </summary>
-        public Pickable GetLog()
-        {
-            return _currentLog;
-        }
+        public Pickable GetLog() => _currentLog;
 
-        /// <summary>
-        /// Checks if stump currently has a log.
-        /// </summary>
         public bool HasLog => _currentLog != null;
+
+        private void OnDrawGizmosSelected()
+        {
+            // Visualize snap radius
+            if (logPlacementPoint != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(logPlacementPoint.position, snapRadius);
+            }
+        }
     }
 }

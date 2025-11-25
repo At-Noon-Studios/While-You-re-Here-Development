@@ -6,76 +6,109 @@ namespace chopping_logs
     public class ChopController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Transform playerHoldPoint; // assign your HeldObjectController's hold transform here
+        [SerializeField] private Transform playerHoldPoint;  // where the axe is held
         [SerializeField] private Stump stump;
-        [SerializeField] private Animator axeAnimator;
+        [SerializeField] private Transform axe;              // the axe object
 
         [Header("Audio")]
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioClip impactSound;
-        [SerializeField] private AudioClip swingSound;
-        [SerializeField] private AudioClip gruntSound;
-        [SerializeField] private AudioClip chopSound;
 
-        [Header("Swipe")]
-        [SerializeField] private float swipeThreshold = 100f;
+        [SerializeField] private AudioClip placeOnStumpSound;
+        [SerializeField] private AudioClip woodChopSound;
+        [SerializeField] private AudioClip crackSound;
+        [SerializeField] private AudioClip axeImpactSound;
+        [SerializeField] private AudioClip axeSwingSound;
+        [SerializeField] private AudioClip gruntSound;
+
+        [Header("Swipe/Stroke Settings")]
+        [SerializeField] private float swipeThreshold = 80f;
 
         private Vector2 _swipeStart;
-        private bool _swipeReady;
+        private bool _strokeReady;        // player pulled mouse upward
+        private bool _strokeDescending;   // player swinging downward
 
         private void Update()
         {
+            HandleAxeStroke();
+        }
+
+        private void HandleAxeStroke()
+        {
+            if (!IsHoldingAxe()) return;
+
+            // Start stroke
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 _swipeStart = Mouse.current.position.ReadValue();
-                _swipeReady = true;
+                _strokeReady = true;
+                _strokeDescending = false;
             }
 
-            if (Mouse.current.leftButton.wasReleasedThisFrame && _swipeReady)
+            if (Mouse.current.leftButton.isPressed && _strokeReady)
             {
-                var swipeEnd = Mouse.current.position.ReadValue();
-                var verticalSwipe = swipeEnd.y - _swipeStart.y;
+                Vector2 currentPos = Mouse.current.position.ReadValue();
+                float deltaY = currentPos.y - _swipeStart.y;
 
-                if (verticalSwipe < -swipeThreshold && IsHoldingAxe() && stump.HasLog)
+                // Phase 1: Pull axe upward
+                if (deltaY > swipeThreshold)
                 {
-                    ChopLog();
+                    _strokeDescending = true;
                 }
 
-                _swipeReady = false;
+                // Phase 2: Swing downward (must follow-up after lifting)
+                if (_strokeDescending && deltaY < -swipeThreshold)
+                {
+                    _strokeReady = false;
+                    _strokeDescending = false;
+
+                    PerformAxeSwing();
+                }
             }
         }
 
         private bool IsHoldingAxe()
         {
-            if (playerHoldPoint == null) return false;
-            // Detect axe by presence under the hold point
-            return playerHoldPoint.GetComponentInChildren<axe.AxePickable>() != null;
+            var axeBehaviour = playerHoldPoint.GetComponentInChildren<AxeBehaviour>();
+            return axeBehaviour != null && axeBehaviour.IsHeld;
         }
 
-        private void ChopLog()
+
+        private void PerformAxeSwing()
         {
-            if (audioSource != null)
+            if (!stump.HasLog) return;
+
+            // Play swing sounds
+            if (axeSwingSound) audioSource.PlayOneShot(axeSwingSound);
+            if (gruntSound) audioSource.PlayOneShot(gruntSound);
+
+            // Check if the axe is above the log (correct hit)
+            if (!IsAxeAboveLog())
             {
-                if (swingSound != null) audioSource.PlayOneShot(swingSound);
-                if (gruntSound != null) audioSource.PlayOneShot(gruntSound);
+                // Wrong hit: dull impact
+                if (axeImpactSound) audioSource.PlayOneShot(axeImpactSound);
+                Debug.Log("Incorrect hit: axe not above log.");
+                return;
             }
 
-            if (axeAnimator != null)
-                axeAnimator.SetTrigger("Chop");
+            // Correct chop sound
+            if (woodChopSound) audioSource.PlayOneShot(woodChopSound);
 
-            if (audioSource != null && chopSound != null)
-                audioSource.PlayOneShot(chopSound);
-
+            // Damage the log
             var pickableLog = stump.GetLog();
             if (pickableLog == null) return;
 
             var logBehaviour = pickableLog.GetComponent<LogBehaviour>();
             if (logBehaviour == null) return;
 
-            logBehaviour.GetLogHit(); // log tracks hits and splits itself when threshold met
+            logBehaviour.GetLogHit();
+        }
 
-            if (audioSource != null && impactSound != null)
-                audioSource.PlayOneShot(impactSound);
+        private bool IsAxeAboveLog()
+        {
+            if (!stump.HasLog) return false;
+
+            Transform log = stump.GetLog().transform;
+            return axe.position.y > log.position.y + 0.1f;
         }
     }
 }
