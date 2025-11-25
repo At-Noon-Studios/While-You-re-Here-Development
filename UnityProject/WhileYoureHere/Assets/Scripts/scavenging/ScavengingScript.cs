@@ -13,9 +13,9 @@ public class ScavengingScript : InteractableBehaviour
 
     }
 
-    public override void OnHoverEnter(string objectname)
+    public override void OnHoverEnter()
     {
-        OnHoverEnter(objectname);
+        base.OnHoverEnter();
     }
 
     public override void OnHoverExit()
