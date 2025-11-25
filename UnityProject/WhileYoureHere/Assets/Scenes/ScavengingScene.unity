@@ -185,6 +185,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c94339de43f81749bbd3a770e66ef3f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 303760989}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c94339de43f81749bbd3a770e66ef3f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 303760991}
   m_SourcePrefab: {fileID: 100100000, guid: 6c94339de43f81749bbd3a770e66ef3f, type: 3}
 --- !u!1 &303760988 stripped
 GameObject:
@@ -224,6 +227,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2889781, y: 0.47021803, z: 0.31729543}
   m_Center: {x: 0.0061482713, y: 0.23453979, z: 0.0007532537}
+--- !u!114 &303760991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303760988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e6c485e19e44e4aa9242d06f4d4fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue.InteractPrompt
+  player: {fileID: 1927399035}
+  interactDistance: 3
+  promptUI: {fileID: 1796303884}
 --- !u!1 &856171953
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,13 +362,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1149714085692487863, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1496990854970835168, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
     - target: {fileID: 4572854504857179515, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
       propertyPath: m_text
-      value: yuhh
+      value: Press E to collect cute plantsy :3
       objectReference: {fileID: 0}
     - target: {fileID: 4616571354600823491, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
       propertyPath: m_LocalPosition.x
@@ -392,11 +414,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6498029568748522372, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
+      propertyPath: m_Name
+      value: PlantPrompt
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
+--- !u!1 &1796303884 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6498029568748522372, guid: 2e57c92d2b21a60408bfb38d661ab041, type: 3}
+  m_PrefabInstance: {fileID: 1796303883}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1927399034
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -454,6 +485,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+--- !u!4 &1927399035 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1941477672436412524, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 1927399034}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2132189476
 GameObject:
   m_ObjectHideFlags: 0
