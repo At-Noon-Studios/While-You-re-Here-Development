@@ -29,7 +29,6 @@ namespace chore
                 {
                     { ChoreComponent.ChoreComponentType.EnemyKilled, CcEnemyKilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory },
-                    // { ChoreComponent.ChoreComponentType.PlantsCollected, CcPlantCollected.CreateFactory}
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

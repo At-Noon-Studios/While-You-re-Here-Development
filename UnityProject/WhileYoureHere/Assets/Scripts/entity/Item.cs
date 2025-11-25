@@ -14,11 +14,5 @@ namespace entity
             ChoreEvents.TriggerItemCollected(itemID);
             Destroy(gameObject);
         }
-
-        // public void OnMouseDown()
-        // {
-        //     ChoreEvents.TriggerItemCollected(itemID);
-        //     Destroy(gameObject);
-        // }
     }
 }
