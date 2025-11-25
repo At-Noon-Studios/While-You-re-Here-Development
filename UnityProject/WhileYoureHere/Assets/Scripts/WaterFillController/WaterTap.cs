@@ -1,57 +1,51 @@
 using UnityEngine;
 
-public class WaterTap : MonoBehaviour
+namespace WaterFillController
 {
-    public ParticleSystem waterStream;
-
-    [Header("Sound Effects")]
-    public AudioSource audioPouringWater;
-
-    [SerializeField]
-    private bool _isRunning = false;
-
-    public bool isRunning
+    public class WaterTap : MonoBehaviour
     {
-        get => _isRunning;
-        set
+        public ParticleSystem waterStream;
+    
+        [SerializeField]
+        private bool _isRunning = false;
+
+        public bool isRunning
         {
-            _isRunning = value;
+            get => _isRunning;
+            private set
+            {
+                _isRunning = value;
+                UpdateWaterState();
+            }
+        }
+
+        private void Start()
+        {
             UpdateWaterState();
         }
-    }
 
-    void Start()
-    {
-        UpdateWaterState();
-    }
-
-    void OnValidate()
-    {
-        UpdateWaterState();
-    }
-
-    public void ToggleTap()
-    {
-        isRunning = !isRunning;
-    }
-
-    private void UpdateWaterState()
-    {
-        if (waterStream == null) return;
-
-        if (_isRunning)
+        private void OnValidate()
         {
-            waterStream.Play();
-
-            if (audioPouringWater != null && !audioPouringWater.isPlaying)
-                audioPouringWater.Play();
+            UpdateWaterState();
         }
-        else
-        {
-            waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-            if (audioPouringWater != null && audioPouringWater.isPlaying)
-                audioPouringWater.Stop();
+        public void ToggleTap()
+        {
+            isRunning = !isRunning;
+        }
+
+        private void UpdateWaterState()
+        {
+            if (waterStream == null) return;
+
+            if (_isRunning)
+            {
+                waterStream.Play();
+            }
+            else
+            {
+                waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
         }
     }
 }

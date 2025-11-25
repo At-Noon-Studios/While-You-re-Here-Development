@@ -1,25 +1,26 @@
 using UnityEngine;
 
-public class WaterFillZone : MonoBehaviour
+namespace WaterFillController
 {
-    public WaterTap tap;
-
-    void OnTriggerStay(Collider other)
+    public class WaterFillZone : MonoBehaviour
     {
-        KettleFill kettle = other.GetComponentInParent<KettleFill>();
+        public WaterTap tap;
 
-        if (kettle != null)
+        private void OnTriggerStay(Collider other)
         {
+            var kettle = other.GetComponentInParent<KettleFill>();
+
+            if (kettle == null) return;
             if (tap.isRunning)
                 kettle.StartFilling();
             else
                 kettle.StopFilling();
         }
-    }
 
-    void OnTriggerExit(Collider other)
-    {
-        KettleFill kettle = other.GetComponentInParent<KettleFill>();
-        if (kettle != null) kettle.StopFilling();
+        private void OnTriggerExit(Collider other)
+        {
+            var kettle = other.GetComponentInParent<KettleFill>();
+            if (kettle != null) kettle.StopFilling();
+        }
     }
 }

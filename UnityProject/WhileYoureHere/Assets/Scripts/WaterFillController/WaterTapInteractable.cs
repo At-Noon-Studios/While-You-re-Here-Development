@@ -1,17 +1,19 @@
 using Interactable;
-using UnityEngine;
 
-public class WaterTapInteractable : InteractableBehaviour
+namespace WaterFillController
 {
-    public WaterTap tap;   // Referenz zum WaterTap-Skript
-
-    protected override string InteractionText()
+    public class WaterTapInteractable : InteractableBehaviour
     {
-        return tap.isRunning ? "Wasserhahn schließen" : "Wasserhahn öffnen";
-    }
+        public WaterTap tap;
 
-    public override void Interact()
-    {
-        tap.ToggleTap();
+        protected override string InteractionText()
+        {
+            return tap.isRunning ? "Tap close" : "Tap open";
+        }
+
+        public override void Interact()
+        {
+            tap.ToggleTap();
+        }
     }
 }

@@ -1,38 +1,34 @@
 using UnityEngine;
 
-public class WaterLevelVisualizer : MonoBehaviour
+namespace WaterFillController
 {
-    public KettleFill kettle;
-
-    public float emptyY = 0f;
-    public float fullY = 0.22f;
-
-    [Header("Collider für Wasseroberfläche")]
-    public Collider waterSurfaceCollider;
-
-    void Start()
+    public class WaterLevelVisualizer : MonoBehaviour
     {
-        if (kettle == null)
-            kettle = GetComponentInParent<KettleFill>();
+        public KettleFill kettle;
 
-        emptyY = transform.localPosition.y;
-    }
+        public float emptyY = 0f;
+        public float fullY = 0.22f;
 
-    void Update()
-    {
-        if (kettle == null) return;
+        public Collider waterSurfaceCollider;
 
-        float t = Mathf.Clamp01(kettle.fillAmount / kettle.maxFill);
+        private void Start()
+        {
+            if (kettle == null)
+                kettle = GetComponentInParent<KettleFill>();
 
-        // visuelle Höhe updaten
-        Vector3 pos = transform.localPosition;
-        pos.y = Mathf.Lerp(emptyY, fullY, t);
-        transform.localPosition = pos;
+            emptyY = transform.localPosition.y;
+        }
 
-        // Überlauf-Logik: Collider toggeln
-        if (kettle.fillAmount >= kettle.maxFill)
-            waterSurfaceCollider.isTrigger = false;   // Partikel prallen ab → Überlaufen
-        else
-            waterSurfaceCollider.isTrigger = true;    // Partikel fallen in die Kanne
+        private void Update()
+        {
+            if (!kettle) return;
+            
+            var t = Mathf.Clamp01(kettle.fillAmount / kettle.maxFill);
+            var pos = transform.localPosition;
+            pos.y = Mathf.Lerp(emptyY, fullY, t);
+            transform.localPosition = pos;
+            
+            waterSurfaceCollider.isTrigger = !(kettle.fillAmount >= kettle.maxFill);
+        }
     }
 }
