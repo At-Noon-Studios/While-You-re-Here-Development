@@ -25,11 +25,11 @@ namespace chore
             OnChoreCompleted?.Invoke(chore);
         }
 
-        public static event Action<int> OnPlantsCollected;
+        // public static event Action<int> OnPlantsCollected;
 
-        public static void TriggerPlantCollected(int plantsID)
-        {
-            OnPlantsCollected?.Invoke(plantsID);
-        }
+        // public static void TriggerPlantCollected(int plantsID)
+        // {
+        //     OnPlantsCollected?.Invoke(plantsID);
+        // }
     }
 }

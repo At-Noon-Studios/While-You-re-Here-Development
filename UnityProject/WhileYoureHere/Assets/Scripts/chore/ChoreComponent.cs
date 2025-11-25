@@ -9,7 +9,6 @@ namespace chore
         {
             EnemyKilled,
             ItemCollected,
-            PlantsCollected,
         }
 
         public event Action<ChoreComponent> OnComponentCompleted;
