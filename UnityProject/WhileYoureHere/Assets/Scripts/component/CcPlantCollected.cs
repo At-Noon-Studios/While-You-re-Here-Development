@@ -24,11 +24,11 @@ namespace component
 
             if (localChoreComponent == null)
             {
-                Debug.LogError($"Factory Error: Wrong SO type passed to CcItemCollected.CreateFactory");
+                Debug.LogError($"Factory Error: Wrong SO type passed to CcPlantCollected.CreateFactory");
                 return null;
             }
 
-            return new CcItemCollected(
+            return new CcPlantCollected(
                 localChoreComponent.componentName,
                 localChoreComponent.description,
                 localChoreComponent.plantsID,
@@ -38,23 +38,23 @@ namespace component
         public override void EnableComponent()
         {
             base.EnableComponent();
-            ChoreEvents.OnItemCollected += ItemCollected;
+            ChoreEvents.OnPlantsCollected += PlantCollected;
         }
 
         public override void MarkCompleted()
         {
             base.MarkCompleted();
-            ChoreEvents.OnItemCollected -= ItemCollected;
+            ChoreEvents.OnPlantsCollected -= PlantCollected;
         }
 
-        private void ItemCollected(int plantsID)
+        private void PlantCollected(int plantsID)
         {
             if (_plantsID != plantsID)
                 return;
 
             _plantsCount++;
 
-            Debug.Log($"{ComponentName}: Item Type {plantsID} was collected {_plantsCount}/{_plantsNeeded}");
+            Debug.Log($"{ComponentName}: Plant Type {plantsID} was collected {_plantsCount}/{_plantsNeeded}");
 
             if (_plantsCount < _plantsNeeded)
                 return;
