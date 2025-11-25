@@ -1,12 +1,12 @@
 using Interactable;
 using UnityEngine;
 
-public class ScavengingScript : InteractableBehaviour, IInteractable
+public class ScavengingScript : InteractableBehaviour
 {
-    void Awake()
-    {
-        base.Awake();
-    }
+    // void Awake()
+    // {
+    //     base.Awake();
+    // }
 
     void Update()
     {
@@ -15,17 +15,17 @@ public class ScavengingScript : InteractableBehaviour, IInteractable
 
     public override void OnHoverEnter()
     {
-        base.OnHoverEnter();
+        OnHoverEnter();
     }
 
     public override void OnHoverExit()
     {
-        base.OnHoverExit();
+        OnHoverExit();
     }
 
     public override void Interact()
     {
-        base.OnHoverExit();
+        OnHoverExit();
         Debug.Log("You just interacted with a: " + gameObject.name);
         Destroy(gameObject);
     }
