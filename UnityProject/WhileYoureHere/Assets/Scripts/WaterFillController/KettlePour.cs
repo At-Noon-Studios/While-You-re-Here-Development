@@ -18,7 +18,7 @@ namespace WaterFillController
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
 
-        void Start()
+        private void Start()
         {
             _rb = GetComponent<Rigidbody>();
 
@@ -33,12 +33,12 @@ namespace WaterFillController
             );
         }
 
-        void Update()
+        private void Update()
         {
-            bool isHeld = !_rb.useGravity;
-            bool leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
+            var isHeld = !_rb.useGravity;
+            var leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
             
-            bool wantsPour =
+            var wantsPour =
                 isHeld &&
                 leftClick &&
                 kettle.fillAmount > 0f;
@@ -54,8 +54,8 @@ namespace WaterFillController
                 if (pourStream && !pourStream.isPlaying)
                     pourStream.Play();
 
-                float delta = pourSpeed * Time.deltaTime;
-                float give = Mathf.Min(delta, kettle.fillAmount);
+                var delta = pourSpeed * Time.deltaTime;
+                var give = Mathf.Min(delta, kettle.fillAmount);
 
                 kettle.fillAmount -= give;
                 if (targetCup)
