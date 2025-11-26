@@ -1,4 +1,3 @@
-using System;
 using Interactable;
 using ScriptableObjects.picking_up_objects;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace picking_up_objects
         private new void Awake()
         {
             _rb = GetComponent<Rigidbody>();
-            GameObject player = GameObject.FindWithTag("Player");
+            var player = GameObject.FindWithTag("Player");
             _holdPoint = player.transform.Find("Main Camera/HoldObjectPoint");
             _heldObjectController = player.GetComponent<HeldObjectController>();
             base.Awake();
@@ -70,7 +69,7 @@ namespace picking_up_objects
             _rb.linearVelocity = direction * FollowSpeed;
         }
 
-        protected void Hold()
+        private void Hold()
         {
             _isHolding = true;
             _currentTargetPoint = _holdPoint;

@@ -62,5 +62,7 @@ namespace picking_up_objects
                 ClearHeldObject();
             }
         }
+        
+        public IHeldObject GetHeldObject() => _heldObject;
     }
 }

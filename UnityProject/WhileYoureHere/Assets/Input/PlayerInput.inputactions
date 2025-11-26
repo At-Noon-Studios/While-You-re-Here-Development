@@ -43,15 +43,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PickUp",
-                    "type": "Button",
-                    "id": "18fe3dba-7f9b-427a-ba32-026c25cd4392",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Drop",
                     "type": "Button",
                     "id": "13e7e2c1-57f7-48c4-bc83-8e644543863f",
@@ -64,6 +55,15 @@
                     "name": "Place",
                     "type": "Button",
                     "id": "daf9c251-fdbe-4449-b02f-5d19ff8c0bea",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Chop",
+                    "type": "Button",
+                    "id": "160f5648-e4fb-4c9e-bc17-6fb80ae6c45f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -150,17 +150,6 @@
                 },
                 {
                     "name": "",
-                    "id": "ef00abdf-add6-48b1-b6f3-36d800198229",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "19a50344-fd15-450c-966d-793ac7185267",
                     "path": "<Keyboard>/g",
                     "interactions": "",
@@ -194,12 +183,12 @@
                 },
                 {
                     "name": "",
-                    "id": "26868262-824c-4379-9dff-175edfb2baca",
-                    "path": "<Mouse>/rightButton",
+                    "id": "ed65826c-fedb-4d89-bb49-1b9391329319",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "PickUp",
+                    "action": "Chop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
