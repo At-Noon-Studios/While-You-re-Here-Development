@@ -27,9 +27,9 @@ namespace WaterFillController
 
             _uprightRot = pivot.localRotation;
             _pourRot = Quaternion.Euler(
-                pivot.localEulerAngles.x + pourAngle,
+                pivot.localEulerAngles.x,
                 pivot.localEulerAngles.y,
-                pivot.localEulerAngles.z
+                pivot.localEulerAngles.z - pourAngle
             );
         }
 
