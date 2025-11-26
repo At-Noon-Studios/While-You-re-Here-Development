@@ -233,6 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::entity.Item
   sc: {fileID: 11400000, guid: e6132a792c5cc47b78a611eac8745deb, type: 2}
+  audioVolume: 1
   itemID: 0
 --- !u!82 &212807863
 AudioSource:
@@ -365,6 +366,51 @@ Transform:
   - {fileID: 958319909}
   - {fileID: 1563917886}
   - {fileID: 1763336848}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &502003999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502004001}
+  - component: {fileID: 502004000}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &502004000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502003999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdc50ba24e1a4162b8a99891048592d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  soundObject: {fileID: 8921456144674298786, guid: 8c7b71689cc2845fca67585cd64be107, type: 3}
+--- !u!4 &502004001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502003999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.07256, y: 0, z: -0.47061}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &856171953
@@ -593,6 +639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::entity.Item
   sc: {fileID: 11400000, guid: e6132a792c5cc47b78a611eac8745deb, type: 2}
+  audioVolume: 1
   itemID: 0
 --- !u!82 &857731381
 AudioSource:
@@ -805,6 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::entity.Item
   sc: {fileID: 11400000, guid: e6132a792c5cc47b78a611eac8745deb, type: 2}
+  audioVolume: 1
   itemID: 0
 --- !u!82 &958319918
 AudioSource:
@@ -1017,6 +1065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::entity.Item
   sc: {fileID: 11400000, guid: e6132a792c5cc47b78a611eac8745deb, type: 2}
+  audioVolume: 1
   itemID: 0
 --- !u!82 &1563917895
 AudioSource:
@@ -1235,6 +1284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::entity.Item
   sc: {fileID: 11400000, guid: e6132a792c5cc47b78a611eac8745deb, type: 2}
+  audioVolume: 1
   itemID: 0
 --- !u!65 &1763336851
 BoxCollider:
@@ -1648,3 +1698,4 @@ SceneRoots:
   - {fileID: 1796303883}
   - {fileID: 448150744}
   - {fileID: 2070950071}
+  - {fileID: 502004001}
