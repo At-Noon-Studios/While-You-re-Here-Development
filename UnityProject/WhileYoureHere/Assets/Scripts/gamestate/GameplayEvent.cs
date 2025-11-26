@@ -1,41 +1,51 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using chore;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Video;
 
 namespace gamestate
 {
     
-    [System.Serializable]
-    public class GameplayEvent : PropertyAttribute
+    [Serializable]
+    public class GameplayEvent
     {
         public GameplayEventType type;
         public TriggeredBy triggeredBy;
         
+        public bool _expanded = false;
         
-        [Header("Optional fields")]
-        public string unlockedField;
+        public string booleanToChange;
+        public bool newValue;
         public int hourOfDay;
         public AudioClip dialogueToPlay;
         public VideoClip cutsceneToPlay;
+        public string eventToInvoke;
+        
         public int triggerAfterSeconds;
-        public string customEventName;
+        public string eventToListenTo;
+        public List<SoChore> choresToComplete;
+        public List<bool> booleansToBeTrue;
     }
 
     public enum GameplayEventType
     {
-        Unlock,
+        BooleanChange,
         SkyboxChange,
         Cutscene,
         Dialogue,
         ProgressToNextActivity,
-        CustomEvent
+        InvokeCustomEvent
     }
 
     public enum TriggeredBy
     {
         StartOfActivity,
         AfterSetTime,
-        OnComplete,
+        AfterFinishActivity,
         ByExternalTrigger,
+        OnChoresCompleted,
+        BooleansToTrue,
     }
 }
