@@ -28,7 +28,7 @@ namespace chore
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
                     { ChoreComponent.ChoreComponentType.EnemyKilled, CcEnemyKilled.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

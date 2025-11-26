@@ -8,8 +8,8 @@ namespace entity
     public class Item : InteractableBehaviour
     {
         private AudioSource _audioSource;
-        [SerializeField] ScavengingChore sc;
-        [SerializeField] float audioVolume = 1.0f;
+        [SerializeField] private ScavengingChore _scavengeChore;
+        [SerializeField] private float _audioVolume = 1.0f;
 
         [Header("Item")]
         [SerializeField] private int itemID;
@@ -23,7 +23,7 @@ namespace entity
         public override void Interact()
         {
             ChoreEvents.TriggerItemCollected(itemID);
-            AudioManager.instance.PlaySound(sc.PickupPlants, transform, audioVolume);
+            AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
             Destroy(gameObject);
         }
     }
