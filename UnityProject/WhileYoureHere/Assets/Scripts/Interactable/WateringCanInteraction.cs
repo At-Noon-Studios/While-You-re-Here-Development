@@ -1,34 +1,50 @@
-using System.Collections;
+using chore;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Interactable
 {
-    public class WateringCanInteraction : InteractableBehaviour
+    public class WateringCanInteraction : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        [SerializeField] private int wateringCanID;
+        [SerializeField] private Transform rotationRoot;
 
+        private Rigidbody _rb;
+        private Quaternion _uprightRot;
+        private Quaternion _pourRot;
+        
+        private bool _hasTriggered = false;
+
+        private readonly float _rotationAngle = 60f;
+        private readonly float _rotationSpeed = 200f;
+
+        private void Start()
+        {
+            _rb = GetComponent<Rigidbody>();
+
+            _uprightRot = rotationRoot.localRotation;
+            _pourRot = Quaternion.Euler(0, 0, _rotationAngle);
         }
 
-        public override void Interact()
+        void Update()
         {
-            
-            transform.localEulerAngles = new Vector3(0, 0, 45);
-            print("rotate watering can to water");
-            
-            StartCoroutine(StartWatering());
-        }
+            var isHolding = !_rb.useGravity;
+            var mouseClick = Mouse.current.leftButton.isPressed;
 
-        private IEnumerator StartWatering()
-        {
-            enabled = false;
-            
-            yield return new WaitForSeconds(2.5f);
-            transform.localEulerAngles = new Vector3(0, 0, 0);
-            print("rotate watering can back");
-            
-            enabled = true;
+            var isMouseDown = isHolding && mouseClick;
+
+            if (isHolding && !_hasTriggered)
+            {
+                ChoreEvents.TriggerWateringCanPickedUp(wateringCanID);
+                _hasTriggered = true;
+            }
+
+            rotationRoot.localRotation = Quaternion.RotateTowards(
+                rotationRoot.localRotation,
+                isMouseDown ? _pourRot : _uprightRot,
+                _rotationSpeed * Time.deltaTime
+            );
         }
     }
 }
+

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace entity
 {
-    public class Item : MonoBehaviour
+    /*public class Item : MonoBehaviour
     {
         [Header("Item")]
         [SerializeField] private int itemID;
@@ -13,5 +13,5 @@ namespace entity
             ChoreEvents.TriggerItemCollected(itemID);
             Destroy(gameObject);
         }
-    }
+    }*/
 }

@@ -5,10 +5,12 @@ namespace chore
 {
     public abstract class ChoreComponent
     {
+        public bool IsActive { get; private set; }
+        
         public enum ChoreComponentType
         {
-            EnemyKilled,
-            ItemCollected
+            WateringCanPickedUp,
+            PlantWatered
         }
 
         public event Action<ChoreComponent> OnComponentCompleted;
@@ -30,12 +32,13 @@ namespace chore
 
         public virtual void EnableComponent()
         {
-            Debug.Log($"{ComponentName} has been enabled.");
+            IsActive = true;
+            Debug.Log($"Component {ComponentName} has been enabled.");
         }
 
         public virtual void MarkCompleted()
         {
-            Debug.Log($"{ComponentName} has been completed.");
+            IsActive = false;
         }
     }
 }

@@ -1,11 +1,14 @@
+using System.Collections;
+using chore;
 using UnityEngine;
 
 namespace gardening
 {
     public class Watering : MonoBehaviour
     {
+        [Header("Water Particles")]
         [SerializeField] private ParticleSystem waterParticleSystem;
-    
+        
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {

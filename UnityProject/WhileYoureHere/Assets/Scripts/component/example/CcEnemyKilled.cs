@@ -1,9 +1,9 @@
 using chore;
 using UnityEngine;
 
-namespace component
+namespace component.example
 {
-    public class CcEnemyKilled : ChoreComponent
+    /*public class CcEnemyKilled : ChoreComponent
     {
         private readonly int _enemyID;
         private int _killCount;
@@ -13,7 +13,6 @@ namespace component
         {
             _enemyID = enemyID;
             _killsNeeded = killsNeeded;
-            _killCount = 0;
             ComponentType = ChoreComponentType.EnemyKilled;
         }
 
@@ -38,6 +37,7 @@ namespace component
         public override void EnableComponent()
         {
             base.EnableComponent();
+            _killCount = 0;
             // Subscribe to enemy kill event
             ChoreEvents.OnEnemyKilled += EnemyKilled;
         }
@@ -47,6 +47,8 @@ namespace component
             base.MarkCompleted();
             // Unsubscribe from enemy kill event
             ChoreEvents.OnEnemyKilled -= EnemyKilled;
+            
+            TriggerComponentCompleted(this);
         }
 
         private void EnemyKilled(int enemyID)
@@ -56,13 +58,12 @@ namespace component
 
             _killCount++;
 
-            Debug.Log($"{ComponentName}: Enemy Type {enemyID} was killed {_killCount}/{_killsNeeded}");
+            Debug.Log($"Component {ComponentName}: Enemy Type {enemyID} was killed {_killCount}/{_killsNeeded}");
 
             if (_killCount < _killsNeeded)
                 return;
 
             MarkCompleted();
-            TriggerComponentCompleted(this);
         }
-    }
+    }*/
 }

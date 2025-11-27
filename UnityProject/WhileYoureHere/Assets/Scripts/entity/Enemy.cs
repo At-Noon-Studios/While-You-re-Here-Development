@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace entity
 {
-   public class Enemy : MonoBehaviour
+   /*public class Enemy : MonoBehaviour
    {
       [Header("Enemy")]
       [SerializeField] private int enemyID;
@@ -13,5 +13,5 @@ namespace entity
          ChoreEvents.TriggerEnemyKilled(enemyID);
          Destroy(gameObject);
       }
-   }
+   }*/
 }

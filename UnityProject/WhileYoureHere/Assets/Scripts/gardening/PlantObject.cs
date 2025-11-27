@@ -1,6 +1,5 @@
+using chore;
 using ScriptableObjects;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace gardening
@@ -9,6 +8,7 @@ namespace gardening
     {
         [Header("Plant settings")]
         [SerializeField] private SoPlant plant;
+        [SerializeField] private int plantID;
         [SerializeField] private ParticleSystem wateringParticles;
         [SerializeField] private Transform spawnPoint;
         
@@ -16,6 +16,7 @@ namespace gardening
         private int _currentStage;
         private float _currentWaterTime = 0f;
         private bool _isWatering = false;
+        private bool _isTriggered = false;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -77,6 +78,13 @@ namespace gardening
             if (nextPrefab == null)
             {
                 Debug.Log($"No prefab found for stage {_currentStage}");
+                
+                if (!_isTriggered)
+                {
+                    _isTriggered = true;
+                    ChoreEvents.TriggerPlantWatered(plantID);
+                }
+                
                 return;
             }
             
