@@ -1,7 +1,9 @@
 using chore;
+using ScriptableObjects.chores;
+using ScriptableObjects.chores.test;
 using UnityEngine;
 
-namespace component
+namespace component.test
 {
     public class CcItemCollected : ChoreComponent
     {

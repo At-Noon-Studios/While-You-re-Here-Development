@@ -1,7 +1,9 @@
 using chore;
+using ScriptableObjects.chores;
+using ScriptableObjects.chores.test;
 using UnityEngine;
 
-namespace component
+namespace component.test
 {
     public class CcEnemyKilled : ChoreComponent
     {
@@ -16,7 +18,7 @@ namespace component
             ComponentType = ChoreComponentType.EnemyKilled;
         }
 
-        // Is used in dictionary and Quest constructor
+        // Is used in dictionary and Chore constructor
         public static ChoreComponent CreateFactory(SoChoreComponent soChoreComponent) // Accept ScriptableObject data
         {
             SoCcEnemyKilled localChoreComponent = soChoreComponent as SoCcEnemyKilled; // Check type

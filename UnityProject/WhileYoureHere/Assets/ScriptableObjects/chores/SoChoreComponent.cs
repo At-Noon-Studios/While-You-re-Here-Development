@@ -1,7 +1,7 @@
 using chore;
 using UnityEngine;
 
-namespace component
+namespace ScriptableObjects.chores
 {
     public abstract class SoChoreComponent : ScriptableObject
     {
