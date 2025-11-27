@@ -1,96 +1,61 @@
-using System;
-using Interactable;
-using picking_up_objects;
 using UnityEngine;
 
 namespace chopping_logs
 {
-    public class LogChopTarget : InteractableBehaviour
+    public class LogChopTarget : MonoBehaviour
     {
-        [Header("Chopping settings")]
-        [SerializeField] private GameObject choppedLogPrefab;
-        [SerializeField] private Transform chopSpawnPoint1;
-        [SerializeField] private Transform chopSpawnPoint2;
-
-        private int _totalChopsRequired = 4;
-
-        private int _currentChopCount;
+        private const int TotalHits = 4;
+        private int _hits;
         private Stump _stump;
 
-        private void Awake()
-        {
-            base.Awake();
-        }
+        [SerializeField] private GameObject choppedLogPrefab;
+        [SerializeField] private Transform spawn1;
+        [SerializeField] private Transform spawn2;
 
         private void Start()
         {
             _stump = GetComponentInParent<Stump>();
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Axe"))
+            if (!_stump || !_stump.MinigameActive || !_stump.HasLog) return;
+
+            if (other.CompareTag("Axe"))
             {
+                Debug.Log("Trigger hit by AXE: " + other.name);
+
+                var axe = other.GetComponent<AxeHitDetector>();
+                if (axe == null)
+                {
+                    Debug.Log("Axe has no AxeHitDetector!");
+                    return;
+                }
+
                 RegisterHit();
             }
         }
 
         private void RegisterHit()
         {
-            _currentChopCount++;
-            Debug.Log($"Log hit! Current chop count: {_currentChopCount}/{_totalChopsRequired}");
+            _hits++;
+            Debug.Log($"HIT {_hits}/{TotalHits}");
 
-            if (_currentChopCount >= _totalChopsRequired)
+            if (_hits >= TotalHits)
             {
-                SplitLog();
-                _stump.ClearLog();
+                ChopLog();
             }
         }
 
-        private void SplitLog()
+        private void ChopLog()
         {
-            if (_stump == null || !_stump.HasLog)
-            {
-                Debug.LogWarning("No log to chop on the stump.");
-                return;
-            }
+            Instantiate(choppedLogPrefab, spawn1.position, spawn1.rotation);
+            Instantiate(choppedLogPrefab, spawn2.position, spawn2.rotation);
 
-            Instantiate(choppedLogPrefab, chopSpawnPoint1.position, chopSpawnPoint1.rotation);
-            Instantiate(choppedLogPrefab, chopSpawnPoint2.position, chopSpawnPoint2.rotation);
+            Debug.Log("LOG CHOPPED!");
 
-            Debug.Log("Log chopped into pieces!");
-        }
-
-        protected override string InteractionText()
-        {
-            if (_stump != null && _stump.HasLog)
-            {
-                var player = GameObject.FindWithTag("Player");
-                var heldController = player?.GetComponent<HeldObjectController>();
-                var heldObject = heldController?.GetHeldObject();
-
-                if (heldObject is Pickable pickableAxe && pickableAxe.CompareTag("Axe"))
-                {
-                    return "Start chopping the Log (E)";
-                }
-            }
-            return string.Empty;
-        }
-
-        public override void Interact()
-        {
-            if (_stump != null && _stump.HasLog)
-            {
-                var player = GameObject.FindWithTag("Player");
-                var heldController = player?.GetComponent<HeldObjectController>();
-                var heldObject = heldController?.GetHeldObject();
-
-                if (heldObject is Pickable pickableAxe && pickableAxe.CompareTag("Axe"))
-                {
-                    Debug.Log("Starting chopping minigame...");
-                    _stump.StartMinigame();
-                }
-            }
+            _hits = 0;
+            _stump.EndMinigame(); // ends the minigame + clears stump
         }
     }
 }

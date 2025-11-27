@@ -1,4 +1,3 @@
-using System;
 using Interactable;
 using picking_up_objects;
 using player_controls;
@@ -11,11 +10,11 @@ namespace chopping_logs
         [Header("Log placement settings")]
         [SerializeField] private Transform logPlaceholder;
 
+        public bool HasLog => _hasLog;
+        public bool MinigameActive { get; private set; }
+
         private GameObject _logObject;
         private bool _hasLog;
-
-        public bool HasLog => _hasLog;
-        public GameObject LogObject => _logObject;
 
         private void Awake()
         {
@@ -24,102 +23,112 @@ namespace chopping_logs
 
         public override void Interact()
         {
-            if (_hasLog) return; // stump already occupied
+            // If minigame has started, stump is no longer interactable
+            if (MinigameActive) return;
 
             var player = GameObject.FindWithTag("Player");
             var heldController = player?.GetComponent<HeldObjectController>();
-            var heldObject = heldController?.GetHeldObject();
+            var held = heldController?.GetHeldObject();
 
-            if (heldObject is Pickable pickableLog && pickableLog.CompareTag("Log"))
+            // If NO LOG is placed → placing logic
+            if (!_hasLog)
             {
-                // Snap to placement point
-                pickableLog.Place();
-                pickableLog.transform.position = logPlaceholder.position;
-                pickableLog.transform.rotation = logPlaceholder.rotation;
-
-                // Freeze physics
-                var rb = pickableLog.GetComponent<Rigidbody>();
-                if (rb)
+                if (held is Pickable pickableLog && pickableLog.CompareTag("Log"))
                 {
-                    rb.linearVelocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                    rb.isKinematic = true;
-                    rb.useGravity = false;
+                    PlaceLog(pickableLog, heldController);
                 }
-
-                // Parent to stump
-                pickableLog.transform.SetParent(logPlaceholder);
-
-                // Track log
-                _logObject = pickableLog.gameObject;
-                _hasLog = true;
-
-                // Disable Pickable so log can't be picked up again
-                pickableLog.enabled = false;
-
-                Debug.Log("Log Placed");
-                heldController.ClearHeldObject();
+                return;
             }
+
+            // If LOG IS placed → start minigame only when holding axe
+            if (held is Pickable axe && axe.CompareTag("Axe"))
+            {
+                StartMinigame();
+            }
+        }
+
+        private void PlaceLog(Pickable pickableLog, HeldObjectController controller)
+        {
+            pickableLog.Place();
+            pickableLog.transform.position = logPlaceholder.position;
+            pickableLog.transform.rotation = logPlaceholder.rotation;
+
+            var rb = pickableLog.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+
+            pickableLog.transform.SetParent(logPlaceholder);
+            pickableLog.enabled = false;
+
+            _logObject = pickableLog.gameObject;
+            _hasLog = true;
+
+            controller.ClearHeldObject();
+
+            Debug.Log("Log placed on stump.");
+        }
+
+        public void StartMinigame()
+        {
+            Debug.Log("Minigame started!");
+
+            MinigameActive = true;
+
+            var movement = GameObject.FindWithTag("Player")?.GetComponent<MovementController>();
+            // if (movement)
+                // movement.PauseMovement();
+        }
+
+        public void EndMinigame()
+        {
+            MinigameActive = false;
+
+            var movement = GameObject.FindWithTag("Player")?.GetComponent<MovementController>();
+            if (movement)
+                movement.ResumeMovement();
+
+            ClearLog();
         }
 
         public void ClearLog()
         {
-            if (_logObject)
-            {
-                _logObject.transform.SetParent(null);
-
-                var rb = _logObject.GetComponent<Rigidbody>();
-                if (rb)
-                {
-                    rb.isKinematic = false;
-                    rb.useGravity = true;
-                }
-
-                // Re‑enable Pickable if log is freed
-                var pickable = _logObject.GetComponent<Pickable>();
-                if (pickable) pickable.enabled = true;
-            }
+            if (_logObject != null)
+                Destroy(_logObject);
 
             _logObject = null;
             _hasLog = false;
         }
 
-        public void StartMinigame()
-        {
-            Debug.Log("Mini-game started for chopping the log!");
-
-            // Freeze camera rotation
-            var cameraController = Camera.main.GetComponent<CameraController>();
-            if (cameraController)
-            {
-                cameraController.PauseCameraMovement();
-            }
-
-            // Freeze player movement
-            var playerMovement = GameObject.FindWithTag("Player")?.GetComponent<MovementController>();
-            if (playerMovement)
-            {
-                playerMovement.PauseMovement();
-            }
-        }
-
         protected override string InteractionText()
         {
-            if (_hasLog) return "Stump (Occupied)";
+            if (MinigameActive) return string.Empty;
 
-            var player = GameObject.FindWithTag("Player");
-            var heldController = player?.GetComponent<HeldObjectController>();
-            var heldObject = heldController?.GetHeldObject();
-
-            if (heldObject is Pickable pickableLog && pickableLog.CompareTag("Log"))
+            if (!_hasLog)
             {
-                return "Place Log on Stump (E)";
+                var held = GameObject.FindWithTag("Player")
+                    ?.GetComponent<HeldObjectController>()?
+                    .GetHeldObject();
+
+                if (held is Pickable p && p.CompareTag("Log"))
+                    return "Place Log (E)";
+
+                return "Stump (Empty)";
             }
 
-            return "Stump (Empty)";
-        }
+            // Has log → show chop interaction ONLY if holding axe
+            var heldAxe = GameObject.FindWithTag("Player")
+                ?.GetComponent<HeldObjectController>()?
+                .GetHeldObject();
 
-        public override void OnHoverEnter() => base.OnHoverEnter();
-        public override void OnHoverExit() => base.OnHoverExit();
+            if (heldAxe is Pickable axe && axe.CompareTag("Axe"))
+                return "Start Chopping (E)";
+
+            return "Stump (Occupied)";
+        }
     }
 }
