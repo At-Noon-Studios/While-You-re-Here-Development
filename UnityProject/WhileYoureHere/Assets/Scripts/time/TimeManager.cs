@@ -32,6 +32,14 @@ namespace time
         {
             TryStartTransition(days, hours);
         }
+
+        public void ChangeTime(int day, int hour)
+        {
+            if (day == _lastDay && hour == _lastHour) return;
+            days = day;
+            hours = hour;
+            OnValidate();
+        }
         
         private void OnValidate()
         {

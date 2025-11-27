@@ -56,5 +56,10 @@ namespace chore
                 Debug.Log($"{chore.ChoreName} has been initialized");
             }
         }
+
+        public bool CheckChoreCompletion(int id)
+        {
+            return _chores[id].ChoreStatus == ChoreStatus.Completed;
+        }
     }
 }

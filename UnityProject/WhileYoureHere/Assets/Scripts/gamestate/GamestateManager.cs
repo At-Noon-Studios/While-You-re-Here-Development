@@ -1,5 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
+using chore;
+using time;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace gamestate
 {
@@ -11,6 +15,12 @@ namespace gamestate
         private Activity _currentActivity;
         
         private static GamestateManager _instance;
+        private TimeManager _timeManager;
+        private ChoreManager _choreManager;
+        private GameObject _player;
+        private AudioSource _playerAudioSource;
+        
+        public int currentDay;
 
         private void Awake()
         {
@@ -19,12 +29,26 @@ namespace gamestate
         
         private void Start()
         {
+            _timeManager = GameObject.FindWithTag("TimeManager").GetComponent<TimeManager>();
+            _choreManager = GameObject.FindWithTag("ChoreManager").GetComponent<ChoreManager>();
+            _player = GameObject.FindWithTag("Player");
+            _playerAudioSource = _player.GetComponent<AudioSource>();
             _currentActivity = activities[0];
+            currentDay = 1;
         }
 
         private void Update()
         {
-        
+            foreach (var gameplayEvent in _currentActivity.events)
+            {
+                if (gameplayEvent.triggeredBy == TriggeredBy.OnChoresCompleted)
+                {
+                    CheckChoreCompletion(gameplayEvent);
+                } else if (gameplayEvent.triggeredBy == TriggeredBy.BooleansToTrue)
+                {
+                    
+                }
+            }
         }
 
         public static GamestateManager GetInstance()
@@ -34,8 +58,89 @@ namespace gamestate
 
         public void GoToNextActivity()
         {
-            // trigger oncomplete events
+            foreach (var gameplayEvent in _currentActivity.events )
+            {
+                if (gameplayEvent.triggeredBy is TriggeredBy.AfterFinishActivity)
+                {
+                    HandleTrigger(gameplayEvent);
+                }
+            }
             _currentActivity = activities[activities.IndexOf(_currentActivity) + 1];
+            foreach (var gameplayEvent in _currentActivity.events )
+            {
+                if (gameplayEvent.triggeredBy is TriggeredBy.StartOfActivity)
+                {
+                    HandleTrigger(gameplayEvent);
+                } else if (gameplayEvent.triggeredBy is TriggeredBy.AfterSetTime)
+                {
+                    StartCoroutine(ScheduleTrigger(gameplayEvent));
+                }
+            }
+        }
+
+        private void BooleanChange(string boolName, bool value)
+        {
+            _instance.GetType().GetField(boolName).SetValue(_currentActivity, value);
+        }
+
+        private void SkyboxChange(int hourOfDay)
+        {
+            _timeManager.ChangeTime(currentDay, hourOfDay);
+        }
+
+        private void PlayCutscene()
+        {
+            // wont be implemented yet
+        }
+
+        private void PlayDialogue(AudioClip clip)
+        {
+            _playerAudioSource.PlayOneShot(clip);
+        }
+
+        private void InvokeCustomEvent(UnityEvent uEvent)
+        {
+            uEvent.Invoke();
+        }
+
+        private IEnumerator ScheduleTrigger(GameplayEvent gameplayEvent)
+        {
+            yield return new WaitForSeconds(gameplayEvent.triggerAfterSeconds);
+            HandleTrigger(gameplayEvent);
+        }
+        
+        private void CheckChoreCompletion(GameplayEvent gameplayEvent)
+        {
+            foreach (var chore in gameplayEvent.choresToComplete)
+            {
+                if (!_choreManager.CheckChoreCompletion(chore.id)) return;
+            }
+            HandleTrigger(gameplayEvent);
+        }
+
+        private void HandleTrigger(GameplayEvent gameplayEvent)
+        {
+            switch (gameplayEvent.type)
+            {
+                case GameplayEventType.BooleanChange:
+                    BooleanChange(gameplayEvent.booleanToChange, gameplayEvent.newValue);
+                    break;
+                case GameplayEventType.SkyboxChange:
+                    SkyboxChange(gameplayEvent.hourOfDay);
+                    break;
+                case GameplayEventType.Cutscene:
+                    PlayCutscene();
+                    break;
+                case GameplayEventType.Dialogue:
+                    PlayDialogue(gameplayEvent.dialogueToPlay);
+                    break;
+                case GameplayEventType.ProgressToNextActivity:
+                    GoToNextActivity();
+                    break;
+                case GameplayEventType.InvokeCustomEvent:
+                    InvokeCustomEvent(gameplayEvent.eventToInvoke);
+                    break;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using chore;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 
 namespace gamestate
@@ -21,7 +22,7 @@ namespace gamestate
         public int hourOfDay;
         public AudioClip dialogueToPlay;
         public VideoClip cutsceneToPlay;
-        public string eventToInvoke;
+        public UnityEvent eventToInvoke;
         
         public int triggerAfterSeconds;
         public string eventToListenTo;

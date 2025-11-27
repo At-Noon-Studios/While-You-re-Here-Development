@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using chore;
-using gamestate;
-using Unity.VisualScripting;
+﻿using gamestate;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Editor
 {
@@ -11,6 +9,7 @@ namespace Editor
 	public class GameplayEventDrawer : PropertyDrawer
 	{
 		private float x, y, w, h;
+		private int _skipRowsForEvent;
 		
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
@@ -18,10 +17,18 @@ namespace Editor
 			int rows = 1;
 			if (property.FindPropertyRelative("_expanded").boolValue)
 			{
-				rows += 4;
+				rows += 5;
 				GameplayEventType gameplayEventType = (GameplayEventType)property.FindPropertyRelative("type").enumValueIndex;
 				if (gameplayEventType == GameplayEventType.BooleanChange) rows += 3;
-				else if (gameplayEventType is GameplayEventType.SkyboxChange or GameplayEventType.Cutscene or GameplayEventType.Dialogue or GameplayEventType.InvokeCustomEvent) rows += 2;
+				else if (gameplayEventType is GameplayEventType.SkyboxChange or GameplayEventType.Cutscene or GameplayEventType.Dialogue) rows += 2;
+				else if (gameplayEventType is GameplayEventType.InvokeCustomEvent)
+				{
+					rows += 5;
+					_skipRowsForEvent = 5;
+					var serializedProperty = property.FindPropertyRelative("eventToInvoke.m_PersistentCalls.m_Calls");
+					rows += Mathf.Max(serializedProperty.arraySize -1, 0) * 3;
+					_skipRowsForEvent += Mathf.Max(serializedProperty.arraySize -1, 0) * 3;	
+				}
 				
 				TriggeredBy trigger =  (TriggeredBy)property.FindPropertyRelative("triggeredBy").enumValueIndex;
 				if (trigger is TriggeredBy.AfterSetTime or TriggeredBy.ByExternalTrigger) rows += 1;
@@ -70,6 +77,7 @@ namespace Editor
 					break;
 				case GameplayEventType.InvokeCustomEvent:
 					AddField("eventToInvoke", property);
+					y += h * _skipRowsForEvent;
 					break;
 				case GameplayEventType.Dialogue:
 					AddField("dialogueToPlay", property);
