@@ -1,7 +1,6 @@
 ﻿using gamestate;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Editor
 {
@@ -17,13 +16,13 @@ namespace Editor
 			int rows = 1;
 			if (property.FindPropertyRelative("_expanded").boolValue)
 			{
-				rows += 5;
+				rows += 4;
 				GameplayEventType gameplayEventType = (GameplayEventType)property.FindPropertyRelative("type").enumValueIndex;
 				if (gameplayEventType == GameplayEventType.BooleanChange) rows += 3;
 				else if (gameplayEventType is GameplayEventType.SkyboxChange or GameplayEventType.Cutscene or GameplayEventType.Dialogue) rows += 2;
 				else if (gameplayEventType is GameplayEventType.InvokeCustomEvent)
 				{
-					rows += 5;
+					rows += 7;
 					_skipRowsForEvent = 5;
 					var serializedProperty = property.FindPropertyRelative("eventToInvoke.m_PersistentCalls.m_Calls");
 					rows += Mathf.Max(serializedProperty.arraySize -1, 0) * 3;
