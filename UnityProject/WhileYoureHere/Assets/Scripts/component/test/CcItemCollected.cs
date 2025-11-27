@@ -14,7 +14,6 @@ namespace component
         {
             _itemID = itemID;
             _itemAmountNeeded = itemAmountNeeded;
-            _itemCount = 0;
             ComponentType = ChoreComponentType.ItemCollected;
         }
 
@@ -38,6 +37,7 @@ namespace component
         public override void EnableComponent()
         {
             base.EnableComponent();
+            _itemCount = 0;
             ChoreEvents.OnItemCollected += ItemCollected;
         }
 
@@ -45,6 +45,8 @@ namespace component
         {
             base.MarkCompleted();
             ChoreEvents.OnItemCollected -= ItemCollected;
+            
+            TriggerComponentCompleted(this);
         }
 
         private void ItemCollected(int itemID)
@@ -54,13 +56,12 @@ namespace component
 
             _itemCount++;
 
-            Debug.Log($"{ComponentName}: Item Type {itemID} was collected {_itemCount}/{_itemAmountNeeded}");
+            Debug.Log($"Component {ComponentName}: Item Type {itemID} was collected {_itemCount}/{_itemAmountNeeded}");
 
             if (_itemCount < _itemAmountNeeded)
                 return;
 
             MarkCompleted();
-            TriggerComponentCompleted(this);
         }
     }
 }
