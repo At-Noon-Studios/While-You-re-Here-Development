@@ -1,6 +1,6 @@
 using chore;
 
-namespace component
+namespace component.making_tea
 {
     public class CcKettleFilled : ChoreComponent
     {

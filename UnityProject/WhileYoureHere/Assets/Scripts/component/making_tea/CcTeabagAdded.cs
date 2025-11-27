@@ -1,36 +1,35 @@
 ﻿using chore;
 
-namespace component
+namespace component.making_tea
 {
-    public class CcWaterBoiled : ChoreComponent
+    public class CcTeabagAdded : ChoreComponent
     {
-        public CcWaterBoiled(string n, string d) : base(n, d)
+        public CcTeabagAdded(string n, string d) : base(n,d)
         {
-            ComponentType = ChoreComponentType.WaterBoiled;
+            ComponentType = ChoreComponentType.TeabagAdded;
         }
 
         public static ChoreComponent CreateFactory(SoChoreComponent so)
         {
-            return new CcWaterBoiled(so.componentName, so.description);
+            return new CcTeabagAdded(so.componentName, so.description);
         }
 
         public override void EnableComponent()
         {
             base.EnableComponent();
-            ChoreEvents.OnWaterBoiled += Done;
+            ChoreEvents.OnTeabagAdded += Done;
         }
 
         public override void MarkCompleted()
         {
             base.MarkCompleted();
-            ChoreEvents.OnWaterBoiled -= Done;
+            ChoreEvents.OnTeabagAdded -= Done;
         }
 
-        void Done()
+        private void Done()
         {
             MarkCompleted();
             TriggerComponentCompleted(this);
         }
     }
 }
-

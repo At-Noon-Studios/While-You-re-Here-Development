@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace component
+namespace component.making_tea
 {
     [CreateAssetMenu(fileName="CcCupFilled", menuName="QuestSystem/Components/CupFilled", order=4)]
     public class SoCcCupFilled : SoChoreComponent 

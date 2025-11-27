@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace WaterFillController
+namespace making_tea
 {
     public class KettlePour : MonoBehaviour
     {

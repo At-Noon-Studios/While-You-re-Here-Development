@@ -1,7 +1,7 @@
 using chore;
 using UnityEngine;
 
-namespace WaterFillController
+namespace making_tea
 {
     public class Stove : MonoBehaviour
     {
