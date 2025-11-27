@@ -7,7 +7,7 @@ using UnityEngine;
 public class Table : InteractableBehaviour
 {
     [SerializeField] private Transform placePoint;
-    [SerializeField] private Vector3 rotation;
+    [SerializeField] private Vector3 placedObjectRotation;
     [CanBeNull] private IHoldableObject _heldObject;
     
     public override void Interact(IInteractor interactor)
@@ -15,7 +15,7 @@ public class Table : InteractableBehaviour
         if (_heldObject == null)
         {
             _heldObject = interactor.HeldObject;
-            _heldObject!.Place(placePoint.position, Quaternion.Euler(rotation));
+            _heldObject!.Place(placePoint.position, Quaternion.Euler(placedObjectRotation));
             _heldObject.EnableCollider(false);
             return;
         }
@@ -25,7 +25,7 @@ public class Table : InteractableBehaviour
 
     public override bool InteractableBy(IInteractor interactor)
     {
-        if (_heldObject == null) return interactor.HeldObject != null;
+        if (_heldObject == null) return interactor.HeldObject is ITablePlaceable;
         return true;
     }
 
