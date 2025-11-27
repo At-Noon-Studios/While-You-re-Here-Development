@@ -78,19 +78,18 @@ namespace gardening
             if (nextPrefab == null)
             {
                 Debug.Log($"No prefab found for stage {_currentStage}");
-                
-                if (!_isTriggered)
-                {
-                    _isTriggered = true;
-                    ChoreEvents.TriggerPlantWatered(plantID);
-                }
-                
                 return;
             }
             
             if (_currentStage < plant.MaxStage && _currentPlant != null)
             {
                 Destroy(_currentPlant);
+            }
+            
+            if (!_isTriggered)
+            {
+                _isTriggered = true;
+                ChoreEvents.TriggerPlantWatered(plantID);
             }
             
             _currentPlant = Instantiate(nextPrefab, spawnPoint.position, spawnPoint.rotation);
