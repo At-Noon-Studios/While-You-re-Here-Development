@@ -15,33 +15,54 @@ namespace chopping_logs
         private void Start()
         {
             _stump = GetComponentInParent<Stump>();
+            Debug.Log($"LogChopTarget initialized. Stump found: {_stump != null}");
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_stump || !_stump.MinigameActive || !_stump.HasLog) return;
+            Debug.Log($"Trigger entered by: {other.name}");
 
-            if (other.CompareTag("Axe"))
+            if (_stump == null)
             {
-                Debug.Log("Trigger hit by AXE: " + other.name);
-
-                var axe = other.GetComponent<AxeHitDetector>();
-                if (axe == null)
-                {
-                    Debug.Log("Axe has no AxeHitDetector!");
-                    return;
-                }
-
-                RegisterHit();
+                Debug.LogWarning("No stump reference in LogChopTarget.");
+                return;
             }
+
+            Debug.Log($"Stump state → MinigameActive: {_stump.MinigameActive}, HasLog: {_stump.HasLog}");
+
+            if (!_stump.IsReadyForChop())
+            {
+                Debug.Log("Hit ignored: stump inactive or no log.");
+                return;
+            }
+
+            var axe = other.GetComponent<AxeHitDetector>()
+                      ?? other.GetComponentInParent<AxeHitDetector>()
+                      ?? other.GetComponentInChildren<AxeHitDetector>();
+
+            if (axe == null)
+            {
+                Debug.Log("No AxeHitDetector found.");
+                return;
+            }
+
+            if (!axe.CanHit)
+            {
+                Debug.Log($"Swing too slow: {axe.SwingSpeed}");
+                return;
+            }
+
+            Debug.Log("Valid hit detected!");
+            axe.ConsumeHit();
+            RegisterHit();
         }
 
         private void RegisterHit()
         {
             _hits++;
-            Debug.Log($"HIT {_hits}/{TotalHits}");
+            Debug.Log($"LOG HIT: {_hits}/{TotalHits}");
 
-            if (_hits >= TotalHits)
+            if (_hits > TotalHits)
             {
                 ChopLog();
             }
@@ -55,7 +76,9 @@ namespace chopping_logs
             Debug.Log("LOG CHOPPED!");
 
             _hits = 0;
-            _stump.EndMinigame(); // ends the minigame + clears stump
+            _stump.EndMinigame();
         }
+
+        public void SetStump(Stump stump) => _stump = stump;
     }
 }
