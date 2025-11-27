@@ -46,12 +46,6 @@ namespace chopping_logs
                 return;
             }
 
-            if (!axe.CanHit)
-            {
-                Debug.Log($"Swing too slow: {axe.SwingSpeed}");
-                return;
-            }
-
             Debug.Log("Valid hit detected!");
             axe.ConsumeHit();
             RegisterHit();

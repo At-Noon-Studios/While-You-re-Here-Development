@@ -914,11 +914,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 90ea49f2f9bf3404381e79ee80d8a444, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.27043292
+      value: 0.285
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 90ea49f2f9bf3404381e79ee80d8a444, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.9063377
+      value: -1.829
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 90ea49f2f9bf3404381e79ee80d8a444, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1165,7 +1165,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 4.74, z: 1}
-  m_Center: {x: -0.19, y: 2.34, z: 0}
+  m_Center: {x: 0, y: 2.76, z: 0}
 --- !u!4 &1581334277 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 90ea49f2f9bf3404381e79ee80d8a444, type: 3}
@@ -1183,7 +1183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9c3c0eb51da164ba0f675294f9dc9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.AxeHitDetector
-  minSwingSpeed: 1.2
 --- !u!1 &1650406700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,8 +1269,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.96, y: 0.97, z: 1}
-  m_Center: {x: 0.09, y: -0.05, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1770620653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1284,7 +1283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9c3c0eb51da164ba0f675294f9dc9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.AxeHitDetector
-  minSwingSpeed: 0.1
 --- !u!64 &1770620654
 MeshCollider:
   m_ObjectHideFlags: 0
