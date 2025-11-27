@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Interactable
 {
-    public class WateringCanInteraction : MonoBehaviour
+    public class WateringCan : MonoBehaviour
     {
         [SerializeField] private int wateringCanID;
         [SerializeField] private Transform rotationRoot;

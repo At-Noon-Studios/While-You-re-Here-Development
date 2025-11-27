@@ -57,8 +57,6 @@ namespace component.waterPlants
 
             _wateringCanCount++;
 
-            Debug.Log($"Component {ComponentName}: WateringCan Type {wateringCanID} was picked up {_wateringCanCount}/{_wateringCanAmountNeeded}");
-
             if (_wateringCanCount < _wateringCanAmountNeeded) return;
             
             MarkCompleted();
