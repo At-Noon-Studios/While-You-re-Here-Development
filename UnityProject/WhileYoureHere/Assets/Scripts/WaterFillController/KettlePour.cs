@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using chore;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace WaterFillController
@@ -60,6 +61,12 @@ namespace WaterFillController
                 kettle.fillAmount -= give;
                 if (targetCup)
                     targetCup.fillAmount += give;
+                
+                if (targetCup && targetCup.fillAmount >= 0.2f)
+                {
+                    ChoreEvents.TriggerCupFilled();
+                }
+
             }
             else
             {

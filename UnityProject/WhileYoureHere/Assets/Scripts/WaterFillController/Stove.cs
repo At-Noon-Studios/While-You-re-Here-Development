@@ -1,3 +1,4 @@
+using chore;
 using UnityEngine;
 
 namespace WaterFillController
@@ -25,6 +26,8 @@ namespace WaterFillController
             if (_heatTimer >= heatTime && boilingParticles != null && !boilingParticles.isPlaying)
             {
                 boilingParticles.Play();
+                ChoreEvents.TriggerWaterBoiled();
+
             }
         }
 

@@ -917,6 +917,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0389ad9e2cb04d14b91e5acc9d50d061, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1415189408}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0389ad9e2cb04d14b91e5acc9d50d061, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1415189414}
   m_SourcePrefab: {fileID: 100100000, guid: 0389ad9e2cb04d14b91e5acc9d50d061, type: 3}
 --- !u!1 &1415189407 stripped
 GameObject:
@@ -1025,6 +1028,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0389ad9e2cb04d14b91e5acc9d50d061, type: 3}
   m_PrefabInstance: {fileID: 1379102143}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1415189414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415189407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29657228d2a1afb44b7f7c1d57aaf06c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KettleChoreTrigger
+  kettle: {fileID: 1415189409}
+  requiredFill: 1
 --- !u!1001 &1456376944
 PrefabInstance:
   m_ObjectHideFlags: 0
