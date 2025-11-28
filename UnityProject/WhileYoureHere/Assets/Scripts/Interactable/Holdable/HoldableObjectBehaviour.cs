@@ -12,18 +12,25 @@ namespace Interactable.Holdable
         private Rigidbody _rigidbody;
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
+        [CanBeNull] private GameObject _heldVersion;
 
         public float Weight => data.Weight;
+
+        private const int HoldLayer = 3;
 
         protected override void Awake()
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
+            Renderers = GetComponentsInChildren<Renderer>();
         }
         
         protected void Start()
         {
             _originalLayer = gameObject.layer;
+            if (!data.HeldPrefab) return;
+            _heldVersion = Instantiate(data.HeldPrefab, transform);
+            _heldVersion?.SetActive(false);
         }
         
         public override void Interact(IInteractor interactor)
@@ -33,16 +40,27 @@ namespace Interactable.Holdable
 
         private void PickUp(IInteractor interactor)
         {
+            if (_heldVersion) SetHeldVisual(true, _heldVersion);
             _holder = interactor;
+            var heldObject = this;
             interactor.HeldObject?.Drop();
-            interactor.SetHeldObject(this);
+            interactor.SetHeldObject(heldObject);
             AttachTo(interactor);
             EnableCollider(false);
+        }
+        
+        private void SetHeldVisual(bool state, GameObject heldVisual) {
+            heldVisual.SetActive(state);
+            foreach (var r in Renderers)
+            {
+                r.enabled = !state;
+            }
         }
         
         public void Drop()
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
+            if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder.SetHeldObject(null);
             _holder = null;
             Detach();
@@ -51,6 +69,7 @@ namespace Interactable.Holdable
 
         public void Place(Vector3 position, Quaternion? rotation = null)
         {
+            if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
             _holder = null;
             _rigidbody.isKinematic = true;
@@ -67,7 +86,7 @@ namespace Interactable.Holdable
             transform.SetParent(interactor.HoldPoint);
             transform.localRotation = Quaternion.Euler(data.Rotation);
             transform.localPosition = data.Offset;
-            gameObject.layer = data.HoldLayer;
+            gameObject.layer = HoldLayer;
         }
 
         private void Detach()
