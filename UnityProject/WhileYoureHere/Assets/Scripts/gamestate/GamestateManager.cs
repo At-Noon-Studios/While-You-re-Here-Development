@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using chore;
@@ -10,7 +11,7 @@ namespace gamestate
     public class GamestateManager : MonoBehaviour
     {
         [Header("List with activities of this day")]
-        [SerializeField] public List<Activity>  activities = new List<Activity>();
+        [SerializeField] private List<Activity>  activities = new List<Activity>();
         
         private Activity _currentActivity;
         
@@ -34,7 +35,7 @@ namespace gamestate
             _player = GameObject.FindWithTag("Player");
             _playerAudioSource = _player.GetComponent<AudioSource>();
             _currentActivity = activities[0];
-            currentDay = 1;
+            HandleStartActivity();
         }
 
         private void Update()
@@ -46,8 +47,17 @@ namespace gamestate
                     CheckChoreCompletion(gameplayEvent);
                 } else if (gameplayEvent.triggeredBy == TriggeredBy.BooleansToTrue)
                 {
-                    
+                    CheckBooleansTrue(gameplayEvent);
                 }
+            }
+        }
+
+        private void CheckBooleansTrue(GameplayEvent gameplayEvent)
+        {
+            foreach (var boolean in gameplayEvent.booleansToBeTrue)
+            {
+                if (!(bool)_instance.GetType().GetField(boolean).GetValue(null)) return;
+                HandleTrigger(gameplayEvent);
             }
         }
 
@@ -56,7 +66,7 @@ namespace gamestate
             return _instance;
         }
 
-        public void GoToNextActivity()
+        private void GoToNextActivity()
         {
             foreach (var gameplayEvent in _currentActivity.events )
             {
@@ -66,6 +76,11 @@ namespace gamestate
                 }
             }
             _currentActivity = activities[activities.IndexOf(_currentActivity) + 1];
+            HandleStartActivity();
+        }
+
+        private void HandleStartActivity()
+        {
             foreach (var gameplayEvent in _currentActivity.events )
             {
                 if (gameplayEvent.triggeredBy is TriggeredBy.StartOfActivity)

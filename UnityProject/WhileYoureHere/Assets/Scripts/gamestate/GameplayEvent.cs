@@ -25,9 +25,8 @@ namespace gamestate
         public UnityEvent eventToInvoke;
         
         public int triggerAfterSeconds;
-        public string eventToListenTo;
         public List<SoChore> choresToComplete;
-        public List<bool> booleansToBeTrue;
+        public List<string> booleansToBeTrue;
     }
 
     public enum GameplayEventType
@@ -45,7 +44,6 @@ namespace gamestate
         StartOfActivity,
         AfterSetTime,
         AfterFinishActivity,
-        ByExternalTrigger,
         OnChoresCompleted,
         BooleansToTrue,
     }

@@ -28,11 +28,6 @@ namespace time
             _sunLight = GameObject.Find("Sun").GetComponent<Light>();
         }
 
-        private void Start()
-        {
-            TryStartTransition(days, hours);
-        }
-
         public void ChangeTime(int day, int hour)
         {
             if (day == _lastDay && hour == _lastHour) return;

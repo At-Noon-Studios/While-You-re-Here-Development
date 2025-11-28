@@ -15,12 +15,6 @@ namespace chore
             InitializeChores();
         }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            StartChore(0); // Starting first quest
-        }
-
         private bool StartChore(int id)
         {
             if (!_chores.ContainsKey(id)) return false;

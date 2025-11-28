@@ -30,12 +30,17 @@ namespace Editor
 				}
 				
 				TriggeredBy trigger =  (TriggeredBy)property.FindPropertyRelative("triggeredBy").enumValueIndex;
-				if (trigger is TriggeredBy.AfterSetTime or TriggeredBy.ByExternalTrigger) rows += 1;
+				if (trigger is TriggeredBy.AfterSetTime) rows += 1;
 				else if (trigger is TriggeredBy.OnChoresCompleted)
 				{
 					rows += 1;
 					var serializedProperty = property.FindPropertyRelative("choresToComplete");
-					if (serializedProperty.isExpanded) rows += 3 + serializedProperty.arraySize;
+					if (serializedProperty.isExpanded) rows += Mathf.Max(2 + serializedProperty.arraySize, 0);
+				} else if (trigger is TriggeredBy.BooleansToTrue)
+				{
+					rows += 1;
+					var serializedProperty = property.FindPropertyRelative("booleansToBeTrue");
+					if (serializedProperty.isExpanded) rows += Mathf.Max(2 + serializedProperty.arraySize, 0);
 				}
 			}
 
@@ -90,9 +95,6 @@ namespace Editor
 			{
 				case TriggeredBy.AfterSetTime:
 					AddField("triggerAfterSeconds", property);
-					break;
-				case TriggeredBy.ByExternalTrigger:
-					AddField("eventToListenTo", property);
 					break;
 				case TriggeredBy.OnChoresCompleted:
 					AddField("choresToComplete", property);
