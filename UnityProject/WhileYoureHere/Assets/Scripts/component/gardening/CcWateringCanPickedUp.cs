@@ -1,7 +1,9 @@
 using chore;
+using component.waterPlants;
+using ScriptableObjects.chores;
 using UnityEngine;
 
-namespace component.waterPlants
+namespace component.gardening
 {
     public class CcWateringCanPickedUp : ChoreComponent
     {

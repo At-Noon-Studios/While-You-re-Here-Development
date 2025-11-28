@@ -1,5 +1,6 @@
 using chore;
 using component.waterPlants;
+using ScriptableObjects.chores;
 using UnityEngine;
 
 namespace component.gardening
