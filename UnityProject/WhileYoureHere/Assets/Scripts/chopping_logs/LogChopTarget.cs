@@ -5,12 +5,12 @@ namespace chopping_logs
     public class LogChopTarget : MonoBehaviour
     {
         private const int TotalHits = 4;
-        private int _hits;
+        private int _hits = 0;
         private Stump _stump;
 
-        [SerializeField] private GameObject choppedLogPrefab;
-        [SerializeField] private Transform spawn1;
-        [SerializeField] private Transform spawn2;
+        public GameObject choppedLogPrefab;
+        public Transform spawn1;
+        public Transform spawn2;
 
         private void Start()
         {
@@ -56,7 +56,7 @@ namespace chopping_logs
             _hits++;
             Debug.Log($"LOG HIT: {_hits}/{TotalHits}");
 
-            if (_hits > TotalHits)
+            if (_hits >= TotalHits)   // ✅ fix threshold
             {
                 ChopLog();
             }
@@ -64,14 +64,24 @@ namespace chopping_logs
 
         private void ChopLog()
         {
-            Instantiate(choppedLogPrefab, spawn1.position, spawn1.rotation);
-            Instantiate(choppedLogPrefab, spawn2.position, spawn2.rotation);
+            if (choppedLogPrefab != null)
+            {
+                if (spawn1 != null)
+                    Instantiate(choppedLogPrefab, spawn1.position, spawn1.rotation);
+                if (spawn2 != null)
+                    Instantiate(choppedLogPrefab, spawn2.position, spawn2.rotation);
+            }
+            else
+            {
+                Debug.LogWarning("No choppedLogPrefab assigned!");
+            }
 
             Debug.Log("LOG CHOPPED!");
 
             _hits = 0;
-            _stump.EndMinigame();
+            _stump.EndMinigame();   // ✅ this will Destroy(_logObject)
         }
+
 
         public void SetStump(Stump stump) => _stump = stump;
     }

@@ -8,6 +8,9 @@ namespace chopping_logs
     public class Stump : InteractableBehaviour
     {
         [SerializeField] private Transform logPlaceholder;
+        [SerializeField] private GameObject choppedLogPrefab;
+        [SerializeField] private Transform spawn1;
+        [SerializeField] private Transform spawn2;
 
         public bool HasLog => _hasLog;
         public bool MinigameActive { get; private set; }
@@ -34,7 +37,7 @@ namespace chopping_logs
                 if (held is Pickable pickableLog && pickableLog.CompareTag("Log"))
                 {
                     Debug.Log("Placing log on stump.");
-                    PlaceLog(pickableLog.GetComponent<Pickable>(), heldController);
+                    PlaceLog(pickableLog, heldController);
                 }
                 else
                 {
@@ -68,25 +71,25 @@ namespace chopping_logs
                 rb.constraints = RigidbodyConstraints.FreezeAll;
             }
 
-            pickableLog.transform.SetParent(logPlaceholder);
             pickableLog.enabled = false;
 
             _logObject = pickableLog.gameObject;
             _hasLog = true;
 
-            // Ensure LogChopTarget exists
-            var chopTarget = _logObject.GetComponent<LogChopTarget>();
-            if (chopTarget == null)
+            var chopTargets = _logObject.GetComponentsInChildren<LogChopTarget>();
+            foreach (var chopTarget in chopTargets)
             {
-                chopTarget = _logObject.AddComponent<LogChopTarget>();
+                chopTarget.SetStump(this);
+                chopTarget.choppedLogPrefab = choppedLogPrefab;
+                chopTarget.spawn1 = spawn1;
+                chopTarget.spawn2 = spawn2;
             }
-            chopTarget.SetStump(this);
 
             controller.ClearHeldObject();
             Debug.Log("Log placed on stump!");
         }
 
-        public void StartMinigame()
+        private void StartMinigame()
         {
             if (!_hasLog)
             {
@@ -113,7 +116,7 @@ namespace chopping_logs
             ClearLog();
         }
 
-        public void ClearLog()
+        private void ClearLog()
         {
             if (_logObject != null)
                 Destroy(_logObject);
@@ -122,7 +125,6 @@ namespace chopping_logs
             _hasLog = false;
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         protected override string InteractionText()
         {
             if (MinigameActive) return string.Empty;
