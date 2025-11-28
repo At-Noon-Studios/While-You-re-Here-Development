@@ -10,7 +10,6 @@ namespace gardening
         [SerializeField] private SoPlant plant;
         [SerializeField] private int plantID;
         [SerializeField] private ParticleSystem wateringParticles;
-        [SerializeField] private Transform spawnPoint;
         
         private GameObject _currentPlant;
         private int _currentStage;
@@ -26,9 +25,6 @@ namespace gardening
                 Debug.LogError("PlantObject: Plant prefabs not assigned!");
                 return;
             }
-
-            if (spawnPoint == null)
-                spawnPoint = this.transform;
 
             SpawnCurrentStage();
             
@@ -56,7 +52,7 @@ namespace gardening
             GameObject prefabPlant = plant.GetPlantByStage(_currentStage);
             if (prefabPlant == null) return;
             
-            _currentPlant = Instantiate(prefabPlant, spawnPoint.position, spawnPoint.rotation);
+            _currentPlant = Instantiate(prefabPlant, transform.position, transform.rotation);
         }
         
         public void StartWatering()
@@ -92,7 +88,7 @@ namespace gardening
                 ChoreEvents.TriggerPlantWatered(plantID);
             }
             
-            _currentPlant = Instantiate(nextPrefab, spawnPoint.position, spawnPoint.rotation);
+            _currentPlant = Instantiate(nextPrefab, transform.position, transform.rotation);
             Debug.Log(_currentPlant);
         }
     }
