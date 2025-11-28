@@ -26,13 +26,12 @@ namespace dialogue
         {
             if (dialogueManager == null || dialogueNodes.Count == 0) return;
 
-            // Wacht 1 frame zodat UI & EventSystem klaar zijn
             StartCoroutine(StartDialogueNextFrame());
         }
 
         private IEnumerator StartDialogueNextFrame()
         {
-            yield return null; // wacht tot einde van frame
+            yield return null;
 
             dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
         }

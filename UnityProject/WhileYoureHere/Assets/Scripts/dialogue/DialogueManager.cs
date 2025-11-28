@@ -1,6 +1,5 @@
-using System.Collections; 
+using System.Collections;
 using System.Collections.Generic;
-using Dialogue;
 using player_controls;
 using ScriptableObjects.Dialogue;
 using UnityEngine;
@@ -15,12 +14,9 @@ namespace dialogue
         [Header("UI References")]
         [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
-        
+
         private MovementController _movementController;
         private CameraController _cameraController;
-        
-        [Header("Interaction References")]
-        [SerializeField] private InteractPrompt interactPrompt;
 
         private const float WaitingTime = 2f;
         private UIManager _uiManager;
@@ -33,11 +29,12 @@ namespace dialogue
             _uiManager = UIManager.Instance;
 
             GameObject player = GameObject.FindWithTag("Player");
-
-            _movementController = player.GetComponent<MovementController>();
-            _cameraController = player.GetComponentInChildren<CameraController>();
+            if (player != null)
+            {
+                _movementController = player.GetComponent<MovementController>();
+                _cameraController = player.GetComponentInChildren<CameraController>();
+            }
         }
-
 
         public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
         {
@@ -46,7 +43,11 @@ namespace dialogue
             Cursor.visible = true;
 
             _dialogueNodes.Clear();
-            foreach (var n in nodes) _dialogueNodes[n.nodeID] = n;
+            foreach (var n in nodes)
+            {
+                if (!_dialogueNodes.ContainsKey(n.nodeID))
+                    _dialogueNodes.Add(n.nodeID, n);
+            }
 
             gameObject.SetActive(true);
             DisplayNode(startingNodeID);
@@ -64,11 +65,12 @@ namespace dialogue
 
             _uiManager?.ShowDialogue(_currentNode.speakerName, _currentNode.dialogueText);
 
+            // Clear previous choice buttons
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
             bool hasText = !string.IsNullOrWhiteSpace(_currentNode.dialogueText);
-            bool hasChoices = _currentNode.choices is { Count: > 0 };
+            bool hasChoices = _currentNode.choices != null && _currentNode.choices.Count > 0;
 
             if (!hasText && !hasChoices)
             {
@@ -82,6 +84,7 @@ namespace dialogue
                 return;
             }
 
+            // Create choice buttons
             foreach (var choice in _currentNode.choices)
             {
                 var button = Instantiate(choiceButtonPrefab, choicesContainer);
@@ -97,7 +100,7 @@ namespace dialogue
             yield return new WaitForSeconds(WaitingTime);
             EndDialogue();
         }
-        
+
         private void EndDialogue()
         {
             _uiManager?.HideDialogue();
@@ -105,10 +108,9 @@ namespace dialogue
             gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        
+
             _movementController?.ResumeMovement();
             _cameraController?.ResumeCameraMovement();
-            interactPrompt?.EndInteraction();
         }
     }
 }
