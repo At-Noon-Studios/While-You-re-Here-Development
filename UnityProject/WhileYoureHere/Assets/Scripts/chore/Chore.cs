@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using component;
 using component.example;
+using component.making_tea;
 using component.waterPlants;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -31,7 +32,11 @@ namespace chore
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
                     { ChoreComponent.ChoreComponentType.WateringCanPickedUp, CcWateringCanPickedUp.CreateFactory }, 
-                    { ChoreComponent.ChoreComponentType.PlantWatered, CcPlantWatered.CreateFactory }
+                    { ChoreComponent.ChoreComponentType.PlantWatered, CcPlantWatered.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.WaterBoiled, CcWaterBoiled.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.TeabagAdded, CcTeabagAdded.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory }
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

@@ -10,9 +10,13 @@ namespace chore
         public enum ChoreComponentType
         {
             WateringCanPickedUp,
-            PlantWatered
+            PlantWatered,
+            KettleFilled,
+            WaterBoiled,
+            TeabagAdded,
+            CupFilled
         }
-
+        
         public event Action<ChoreComponent> OnComponentCompleted;
 
         protected void TriggerComponentCompleted(ChoreComponent choreComponent)
