@@ -1,5 +1,4 @@
-﻿using Interactable.Holdable;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ScriptableObjects.Interactable
 {
@@ -7,15 +6,15 @@ namespace ScriptableObjects.Interactable
     public class HoldableObjectData : ScriptableObject
     {
         [SerializeField, Range(0, 100)] private float weight = 50f;
-        [SerializeField] private Vector3 offset = Vector3.zero;
-        [SerializeField] private Vector3 rotation = Vector3.zero;
+        [SerializeField, Tooltip("The offset that will be applied relative to the 'hold point' when holding this object")] private Vector3 holdingOffset = Vector3.zero;
+        [SerializeField, Tooltip("The rotation that will be applied relative to the 'hold point' when holding this object")] private Vector3 holdingRotation = Vector3.zero;
         [SerializeField] private float droppingForce = 400f;
-        [SerializeField] private GameObject heldPrefab;
+        [SerializeField] private GameObject holdingPrefab;
 
         public float Weight => weight;
-        public Vector3 Offset => offset;
-        public Vector3 Rotation => rotation;
+        public Vector3 HoldingOffset => holdingOffset;
+        public Vector3 HoldingRotation => holdingRotation;
         public float DroppingForce => droppingForce;
-        public GameObject HeldPrefab => heldPrefab;
+        public GameObject HoldingPrefab => holdingPrefab;
     }
 }

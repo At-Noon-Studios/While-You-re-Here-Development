@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
@@ -28,9 +29,7 @@ namespace Interactable.Holdable
         protected void Start()
         {
             _originalLayer = gameObject.layer;
-            if (!data.HeldPrefab) return;
-            _heldVersion = Instantiate(data.HeldPrefab, transform);
-            _heldVersion?.SetActive(false);
+            InitializeHeldVersion();
         }
         
         public override void Interact(IInteractor interactor)
@@ -57,7 +56,7 @@ namespace Interactable.Holdable
             }
         }
         
-        public void Drop()
+        public virtual void Drop()
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
@@ -67,7 +66,7 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null)
+        public virtual void Place(Vector3 position, Quaternion? rotation = null)
         {
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
@@ -84,8 +83,8 @@ namespace Interactable.Holdable
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
-            transform.localRotation = Quaternion.Euler(data.Rotation);
-            transform.localPosition = data.Offset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+            transform.localPosition = data.HoldingOffset;
             gameObject.layer = HoldLayer;
         }
 
@@ -95,6 +94,22 @@ namespace Interactable.Holdable
             _rigidbody.AddForce((transform.parent?.forward ?? Vector3.zero) * data.DroppingForce);
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
+        }
+        
+        private void InitializeHeldVersion()
+        {
+            if (!data.HoldingPrefab) return;
+            _heldVersion = Instantiate(data.HoldingPrefab, transform, true);
+            _heldVersion!.transform.localPosition = data.HoldingPrefab.transform.position;
+            _heldVersion.SetActive(false);
+            DisableHeldVersionColliders();
+        }
+
+        private void DisableHeldVersionColliders()
+        {
+            var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
+            heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
+            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
     }
 }
