@@ -1,7 +1,8 @@
 using chore;
+using component.waterPlants;
 using UnityEngine;
 
-namespace component.waterPlants
+namespace component.gardening
 {
     public class CcPlantWatered : ChoreComponent
     {

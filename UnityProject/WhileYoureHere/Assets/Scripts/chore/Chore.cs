@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using component;
-using component.example;
+using component.gardening;
 using component.making_tea;
 using component.waterPlants;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace chore
