@@ -1,10 +1,15 @@
 using UnityEngine;
 using Interactable;
+using Interactable.Concrete.Key;
 
 namespace door
 {
     public class DoorInteractable : InteractableBehaviour
     {
+        [Header("Key Settings")]
+        [SerializeField] private Transform keyHolePosition;
+        [SerializeField] private Vector3 keyRotation;
+        
         [Header("Door Settings")]
         [SerializeField] private float openAngle = 90f;
         [SerializeField] private float openSpeed = 3f;
@@ -15,7 +20,7 @@ namespace door
         [SerializeField] private AudioClip closeSound;
         [SerializeField] private AudioClip lockedSound;
         [SerializeField] private AudioSource audioSource;
-
+        
         [Header("Door Lock")]
         [SerializeField] private bool isLocked = false;
 
@@ -23,7 +28,7 @@ namespace door
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
 
-        protected new void Awake()
+        protected override void Awake()
         {
             base.Awake();
 
@@ -36,9 +41,15 @@ namespace door
             if (!audioSource)
                 audioSource = gameObject.AddComponent<AudioSource>();
         }
-
-        public override void Interact()
+        
+        public override void Interact(IInteractor interactor)
         {
+            if (interactor.HeldObject is Key key)
+            {
+                key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
+                key.StartMinigame(interactor, (newState) => isLocked = newState);
+                return;
+            }
             if (isLocked)
             {
                 if (audioSource && lockedSound)
@@ -68,7 +79,7 @@ namespace door
             );
         }
 
-        protected override string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             if (isLocked)
                 return "Door is locked";
