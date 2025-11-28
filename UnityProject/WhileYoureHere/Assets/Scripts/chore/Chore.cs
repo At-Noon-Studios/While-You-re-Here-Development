@@ -4,6 +4,7 @@ using component;
 using component.gardening;
 using component.making_tea;
 using component.waterPlants;
+using ScriptableObjects.chores;
 using UnityEngine;
 
 namespace chore
@@ -64,7 +65,7 @@ namespace chore
 
                 _choreComponents.Add(ccTemp);
 
-                // Subscribe to the component so that the Quest knows when the component has been completed.
+                // Subscribe to the component so that the Chore knows when the component has been completed.
                 ccTemp.OnComponentCompleted += ComponentCompleted;
             }
         }
@@ -87,7 +88,7 @@ namespace chore
 
             if (_componentsCompleted == _choreComponents.Count)
             {
-                // Quest has been completed
+                // Chore has been completed
                 ChoreStatus = ChoreStatus.Completed;
                 OnChoreCompleted?.Invoke(this);
             }

@@ -25,5 +25,9 @@ namespace chore
         public static event Action OnCupFilled;
         public static void TriggerCupFilled() => OnCupFilled?.Invoke();
 
+        public static void TriggerChoreCompleted(Chore chore)
+        {
+            OnChoreCompleted?.Invoke(chore);
+        }
     }
 }

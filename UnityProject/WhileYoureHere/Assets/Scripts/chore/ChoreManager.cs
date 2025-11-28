@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ScriptableObjects.chores;
 using UnityEngine;
 
 namespace chore
@@ -18,7 +19,7 @@ namespace chore
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            StartChore(0); // Starting first quest
+            StartChore(0); // Starting first chore
         }
 
         private bool StartChore(int id)
@@ -38,7 +39,7 @@ namespace chore
             Debug.Log($"Chore {chore.ChoreName} has been completed");
             chore.OnChoreCompleted -= ChoreCompleted;
 
-            ChoreEvents.TriggerQuestCompleted(chore);
+            ChoreEvents.TriggerChoreCompleted(chore);
             
             var nextID = chore.ChoreID + 1;
             if (_chores.ContainsKey(nextID))
