@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
-  m_Name: radio_start
+  m_Name: radio_end
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  nodeID: radio_start
+  nodeID: radio_end
   speakerName: 
-  dialogueText: Nora reaches over to switch on the radio.
-  choices:
-  - choiceText: Turn on radio
-    targetNodeID: radio_intro
-  - choiceText: Walk away
-    targetNodeID: nora_turns_off
+  sentences:
+  - {fileID: 11400000, guid: 5642ce4df14c4e0419ff002f7cf7f564, type: 2}
+  choices: []
+  targetNodeID: 
