@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d7c39e4798dd247a59e754b6ad1dda, type: 3}
-  m_Name: door_response3a
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  nodeID: response3a
-  speakerName: 'Stranger:'
-  dialogueText: Whatever. Open the damn door. Now.
-  choices:
-  - choiceText: "Okay\u2026 I\u2019ll open it."
-    targetNodeID: end_good
-  - choiceText: Not until you say please.
-    targetNodeID: end_bad
+  m_Name: door_end_good
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.Dialogue.DialogueNode
+  nodeID: door_end_good
+  speakerName: 
+  sentences: []
+  choices: []
+  targetNodeID: 
