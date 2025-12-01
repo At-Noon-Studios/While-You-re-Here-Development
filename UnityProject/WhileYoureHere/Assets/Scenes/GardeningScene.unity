@@ -560,9 +560,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3795fa7e07ba7439f375fd4ccce46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gardening.WaterLevelVisualizer
-  wateringCan: {fileID: 8794867259117342886}
+  wateringCan: {fileID: 8794867259117342889}
   emptyY: 0
-  fullY: 1.5
+  fullY: 1.32
   waterSurfaceCollider: {fileID: 917781648}
 --- !u!64 &917781648 stripped
 MeshCollider:
@@ -853,7 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Watering
   waterParticleSystem: {fileID: 1361804391}
-  wateringCanFill: {fileID: 0}
+  wateringCanFill: {fileID: 8794867259117342889}
 --- !u!1 &1559164546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1461,10 +1461,10 @@ PrefabInstance:
       addedObject: {fileID: 275551066}
     - targetCorrespondingSourceObject: {fileID: 4717534625308886290, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8794867259117342886}
+      addedObject: {fileID: 8794867259117342887}
     - targetCorrespondingSourceObject: {fileID: 4717534625308886290, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8794867259117342887}
+      addedObject: {fileID: 8794867259117342889}
     - targetCorrespondingSourceObject: {fileID: 2385687236259636226, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1361804392}
@@ -1472,21 +1472,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 917781646}
   m_SourcePrefab: {fileID: 100100000, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
---- !u!114 &8794867259117342886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275551057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 517f6fb923307af4b9a882a9b4abc4f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::gardening.WateringCanFill
-  fillAmount: 0
-  maxFill: 1
-  fillSpeed: 0.25
 --- !u!114 &8794867259117342887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1500,8 +1485,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gardening.WateringCanFilledTrigger
   wateringCanID: 0
-  wateringCan: {fileID: 8794867259117342886}
+  wateringCan: {fileID: 8794867259117342889}
   threshold: 0.2
+--- !u!114 &8794867259117342889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275551057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c121e7338db205640b7c153154f18cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::making_tea.KettleFill
+  fillAmount: 0
+  maxFill: 1
+  fillSpeed: 0.25
+  isFilling: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

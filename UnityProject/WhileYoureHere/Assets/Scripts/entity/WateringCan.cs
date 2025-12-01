@@ -6,8 +6,14 @@ namespace entity
 {
     public class WateringCan : MonoBehaviour
     {
+        [Header("WateringCan settings")]
         [SerializeField] private int wateringCanID;
         [SerializeField] private Transform rotationRoot;
+        
+        [Header("Sound")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip pickUpSound;
+        [SerializeField] private AudioClip dropSound;
 
         private Rigidbody _rb;
         private Quaternion _uprightRot;
@@ -36,6 +42,9 @@ namespace entity
 
             if (isHolding && !_hasTriggered)
             {
+                if (audioSource && pickUpSound)
+                    audioSource.PlayOneShot(pickUpSound);
+                
                 ChoreEvents.TriggerWateringCanPickedUp(wateringCanID);
                 _hasTriggered = true;
             }
