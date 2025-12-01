@@ -1,6 +1,7 @@
 using dialogue;
 using EventChannels;
 using player_controls;
+using ScriptableObjects.Events;
 using UnityEngine;
 
 namespace Dialogue
@@ -41,7 +42,10 @@ namespace Dialogue
                 dialogueLoader?.StartDialogue();
 
                 var movementController = player.GetComponent<MovementController>();
+                
                 movementController?.PauseMovement();
+                
+                
 
                 var cameraController = player.GetComponentInChildren<CameraController>();
                 cameraController?.PauseCameraMovement();

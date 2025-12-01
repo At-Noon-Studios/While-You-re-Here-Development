@@ -1,5 +1,4 @@
 using EventChannels;
-using picking_up_objects;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -28,8 +27,7 @@ namespace player_controls
 
         Animator _animator;
         CharacterController _controller;
-
-        private IHeldObject _heldObject;
+        
         private float _timer;
         private Camera _mainCamera;
         private CameraController _cameraController;
