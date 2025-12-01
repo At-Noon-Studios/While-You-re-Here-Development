@@ -1,8 +1,9 @@
 using EventChannels;
+using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PlayerControls
+namespace player_controls
 {
     public class PlayerInputProcessor : MonoBehaviour
     {
@@ -11,6 +12,8 @@ namespace PlayerControls
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickTune;
+        [SerializeField] private EventChannel drop;
+
         private void OnLook(InputValue inputValue)
         {
             look.Raise(inputValue.Get<Vector2>());
@@ -23,7 +26,6 @@ namespace PlayerControls
     
         private void OnInteract()
         {
-            Debug.Log("Interact input called");
             interact.Raise();
         }
 
@@ -31,6 +33,11 @@ namespace PlayerControls
         {
             Debug.Log("mouse click is being called");
             clickTune.Raise(inputValue.isPressed);
+        }
+
+        private void OnDrop()
+        {
+            drop.Raise();
         }
     }
 }
