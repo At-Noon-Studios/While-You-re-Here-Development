@@ -33,6 +33,7 @@ namespace player_controls
         {
             Debug.Log("mouse click is being called");
             clickTune.Raise(inputValue.isPressed);
+            interact.Raise();
         }
 
         private void OnDrop()
