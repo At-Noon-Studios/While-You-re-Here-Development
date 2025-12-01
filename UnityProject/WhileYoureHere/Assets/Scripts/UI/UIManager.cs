@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
@@ -8,12 +9,13 @@ namespace UI
         public static UIManager Instance;
         
         [Header("Interact Prompt")]
-        [SerializeField] private GameObject interactPrompt;
-        [SerializeField] private TextMeshProUGUI interactPromptObjectName;
+        [SerializeField] private InteractionPrompt interactPrompt;
 
         [Header("Dialogue UI")]
         [SerializeField] private TextMeshProUGUI dialogueText;
         [SerializeField] private GameObject dialoguePanel;
+
+        [CanBeNull] private Coroutine _currentPulseRoutine;
 
         private void Awake()
         {
@@ -27,30 +29,29 @@ namespace UI
             }
         }
 
-        public void ShowInteractPrompt(string objectName)
+        public void ShowInteractPrompt(string text, bool allowed)
         {
-            if (interactPromptObjectName != null)
-                interactPromptObjectName.text = objectName;
-
-            interactPrompt?.SetActive(true);
+            interactPrompt.ShowInteractPrompt(text, allowed);
         }
 
         public void HideInteractPrompt()
         {
-            interactPrompt?.SetActive(false);
+            interactPrompt.HideInteractPrompt();
         }
 
+        public void PulseInteractPrompt()
+        {
+            interactPrompt.PulseInteractPrompt();
+        }
+
+    
         public void ShowDialogue(string speaker, string line)
         {
-            if (dialoguePanel != null)
-                dialoguePanel.SetActive(true);
-
-            if (dialogueText != null)
-            {
-                dialogueText.text = !string.IsNullOrEmpty(speaker)
+            if (dialoguePanel) dialoguePanel.SetActive(true);
+            if (!dialogueText) return;
+            dialogueText.text = !string.IsNullOrEmpty(speaker)
                     ? $"<b>{speaker}</b>\n{line}"
                     : line;
-            }
         }
 
         public void HideDialogue()
