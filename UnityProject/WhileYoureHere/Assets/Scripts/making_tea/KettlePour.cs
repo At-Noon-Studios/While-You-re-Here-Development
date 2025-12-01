@@ -9,6 +9,8 @@ namespace making_tea
         public KettleFill kettle;
         public KettleFill targetCup;
         public ParticleSystem pourStream;
+        public AudioSource pourSound;
+        public AudioSource spillSound;
         public Transform pivot;
 
         public float pourAngle = 120f;
@@ -54,6 +56,9 @@ namespace making_tea
 
                 if (pourStream && !pourStream.isPlaying)
                     pourStream.Play();
+                
+                if (pourSound && !pourSound.isPlaying)
+                    pourSound.Play();
 
                 var delta = pourSpeed * Time.deltaTime;
                 var give = Mathf.Min(delta, kettle.fillAmount);
@@ -66,7 +71,16 @@ namespace making_tea
                 {
                     ChoreEvents.TriggerCupFilled();
                 }
-
+                if (targetCup && targetCup.fillAmount > targetCup.maxFill)
+                {
+                    if (!spillSound.isPlaying)
+                        spillSound.Play();
+                }
+                else
+                {
+                    if (spillSound.isPlaying)
+                        spillSound.Stop();
+                }
             }
             else
             {
@@ -78,6 +92,12 @@ namespace making_tea
 
                 if (pourStream && pourStream.isPlaying)
                     pourStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                
+                if (pourSound && pourSound.isPlaying)
+                    pourSound.Stop();
+                
+                if (spillSound && spillSound.isPlaying)
+                    spillSound.Stop();
             }
         }
     }

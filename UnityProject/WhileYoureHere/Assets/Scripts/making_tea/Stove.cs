@@ -6,6 +6,8 @@ namespace making_tea
     public class Stove : MonoBehaviour
     {
         public ParticleSystem boilingParticles;
+        public AudioSource whistleSound;
+        public AudioSource boilingSound;
         public float requiredFill = 0.2f;
         public float heatTime = 3f;
 
@@ -20,12 +22,19 @@ namespace making_tea
 
             var kettle = other.GetComponentInParent<KettleFill>();
             if (kettle == null || kettle.fillAmount < requiredFill) return;
-
+            
+            if (!boilingSound.isPlaying)
+                boilingSound.Play();
+            
             _heatTimer += Time.deltaTime;
 
             if (_heatTimer >= heatTime && boilingParticles != null && !boilingParticles.isPlaying)
             {
                 boilingParticles.Play();
+                
+                if (!whistleSound.isPlaying)
+                    whistleSound.Play();
+                
                 ChoreEvents.TriggerWaterBoiled();
 
             }
@@ -51,6 +60,12 @@ namespace making_tea
 
             if (boilingParticles != null && boilingParticles.isPlaying)
                 boilingParticles.Stop();
+            
+            if (whistleSound.isPlaying)
+                whistleSound.Stop();
+            
+            if (boilingSound.isPlaying)
+                boilingSound.Stop();
         }
     }
 }
