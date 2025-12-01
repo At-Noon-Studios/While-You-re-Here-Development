@@ -56,7 +56,7 @@ namespace gamestate
         {
             foreach (var boolean in gameplayEvent.booleansToBeTrue)
             {
-                if (!(bool)_instance.GetType().GetField(boolean).GetValue(null)) return;
+                if (!(bool)_instance.GetType().GetField(boolean).GetValue(_instance)) return;
                 HandleTrigger(gameplayEvent);
             }
         }
@@ -75,7 +75,15 @@ namespace gamestate
                     HandleTrigger(gameplayEvent);
                 }
             }
-            _currentActivity = activities[activities.IndexOf(_currentActivity) + 1];
+
+            try
+            {
+                _currentActivity = activities[activities.IndexOf(_currentActivity) + 1];
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Debug.LogError("No new activity was found");
+            }
             HandleStartActivity();
         }
 
@@ -95,7 +103,7 @@ namespace gamestate
 
         private void BooleanChange(string boolName, bool value)
         {
-            _instance.GetType().GetField(boolName).SetValue(_currentActivity, value);
+            _instance.GetType().GetField(boolName).SetValue(_instance, value);
         }
 
         private void SkyboxChange(int hourOfDay)
