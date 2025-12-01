@@ -31,12 +31,7 @@ namespace door
                 audioSource = gameObject.AddComponent<AudioSource>();
         }
 
-        public override void Interact(IInteractor interactor)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Interact()
+        public override void Interact(IInteractor interact)
         {
             if (config.isLocked)
             {
@@ -69,7 +64,7 @@ namespace door
             );
         }
 
-        protected string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             if (config.isLocked)
                 return "Door is locked";
