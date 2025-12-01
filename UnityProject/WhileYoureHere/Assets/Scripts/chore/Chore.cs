@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using component;
 using component.making_tea;
+using component.test;
+using ScriptableObjects.chores;
 using UnityEngine;
 
 namespace chore
@@ -48,7 +50,7 @@ namespace chore
 
             // Don't continue if no components are added to the list
             if (choreComponents.Count <= 0)
-                return;
+                Debug.Log($"No chore components found for stage {name}");
 
             foreach (SoChoreComponent choreComponent in choreComponents)
             {
@@ -58,11 +60,15 @@ namespace chore
                     ccTemp = _componentFactory[choreComponent.choreType](choreComponent);
 
                 if (ccTemp == null)
-                    return;
+                {
+                    Debug.LogError(
+                        $"Failed to create ChoreComponent of type {choreComponent.choreType} in chore {name}");
+                    continue;
+                }
 
                 _choreComponents.Add(ccTemp);
 
-                // Subscribe to the component so that the Quest knows when the component has been completed.
+                // Subscribe to the component so that the Chore knows when the component has been completed.
                 ccTemp.OnComponentCompleted += ComponentCompleted;
             }
         }
@@ -81,11 +87,11 @@ namespace chore
         {
             _componentsCompleted++;
 
-            Debug.Log($"{ChoreName}: Component '{choreComponent.ComponentName}' was completed");
+            Debug.Log($"Chore {ChoreName}: Component '{choreComponent.ComponentName}' was completed");
 
             if (_componentsCompleted == _choreComponents.Count)
             {
-                // Quest has been completed
+                // Chore has been completed
                 ChoreStatus = ChoreStatus.Completed;
                 OnChoreCompleted?.Invoke(this);
             }
@@ -99,8 +105,13 @@ namespace chore
 
         public void Activate()
         {
-            if (_choreComponents.Count < 1) return;
+            if (_choreComponents.Count < 1)
+            {
+                Debug.LogWarning($"Chore {ChoreName} has no components to activate!");
+                return;
+            }
 
+            Debug.Log($"Activating chore {ChoreName}, first component: {_choreComponents?[0]}");
             _choreComponents[0].EnableComponent();
             ChoreStatus = ChoreStatus.Active;
         }

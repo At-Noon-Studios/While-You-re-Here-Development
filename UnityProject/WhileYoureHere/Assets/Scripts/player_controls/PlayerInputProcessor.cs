@@ -1,8 +1,9 @@
 using EventChannels;
+using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PlayerControls
+namespace player_controls
 {
     public class PlayerInputProcessor : MonoBehaviour
     {
@@ -10,6 +11,7 @@ namespace PlayerControls
         [SerializeField] private Vector2EventChannel look;
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private EventChannel interact;
+        [SerializeField] private EventChannel drop;
         
         private void OnLook(InputValue inputValue)
         {
@@ -24,6 +26,11 @@ namespace PlayerControls
         private void OnInteract()
         {
             interact.Raise();
+        }
+
+        private void OnDrop()
+        {
+            drop.Raise();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace chore
 
         public static event Action<Chore> OnChoreCompleted;
 
-        public static void TriggerQuestCompleted(Chore chore)
+        public static void TriggerChoreCompleted(Chore chore)
         {
             OnChoreCompleted?.Invoke(chore);
         }
