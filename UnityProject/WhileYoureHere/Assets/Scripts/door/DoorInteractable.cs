@@ -6,23 +6,12 @@ namespace door
 {
     public class DoorInteractable : InteractableBehaviour
     {
-        [Header("Key Settings")]
-        [SerializeField] private Transform keyHolePosition;
-        [SerializeField] private Vector3 keyRotation;
-        
-        [Header("Door Settings")]
-        [SerializeField] private float openAngle = 90f;
-        [SerializeField] private float openSpeed = 3f;
-        [SerializeField] private Transform doorPivot;
+        [Header("Door Config")]
+        [SerializeField] private DoorConfig config;
 
-        [Header("Door Sounds")]
-        [SerializeField] private AudioClip openSound;
-        [SerializeField] private AudioClip closeSound;
-        [SerializeField] private AudioClip lockedSound;
+        [Header("References")]
+        [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
-        
-        [Header("Door Lock")]
-        [SerializeField] private bool isLocked = false;
 
         private bool _isOpen = false;
         private Quaternion _closeRotation;
@@ -36,7 +25,7 @@ namespace door
                 doorPivot = transform;
 
             _closeRotation = doorPivot.localRotation;
-            _openRotation = Quaternion.Euler(0, openAngle, 0) * _closeRotation;
+            _openRotation = Quaternion.Euler(0, config.openAngle, 0) * _closeRotation;
 
             if (!audioSource)
                 audioSource = gameObject.AddComponent<AudioSource>();
@@ -50,10 +39,10 @@ namespace door
                 key.StartMinigame(interactor, (newState) => isLocked = newState);
                 return;
             }
-            if (isLocked)
+            if (config.isLocked)
             {
-                if (audioSource && lockedSound)
-                    audioSource.PlayOneShot(lockedSound);
+                if (audioSource && config.lockedSound)
+                    audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
 
@@ -61,27 +50,29 @@ namespace door
 
             if (audioSource)
             {
-                if (_isOpen && openSound)
-                    audioSource.PlayOneShot(openSound);
-                else if (!_isOpen && closeSound)
-                    audioSource.PlayOneShot(closeSound);
+                if (_isOpen && config.openSound)
+                    audioSource.PlayOneShot(config.openSound);
+                else if (!_isOpen && config.closeSound)
+                    audioSource.PlayOneShot(config.closeSound);
             }
         }
 
         private void Update()
         {
+            float speed = config != null ? config.openSpeed : 2f;
+
             Quaternion target = _isOpen ? _openRotation : _closeRotation;
 
             doorPivot.localRotation = Quaternion.Lerp(
                 doorPivot.localRotation,
                 target,
-                Time.deltaTime * openSpeed
+                Time.deltaTime * speed
             );
         }
 
         public override string InteractionText(IInteractor interactor)
         {
-            if (isLocked)
+            if (config.isLocked)
                 return "Door is locked";
 
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
