@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using chore;
-using UnityEditor;
+using ScriptableObjects.chores;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Video;
