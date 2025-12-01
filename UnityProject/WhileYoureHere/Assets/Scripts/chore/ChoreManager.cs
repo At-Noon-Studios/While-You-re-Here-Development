@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ScriptableObjects.chores;
 using UnityEngine;
 
 namespace chore
@@ -23,16 +24,20 @@ namespace chore
             _chores[id].Activate();
             _chores[id].OnChoreCompleted += ChoreCompleted;
 
-            Debug.Log($"{_chores[id].ChoreName} has been started");
+            Debug.Log($"Chore {_chores[id].ChoreName} has been started");
             return true;
         }
 
         private void ChoreCompleted(Chore chore)
         {
-            Debug.Log($"{chore.ChoreName} has been completed");
+            Debug.Log($"Chore {chore.ChoreName} has been completed");
             chore.OnChoreCompleted -= ChoreCompleted;
 
-            ChoreEvents.TriggerQuestCompleted(chore);
+            ChoreEvents.TriggerChoreCompleted(chore);
+            
+            var nextID = chore.ChoreID + 1;
+            if (_chores.ContainsKey(nextID))
+                StartChore(nextID);
         }
 
         private void InitializeChores()
@@ -47,7 +52,7 @@ namespace chore
                 var chore = new Chore(choreToLoad.choreName, choreToLoad.id, choreToLoad.components);
                 _chores.Add(chore.ChoreID, chore);
 
-                Debug.Log($"{chore.ChoreName} has been initialized");
+                Debug.Log($"Chore {chore.ChoreName} has been initialized");
             }
         }
 
