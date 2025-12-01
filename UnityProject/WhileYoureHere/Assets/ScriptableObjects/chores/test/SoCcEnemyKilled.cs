@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace component
+namespace ScriptableObjects.chores.test
 {
-    [CreateAssetMenu(fileName = "CcEnemyKilled", menuName = "QuestSystem/Components/CcEnemyKilled", order = 1)]
+    [CreateAssetMenu(fileName = "CcEnemyKilled", menuName = "ChoreSystem/Components/CcEnemyKilled", order = 1)]
     public class SoCcEnemyKilled : SoChoreComponent
     {
         [Header("Enemy Settings")]
