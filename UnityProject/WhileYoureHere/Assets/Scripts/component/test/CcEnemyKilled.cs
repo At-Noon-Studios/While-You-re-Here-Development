@@ -1,7 +1,9 @@
 using chore;
+using ScriptableObjects.chores;
+using ScriptableObjects.chores.test;
 using UnityEngine;
 
-namespace component
+namespace component.test
 {
     public class CcEnemyKilled : ChoreComponent
     {
@@ -13,11 +15,10 @@ namespace component
         {
             _enemyID = enemyID;
             _killsNeeded = killsNeeded;
-            _killCount = 0;
             ComponentType = ChoreComponentType.EnemyKilled;
         }
 
-        // Is used in dictionary and Quest constructor
+        // Is used in dictionary and Chore constructor
         public static ChoreComponent CreateFactory(SoChoreComponent soChoreComponent) // Accept ScriptableObject data
         {
             SoCcEnemyKilled localChoreComponent = soChoreComponent as SoCcEnemyKilled; // Check type
@@ -38,6 +39,7 @@ namespace component
         public override void EnableComponent()
         {
             base.EnableComponent();
+            _killCount = 0;
             // Subscribe to enemy kill event
             ChoreEvents.OnEnemyKilled += EnemyKilled;
         }
@@ -47,6 +49,8 @@ namespace component
             base.MarkCompleted();
             // Unsubscribe from enemy kill event
             ChoreEvents.OnEnemyKilled -= EnemyKilled;
+            
+            TriggerComponentCompleted(this);
         }
 
         private void EnemyKilled(int enemyID)
@@ -56,13 +60,12 @@ namespace component
 
             _killCount++;
 
-            Debug.Log($"{ComponentName}: Enemy Type {enemyID} was killed {_killCount}/{_killsNeeded}");
+            Debug.Log($"Component {ComponentName}: Enemy Type {enemyID} was killed {_killCount}/{_killsNeeded}");
 
             if (_killCount < _killsNeeded)
                 return;
 
             MarkCompleted();
-            TriggerComponentCompleted(this);
         }
     }
 }
