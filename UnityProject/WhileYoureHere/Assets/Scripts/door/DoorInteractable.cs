@@ -86,5 +86,10 @@ namespace door
 
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
+
+        public override bool InteractableBy(IInteractor interactor)
+        {
+            return !isLocked;
+        }
     }
 }
