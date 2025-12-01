@@ -83,6 +83,7 @@ namespace Interactable
             var closestDistance = float.MaxValue;
             for (var i = 0; i < hitCount; i++)
             {
+                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) && HeldObject != null) break;
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
             }
 

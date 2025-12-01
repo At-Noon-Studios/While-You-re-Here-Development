@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 6192574075913868727}
   - component: {fileID: 447125326348780148}
   - component: {fileID: 5887860378672515197}
+  - component: {fileID: 6746169409009684303}
   m_Layer: 5
   m_Name: InteractionUI
   m_TagString: Untagged
@@ -471,6 +472,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6746169409009684303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4758752748503572694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 682800286fd244d4a3697c168f025abd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractionPrompt
+  data: {fileID: 11400000, guid: 50ee4f3189e44af468ccb03d7e47676c, type: 2}
+  textMesh: {fileID: 1483114722214656556}
 --- !u!1 &6071790989527346089
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,6 +669,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.UIManager
   interactPrompt: {fileID: 4758752748503572694}
-  interactPromptObjectName: {fileID: 1483114722214656556}
   dialogueText: {fileID: 5482900032588360645}
   dialoguePanel: {fileID: 2567776071886388462}
