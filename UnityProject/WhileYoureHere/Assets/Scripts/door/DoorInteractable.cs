@@ -41,7 +41,8 @@ namespace door
                     audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
-
+            
+            keyhole.EnableCollider(_isOpen);
             _isOpen = !_isOpen;
 
             if (audioSource)

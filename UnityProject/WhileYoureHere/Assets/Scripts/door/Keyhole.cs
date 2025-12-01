@@ -6,18 +6,23 @@ namespace door
 {
     public class Keyhole : InteractableBehaviour
     {
-        [Header("Door Lock")]
-        [SerializeField] private bool isLocked = false;
-        public bool IsLocked => isLocked;
         [Header("Key Settings")]
         [SerializeField] private Transform keyHolePosition;
         [SerializeField] private Vector3 keyRotation;
+        
+        public bool IsLocked { get; private set; }
         
         public override void Interact(IInteractor interactor)
         {
             if (interactor.HeldObject is not Key key) return;
             key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
-            key.StartMinigame(interactor, (newState) => isLocked = newState);
+            key.EnableCollider(false);
+            EnableCollider(false);
+            key.StartMinigame(interactor, (newState) =>
+            {
+                EnableCollider(true);
+                IsLocked = newState;
+            });
         }
 
         public override bool InteractableBy(IInteractor interactor)

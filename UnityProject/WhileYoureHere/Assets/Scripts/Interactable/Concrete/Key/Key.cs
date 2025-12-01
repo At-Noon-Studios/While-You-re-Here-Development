@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using EventChannels;
 using Interactable.Holdable;
 using player_controls;
@@ -38,7 +39,7 @@ namespace Interactable.Concrete.Key
             _onSuccess?.Invoke(locked);
             _rotation = 0;
         }
-
+        
         private void RotateKey(Vector2 mouseDelta)
         {
             _rotation += mouseDelta.x;
@@ -48,7 +49,7 @@ namespace Interactable.Concrete.Key
             if (DoorUnlocked) EndMinigame(false);
         }
         
-        private bool DoorLocked => _rotation >= -180f;
-        private bool DoorUnlocked => _rotation <= 180f;
+        private bool DoorLocked => _rotation <= -180f;
+        private bool DoorUnlocked => _rotation >= 180f;
     }
 }

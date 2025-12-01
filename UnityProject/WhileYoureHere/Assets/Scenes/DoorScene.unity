@@ -1349,6 +1349,17 @@ MonoBehaviour:
   playerCamera: {fileID: 2132364982}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
   holdPoint: {fileID: 1144184696}
+--- !u!114 &1220139917 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4754024356005632818, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 355537134}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220139904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a2f0b245e5d4c9891c329adaa2fd2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1270358243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,7 +1461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.Key.Key
   data: {fileID: 11400000, guid: 9e4bb462cfbc67541b1bb6bd365017aa, type: 2}
   cameraController: {fileID: 2132364979}
-  movementController: {fileID: 0}
+  movementController: {fileID: 1220139917}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
 --- !u!1 &1385643649 stripped
 GameObject:
@@ -1767,7 +1778,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
-  isLocked: 0
   keyHolePosition: {fileID: 1769186261}
   keyRotation: {x: 0, y: 0, z: 0}
 --- !u!65 &1803671441
