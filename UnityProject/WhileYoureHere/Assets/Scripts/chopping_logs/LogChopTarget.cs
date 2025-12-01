@@ -50,12 +50,12 @@ namespace chopping_logs
             RegisterHit();
         }
 
-        private void RegisterHit()
+        public void RegisterHit()
         {
             _hits++;
             Debug.Log($"LOG HIT: {_hits}/{TotalHits}");
 
-            if (_hits >= TotalHits)   // ✅ fix threshold
+            if (_hits >= TotalHits)
             {
                 ChopLog();
             }
