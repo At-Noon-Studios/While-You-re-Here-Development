@@ -20,11 +20,12 @@ namespace entity
             _audioSource = GetComponent<AudioSource>();
         }
 
-        public override void Interact()
+        public override void Interact(IInteractor interactor)
         {
             ChoreEvents.TriggerItemCollected(itemID);
             AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
             Destroy(gameObject);
         }
+        public override string InteractionText(IInteractor interactor) => "";
     }
 }
