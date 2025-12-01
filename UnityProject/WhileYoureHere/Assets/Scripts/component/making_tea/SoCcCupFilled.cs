@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ScriptableObjects.chores;
+using UnityEngine;
 
 namespace component.making_tea
 {

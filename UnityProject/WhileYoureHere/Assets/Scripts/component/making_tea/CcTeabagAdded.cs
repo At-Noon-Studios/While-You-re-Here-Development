@@ -1,4 +1,5 @@
 ﻿using chore;
+using ScriptableObjects.chores;
 
 namespace component.making_tea
 {

@@ -6,13 +6,13 @@ namespace making_tea
     {
         public Stove stove;
 
-        protected override string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             if (stove == null) return string.Empty;
             return stove.isOn ? "Stove off" : "Stove on";
         }
 
-        public override void Interact()
+        public override void Interact(IInteractor interactor)
         {
             if (stove == null) return;
             stove.ToggleStove();
