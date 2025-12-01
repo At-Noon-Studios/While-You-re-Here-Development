@@ -5,7 +5,7 @@ namespace make_a_fire
 {
     public class StoveBehaviour : MonoBehaviour
     {
-        public VisualEffect fireEffect;
+        public VisualEffect fireParticle;
         private bool _isFireOn;
 
         private void Awake()
@@ -17,6 +17,7 @@ namespace make_a_fire
         {
             if (collision.gameObject.CompareTag("Newspaper") && !_isFireOn)
             {
+                Debug.Log("Newspaper collided with " + collision.gameObject.name);
                 _isFireOn = true;
                 PlayFireEffect(true);
                 Destroy(collision.gameObject);
@@ -25,13 +26,13 @@ namespace make_a_fire
 
         private void PlayFireEffect(bool status)
         {
-            if (fireEffect == null) return;
+            if (fireParticle == null) return;
 
-            fireEffect.gameObject.SetActive(status);
-
+            fireParticle.gameObject.SetActive(status);
+ 
             if (status)
             {
-                fireEffect.Play();
+                fireParticle.Play();
             }
         }
     }
