@@ -1,6 +1,6 @@
 ﻿using Interactable.Holdable;
 
-namespace HOLDABLE_OBJECT_TEMPORARY
+namespace Interactable.Concrete.ObjectHolder
 {
     public class Placeable : HoldableObjectBehaviour, IPlaceable
     {

@@ -1,4 +1,4 @@
-﻿namespace HOLDABLE_OBJECT_TEMPORARY
+﻿namespace Interactable.Concrete.ObjectHolder
 {
     public interface IPlaceable
     {

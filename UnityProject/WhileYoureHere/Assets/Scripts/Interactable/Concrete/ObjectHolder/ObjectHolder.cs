@@ -1,9 +1,8 @@
-using Interactable;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace HOLDABLE_OBJECT_TEMPORARY
+namespace Interactable.Concrete.ObjectHolder
 {
     public class ObjectHolder : InteractableBehaviour
     {
