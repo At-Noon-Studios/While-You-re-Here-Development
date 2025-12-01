@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using UI;
 using UnityEngine;
 
 namespace Interactable
@@ -10,52 +9,53 @@ namespace Interactable
     [RequireComponent(typeof(Collider))] // Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
-        private Material _outlineMaterial;
-        private UIManager _uiManager;
+        private Collider _collider;
         private Renderer[] _renderers;
-
+        private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
+        #region Unity event functions
+        
         /// <remarks>
         /// Be sure to call <c>base.Awake();</c> when overriding this method. Not doing so will prevent outlines from being rendered.
         /// </remarks>
-        protected void Awake()
+        protected virtual void Awake()
         {
-            if (GetComponent<Collider>() == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
+            _collider = GetComponent<Collider>();
+            if (_collider == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
             _renderers = GetComponentsInChildren<Renderer>();
             if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
         }
+        
+        #endregion
+        
+        #region Interface implementation
+        
+        public virtual bool InteractableBy(IInteractor interactor) => true;
 
-        /// <remarks>
-        /// Be sure to call <c>base.Start();</c> when overriding this method. Not doing so will prevent the default interaction prompt from showing up.
-        /// </remarks>
-        protected void Start()
-        {
-            _uiManager = UIManager.Instance;
-        }
+        public abstract void Interact(IInteractor interactor);
         
-        public abstract void Interact();
-        
-        public virtual void OnHoverEnter()
+        public virtual void OnHoverEnter(IInteractor interactor)
         {
             AddOutlineMaterialToRenderers();
-            _uiManager?.ShowInteractPrompt(InteractionText());
         }
         
-        public virtual void OnHoverExit()
+        public virtual void OnHoverExit(IInteractor interactor)
         {
             RemoveOutlineMaterialFromRenderers();
-            _uiManager?.HideInteractPrompt();
         }
         
-        /// <summary>
-        /// <returns>A string that will be used to indicate what you are interacting with.</returns>> Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.
-        /// </summary>
-        protected virtual string InteractionText()
+        public virtual string InteractionText(IInteractor interactor) => gameObject.name;
+        
+        public void EnableCollider(bool state)
         {
-            return gameObject.name;
+            _collider.enabled = state;
         }
+        
+        #endregion
+        
+        #region Private methods
         
         private void AddOutlineMaterialToRenderers()
         {
@@ -73,7 +73,6 @@ namespace Interactable
                 return;
             rendererComponent.materials = materials.Append(_outlineMaterial).ToArray();
         }
-        
 
         private void RemoveOutlineMaterialFromRenderers()
         {
@@ -91,5 +90,7 @@ namespace Interactable
                 return;
             rendererComponent.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
         }
+        
+        #endregion
     }
 }
