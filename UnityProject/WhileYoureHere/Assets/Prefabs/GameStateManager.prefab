@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4575857222935271300}
   - component: {fileID: 9199017046876773457}
   - component: {fileID: 6264709909495685684}
+  - component: {fileID: 8661659309218664650}
   m_Layer: 0
   m_Name: GameStateManager
   m_TagString: Untagged
@@ -51,7 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53963be3cebe2fe4a9beac28673bca13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  activities: []
+  activities:
+  - description: 
+    events: []
   currentDay: 0
 --- !u!114 &7698500387307092215
 MonoBehaviour:
@@ -239,6 +242,19 @@ MonoBehaviour:
   distanceToTriggerEffects: 5
   timeBeforeRetrigger: 10
   tooFarFromCabinVoiceLine: {fileID: 8300000, guid: a15ae0a33438bf2439c60f37a3465da7, type: 3}
+--- !u!114 &8661659309218664650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144938144498885975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdc50ba24e1a4162b8a99891048592d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  soundObject: {fileID: 8921456144674298786, guid: db120ffa1c75695408e3532797d93629, type: 3}
 --- !u!1 &1449805332642960008
 GameObject:
   m_ObjectHideFlags: 0
