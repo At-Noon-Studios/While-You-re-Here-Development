@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using component;
 using component.gardening;
 using component.making_tea;
-using component.waterPlants;
 using ScriptableObjects.chores;
 using UnityEngine;
 
@@ -31,7 +29,8 @@ namespace chore
             _componentFactory
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
-                    { ChoreComponent.ChoreComponentType.WateringCanPickedUp, CcWateringCanPickedUp.CreateFactory }, 
+                    { ChoreComponent.ChoreComponentType.WateringCanPickedUp, CcWateringCanPickedUp.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.WateringCanFilled , CcWateringCanFilled.CreateFactory},
                     { ChoreComponent.ChoreComponentType.PlantWatered, CcPlantWatered.CreateFactory },
                     { ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.WaterBoiled, CcWaterBoiled.CreateFactory },

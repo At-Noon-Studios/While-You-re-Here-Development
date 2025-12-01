@@ -10,6 +10,9 @@ namespace chore
         public static event Action<int> OnWateringCanPickedUp;
         public static void TriggerWateringCanPickedUp(int wateringCanID) => OnWateringCanPickedUp?.Invoke(wateringCanID);
         
+        public static event Action<int> OnWateringCanFilled;
+        public static void TriggerWateringCanFilled(int wateringCanID) => OnWateringCanFilled?.Invoke(wateringCanID);
+        
         public static event Action<int> OnPlantWatered;
         public static void TriggerPlantWatered(int plantID) => OnPlantWatered?.Invoke(plantID);
         

@@ -10,6 +10,7 @@ namespace chore
         public enum ChoreComponentType
         {
             WateringCanPickedUp,
+            WateringCanFilled,
             PlantWatered,
             KettleFilled,
             WaterBoiled,

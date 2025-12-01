@@ -2,7 +2,7 @@ using chore;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Interactable
+namespace entity
 {
     public class WateringCan : MonoBehaviour
     {
@@ -14,6 +14,7 @@ namespace Interactable
         private Quaternion _pourRot;
         
         private bool _hasTriggered = false;
+        private bool _isFilled = false;
 
         private readonly float _rotationAngle = 60f;
         private readonly float _rotationSpeed = 200f;

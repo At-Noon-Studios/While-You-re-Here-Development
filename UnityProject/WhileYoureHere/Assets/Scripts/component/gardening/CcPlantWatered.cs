@@ -1,5 +1,4 @@
 using chore;
-using component.waterPlants;
 using ScriptableObjects.chores;
 using UnityEngine;
 
@@ -53,8 +52,7 @@ namespace component.gardening
         private void PlantWatered(int plantID)
         {
             if (!IsActive) return;
-            if (_plantID != plantID)
-                return;
+            if (_plantID != plantID) return;
             
             _wateringCount++;
             

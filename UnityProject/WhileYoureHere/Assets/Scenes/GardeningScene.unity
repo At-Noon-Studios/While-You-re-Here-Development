@@ -537,10 +537,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gardening.Watering
   waterParticleSystem: {fileID: 826626100}
+  wateringCanFill: {fileID: 0}
 --- !u!198 &826626100 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198020576693072572, guid: 3d19250bdd4e0df4c8da855e85a8d70b, type: 3}
   m_PrefabInstance: {fileID: 756621144}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &917781640 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7331169379871298732, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+  m_PrefabInstance: {fileID: 8794867259117342880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &917781646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917781640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e3795fa7e07ba7439f375fd4ccce46f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::gardening.WaterLevelVisualizer
+  wateringCan: {fileID: 8794867259117342886}
+  emptyY: 0
+  fullY: 1.5
+  waterSurfaceCollider: {fileID: 917781648}
+--- !u!64 &917781648 stripped
+MeshCollider:
+  m_CorrespondingSourceObject: {fileID: 1763101617086250601, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+  m_PrefabInstance: {fileID: 8794867259117342880}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &933944907
 PrefabInstance:
@@ -568,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.69199944
+      value: -0.015600952
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalRotation.x
@@ -576,7 +603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7218981
+      value: 0.99987835
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalRotation.z
@@ -588,7 +615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 267.577
+      value: 181.788
       objectReference: {fileID: 0}
     - target: {fileID: 2220377434948864645, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -599,135 +626,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45273a055fdc30945b0f04f24ed36ade, type: 3}
---- !u!1 &1016657640
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1016657641}
-  - component: {fileID: 1016657646}
-  - component: {fileID: 1016657645}
-  - component: {fileID: 1016657644}
-  - component: {fileID: 1016657643}
-  m_Layer: 0
-  m_Name: Plane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1016657641
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016657640}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.2, y: 0.818, z: 0.1}
-  m_LocalScale: {x: 0.06, y: 1, z: 0.03}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8794867259117342881}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1016657643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016657640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a17044fbab8675b49a75d163fd9893bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterLevelVisualizer
-  kettle: {fileID: 8794867259117342882}
-  emptyY: 0
-  fullY: 0.4
-  waterSurfaceCollider: {fileID: 1016657644}
---- !u!64 &1016657644
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016657640}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1016657645
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016657640}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1016657646
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016657640}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1330900125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -955,6 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Watering
   waterParticleSystem: {fileID: 1361804391}
+  wateringCanFill: {fileID: 0}
 --- !u!1 &1559164546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,6 +1281,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Watering
       objectReference: {fileID: 0}
+    - target: {fileID: 5656819140158779758, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      propertyPath: kettle
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5656819140158779758, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5762951033788506343, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: prewarm
       value: 1
@@ -1484,27 +1391,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.81
+      value: -0.161
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.119
+      value: 0.069
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6730201
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.73962426
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1512,11 +1419,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 95.399
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7331169379871298732, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      propertyPath: m_Name
+      value: Water
       objectReference: {fileID: 0}
     - target: {fileID: 8183128590503915999, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_RenderMode
@@ -1534,12 +1445,10 @@ PrefabInstance:
       propertyPath: m_FreeformStretching
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5656819140158779758, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1016657641}
     - targetCorrespondingSourceObject: {fileID: 8091857952111568754, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 826626097}
@@ -1552,17 +1461,18 @@ PrefabInstance:
       addedObject: {fileID: 275551066}
     - targetCorrespondingSourceObject: {fileID: 4717534625308886290, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8794867259117342882}
+      addedObject: {fileID: 8794867259117342886}
+    - targetCorrespondingSourceObject: {fileID: 4717534625308886290, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8794867259117342887}
     - targetCorrespondingSourceObject: {fileID: 2385687236259636226, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1361804392}
+    - targetCorrespondingSourceObject: {fileID: 7331169379871298732, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 917781646}
   m_SourcePrefab: {fileID: 100100000, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
---- !u!4 &8794867259117342881 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5915386162281141421, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
-  m_PrefabInstance: {fileID: 8794867259117342880}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8794867259117342882
+--- !u!114 &8794867259117342886
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1571,13 +1481,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 275551057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c121e7338db205640b7c153154f18cb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 517f6fb923307af4b9a882a9b4abc4f8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::making_tea.KettleFill
+  m_EditorClassIdentifier: Assembly-CSharp::gardening.WateringCanFill
   fillAmount: 0
   maxFill: 1
   fillSpeed: 0.25
-  isFilling: 0
+--- !u!114 &8794867259117342887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275551057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec34095501e4e1341b55019676c5f507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::gardening.WateringCanFilledTrigger
+  wateringCanID: 0
+  wateringCan: {fileID: 8794867259117342886}
+  threshold: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

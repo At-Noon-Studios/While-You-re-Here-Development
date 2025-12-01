@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using ScriptableObjects.chores;
 using UnityEngine;
 
-namespace component.waterPlants
+namespace component.gardening
 {
-    [CreateAssetMenu(fileName = "CcPlantWatered", menuName = "QuestSystem/Components/CcPlantWatered", order = 2)]
+    [CreateAssetMenu(fileName = "CcPlantWatered", menuName = "ChoreSystem/Components/CcPlantWatered", order = 3)]
     public class SoCcPlantWatered : SoChoreComponent
     {
         [Header("Plant settings")]
