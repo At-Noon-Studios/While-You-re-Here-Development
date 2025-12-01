@@ -30,8 +30,8 @@ namespace gamestate
         
         private void Start()
         {
-            _timeManager = GameObject.FindWithTag("TimeManager").GetComponent<TimeManager>();
-            _choreManager = GameObject.FindWithTag("ChoreManager").GetComponent<ChoreManager>();
+            GetComponent<TimeManager>();
+            GetComponent<ChoreManager>();
             _player = GameObject.FindWithTag("Player");
             _playerAudioSource = _player.GetComponent<AudioSource>();
             _currentActivity = activities[0];
@@ -40,6 +40,7 @@ namespace gamestate
 
         private void Update()
         {
+            if (_currentActivity == null) return;
             foreach (var gameplayEvent in _currentActivity.events)
             {
                 if (gameplayEvent.triggeredBy == TriggeredBy.OnChoresCompleted)
@@ -82,7 +83,7 @@ namespace gamestate
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Debug.LogError("No new activity was found");
+                Debug.LogError("No new activity was found: " + e.Message);
             }
             HandleStartActivity();
         }

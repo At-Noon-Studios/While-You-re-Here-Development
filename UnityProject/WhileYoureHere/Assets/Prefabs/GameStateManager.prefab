@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6543351211943670410}
   - component: {fileID: 4575857222935271300}
   - component: {fileID: 9199017046876773457}
+  - component: {fileID: 6264709909495685684}
   m_Layer: 0
   m_Name: GameStateManager
   m_TagString: Untagged
@@ -223,6 +224,21 @@ MonoBehaviour:
   interactPrompt: {fileID: 218114406430887277}
   dialogueText: {fileID: 4233242359865259602}
   dialoguePanel: {fileID: 1835750980697457386}
+--- !u!114 &6264709909495685684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144938144498885975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1868a08c65e506e4d84b09bdf1a45b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapBorder.PlayerBorderController
+  distanceToTriggerEffects: 5
+  timeBeforeRetrigger: 10
+  tooFarFromCabinVoiceLine: {fileID: 8300000, guid: a15ae0a33438bf2439c60f37a3465da7, type: 3}
 --- !u!1 &1449805332642960008
 GameObject:
   m_ObjectHideFlags: 0
