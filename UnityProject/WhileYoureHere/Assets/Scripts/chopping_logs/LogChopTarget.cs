@@ -8,9 +8,8 @@ namespace chopping_logs
         private int _hits = 0;
         private Stump _stump;
 
-        public GameObject choppedLogPrefab;
-        public Transform spawn1;
-        public Transform spawn2;
+        public GameObject choppedLogQuarterPrefab;
+        public Transform[] spawnPoints = new Transform[4];
 
         private void Start()
         {
@@ -64,22 +63,27 @@ namespace chopping_logs
 
         private void ChopLog()
         {
-            if (choppedLogPrefab != null)
+            if (choppedLogQuarterPrefab == null)
             {
-                if (spawn1 != null)
-                    Instantiate(choppedLogPrefab, spawn1.position, spawn1.rotation);
-                if (spawn2 != null)
-                    Instantiate(choppedLogPrefab, spawn2.position, spawn2.rotation);
-            }
-            else
-            {
-                Debug.LogWarning("No choppedLogPrefab assigned!");
+                Debug.LogWarning("No choppedLogQuarterPrefab assigned!");
+                return;
             }
 
-            Debug.Log("LOG CHOPPED!");
+            for (var i = 0; i < spawnPoints.Length; i++)
+            {
+                if (spawnPoints[i] != null)
+                {
+                    Instantiate(choppedLogQuarterPrefab, spawnPoints[i].position, spawnPoints[i].rotation);
+                }
+                else
+                {
+                    Debug.LogWarning($"Missing spawn point {i} for chopped log quarter.");
+                }
+            }
 
+            Debug.Log("LOG CHOPPED INTO QUARTERS!");
             _hits = 0;
-            _stump.EndMinigame();   // ✅ this will Destroy(_logObject)
+            _stump.EndMinigame();
         }
 
 

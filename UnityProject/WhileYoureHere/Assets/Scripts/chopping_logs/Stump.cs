@@ -8,9 +8,7 @@ namespace chopping_logs
     public class Stump : InteractableBehaviour
     {
         [SerializeField] private Transform logPlaceholder;
-        [SerializeField] private GameObject choppedLogPrefab;
-        [SerializeField] private Transform spawn1;
-        [SerializeField] private Transform spawn2;
+        [SerializeField] private Transform minigameStartPoint;
 
         public bool HasLog => _hasLog;
         public bool MinigameActive { get; private set; }
@@ -80,16 +78,13 @@ namespace chopping_logs
             foreach (var chopTarget in chopTargets)
             {
                 chopTarget.SetStump(this);
-                chopTarget.choppedLogPrefab = choppedLogPrefab;
-                chopTarget.spawn1 = spawn1;
-                chopTarget.spawn2 = spawn2;
             }
 
             controller.ClearHeldObject();
             Debug.Log("Log placed on stump!");
         }
 
-        private void StartMinigame()
+        public void StartMinigame()
         {
             if (!_hasLog)
             {
@@ -100,7 +95,14 @@ namespace chopping_logs
             MinigameActive = true;
             Debug.Log("Minigame started!");
 
-            var movement = GameObject.FindWithTag("Player")?.GetComponent<MovementController>();
+            var player = GameObject.FindWithTag("Player");
+            if (player != null && minigameStartPoint != null)
+            {
+                player.transform.position = minigameStartPoint.position;
+                player.transform.rotation = minigameStartPoint.rotation;
+            }
+
+            var movement = player?.GetComponent<MovementController>();
             if (movement)
                 movement.PauseMovement();
         }
