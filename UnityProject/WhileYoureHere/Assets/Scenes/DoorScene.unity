@@ -1078,6 +1078,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2426911818523384888, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
+    - target: {fileID: 2426911818523384888, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
+      propertyPath: keyhole
+      value: 
+      objectReference: {fileID: 1803671440}
+    - target: {fileID: 2426911818523384888, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
       propertyPath: isLocked
       value: 0
       objectReference: {fileID: 0}
@@ -1174,7 +1182,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6106076662692845246, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1769186261}
+      addedObject: {fileID: 1803671439}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1047075541405575102, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
       insertIndex: -1
@@ -1442,6 +1450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.Key.Key
   data: {fileID: 11400000, guid: 9e4bb462cfbc67541b1bb6bd365017aa, type: 2}
   cameraController: {fileID: 2132364979}
+  movementController: {fileID: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
 --- !u!1 &1385643649 stripped
 GameObject:
@@ -1705,13 +1714,83 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769186260}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.87, y: 7.31, z: 0.82}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+  m_Father: {fileID: 1803671439}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1803671438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1803671439}
+  - component: {fileID: 1803671441}
+  - component: {fileID: 1803671440}
+  m_Layer: 0
+  m_Name: Keyhole
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1803671439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803671438}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.82, y: 9.05, z: 0.77}
+  m_LocalScale: {x: 1, y: 1, z: 1.5969}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1769186261}
   m_Father: {fileID: 1959604749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1803671440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803671438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
+  isLocked: 0
+  keyHolePosition: {fileID: 1769186261}
+  keyRotation: {x: 0, y: 0, z: 0}
+--- !u!65 &1803671441
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803671438}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1959604749 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6106076662692845246, guid: 3e066772081d28b418e027d5a6c01392, type: 3}

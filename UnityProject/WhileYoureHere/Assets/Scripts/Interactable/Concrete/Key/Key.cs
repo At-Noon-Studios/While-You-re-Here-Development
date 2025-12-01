@@ -19,7 +19,7 @@ namespace Interactable.Concrete.Key
         private Action<bool> _onSuccess;
 
         private float _rotation;
-
+        
         public void StartMinigame(IInteractor interactor, Action<bool> onSuccess)
         {
             _onSuccess = onSuccess;

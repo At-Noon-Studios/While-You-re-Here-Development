@@ -1,6 +1,7 @@
 using UnityEngine;
 using Interactable;
 using Interactable.Concrete.Key;
+using ScriptableObjects.door;
 
 namespace door
 {
@@ -12,6 +13,7 @@ namespace door
         [Header("References")]
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private Keyhole keyhole;
 
         private bool _isOpen = false;
         private Quaternion _closeRotation;
@@ -33,13 +35,7 @@ namespace door
         
         public override void Interact(IInteractor interactor)
         {
-            if (interactor.HeldObject is Key key)
-            {
-                key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
-                key.StartMinigame(interactor, (newState) => isLocked = newState);
-                return;
-            }
-            if (config.isLocked)
+            if (keyhole.IsLocked)
             {
                 if (audioSource && config.lockedSound)
                     audioSource.PlayOneShot(config.lockedSound);
@@ -72,7 +68,7 @@ namespace door
 
         public override string InteractionText(IInteractor interactor)
         {
-            if (config.isLocked)
+            if (keyhole.IsLocked)
                 return "Door is locked";
 
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
@@ -80,7 +76,7 @@ namespace door
 
         public override bool InteractableBy(IInteractor interactor)
         {
-            return !isLocked;
+            return !keyhole.IsLocked;
         }
     }
 }
