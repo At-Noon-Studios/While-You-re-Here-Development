@@ -1,5 +1,5 @@
 using Interactable;
-using picking_up_objects;
+using Interactable.Holdable;
 using player_controls;
 using UnityEngine;
 
@@ -16,9 +16,7 @@ namespace chopping_logs
         private GameObject _logObject;
         private bool _hasLog;
 
-        private void Awake() => base.Awake();
-
-        public override void Interact()
+        public override void Interact(IInteractor interactor)
         {
             if (MinigameActive)
             {
@@ -27,12 +25,12 @@ namespace chopping_logs
             }
 
             var player = GameObject.FindWithTag("Player");
-            var heldController = player?.GetComponent<HeldObjectController>();
-            var held = heldController?.GetHeldObject();
+            var heldController = player?.GetComponent<PlayerInteractionController>();
+            var held = heldController?.HeldObject;
 
             if (!_hasLog)
             {
-                if (held is Pickable pickableLog && pickableLog.CompareTag("Log"))
+                if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
                 {
                     Debug.Log("Placing log on stump.");
                     PlaceLog(pickableLog, heldController);
@@ -45,7 +43,7 @@ namespace chopping_logs
                 return;
             }
 
-            if (held is Pickable p && p.GetComponentInChildren<AxeHitDetector>() != null)
+            if (held is HoldableObjectBehaviour p && p.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 Debug.Log("Starting chopping minigame.");
                 StartMinigame();
@@ -56,11 +54,9 @@ namespace chopping_logs
             }
         }
 
-        private void PlaceLog(Pickable pickableLog, HeldObjectController controller)
+        private void PlaceLog(HoldableObjectBehaviour pickableLog, PlayerInteractionController controller)
         {
-            pickableLog.Place();
-            pickableLog.transform.position = logPlaceholder.position;
-            pickableLog.transform.rotation = logPlaceholder.rotation;
+            pickableLog.Place(logPlaceholder.position, logPlaceholder.rotation);
 
             var rb = pickableLog.GetComponent<Rigidbody>();
             if (rb)
@@ -80,7 +76,7 @@ namespace chopping_logs
                 chopTarget.SetStump(this);
             }
 
-            controller.ClearHeldObject();
+            controller.SetHeldObject(null);
             Debug.Log("Log placed on stump!");
         }
 
@@ -127,23 +123,23 @@ namespace chopping_logs
             _hasLog = false;
         }
 
-        protected override string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             if (MinigameActive) return string.Empty;
 
             var held = GameObject.FindWithTag("Player")
-                ?.GetComponent<HeldObjectController>()
-                ?.GetHeldObject();
+                ?.GetComponent<PlayerInteractionController>()
+                ?.HeldObject;
 
             if (!_hasLog)
             {
-                if (held is Pickable pickableLog && pickableLog.CompareTag("Log"))
+                if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
                     return "Place Log (E)";
 
                 return "Stump (Empty)";
             }
 
-            if (held is Pickable pick && pick.GetComponentInChildren<AxeHitDetector>())
+            if (held is HoldableObjectBehaviour && gameObject.GetComponentInChildren<AxeHitDetector>())
                 return "Start Chopping (E)";
 
             return "Stump (Occupied)";

@@ -4,12 +4,12 @@ namespace chopping_logs
 {
     public class LogChopTarget : MonoBehaviour
     {
-        private const int TotalHits = 4;
+        private const int TotalHits = 2;
         private int _hits = 0;
         private Stump _stump;
 
         public GameObject choppedLogQuarterPrefab;
-        public Transform[] spawnPoints = new Transform[4];
+        public Transform[] spawnPoints = new Transform[2];
 
         private void Start()
         {
