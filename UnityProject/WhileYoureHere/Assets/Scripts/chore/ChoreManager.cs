@@ -15,6 +15,11 @@ namespace chore
         {
             InitializeChores();
         }
+        
+        void Start()
+        {
+            StartChore(0); // Starting first chore
+        }
 
         private bool StartChore(int id)
         {

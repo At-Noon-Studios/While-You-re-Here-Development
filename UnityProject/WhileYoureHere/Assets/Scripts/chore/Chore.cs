@@ -27,6 +27,7 @@ namespace chore
             _componentFactory
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
+                    { ChoreComponent.ChoreComponentType.DoorOpened, CcDoorOpened.CreateFactory }
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

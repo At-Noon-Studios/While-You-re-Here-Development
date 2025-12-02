@@ -1,3 +1,4 @@
+using chore;
 using UnityEngine;
 using Interactable;
 using ScriptableObjects.door;
@@ -6,6 +7,7 @@ namespace door
 {
     public class DoorInteractable : InteractableBehaviour
     {
+        [SerializeField] private int doorID;
         [Header("Door Config")]
         [SerializeField] private DoorConfig config;
 
@@ -41,6 +43,9 @@ namespace door
             }
 
             _isOpen = !_isOpen;
+            
+            if (_isOpen)
+                ChoreEvents.TriggerDoorOpened(doorID);
 
             if (audioSource)
             {

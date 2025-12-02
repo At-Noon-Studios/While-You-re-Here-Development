@@ -17,6 +17,13 @@ namespace chore
         {
             OnItemCollected?.Invoke(itemID);
         }
+        
+        public static event Action<int> OnDoorOpened;
+
+        public static void TriggerDoorOpened(int doorID)
+        {
+            OnDoorOpened?.Invoke(doorID);
+        }
 
         public static event Action<Chore> OnChoreCompleted;
 

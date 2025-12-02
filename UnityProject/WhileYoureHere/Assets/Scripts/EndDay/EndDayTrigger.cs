@@ -1,3 +1,4 @@
+using chore;
 using UnityEngine;
 
 namespace EndDay
@@ -35,6 +36,7 @@ namespace EndDay
 
             if (_timer > fadeDuration + displayImageDuration)
             {
+                // You can add to quit game or maybe change scene
                 Debug.Log("End of the day");
             }
         }
