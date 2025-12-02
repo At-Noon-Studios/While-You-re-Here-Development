@@ -15,8 +15,9 @@ namespace Interactable.Concrete.ObjectHolder
             if (_heldObject == null)
             {
                 _heldObject = interactor.HeldObject;
-                _heldObject!.Place(placePoint.position, Quaternion.Euler(placedObjectRotation));
-                _heldObject.EnableCollider(false);
+                _heldObject!.Place(placePoint.position);
+                //_heldObject!.Place(placePoint.position, Quaternion.Euler(placedObjectRotation));
+                //_heldObject.EnableCollider(false);
                 return;
             }
             _heldObject.Interact(interactor);

@@ -14,7 +14,8 @@ namespace Interactable.Holdable
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
         [CanBeNull] private GameObject _heldVersion;
-
+        
+        public bool IsCurrentlyHeld => _holder != null;
         public float Weight => data.Weight;
 
         private const int HoldLayer = 3;

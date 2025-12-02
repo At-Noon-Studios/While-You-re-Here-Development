@@ -6,8 +6,8 @@ namespace making_tea
     {
         public KettleFill kettle;
 
-        public float emptyY = 0f;
-        public float fullY = 0.22f;
+        public float emptyY;
+        public float fullY;
 
         public Collider waterSurfaceCollider;
 

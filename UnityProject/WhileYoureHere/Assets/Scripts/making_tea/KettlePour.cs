@@ -1,4 +1,5 @@
 ﻿using chore;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,13 +33,17 @@ namespace making_tea
             _pourRot = Quaternion.Euler(
                 pivot.localEulerAngles.x,
                 pivot.localEulerAngles.y,
-                pivot.localEulerAngles.z - pourAngle
+                pivot.localEulerAngles.z + pourAngle
             );
         }
 
         private void Update()
         {
-            var isHeld = !_rb.useGravity;
+            var isHeld = false;
+
+            if (TryGetComponent<HoldableObjectBehaviour>(out var h))
+                isHeld = h.IsCurrentlyHeld;
+
             var leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
             
             var wantsPour =
