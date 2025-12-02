@@ -32,7 +32,6 @@ namespace door
             if (!audioSource)
                 audioSource = gameObject.AddComponent<AudioSource>();
         }
-        
         public override void Interact(IInteractor interactor)
         {
             if (keyhole.IsLocked)
