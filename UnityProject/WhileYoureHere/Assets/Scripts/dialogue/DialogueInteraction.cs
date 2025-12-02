@@ -9,7 +9,7 @@ namespace dialogue
     {
         [SerializeField] private DialogueLoader dialogueLoader;
         [SerializeField] private DialogueInteractionConfig config;
-        [SerializeField] private GameObject interactionText;
+        [SerializeField] private GameObject interactionUI;
 
         public override void Interact(IInteractor interactor)
         {
@@ -44,7 +44,7 @@ namespace dialogue
             
             dialogueLoader.StartDialogue(config.dialogueNodes);
 
-            interactionText.gameObject.SetActive(false);
+            interactionUI.gameObject.SetActive(false);
         }
 
         public override string InteractionText(IInteractor interactor)
