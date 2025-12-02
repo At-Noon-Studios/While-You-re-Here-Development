@@ -28,7 +28,7 @@ namespace MapBorder
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            _player = GameObject.Find("Player");
+            _player = GameObject.FindGameObjectWithTag("Player");
             _audioSource = _player.GetComponent<AudioSource>();
             Volume volume = GetComponent<Volume>();
             volume.profile.TryGet(out _vignette);
@@ -39,8 +39,9 @@ namespace MapBorder
         // Update is called once per frame
         void Update()
         {
+            if (_borderObjects.Length == 0) return;
             var distances = new List<float>();
-            foreach (GameObject borderObject in _borderObjects)
+            foreach (var borderObject in _borderObjects)
             {
                 borderObject.TryGetComponent<Collider>(out _collider);
                 distances.Add((_player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider,

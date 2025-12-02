@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using component;
-using component.test;
 using ScriptableObjects.chores;
 using UnityEngine;
 
@@ -29,8 +27,6 @@ namespace chore
             _componentFactory
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
-                    { ChoreComponent.ChoreComponentType.EnemyKilled, CcEnemyKilled.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)
