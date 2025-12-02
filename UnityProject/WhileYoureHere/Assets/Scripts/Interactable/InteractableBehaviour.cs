@@ -33,6 +33,8 @@ namespace Interactable
         #region Interface implementation
         
         public virtual bool InteractableBy(IInteractor interactor) => true;
+        
+        public virtual bool DetectableBy(IInteractor interactor) => true;
 
         public abstract void Interact(IInteractor interactor);
         

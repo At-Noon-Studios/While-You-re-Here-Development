@@ -1,6 +1,5 @@
 using UnityEngine;
 using Interactable;
-using Interactable.Concrete.Key;
 using ScriptableObjects.door;
 
 namespace door
