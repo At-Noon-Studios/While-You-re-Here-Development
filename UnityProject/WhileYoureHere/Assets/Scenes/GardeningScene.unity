@@ -329,6 +329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   wateringCanID: 0
   rotationRoot: {fileID: 409779606}
+  audioSource: {fileID: 0}
+  pickUpSound: {fileID: 0}
+  dropSound: {fileID: 0}
 --- !u!114 &275551066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,6 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::gardening.Watering
   waterParticleSystem: {fileID: 826626100}
   wateringCanFill: {fileID: 0}
+  pouringSound: {fileID: 0}
 --- !u!198 &826626100 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198020576693072572, guid: 3d19250bdd4e0df4c8da855e85a8d70b, type: 3}
@@ -854,6 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watering
   waterParticleSystem: {fileID: 1361804391}
   wateringCanFill: {fileID: 8794867259117342889}
+  pouringSound: {fileID: 0}
 --- !u!1 &1559164546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,6 +1277,14 @@ PrefabInstance:
     - target: {fileID: 3020329612402148971, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 93.242
+      objectReference: {fileID: 0}
+    - target: {fileID: 3587568386754220840, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3587568386754220840, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4717534625308886290, guid: 55d802172728d6146b6d6feedbef6ea0, type: 3}
       propertyPath: m_Name
