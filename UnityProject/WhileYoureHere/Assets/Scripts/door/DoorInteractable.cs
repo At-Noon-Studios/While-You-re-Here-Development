@@ -40,7 +40,6 @@ namespace door
                 return;
             }
             
-            keyhole.EnableCollider(_isOpen);
             _isOpen = !_isOpen;
 
             if (audioSource)
@@ -73,9 +72,9 @@ namespace door
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
 
-        public override bool InteractableBy(IInteractor interactor)
-        {
-            return !keyhole.IsLocked;
-        }
+        public override bool IsInteractableBy(IInteractor interactor) => !keyhole.IsLocked;
+        
+        public override bool IsDetectableBy(IInteractor interactor) => !keyhole.CurrentlyBeingOperated;
+        
     }
 }

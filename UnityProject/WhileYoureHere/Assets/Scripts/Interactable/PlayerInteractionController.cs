@@ -101,7 +101,7 @@ namespace Interactable
             ref IInteractable bestTarget)
         {
             if (candidate.distance >= closestDistance ||
-                !candidate.collider.TryGetComponent<IInteractable>(out var interactable) || !interactable.DetectableBy(this)) return;
+                !candidate.collider.TryGetComponent<IInteractable>(out var interactable) || !interactable.IsDetectableBy(this)) return;
             
             bestTarget = interactable;
             closestDistance = candidate.distance;
@@ -117,7 +117,7 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.IsInteractableBy(this));
             target.OnHoverEnter(this);
         }
 
@@ -129,7 +129,7 @@ namespace Interactable
         
         private bool NoTarget => _currentTarget == null;
         
-        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
+        private bool TargetInteractable => _currentTarget != null && _currentTarget.IsInteractableBy(this);
         
         private void InteractWithTarget()
         {

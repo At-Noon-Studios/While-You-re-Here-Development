@@ -18,7 +18,7 @@
         /// <param name="interactor">
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
-        public bool InteractableBy(IInteractor interactor);
+        public bool IsInteractableBy(IInteractor interactor);
      
         /// <summary>
         /// Determines whether <paramref name="interactor"/> is able to detect this <see cref="IInteractable"/> component.
@@ -27,7 +27,7 @@
         /// <param name="interactor">
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
-        public bool DetectableBy(IInteractor interactor);
+        public bool IsDetectableBy(IInteractor interactor);
         
         /// <summary>
         /// Called when a <see cref="PlayerInteractionController"/> 
