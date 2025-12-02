@@ -19,7 +19,7 @@ namespace gamestate
         public string booleanToChange;
         public bool newValue;
         public int hourOfDay;
-        public AudioClip dialogueToPlay;
+        public AudioClip audioToPlay;
         public VideoClip cutsceneToPlay;
         public UnityEvent eventToInvoke;
         

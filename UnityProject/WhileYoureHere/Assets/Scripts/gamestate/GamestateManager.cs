@@ -22,12 +22,18 @@ namespace gamestate
         private AudioSource _playerAudioSource;
         
         public int currentDay;
+        public static Dictionary<string, bool> States = new Dictionary<string, bool>();
 
         private void Awake()
         {
             _instance = this;
         }
-        
+
+        private void OnValidate()
+        {
+            
+        }
+
         private void Start()
         {
             GetComponent<TimeManager>();
@@ -57,7 +63,7 @@ namespace gamestate
         {
             foreach (var boolean in gameplayEvent.booleansToBeTrue)
             {
-                if (!(bool)_instance.GetType().GetField(boolean).GetValue(_instance)) return;
+                if (!States.TryGetValue(boolean, out var value) || !value) return;
                 HandleTrigger(gameplayEvent);
             }
         }
@@ -84,6 +90,7 @@ namespace gamestate
             catch (ArgumentOutOfRangeException e)
             {
                 Debug.LogError("No new activity was found: " + e.Message);
+                return;
             }
             HandleStartActivity();
         }
@@ -104,7 +111,7 @@ namespace gamestate
 
         private void BooleanChange(string boolName, bool value)
         {
-            _instance.GetType().GetField(boolName).SetValue(_instance, value);
+            States[boolName] = value;
         }
 
         private void SkyboxChange(int hourOfDay)
@@ -149,14 +156,14 @@ namespace gamestate
                 case GameplayEventType.BooleanChange:
                     BooleanChange(gameplayEvent.booleanToChange, gameplayEvent.newValue);
                     break;
-                case GameplayEventType.SkyboxChange:
+                case GameplayEventType.SkyboxChange: 
                     SkyboxChange(gameplayEvent.hourOfDay);
                     break;
                 case GameplayEventType.Cutscene:
                     PlayCutscene();
                     break;
                 case GameplayEventType.Dialogue:
-                    PlayDialogue(gameplayEvent.dialogueToPlay);
+                    PlayDialogue(gameplayEvent.audioToPlay);
                     break;
                 case GameplayEventType.ProgressToNextActivity:
                     GoToNextActivity();
