@@ -1,58 +1,34 @@
 using System.Collections.Generic;
-using checklist;
-using ScriptableObjects.CheckList;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TaskManager : MonoBehaviour
+namespace checklist
 {
-    public TaskLoader taskLoader;          // Je TaskLoader met alle ScriptableObject tasks
-    public GameObject togglePrefab;        // Prefab met een Toggle component
-    public Transform toggleContainer;      // Parent waar de toggles in komen
-
-    private Dictionary<string, Toggle> _taskToggles = new Dictionary<string, Toggle>();
-
-    private void Start()
+    public class TaskManager : MonoBehaviour
     {
-        if (taskLoader == null || togglePrefab == null || toggleContainer == null) return;
+        [SerializeField] private TaskLoader taskLoader;
+        [SerializeField] private GameObject togglePrefab;
+        [SerializeField] private Transform toggleContainer;
 
-        foreach (var task in taskLoader.tasks)
+        private readonly Dictionary<string, Toggle> taskToggles = new();
+
+        private void Start()
         {
-            GameObject toggleGO = Instantiate(togglePrefab, toggleContainer);
-            Toggle toggle = toggleGO.GetComponent<Toggle>();
-            if (toggle == null) continue;
-
-            // Zet de tekst van de toggle
-            Text label = toggle.GetComponentInChildren<Text>();
-            if (label != null) label.text = task.taskName;
-
-            // Zet de toggle aan/uit op basis van isCompleted
-            toggle.isOn = task.isCompleted;
-
-            string taskID = task.taskID; // nodig voor de lambda
-
-            toggle.onValueChanged.AddListener((value) =>
+            foreach (var task in taskLoader.tasks)
             {
-                if (value) taskLoader.CompleteTask(taskID);
-                else
+                var toggle = Instantiate(togglePrefab, toggleContainer).GetComponent<Toggle>();
+                toggle.GetComponentInChildren<Text>().text = task.taskName;
+                toggle.isOn = task.isCompleted;
+
+                string taskID = task.taskID;
+                toggle.onValueChanged.AddListener(value =>
                 {
-                    Task t = taskLoader.GetTaskByID(taskID);
-                    if (t != null) t.isCompleted = false;
-                }
-            });
+                    if (value) taskLoader.CompleteTask(taskID);
+                    else taskLoader.GetTaskByID(taskID).isCompleted = false;
+                });
 
-            _taskToggles.Add(taskID, toggle);
-        }
-    }
-
-    // Optioneel: update de toggles als tasks elders veranderd worden
-    public void RefreshToggles()
-    {
-        foreach (var kvp in _taskToggles)
-        {
-            Task t = taskLoader.GetTaskByID(kvp.Key);
-            if (t != null)
-                kvp.Value.isOn = t.isCompleted;
+                taskToggles[taskID] = toggle;
+            }
         }
     }
 }

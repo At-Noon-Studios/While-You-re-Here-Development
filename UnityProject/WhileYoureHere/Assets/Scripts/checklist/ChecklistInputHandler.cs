@@ -8,8 +8,6 @@ namespace checklist
 
         public void OnCheckList()
         {
-            if (checklistUI == null) return;
-
             checklistUI.OnCheckListInput();
         }
     }

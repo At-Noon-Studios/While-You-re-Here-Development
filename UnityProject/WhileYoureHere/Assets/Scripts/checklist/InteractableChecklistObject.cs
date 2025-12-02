@@ -5,26 +5,17 @@ namespace checklist
 {
     public class InteractableChecklistObject : InteractableBehaviour
     {
-        public ChecklistUI checklistUI;
+        [SerializeField] private ChecklistUI checklistUI;
 
-        private bool _isPickedUp = false;
+        private bool _isPickedUp;
 
         public override void Interact(IInteractor interactor)
-        {
-            PickUpObject();
-        }
-
-        private void PickUpObject()
         {
             if (_isPickedUp) return;
 
             _isPickedUp = true;
             gameObject.SetActive(false);
-
-            if (checklistUI != null)
-            {
-                checklistUI.SetChecklistAvailable(true, transform, gameObject);
-            }
+            checklistUI.SetChecklistAvailable(true, transform, gameObject);
         }
     }
 }
