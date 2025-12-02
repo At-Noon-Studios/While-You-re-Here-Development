@@ -67,7 +67,6 @@ namespace Interactable.Holdable
             transform.SetParent(interactor.HoldPoint);
             transform.localRotation = Quaternion.Euler(data.Rotation);
             transform.localPosition = data.Offset;
-            gameObject.layer = data.HoldLayer;
         }
 
         private void Detach()
