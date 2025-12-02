@@ -9,12 +9,10 @@ namespace radio_interaction
         public void Start()
         {
             radioController = GetComponentInParent<RadioController>();
-            // base.Start();
         }
     
         public override void Interact(IInteractor interactor)
         {
-            print("interacted with RadioPowerInteraction");
             switch (radioController.radioOn)
             {
                 case false:

@@ -5,19 +5,17 @@ namespace radio_interaction
 {
     public class RadioDialInteraction : InteractableBehaviour, IClickInteractable
     {
+        private RadioController radioController;
 
-        RadioController radioController ;
         public void Start()
         {
             radioController = GetComponentInParent<RadioController>();
-            // base.Start();
         }
 
         public override void Interact(IInteractor interactor)
         {
-            Debug.Log("interacted with dial");
             var isTuning = radioController.tuning();
-        
+
             switch (isTuning)
             {
                 case false:
@@ -27,7 +25,6 @@ namespace radio_interaction
                     radioController.ExitTuningMode();
                     break;
             }
-            Debug.Log("interacted with dial" + isTuning);
         }
     }
 }

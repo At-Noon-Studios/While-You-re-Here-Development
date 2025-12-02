@@ -34,7 +34,6 @@ namespace radio_interaction
         public void OnDisable()
         {
             clickTune.OnClick -= mouseDown;
-
         }
 
         public void mouseDown(bool isPressed)
