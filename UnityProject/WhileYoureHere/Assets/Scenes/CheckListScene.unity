@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &65404015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 65404016}
+  m_Layer: 0
+  m_Name: NotebookPlacement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &65404016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65404015}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.16662456, y: -0.10394789, z: 0.009779912, w: 0.98047715}
+  m_LocalPosition: {x: -0.219, y: 1.141, z: 0.426}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 758969346}
+  m_LocalEulerAnglesHint: {x: -18.948, y: -12.648, z: 3.262}
 --- !u!1001 &355537134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -265,11 +296,17 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1941477672436412524, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 65404016}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 758969337}
+      addedObject: {fileID: 758969347}
+    - targetCorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 758969348}
   m_SourcePrefab: {fileID: 100100000, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
 --- !u!1 &410087039
 GameObject:
@@ -471,7 +508,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
   m_PrefabInstance: {fileID: 355537134}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &758969337
+--- !u!4 &758969346 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1941477672436412524, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 355537134}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &758969347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -480,13 +522,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 758969328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6894e439a05eff348a0d781d04596d30, type: 3}
+  m_Script: {fileID: 11500000, guid: e23db040cddf543449e5e3744b84702c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CheckList.ChecklistManager
-  checklistCanvas: {fileID: 790271134}
-  checklistPanel: {fileID: 1987134903}
-  checklistItemPrefab: {fileID: 4129839724053394166, guid: d130af2a940c6024295bf924592d2a07, type: 3}
-  checklistData: {fileID: 11400000, guid: 40c6b5a3736d7404ba9243c23fe18b41, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::checklist.ChecklistInputHandler
+  checklistUI: {fileID: 1166832821}
+--- !u!114 &758969348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758969328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe4d44460e4ded4587f4c2a3b3aaa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.PlayerInteractionController
+  data: {fileID: 11400000, guid: 09bfd3ba5260bc542a2615e67084a739, type: 2}
+  playerCamera: {fileID: 1887758225}
+  interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  holdPoint: {fileID: 1881009236}
 --- !u!1 &790271130
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,13 +553,14 @@ GameObject:
   - component: {fileID: 790271131}
   - component: {fileID: 790271134}
   - component: {fileID: 790271133}
+  - component: {fileID: 790271135}
   m_Layer: 5
   m_Name: ChecklistCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &790271131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -512,19 +568,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 790271130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0044}
+  m_LocalScale: {x: 0.1847596, y: 0.03262665, z: 0.3132211}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1987134903}
-  m_Father: {fileID: 1708742848}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  - {fileID: 1068653920}
+  m_Father: {fileID: 1166832819}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.006, y: 0.5}
+  m_SizeDelta: {x: 4.739, y: 28.238}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &790271133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +603,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &790271134
 Canvas:
   m_ObjectHideFlags: 0
@@ -557,7 +613,7 @@ Canvas:
   m_GameObject: {fileID: 790271130}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -571,6 +627,109 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &790271135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790271130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e63cc8574fd5c468b383133ad192a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TaskManager
+  taskLoader: {fileID: 1068653921}
+  togglePrefab: {fileID: 7427046779101747241, guid: 854340eeadca5644f817f43fad4b89a0, type: 3}
+  toggleContainer: {fileID: 1068653920}
+--- !u!1 &1068653917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1068653920}
+  - component: {fileID: 1068653919}
+  - component: {fileID: 1068653918}
+  - component: {fileID: 1068653921}
+  m_Layer: 5
+  m_Name: ChecklistPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1068653918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068653917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!222 &1068653919
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068653917}
+  m_CullTransparentMesh: 1
+--- !u!224 &1068653920
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068653917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 790271131}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00024986267, y: 0.000014305115}
+  m_SizeDelta: {x: -0.0005002, y: 0.00002861}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1068653921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068653917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64103ac5a396670498fd854243368ce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::checklist.TaskLoader
+  tasks:
+  - {fileID: 11400000, guid: 57050597eda6d8449b2f7aa1ab9f8a0e, type: 2}
+  - {fileID: 11400000, guid: 8ae57aa552245ea4491458e4b954a9e0, type: 2}
+  - {fileID: 11400000, guid: 536177d1a4bc3124da426d9523fcf36d, type: 2}
 --- !u!1 &1153047690 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1114187060030297372, guid: 3e066772081d28b418e027d5a6c01392, type: 3}
@@ -780,10 +939,11 @@ Transform:
   m_GameObject: {fileID: 1166832815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1595, y: 0.4325, z: -8.1744}
-  m_LocalScale: {x: 0.4548848, y: 0.1351, z: 0.6804578}
+  m_LocalPosition: {x: -1.3579, y: 0.4837, z: -8.2643}
+  m_LocalScale: {x: 0.18475956, y: 0.03262665, z: 0.31322107}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 790271131}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1166832820
@@ -795,13 +955,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1166832815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5331ab2d27578cc4c8c2de4c818fe2a8, type: 3}
+  m_Script: {fileID: 11500000, guid: ab75bac712bfcf44398d6bf9738e2b02, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::checklist.ChecklistReveal
-  checklistUI: {fileID: 790271131}
-  offscreenPos: {x: -400, y: -300}
-  targetPos: {x: 50, y: 50}
-  duration: 1.2
+  m_EditorClassIdentifier: Assembly-CSharp::checklist.InteractableChecklistObject
+  checklistUI: {fileID: 1166832821}
 --- !u!114 &1166832821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,11 +968,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1166832815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8173977c6d079524cb4819294c7cb25f, type: 3}
+  m_Script: {fileID: 11500000, guid: dbc23fc8bba508441acd1d7d92c9aec0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::checklist.PickableChecklistObject
-  objectToShowInUI: {fileID: 790271130}
-  worldModel: {fileID: 1166832815}
+  m_EditorClassIdentifier: Assembly-CSharp::checklist.ChecklistUI
+  checklistCanvas: {fileID: 790271134}
+  panel: {fileID: 1068653917}
+  panelOffset: {x: 0, y: 0, z: 0}
+  handPosition: {fileID: 65404016}
 --- !u!1 &1678604623 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4758752748503572694, guid: f4716de87d7397641987838486f327eb, type: 3}
@@ -835,11 +994,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.InteractionPrompt
   data: {fileID: 11400000, guid: 50ee4f3189e44af468ccb03d7e47676c, type: 2}
   textMesh: {fileID: 1770287584}
---- !u!4 &1708742848 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6771780751057467638, guid: f4716de87d7397641987838486f327eb, type: 3}
-  m_PrefabInstance: {fileID: 1833675559}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1770287584 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1483114722214656556, guid: f4716de87d7397641987838486f327eb, type: 3}
@@ -955,6 +1109,10 @@ PrefabInstance:
       propertyPath: m_fontColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4758752748503572694, guid: f4716de87d7397641987838486f327eb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5482900032588360645, guid: f4716de87d7397641987838486f327eb, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -1025,117 +1183,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6771780751057467638, guid: f4716de87d7397641987838486f327eb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 790271131}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4758752748503572694, guid: f4716de87d7397641987838486f327eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1678604625}
   m_SourcePrefab: {fileID: 100100000, guid: f4716de87d7397641987838486f327eb, type: 3}
---- !u!1 &1987134902
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!4 &1881009236 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7925312433936835102, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 355537134}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1987134903}
-  - component: {fileID: 1987134906}
-  - component: {fileID: 1987134905}
-  - component: {fileID: 1987134904}
-  m_Layer: 5
-  m_Name: ChecklistPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1987134903
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!20 &1887758225 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5352190178679778564, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 355537134}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987134902}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 790271131}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -822, y: -142.67065}
-  m_SizeDelta: {x: 417.3245, y: -285.3413}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1987134904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987134902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
---- !u!114 &1987134905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987134902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1987134906
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987134902}
-  m_CullTransparentMesh: 1
 --- !u!1 &2113640152
 GameObject:
   m_ObjectHideFlags: 0

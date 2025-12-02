@@ -6,43 +6,49 @@ namespace checklist
     {
         public Canvas checklistCanvas;
         public GameObject panel;
-        public Vector3 uiOffset = new Vector3(100, 100, 0);
+        public Vector3 panelOffset = Vector3.zero;
+
+        [Header("Optional: assign a hand position object")]
+        public Transform handPosition;
 
         private bool _canShowChecklist = false;
         private Transform _objectTransform;
+        private GameObject _objectToShow;
+        private GameObject _uiInstance;
 
-        public void SetChecklistAvailable(bool available, Transform objectTransform)
+        public void SetChecklistAvailable(bool available, Transform objectTransform, GameObject objectToShow)
         {
             _canShowChecklist = available;
             _objectTransform = objectTransform;
+            _objectToShow = objectToShow;
         }
 
         public void OnCheckListInput()
         {
-            if (!_canShowChecklist) return;
-
-            checklistCanvas.gameObject.SetActive(!checklistCanvas.gameObject.activeSelf);
+            if (!_canShowChecklist || _objectTransform == null || _objectToShow == null) return;
 
             if (checklistCanvas.gameObject.activeSelf)
             {
-                ShowPanelOnObject();
+                checklistCanvas.gameObject.SetActive(false);
+                _objectToShow.SetActive(false);
+                if (_uiInstance != null) Destroy(_uiInstance);
             }
             else
             {
-                if (panel != null)
-                    panel.SetActive(false);
+                checklistCanvas.gameObject.SetActive(true);
+                _objectToShow.SetActive(true);
+
+                _uiInstance = Instantiate(panel, _objectTransform.position, Quaternion.identity);
+                _uiInstance.transform.SetParent(_objectTransform);
+                _uiInstance.transform.localPosition = panelOffset;
+
+                if (handPosition != null)
+                {
+                    _objectToShow.transform.SetParent(handPosition);
+                    _objectToShow.transform.localPosition = Vector3.zero;
+                    _objectToShow.transform.localRotation = Quaternion.identity;
+                }
             }
-        }
-
-        private void ShowPanelOnObject()
-        {
-            if (_objectTransform == null || panel == null) return;
-
-            panel.SetActive(true);
-
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(_objectTransform.position);
-            screenPos += uiOffset;
-            panel.transform.position = screenPos;
         }
     }
 }

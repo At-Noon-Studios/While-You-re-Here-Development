@@ -1,4 +1,5 @@
 using Interactable;
+using UnityEngine;
 
 namespace checklist
 {
@@ -22,7 +23,7 @@ namespace checklist
 
             if (checklistUI != null)
             {
-                checklistUI.SetChecklistAvailable(true, transform);
+                checklistUI.SetChecklistAvailable(true, transform, gameObject);
             }
         }
     }
