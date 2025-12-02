@@ -17,7 +17,7 @@ namespace checklist
             foreach (var task in taskLoader.tasks)
             {
                 var toggle = Instantiate(togglePrefab, toggleContainer).GetComponent<Toggle>();
-                toggle.GetComponentInChildren<Text>().text = task.taskName;
+                toggle.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = task.taskName;
                 toggle.isOn = task.isCompleted;
 
                 string taskID = task.taskID;
