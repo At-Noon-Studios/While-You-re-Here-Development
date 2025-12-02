@@ -44,6 +44,7 @@ namespace door
 
             _isOpen = !_isOpen;
             
+            // only to test EndDay
             if (_isOpen)
                 ChoreEvents.TriggerDoorOpened(doorID);
 

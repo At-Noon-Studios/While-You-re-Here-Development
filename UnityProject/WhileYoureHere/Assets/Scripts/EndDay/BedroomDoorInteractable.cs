@@ -18,11 +18,15 @@ namespace EndDay
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         
-        private Chore _chores;
+        private ChoreManager _chores;
 
         protected new void Awake()
         {
             base.Awake();
+            
+            _chores = FindFirstObjectByType<ChoreManager>();
+
+            config.isLocked = true;
 
             if (!doorPivot)
                 doorPivot = transform;
@@ -65,6 +69,9 @@ namespace EndDay
                 target,
                 Time.deltaTime * speed
             );
+            
+            if (_chores != null && _chores.AreAllChoresCompleted())
+                config.isLocked = false;
         }
 
         public override string InteractionText(IInteractor interactor)

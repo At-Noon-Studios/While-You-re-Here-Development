@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ScriptableObjects.chores;
 using UnityEngine;
 
@@ -64,6 +65,12 @@ namespace chore
         public bool CheckChoreCompletion(int id)
         {
             return _chores[id].ChoreStatus == ChoreStatus.Completed;
+        }
+        
+        // For day transition
+        public bool AreAllChoresCompleted()
+        {
+            return _chores != null && _chores.Values.All(c => c.ChoreStatus == ChoreStatus.Completed);
         }
     }
 }
