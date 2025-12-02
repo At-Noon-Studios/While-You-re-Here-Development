@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace chopping_logs
 {
+    [RequireComponent(typeof(LogChopTarget))]
     public class LogChopPrompt : MonoBehaviour
     {
         [Header("References")]
