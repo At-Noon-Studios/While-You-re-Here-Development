@@ -25,7 +25,7 @@ namespace time
 
         private void Awake()
         {
-            _sunLight = GameObject.Find("Sun").GetComponent<Light>();
+            _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
         }
 
         public void ChangeTime(int day, int hour)
@@ -33,10 +33,10 @@ namespace time
             if (day == _lastDay && hour == _lastHour) return;
             days = day;
             hours = hour;
-            OnValidate();
+            Validate();
         }
         
-        private void OnValidate()
+        private void Validate()
         {
             if (days == _lastDay && hours == _lastHour) return;
             _lastDay = days;
