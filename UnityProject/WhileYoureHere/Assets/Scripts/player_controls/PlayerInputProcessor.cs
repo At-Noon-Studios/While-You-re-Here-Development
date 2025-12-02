@@ -31,9 +31,7 @@ namespace player_controls
 
         private void OnClick(InputValue inputValue)
         {
-            Debug.Log("mouse click is being called");
-            clickTune.Raise(inputValue.isPressed);
-            interact.Raise();
+            clickTune.Raise();
         }
 
         private void OnDrop()

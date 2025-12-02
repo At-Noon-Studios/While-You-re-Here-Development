@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace radio_interaction
 {
-    public class RadioDialInteraction : InteractableBehaviour
+    public class RadioDialInteraction : InteractableBehaviour, IClickInteractable
     {
 
         RadioController radioController ;

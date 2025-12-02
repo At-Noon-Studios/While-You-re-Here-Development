@@ -2,7 +2,7 @@ using Interactable;
 
 namespace radio_interaction
 {
-    public class RadioPowerInteraction : InteractableBehaviour
+    public class RadioPowerInteraction : InteractableBehaviour, IEInteractable
     {
 
         RadioController radioController ;

@@ -1,6 +1,6 @@
 ﻿namespace Interactable
 {
-    public interface IInteractable
+    public interface  IInteractable
     {
         /// <summary>
         /// Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.

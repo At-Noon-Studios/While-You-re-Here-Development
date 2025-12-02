@@ -57,17 +57,10 @@ namespace radio_interaction
             // Handle tuning mode input
             if (isTuning)
             {
-                if (leftMouseButtonPressed)
-                {
                     Vector2 current = Mouse.current.position.ReadValue();
                     float deltaX = current.x - lastMousePos.x;
-
                     tuneValue = Mathf.Clamp01(tuneValue + deltaX * sensitivity);
-
-                
                     lastMousePos = current;
-                }
-            
             }
 
             // Perform radio tuning while on
