@@ -2,7 +2,6 @@ using UnityEngine;
 using Interactable;
 using player_controls;
 using ScriptableObjects.dialogue;
-using System.Collections.Generic;
 
 namespace dialogue
 {
@@ -12,7 +11,7 @@ namespace dialogue
         [SerializeField] private DialogueInteractionConfig config;
         [SerializeField] private GameObject interactionText;
 
-        public override void Interact()
+        public override void Interact(IInteractor interactor)
         {
             if (dialogueLoader.gameObject.activeSelf || config.dialogueNodes == null || config.dialogueNodes.Count == 0)
                 return;
@@ -48,7 +47,7 @@ namespace dialogue
             interactionText.gameObject.SetActive(false);
         }
 
-        protected override string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             return "Talk";
         }

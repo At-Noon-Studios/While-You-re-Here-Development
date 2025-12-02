@@ -20,36 +20,36 @@ namespace dialogue
         [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
-        private AudioSource audioSource;
-        private UIManager ui;
-        private MovementController movement;
-        private CameraController cameraController;
-        private PlayerInput playerInput;
+        private AudioSource _audioSource;
+        private UIManager _ui;
+        private MovementController _movement;
+        private CameraController _cameraController;
+        private PlayerInput _playerInput;
 
-        private readonly Dictionary<string, DialogueNode> nodes = new();
-        private DialogueNode currentNode;
-        private DialogueSentence[] activeSentences;
-        private int sentenceIndex;
-        private string currentFullSentence;
-        private Coroutine sentenceRoutine;
-        private bool isTyping;
+        private readonly Dictionary<string, DialogueNode> _nodes = new();
+        private DialogueNode _currentNode;
+        private DialogueSentence[] _activeSentences;
+        private int _sentenceIndex;
+        private string _currentFullSentence;
+        private Coroutine _sentenceRoutine;
+        private bool _isTyping;
 
         private void Start()
         {
-            ui = UIManager.Instance;
+            _ui = UIManager.Instance;
 
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.playOnAwake = false;
 
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                movement = player.GetComponent<MovementController>();
-                cameraController = player.GetComponentInChildren<CameraController>();
-                playerInput = player.GetComponent<PlayerInput>();
+                _movement = player.GetComponent<MovementController>();
+                _cameraController = player.GetComponentInChildren<CameraController>();
+                _playerInput = player.GetComponent<PlayerInput>();
 
-                if (playerInput != null)
-                    playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+                if (_playerInput != null)
+                    _playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
             }
         }
 
@@ -57,10 +57,10 @@ namespace dialogue
         {
             if (!gameObject.activeSelf || choicesContainer.childCount > 0) return;
 
-            if (isTyping)
+            if (_isTyping)
             {
-                isTyping = false;
-                ui.ShowDialogue(currentNode.speakerName, currentFullSentence);
+                _isTyping = false;
+                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence);
             }
             else
             {
@@ -72,8 +72,8 @@ namespace dialogue
         {
             EventSystem.current?.SetSelectedGameObject(null);
 
-            nodes.Clear();
-            foreach (var n in dialogueNodes) nodes[n.nodeID] = n;
+            _nodes.Clear();
+            foreach (var n in dialogueNodes) _nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
             DisplayNode(startId);
@@ -81,7 +81,7 @@ namespace dialogue
 
         private void DisplayNode(string id)
         {
-            if (!nodes.TryGetValue(id, out currentNode))
+            if (!_nodes.TryGetValue(id, out _currentNode))
             {
                 EndDialogue();
                 return;
@@ -90,16 +90,16 @@ namespace dialogue
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
-            if (sentenceRoutine != null)
-                StopCoroutine(sentenceRoutine);
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
 
-            if (currentNode.sentences?.Count > 0)
+            if (_currentNode.sentences?.Count > 0)
             {
-                activeSentences = currentNode.sentences.ToArray();
-                sentenceIndex = 0;
+                _activeSentences = _currentNode.sentences.ToArray();
+                _sentenceIndex = 0;
                 PlayNextSentence();
             }
-            else if (currentNode.choices?.Count > 0)
+            else if (_currentNode.choices?.Count > 0)
             {
                 CreateChoices();
             }
@@ -111,46 +111,46 @@ namespace dialogue
 
         private void PlayNextSentence()
         {
-            if (sentenceIndex >= activeSentences.Length)
+            if (_sentenceIndex >= _activeSentences.Length)
             {
-                if (currentNode.choices?.Count > 0)
+                if (_currentNode.choices?.Count > 0)
                     CreateChoices();
                 else
                     HandleNextNodeOrEnd();
                 return;
             }
 
-            DialogueSentence sentence = activeSentences[sentenceIndex++];
-            sentenceRoutine = StartCoroutine(TypeSentence(sentence));
+            DialogueSentence sentence = _activeSentences[_sentenceIndex++];
+            _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
 
         private IEnumerator TypeSentence(DialogueSentence sentence)
         {
-            isTyping = true;
-            currentFullSentence = sentence.text;
+            _isTyping = true;
+            _currentFullSentence = sentence.text;
 
             if (sentence.audio != null)
             {
-                audioSource.Stop();
-                audioSource.clip = sentence.audio;
-                audioSource.Play();
+                _audioSource.Stop();
+                _audioSource.clip = sentence.audio;
+                _audioSource.Play();
             }
 
             string output = "";
             foreach (char c in sentence.text)
             {
-                if (!isTyping)
+                if (!_isTyping)
                 {
-                    ui.ShowDialogue(currentNode.speakerName, sentence.text);
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
                     yield break;
                 }
 
                 output += c;
-                ui.ShowDialogue(currentNode.speakerName, output);
+                _ui.ShowDialogue(_currentNode.speakerName, output);
                 yield return new WaitForSeconds(letterDelay);
             }
 
-            isTyping = false;
+            _isTyping = false;
             yield return new WaitForSeconds(sentenceDelay);
 
             PlayNextSentence();
@@ -158,7 +158,7 @@ namespace dialogue
 
         private void CreateChoices()
         {
-            foreach (var choice in currentNode.choices)
+            foreach (var choice in _currentNode.choices)
             {
                 var btn = Instantiate(choiceButtonPrefab, choicesContainer);
                 btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = choice.choiceText;
@@ -170,24 +170,24 @@ namespace dialogue
 
         private void HandleNextNodeOrEnd()
         {
-            if (!string.IsNullOrEmpty(currentNode.targetNodeID))
-                DisplayNode(currentNode.targetNodeID);
+            if (!string.IsNullOrEmpty(_currentNode.targetNodeID))
+                DisplayNode(_currentNode.targetNodeID);
             else
                 EndDialogue();
         }
 
         private void EndDialogue()
         {
-            if (sentenceRoutine != null)
-                StopCoroutine(sentenceRoutine);
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
 
-            ui.HideDialogue();
+            _ui.HideDialogue();
             gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            audioSource.Stop();
-            movement?.ResumeMovement();
-            cameraController?.ResumeCameraMovement();
+            _audioSource.Stop();
+            _movement?.ResumeMovement();
+            _cameraController?.ResumeCameraMovement();
         }
     }
 }
