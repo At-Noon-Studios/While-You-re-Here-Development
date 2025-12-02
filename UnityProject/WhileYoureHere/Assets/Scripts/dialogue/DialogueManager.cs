@@ -47,16 +47,15 @@ namespace dialogue
                 movement = player.GetComponent<MovementController>();
                 cameraController = player.GetComponentInChildren<CameraController>();
                 playerInput = player.GetComponent<PlayerInput>();
-            }
 
-            if (playerInput != null)
-                playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+                if (playerInput != null)
+                    playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+            }
         }
 
         private void OnSkipDialogue(InputAction.CallbackContext ctx)
         {
-            if (!gameObject.activeSelf || choicesContainer.childCount > 0)
-                return;
+            if (!gameObject.activeSelf || choicesContainer.childCount > 0) return;
 
             if (isTyping)
             {
@@ -72,11 +71,9 @@ namespace dialogue
         public void StartDialogue(List<DialogueNode> dialogueNodes, string startId)
         {
             EventSystem.current?.SetSelectedGameObject(null);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
 
             nodes.Clear();
-            foreach (var n in dialogueNodes) nodes.TryAdd(n.nodeID, n);
+            foreach (var n in dialogueNodes) nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
             DisplayNode(startId);
@@ -93,19 +90,16 @@ namespace dialogue
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
-            bool hasSentences = currentNode.sentences is { Count: > 0 };
-            bool hasChoices = currentNode.choices is { Count: > 0 };
-
             if (sentenceRoutine != null)
                 StopCoroutine(sentenceRoutine);
 
-            if (hasSentences)
+            if (currentNode.sentences?.Count > 0)
             {
                 activeSentences = currentNode.sentences.ToArray();
                 sentenceIndex = 0;
                 PlayNextSentence();
             }
-            else if (hasChoices)
+            else if (currentNode.choices?.Count > 0)
             {
                 CreateChoices();
             }
@@ -119,8 +113,7 @@ namespace dialogue
         {
             if (sentenceIndex >= activeSentences.Length)
             {
-                bool hasChoices = currentNode.choices is { Count: > 0 };
-                if (hasChoices)
+                if (currentNode.choices?.Count > 0)
                     CreateChoices();
                 else
                     HandleNextNodeOrEnd();
@@ -128,9 +121,6 @@ namespace dialogue
             }
 
             DialogueSentence sentence = activeSentences[sentenceIndex++];
-            if (sentenceRoutine != null)
-                StopCoroutine(sentenceRoutine);
-
             sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
 

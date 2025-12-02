@@ -11,7 +11,7 @@ namespace dialogue
         [SerializeField] private string startingNodeId = "start";
         [SerializeField] private DialogueManager dialogueManager;
 
-        public void StartDialogue()
+        public void StartDialogue(List<DialogueNode> configDialogueNodes)
         {
             if (dialogueNodes.Count == 0 || dialogueManager == null) return;
             StartCoroutine(StartDialogueNextFrame());
