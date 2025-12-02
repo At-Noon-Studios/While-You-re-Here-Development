@@ -1,12 +1,10 @@
 using EventChannels;
-using picking_up_objects;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 namespace player_controls
 {
-    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(CharacterController))]
     public class MovementController : MonoBehaviour
     {
@@ -26,10 +24,8 @@ namespace player_controls
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private float movementSpeed = 2.2f;
 
-        Animator _animator;
         CharacterController _controller;
-
-        private IHeldObject _heldObject;
+        
         private float _timer;
         private Camera _mainCamera;
         private CameraController _cameraController;
@@ -45,7 +41,6 @@ namespace player_controls
 
         void Awake()
         {
-            _animator = GetComponent<Animator>();
             _controller = GetComponent<CharacterController>();
             _mainCamera = GetComponentInChildren<Camera>();
             _cameraController = _mainCamera.gameObject.GetComponent<CameraController>();
@@ -91,11 +86,6 @@ namespace player_controls
             IsInput = _moveY != 0 || _moveX != 0;
             HeadBob();
 
-            _animator.SetBool(IsWalking, _moveY > 0);
-            _animator.SetBool(IsWalkingBackwards, _moveY < 0);
-            _animator.SetBool(IsStrafingLeft, _moveX < 0);
-            _animator.SetBool(IsStrafingRight, _moveX > 0);
-
             float speed = movementSpeed * _speedModifier;
             var movementFinal = transform.right * _moveX + transform.forward * _moveY + Physics.gravity;
             _controller.Move(speed * Time.deltaTime * movementFinal);
@@ -110,10 +100,6 @@ namespace player_controls
         public void PauseMovement()
         {
             canMove = false;
-            _animator.SetBool(IsWalking, false);
-            _animator.SetBool(IsWalkingBackwards, false);
-            _animator.SetBool(IsStrafingLeft, false);
-            _animator.SetBool(IsStrafingRight, false);
         }
 
         public void ResumeMovement()
