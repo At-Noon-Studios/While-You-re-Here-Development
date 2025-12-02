@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using component;
 using UnityEngine;
 
 namespace ScriptableObjects.chores
