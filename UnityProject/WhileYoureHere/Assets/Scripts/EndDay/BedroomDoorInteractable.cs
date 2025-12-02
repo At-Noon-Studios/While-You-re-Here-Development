@@ -69,7 +69,7 @@ namespace EndDay
                 target,
                 Time.deltaTime * speed
             );
-            
+
             if (_chores != null && _chores.AreAllChoresCompleted())
                 config.isLocked = false;
         }
