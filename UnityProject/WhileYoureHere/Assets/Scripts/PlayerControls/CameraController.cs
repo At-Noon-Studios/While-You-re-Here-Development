@@ -1,5 +1,6 @@
 using System;
-using EventChannels;
+using ScriptableObjects.Controls;
+using ScriptableObjects.Events;
 using UnityEngine;
 
 namespace player_controls

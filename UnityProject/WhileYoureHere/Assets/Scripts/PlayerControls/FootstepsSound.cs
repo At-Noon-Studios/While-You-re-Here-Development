@@ -1,4 +1,5 @@
 using player_controls;
+using ScriptableObjects.FootSteps;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 

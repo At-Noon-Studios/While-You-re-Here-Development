@@ -1,4 +1,3 @@
-using EventChannels;
 using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
