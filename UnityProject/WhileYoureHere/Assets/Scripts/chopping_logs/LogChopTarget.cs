@@ -1,10 +1,11 @@
+using gamestate;
 using UnityEngine;
 
 namespace chopping_logs
 {
     public class LogChopTarget : MonoBehaviour
     {
-        private const int TotalHits = 2;
+        private const int TotalHits = 3;
         private int _hits = 0;
         private Stump _stump;
 
@@ -83,6 +84,7 @@ namespace chopping_logs
             Debug.Log("Log fully chopped! Spawning quarters and ending minigame.");
             _hits = 0;
             _stump.EndMinigame();
+            GamestateManager.GetInstance().EndChopMinigame();
         }
 
 

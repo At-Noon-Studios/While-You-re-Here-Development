@@ -21,6 +21,9 @@ namespace gamestate
         private GameObject _player;
         private AudioSource _playerAudioSource;
         
+        public event Action OnChopMinigameStarted;
+        public event Action OnChopMinigameEnded;
+        
         public int currentDay;
 
         private void Awake()
@@ -165,6 +168,16 @@ namespace gamestate
                     InvokeCustomEvent(gameplayEvent.eventToInvoke);
                     break;
             }
+        }
+        
+        public void StartChopMinigame()
+        {
+            OnChopMinigameStarted?.Invoke();
+        }
+
+        public void EndChopMinigame()
+        {
+            OnChopMinigameEnded?.Invoke();
         }
     }
 }

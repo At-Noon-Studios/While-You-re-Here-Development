@@ -19,6 +19,7 @@ namespace player_controls
         private float _yRotation;
     
         public bool canLook = true;
+        public bool lockVertical = false;
 
         private void Start()
         {
@@ -46,6 +47,12 @@ namespace player_controls
             var rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
             transform.rotation = rotation;
             OnRotate?.Invoke(rotation);
+            
+            if (!lockVertical)
+            {
+                _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
+                _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
+            }
         }
 
         public void PauseCameraMovement()
@@ -57,5 +64,16 @@ namespace player_controls
         {
             canLook = true;
         }
+
+        public void LockVerticalLook()
+        {
+            lockVertical = true;
+        }
+
+        public void UnlockVerticalLook()
+        {
+            lockVertical = false;
+        }
+
     }
 }

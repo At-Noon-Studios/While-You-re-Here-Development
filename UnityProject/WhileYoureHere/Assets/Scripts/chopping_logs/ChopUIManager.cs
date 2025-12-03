@@ -1,71 +1,87 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using gamestate;
 
 namespace chopping_logs
 {
     public class ChopUIManager : MonoBehaviour
     {
-        [Header("References")] [SerializeField]
-        private Stump stumpReference;
-
+        [Header("UI References")]
         [SerializeField] private Image mouseUpImage;
         [SerializeField] private Image mouseDownImage;
         [SerializeField] private Image guideLineImage;
 
-        private void Start()
+        private bool _minigameActive = false;
+
+        private void Awake()
+        {
+            HideAllUI();
+        }
+
+        private void OnEnable()
+        {
+            var gsm = GamestateManager.GetInstance();
+            gsm.OnChopMinigameStarted += OnMinigameStarted;
+            gsm.OnChopMinigameEnded += OnMinigameEnded;
+        }
+
+        private void OnDisable()
+        {
+            var gsm = GamestateManager.GetInstance();
+            gsm.OnChopMinigameStarted -= OnMinigameStarted;
+            gsm.OnChopMinigameEnded -= OnMinigameEnded;
+        }
+
+        private void OnMinigameStarted()
+        {
+            _minigameActive = true;
+            ResetUI();
+            Debug.Log("Minigame started → UI activated.");
+        }
+
+        private void OnMinigameEnded()
+        {
+            _minigameActive = false;
+            HideAllUI();
+            Debug.Log("Minigame ended → UI hidden.");
+        }
+
+        private void ResetUI()
+        {
+            if (mouseUpImage != null) mouseUpImage.enabled = true;
+            if (mouseDownImage != null) mouseDownImage.enabled = false;
+            if (guideLineImage != null) guideLineImage.enabled = true;
+        }
+
+        private void HideAllUI()
         {
             if (mouseUpImage != null) mouseUpImage.enabled = false;
             if (mouseDownImage != null) mouseDownImage.enabled = false;
             if (guideLineImage != null) guideLineImage.enabled = false;
-
-            Debug.Log("ChopUIManager initialized. All UI hidden.");
         }
 
         public void OnLook(InputValue value)
         {
-            if (stumpReference == null || !stumpReference.MinigameActive)
-            {
-                Debug.Log("Mouse input ignored: minigame not active.");
-                return;
-            }
+            if (!_minigameActive) return;
 
-            // Show guideline when minigame is active
+            var delta = value.Get<Vector2>();
+            var yDelta = delta.y;
+
             if (guideLineImage != null && !guideLineImage.enabled)
                 guideLineImage.enabled = true;
 
-            // DEFAULT STATE (when minigame first starts)
-            // Ensure UP icon is always shown at the start
-            if (!mouseUpImage.enabled && !mouseDownImage.enabled)
-            {
-                mouseUpImage.enabled = true;
-                mouseDownImage.enabled = false;
-                Debug.Log("Default state: Showing UP icon.");
-            }
-
-            var delta = value.Get<Vector2>();
-            float yDelta = delta.y;
-
-            Debug.Log($"Mouse Y Delta: {yDelta}");
-
-            // Player moves UP → tell them to move DOWN next
             if (yDelta > 1f)
             {
-                mouseUpImage.enabled = false;
-                mouseDownImage.enabled = true;
-                Debug.Log("Mouse moved up → showing DOWN icon.");
+                if (mouseUpImage != null) mouseUpImage.enabled = false;
+                if (mouseDownImage != null) mouseDownImage.enabled = true;
+                Debug.Log("Mouse moved UP → showing MouseDown icon.");
             }
-            // Player moves DOWN → tell them to move UP next
             else if (yDelta < -1f)
             {
-                mouseUpImage.enabled = true;
-                mouseDownImage.enabled = false;
-                Debug.Log("Mouse moved down → showing UP icon.");
-            }
-            else
-            {
-                Debug.Log("Mouse Y movement minimal → no icon change.");
+                if (mouseUpImage != null) mouseUpImage.enabled = true;
+                if (mouseDownImage != null) mouseDownImage.enabled = false;
+                Debug.Log("Mouse moved DOWN → showing MouseUp icon.");
             }
         }
     }
