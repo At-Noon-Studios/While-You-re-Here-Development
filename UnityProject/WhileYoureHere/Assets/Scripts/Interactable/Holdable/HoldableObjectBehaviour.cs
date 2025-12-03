@@ -33,8 +33,19 @@ namespace Interactable.Holdable
             InitializeHeldVersion();
         }
         
+        public override bool InteractableBy(IInteractor interactor)
+        {
+            if (interactor is PlayerInteractionController p && p.TableMode)
+                return false;
+
+            return base.InteractableBy(interactor);
+        }
+        
         public override void Interact(IInteractor interactor)
         {
+            if (interactor is PlayerInteractionController p && p.TableMode)
+                return;
+
             PickUp(interactor);
         }
 

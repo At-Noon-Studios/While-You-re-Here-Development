@@ -21,6 +21,9 @@ namespace Interactable
         private UIManager _uiManager;
         private MovementController _movementController;
         
+        public bool TableMode { get; private set; } = false;
+        public Camera PlayerCamera => GetComponentInChildren<Camera>();
+        
         private const int InteractableRaycastAllocation = 16;
 
         #region Unity event functions
@@ -70,10 +73,18 @@ namespace Interactable
         
         private void Interact()
         {
+            if (TableMode)
+            {
+                if (_currentTarget != null)
+                    _currentTarget.Interact(this);
+                return;
+            }
+            
             if (NoTarget) HeldObject?.Drop();
             else if (TargetInteractable) InteractWithTarget();
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+            else _uiManager.PulseInteractPrompt();
         }
+
         
         private void RefreshCurrentTarget()
         {
@@ -146,6 +157,22 @@ namespace Interactable
             var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
             var modifier = Mathf.Max(1f - weight, 0.4f);
             _movementController.SetMovementModifier(modifier);
+        }
+        
+        public void EnableTableMode(bool enable)
+        {
+            TableMode = enable;
+
+            if (enable)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
         
         #endregion

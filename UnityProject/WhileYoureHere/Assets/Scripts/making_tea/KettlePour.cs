@@ -33,21 +33,25 @@ namespace making_tea
             _pourRot = Quaternion.Euler(
                 pivot.localEulerAngles.x,
                 pivot.localEulerAngles.y,
-                pivot.localEulerAngles.z + pourAngle
+                pivot.localEulerAngles.z - pourAngle
             );
         }
 
         private void Update()
         {
             var isHeld = false;
+            var isTableHeld = false;
 
             if (TryGetComponent<HoldableObjectBehaviour>(out var h))
                 isHeld = h.IsCurrentlyHeld;
+            
+            if (TryGetComponent<KettleTablePickup>(out var t))
+                isTableHeld = t.IsTableHeld;
 
             var leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
             
             var wantsPour =
-                isHeld &&
+                (isHeld || isTableHeld) &&
                 leftClick &&
                 kettle.fillAmount > 0f;
 
