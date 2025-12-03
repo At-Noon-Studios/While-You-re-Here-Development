@@ -1,4 +1,5 @@
 using Interactable;
+using ScriptableObjects.Chores;
 using UnityEngine;
 
 namespace chore.scavenging

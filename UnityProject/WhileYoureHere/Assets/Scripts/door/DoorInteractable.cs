@@ -21,6 +21,8 @@ namespace door
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
+        
+        public void LockDoor(bool locked) { config.isLocked = locked; }
 
         protected new void Awake()
         {
