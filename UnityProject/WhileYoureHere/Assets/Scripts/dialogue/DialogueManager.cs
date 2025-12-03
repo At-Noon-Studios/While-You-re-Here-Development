@@ -1,114 +1,193 @@
-using System.Collections; 
+using System.Collections;
 using System.Collections.Generic;
-using Dialogue;
-using player_controls;
-using ScriptableObjects.Dialogue;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using player_controls;
+using ScriptableObjects.Dialogue;
 using UI;
 
 namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI References")]
+        [Header("UI")]
         [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
-        
-        private MovementController _movementController;
+
+        [Header("Timing")]
+        [SerializeField] private float letterDelay = 0.05f;
+        [SerializeField] private float sentenceDelay = 1.5f;
+
+        private AudioSource _audioSource;
+        private UIManager _ui;
+        private MovementController _movement;
         private CameraController _cameraController;
-        
-        [Header("Interaction References")]
-        [SerializeField] private InteractPrompt interactPrompt;
+        private PlayerInput _playerInput;
 
-        private const float WaitingTime = 2f;
-        private UIManager _uiManager;
-
-        private readonly Dictionary<string, DialogueNode> _dialogueNodes = new Dictionary<string, DialogueNode>();
+        private readonly Dictionary<string, DialogueNode> _nodes = new();
         private DialogueNode _currentNode;
+        private DialogueSentence[] _activeSentences;
+        private int _sentenceIndex;
+        private string _currentFullSentence;
+        private Coroutine _sentenceRoutine;
+        private bool _isTyping;
 
         private void Start()
         {
-            _uiManager = UIManager.Instance;
+            _ui = UIManager.Instance;
 
-            GameObject player = GameObject.FindWithTag("Player");
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.playOnAwake = false;
 
-            _movementController = player.GetComponent<MovementController>();
-            _cameraController = player.GetComponentInChildren<CameraController>();
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                _movement = player.GetComponent<MovementController>();
+                _cameraController = player.GetComponentInChildren<CameraController>();
+                _playerInput = player.GetComponent<PlayerInput>();
+
+                if (_playerInput != null)
+                    _playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+            }
         }
 
+        private void OnSkipDialogue(InputAction.CallbackContext ctx)
+        {
+            if (!gameObject.activeSelf || choicesContainer.childCount > 0) return;
 
-        public void StartDialogue(List<DialogueNode> nodes, string startingNodeID)
+            if (_isTyping)
+            {
+                _isTyping = false;
+                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence);
+            }
+            else
+            {
+                PlayNextSentence();
+            }
+        }
+
+        public void StartDialogue(List<DialogueNode> dialogueNodes, string startId)
         {
             EventSystem.current?.SetSelectedGameObject(null);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
 
-            _dialogueNodes.Clear();
-            foreach (var n in nodes) _dialogueNodes[n.nodeID] = n;
+            _nodes.Clear();
+            foreach (var n in dialogueNodes) _nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
-            DisplayNode(startingNodeID);
+            DisplayNode(startId);
         }
 
-        private void DisplayNode(string nodeID)
+        private void DisplayNode(string id)
         {
-            if (!_dialogueNodes.TryGetValue(nodeID, out var node))
+            if (!_nodes.TryGetValue(id, out _currentNode))
             {
                 EndDialogue();
                 return;
             }
-
-            _currentNode = node;
-
-            _uiManager?.ShowDialogue(_currentNode.speakerName, _currentNode.dialogueText);
 
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
-            bool hasText = !string.IsNullOrWhiteSpace(_currentNode.dialogueText);
-            bool hasChoices = _currentNode.choices is { Count: > 0 };
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
 
-            if (!hasText && !hasChoices)
+            if (_currentNode.sentences?.Count > 0)
             {
-                EndDialogue();
+                _activeSentences = _currentNode.sentences.ToArray();
+                _sentenceIndex = 0;
+                PlayNextSentence();
+            }
+            else if (_currentNode.choices?.Count > 0)
+            {
+                CreateChoices();
+            }
+            else
+            {
+                HandleNextNodeOrEnd();
+            }
+        }
+
+        private void PlayNextSentence()
+        {
+            if (_sentenceIndex >= _activeSentences.Length)
+            {
+                if (_currentNode.choices?.Count > 0)
+                    CreateChoices();
+                else
+                    HandleNextNodeOrEnd();
                 return;
             }
 
-            if (hasText && !hasChoices)
+            DialogueSentence sentence = _activeSentences[_sentenceIndex++];
+            _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
+        }
+
+        private IEnumerator TypeSentence(DialogueSentence sentence)
+        {
+            _isTyping = true;
+            _currentFullSentence = sentence.text;
+
+            if (sentence.audio != null)
             {
-                StartCoroutine(AutoContinue());
-                return;
+                _audioSource.Stop();
+                _audioSource.clip = sentence.audio;
+                _audioSource.Play();
             }
 
+            string output = "";
+            foreach (char c in sentence.text)
+            {
+                if (!_isTyping)
+                {
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                    yield break;
+                }
+
+                output += c;
+                _ui.ShowDialogue(_currentNode.speakerName, output);
+                yield return new WaitForSeconds(letterDelay);
+            }
+
+            _isTyping = false;
+            yield return new WaitForSeconds(sentenceDelay);
+
+            PlayNextSentence();
+        }
+
+        private void CreateChoices()
+        {
             foreach (var choice in _currentNode.choices)
             {
-                var button = Instantiate(choiceButtonPrefab, choicesContainer);
-                button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = choice.choiceText;
-                button.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
+                var btn = Instantiate(choiceButtonPrefab, choicesContainer);
+                btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = choice.choiceText;
+                btn.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
             }
 
             EventSystem.current?.SetSelectedGameObject(null);
         }
 
-        private IEnumerator AutoContinue()
+        private void HandleNextNodeOrEnd()
         {
-            yield return new WaitForSeconds(WaitingTime);
-            EndDialogue();
+            if (!string.IsNullOrEmpty(_currentNode.targetNodeID))
+                DisplayNode(_currentNode.targetNodeID);
+            else
+                EndDialogue();
         }
-        
+
         private void EndDialogue()
         {
-            _uiManager?.HideDialogue();
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
 
+            _ui.HideDialogue();
             gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        
-            _movementController?.ResumeMovement();
+            _audioSource.Stop();
+            _movement?.ResumeMovement();
             _cameraController?.ResumeCameraMovement();
-            interactPrompt?.EndInteraction();
         }
     }
 }
