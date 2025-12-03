@@ -1,8 +1,9 @@
 ﻿using EventChannels;
 using Interactable;
 using Interactable.Concrete.Key;
-using JetBrains.Annotations;
 using player_controls;
+using ScriptableObjects.Events;
+using UI;
 using UnityEngine;
 
 namespace door
@@ -19,77 +20,126 @@ namespace door
         [SerializeField] private MovementController movementController;
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
-
-        [CanBeNull] private IInteractor _currentOperator;
-        [CanBeNull] private Key _currentKey;
+        [SerializeField] private EventChannel interact;
         
+        private UIManager _uiManager;
+        
+        [HideInInspector] public bool detectable = true;
         public bool IsLocked { get; private set; }
+        
+        private Operation _currentOperation;
+
+        private void Start()
+        {
+            _uiManager = UIManager.Instance;
+            if (_uiManager == null) Debug.LogError("UI Manager not found");
+        }
+
+        private void OnEnable()
+        {
+            interact.OnRaise += AttemptFinishOperatingLock;
+        }
+
+        private void OnDisable()
+        {
+            interact.OnRaise -= AttemptFinishOperatingLock;
+        }
+
+        private void AttemptFinishOperatingLock()
+        {
+            if (!CanStopOperating(out var lockedState)) return;
+            FinishOperatingLock(lockedState);
+        }
         
         public override void Interact(IInteractor interactor)
         {
-            if (CurrentlyBeingOperated && CanStopOperating(out var lockedState))
-            {
-                FinishOperatingLock(lockedState);
-                return;
-            }
             if (interactor.HeldObject is not Key key) return;
-            StartOperatingLock(interactor, key);
+            StartOperatingLock(new Operation(key, interactor));
         }
 
-        private void StartOperatingLock(IInteractor interactor, Key key)
+        private void StartOperatingLock(Operation operation)
         {
-            _currentOperator = interactor;
-            _currentKey = key;
-            key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
-            key.detectable = false;
+            _currentOperation = operation;
+            PlaceKey();
             look.OnRaise += RotateKey;
+            PausePlayer();
+        }
+
+        private void PlaceKey()
+        {
+            if (!CurrentlyBeingOperated) return;
+            _currentOperation.Key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
+            _currentOperation.Key.transform.SetParent(transform);
+            _currentOperation.Key.detectable = false;
+        }
+
+        private void PausePlayer()
+        {
             cameraController.PauseCameraMovement();
             movementController.PauseMovement();
         }
 
         private void FinishOperatingLock(bool isLocked)
         {
-            if (!CurrentlyBeingOperated) Debug.LogError("This is not supposed to happen");
             StopOperatingLock();
             IsLocked = isLocked;
         }
 
         private void StopOperatingLock()
         {
-            if (!CurrentlyBeingOperated) Debug.LogError("This is not supposed to happen");
-            _currentKey?.Interact(_currentOperator);
-            _currentKey?.ResetRotation();
-            _currentKey!.detectable = true;
-            _currentOperator = null;
-            _currentKey = null;
+            if (!CurrentlyBeingOperated) return;
+            ResetCurrentKey();
+            _currentOperation = null;
             look.OnRaise -= RotateKey;
+            ResumePlayer();
+        }
+        
+        public bool CurrentlyBeingOperated => _currentOperation != null;
+
+        private void ResetCurrentKey()
+        {
+            if (!CurrentlyBeingOperated) return;
+            _currentOperation.Key.Interact(_currentOperation.Interactor);
+            _currentOperation.Key.ResetRotation();
+            _currentOperation.Key.detectable = true;
+        }
+
+        private void ResumePlayer()
+        {
             cameraController.ResumeCameraMovement();
             movementController.ResumeMovement();
         }
 
         private void RotateKey(Vector2 mouseDelta)
         {
-            if (!CurrentlyBeingOperated) Debug.LogError("This is not supposed to happen");
-            _currentKey?.RotateKey(mouseDelta.x);
+            _currentOperation.Key.RotateKey(mouseDelta.x);
+            UpdateUI();
         }
 
-        public bool CurrentlyBeingOperated => _currentOperator != null && _currentKey != null;
+        private void UpdateUI()
+        {
+            if (CanStopOperating(out var lockedState))
+            {
+                _uiManager.ShowInteractPrompt((lockedState ? "Lock" : "Unlock") + " the door", true);
+                return;
+            }
+            _uiManager.HideInteractPrompt();
+        }
 
         public override bool IsDetectableBy(IInteractor interactor)
         {
-            return (interactor.HeldObject is Key && !CurrentlyBeingOperated) || (CurrentlyBeingOperated && CanStopOperating(out _));
+            return CanStartOperating(interactor) && detectable;
         }
 
-        public override string InteractionText(IInteractor interactor)
-        {
-            if (CurrentlyBeingOperated && CanStopOperating(out var lockedState)) return (lockedState ? "Lock" : "Unlock") + " the door";
-            return "Operate the lock";
-        }
+        private bool CanStartOperating(IInteractor interactor) => interactor.HeldObject is Key && _currentOperation == null;
+        
+        public override string InteractionText(IInteractor interactor) => "Operate the lock";
 
         private bool CanStopOperating(out bool lockedState)
         {
             lockedState = IsLocked;
-            switch (_currentKey?.Rotation)
+            if (!CurrentlyBeingOperated) return false;
+            switch (_currentOperation.Key.Rotation)
             {
                 case >= 180f:
                     lockedState = true;
@@ -99,6 +149,18 @@ namespace door
                     return true;
             }
             return false;
+        }
+
+        private class Operation
+        {
+            public readonly Key Key;
+            public readonly IInteractor Interactor;
+            
+            public Operation(Key key, IInteractor interactor)
+            {
+                Key = key;
+                Interactor = interactor;
+            }
         }
     }
 }

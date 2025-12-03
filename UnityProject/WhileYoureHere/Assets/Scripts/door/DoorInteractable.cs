@@ -40,6 +40,7 @@ namespace door
                 return;
             }
             
+            keyhole.detectable = _isOpen;
             _isOpen = !_isOpen;
 
             if (audioSource)
@@ -67,7 +68,7 @@ namespace door
         public override string InteractionText(IInteractor interactor)
         {
             if (keyhole.IsLocked)
-                return "Door is locked";
+                return "Door is locked"; 
 
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
