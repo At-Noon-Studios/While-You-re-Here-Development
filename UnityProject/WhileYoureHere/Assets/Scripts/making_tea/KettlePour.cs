@@ -1,4 +1,5 @@
 ﻿using chore;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,8 @@ namespace making_tea
         public KettleFill kettle;
         public KettleFill targetCup;
         public ParticleSystem pourStream;
+        public AudioSource pourSound;
+        public AudioSource spillSound;
         public Transform pivot;
 
         public float pourAngle = 120f;
@@ -36,11 +39,19 @@ namespace making_tea
 
         private void Update()
         {
-            var isHeld = !_rb.useGravity;
+            var isHeld = false;
+            var isTableHeld = false;
+
+            if (TryGetComponent<HoldableObjectBehaviour>(out var h))
+                isHeld = h.IsCurrentlyHeld;
+            
+            if (TryGetComponent<KettleTablePickup>(out var t))
+                isTableHeld = t.IsTableHeld;
+
             var leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
             
             var wantsPour =
-                isHeld &&
+                (isHeld || isTableHeld) &&
                 leftClick &&
                 kettle.fillAmount > 0f;
 
@@ -54,6 +65,9 @@ namespace making_tea
 
                 if (pourStream && !pourStream.isPlaying)
                     pourStream.Play();
+                
+                if (pourSound && !pourSound.isPlaying)
+                    pourSound.Play();
 
                 var delta = pourSpeed * Time.deltaTime;
                 var give = Mathf.Min(delta, kettle.fillAmount);
@@ -66,7 +80,16 @@ namespace making_tea
                 {
                     ChoreEvents.TriggerCupFilled();
                 }
-
+                if (targetCup && targetCup.fillAmount > targetCup.maxFill)
+                {
+                    if (!spillSound.isPlaying)
+                        spillSound.Play();
+                }
+                else
+                {
+                    if (spillSound.isPlaying)
+                        spillSound.Stop();
+                }
             }
             else
             {
@@ -78,6 +101,12 @@ namespace making_tea
 
                 if (pourStream && pourStream.isPlaying)
                     pourStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                
+                if (pourSound && pourSound.isPlaying)
+                    pourSound.Stop();
+                
+                if (spillSound && spillSound.isPlaying)
+                    spillSound.Stop();
             }
         }
     }

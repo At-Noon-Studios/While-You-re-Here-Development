@@ -5,7 +5,10 @@ namespace making_tea
     public class WaterTap : MonoBehaviour
     {
         public ParticleSystem waterStream;
-    
+
+        [Header("Audio")]
+        public AudioSource tapSound;
+
         [SerializeField]
         private bool _isRunning = false;
 
@@ -41,10 +44,16 @@ namespace making_tea
             if (_isRunning)
             {
                 waterStream.Play();
+
+                if (tapSound && !tapSound.isPlaying)
+                    tapSound.Play();
             }
             else
             {
                 waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+                if (tapSound && tapSound.isPlaying)
+                    tapSound.Stop();
             }
         }
     }

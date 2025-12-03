@@ -6,12 +6,12 @@ namespace making_tea
     {
         public WaterTap tap;
 
-        protected override string InteractionText()
+        public override string InteractionText(IInteractor interactor)
         {
             return tap.isRunning ? "Tap close" : "Tap open";
         }
 
-        public override void Interact()
+        public override void Interact(IInteractor interactor)
         {
             tap.ToggleTap();
         }
