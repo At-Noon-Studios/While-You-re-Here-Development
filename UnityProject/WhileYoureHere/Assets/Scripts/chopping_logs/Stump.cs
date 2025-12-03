@@ -80,7 +80,7 @@ namespace chopping_logs
             Debug.Log("Log placed on stump!");
         }
 
-        public void StartMinigame()
+        private void StartMinigame()
         {
             if (!_hasLog)
             {
@@ -101,6 +101,10 @@ namespace chopping_logs
             var movement = player?.GetComponent<MovementController>();
             if (movement)
                 movement.PauseMovement();
+            
+            var cameraController = Camera.main?.GetComponent<CameraController>();
+            if (cameraController)
+                cameraController.PauseCameraMovement();
         }
 
         public void EndMinigame()
@@ -139,7 +143,7 @@ namespace chopping_logs
                 return "Stump (Empty)";
             }
 
-            if (held is HoldableObjectBehaviour && gameObject.GetComponentInChildren<AxeHitDetector>())
+            if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
                 return "Start Chopping (E)";
 
             return "Stump (Occupied)";

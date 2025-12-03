@@ -16,7 +16,6 @@ namespace chopping_logs
 
         public void ConsumeHit()
         {
-            // You can leave this empty or reset speed if you want
             SwingSpeed = 0f;
         }
     }

@@ -34,15 +34,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Swing",
-                    "type": "Button",
-                    "id": "703e8fec-971a-42b0-bd2d-4f79c4bd6c24",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Drop",
                     "type": "Button",
                     "id": "13e7e2c1-57f7-48c4-bc83-8e644543863f",
@@ -61,13 +52,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Chop",
-                    "type": "Button",
-                    "id": "160f5648-e4fb-4c9e-bc17-6fb80ae6c45f",
-                    "expectedControlType": "",
+                    "name": "MouseDeltaRaw",
+                    "type": "PassThrough",
+                    "id": "13172998-3812-4ff4-bbf1-570fadea98ae",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -161,34 +152,23 @@
                 },
                 {
                     "name": "",
-                    "id": "a7f9b96f-17bf-412c-91b6-96ab271c0bd8",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Swing",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ed65826c-fedb-4d89-bb49-1b9391329319",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Chop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f7969ad4-fdfa-4039-977e-cd53a603541d",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dcbe744a-56f7-4f08-a9a9-eed7aa6aee28",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad;Keyboard&Mouse",
+                    "action": "MouseDeltaRaw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

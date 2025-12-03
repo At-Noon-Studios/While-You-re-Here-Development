@@ -19,7 +19,7 @@ namespace chopping_logs
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"Trigger entered by: {other.name}");
+            Debug.Log($"Trigger entered by: {other.name} | Tag: {other.tag}");
 
             if (_stump == null)
             {
@@ -41,7 +41,7 @@ namespace chopping_logs
 
             if (axe == null)
             {
-                Debug.Log("No AxeHitDetector found.");
+                Debug.Log("No AxeHitDetector found — ignoring non-axe collider.");
                 return;
             }
 
@@ -80,8 +80,7 @@ namespace chopping_logs
                     Debug.LogWarning($"Missing spawn point {i} for chopped log quarter.");
                 }
             }
-
-            Debug.Log("LOG CHOPPED INTO QUARTERS!");
+            Debug.Log("Log fully chopped! Spawning quarters and ending minigame.");
             _hits = 0;
             _stump.EndMinigame();
         }
