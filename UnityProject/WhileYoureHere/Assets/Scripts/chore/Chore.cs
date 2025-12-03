@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using component.gardening;
 using component.making_tea;
-using component;
-using component.making_tea;
-using component.test;
 using ScriptableObjects.chores;
 using UnityEngine;
 

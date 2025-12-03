@@ -24,9 +24,6 @@ namespace gardening
             
             if (wateringCanFill == null)
                 wateringCanFill = GetComponent<KettleFill>();
-                
-            if (waterParticleSystem == null)
-                waterParticleSystem = GetComponent<ParticleSystem>();
         }
 
         // Update is called once per frame

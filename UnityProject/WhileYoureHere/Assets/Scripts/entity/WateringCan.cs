@@ -1,4 +1,5 @@
 using chore;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,33 +15,32 @@ namespace entity
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip pickUpSound;
         [SerializeField] private AudioClip dropSound;
-
-        private Rigidbody _rb;
+        
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
         
         private bool _hasTriggered = false;
-        private bool _isFilled = false;
 
-        private readonly float _rotationAngle = 60f;
+        private readonly float _rotationAngle = 50f;
         private readonly float _rotationSpeed = 200f;
 
         private void Start()
         {
-            _rb = GetComponent<Rigidbody>();
-
             _uprightRot = rotationRoot.localRotation;
             _pourRot = Quaternion.Euler(0, 0, _rotationAngle);
         }
 
         void Update()
         {
-            var isHolding = !_rb.useGravity;
+            var isHeld = false;
             var mouseClick = Mouse.current.leftButton.isPressed;
 
-            var isMouseDown = isHolding && mouseClick;
+            if (TryGetComponent<HoldableObjectBehaviour>(out var h))
+                isHeld = h.IsCurrentlyHeld;
+            
+            var isMouseDown = isHeld && mouseClick;
 
-            if (isHolding && !_hasTriggered)
+            if (isHeld && !_hasTriggered)
             {
                 if (audioSource && pickUpSound)
                     audioSource.PlayOneShot(pickUpSound);
