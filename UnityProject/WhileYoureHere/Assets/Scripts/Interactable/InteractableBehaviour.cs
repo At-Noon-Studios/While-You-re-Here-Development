@@ -15,7 +15,7 @@ namespace Interactable
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
         #region Unity event functions
-        
+
         /// <remarks>
         /// Be sure to call <c>base.Awake();</c> when overriding this method. Not doing so will prevent outlines from being rendered.
         /// </remarks>
@@ -27,36 +27,36 @@ namespace Interactable
             if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
         }
-        
+
         #endregion
-        
+
         #region Interface implementation
-        
+
         public virtual bool InteractableBy(IInteractor interactor) => true;
 
         public abstract void Interact(IInteractor interactor);
-        
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             AddOutlineMaterialToRenderers();
         }
-        
+
         public virtual void OnHoverExit(IInteractor interactor)
         {
             RemoveOutlineMaterialFromRenderers();
         }
-        
+
         public virtual string InteractionText(IInteractor interactor) => gameObject.name;
-        
+
         public void EnableCollider(bool state)
         {
             _collider.enabled = state;
         }
-        
+
         #endregion
-        
+
         #region Private methods
-        
+
         private void AddOutlineMaterialToRenderers()
         {
             foreach (var rendererComponent in _renderers)
@@ -90,7 +90,7 @@ namespace Interactable
                 return;
             rendererComponent.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
         }
-        
+
         #endregion
     }
 }

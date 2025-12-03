@@ -13,6 +13,8 @@ namespace Interactable.Holdable
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
 
+        public bool IsHeld => _holder != null;
+
         public float Weight => data.Weight;
 
         protected override void Awake()
@@ -20,12 +22,12 @@ namespace Interactable.Holdable
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
         }
-        
+
         protected void Start()
         {
             _originalLayer = gameObject.layer;
         }
-        
+
         public override void Interact(IInteractor interactor)
         {
             PickUp(interactor);
@@ -39,7 +41,7 @@ namespace Interactable.Holdable
             AttachTo(interactor);
             EnableCollider(false);
         }
-        
+
         public void Drop()
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
@@ -60,7 +62,7 @@ namespace Interactable.Holdable
             transform.rotation = rotation ?? Quaternion.identity;
             EnableCollider(true);
         }
-        
+
         private void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
