@@ -1,9 +1,8 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ScriptableObjects.Interactable
 {
-    [CreateAssetMenu(fileName = "HoldableObject",  menuName = "ScriptableObjects/HoldableObject")]
+    [CreateAssetMenu(fileName = "HoldableObject",  menuName = "ScriptableObjects/Interaction/HoldableObject")]
     public class HoldableObjectData : ScriptableObject
     {
         [Range(0, 100)]
