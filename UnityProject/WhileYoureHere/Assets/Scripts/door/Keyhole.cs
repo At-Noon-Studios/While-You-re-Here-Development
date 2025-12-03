@@ -29,6 +29,8 @@ namespace door
         
         private Operation _currentOperation;
 
+        #region Unity event functions
+        
         private void Start()
         {
             _uiManager = UIManager.Instance;
@@ -44,19 +46,34 @@ namespace door
         {
             interact.OnRaise -= AttemptFinishOperatingLock;
         }
+        
+        #endregion
+        
+        #region Overrides 
 
+        public override void Interact(IInteractor interactor)
+        {
+            if (interactor.HeldObject is not Key key) return;
+            StartOperatingLock(new Operation(key, interactor));
+        }
+        
+        public override bool IsDetectableBy(IInteractor interactor)
+        {
+            return CanStartOperating(interactor) && detectable;
+        }
+        
+        public override string InteractionText(IInteractor interactor) => "Operate the lock";
+        
+        #endregion
+        
+        #region Private methods
+        
         private void AttemptFinishOperatingLock()
         {
             if (!CanStopOperating(out var lockedState)) return;
             FinishOperatingLock(lockedState);
         }
         
-        public override void Interact(IInteractor interactor)
-        {
-            if (interactor.HeldObject is not Key key) return;
-            StartOperatingLock(new Operation(key, interactor));
-        }
-
         private void StartOperatingLock(Operation operation)
         {
             _currentOperation = operation;
@@ -126,14 +143,7 @@ namespace door
             _uiManager.HideInteractPrompt();
         }
 
-        public override bool IsDetectableBy(IInteractor interactor)
-        {
-            return CanStartOperating(interactor) && detectable;
-        }
-
         private bool CanStartOperating(IInteractor interactor) => interactor.HeldObject is Key && _currentOperation == null;
-        
-        public override string InteractionText(IInteractor interactor) => "Operate the lock";
 
         private bool CanStopOperating(out bool lockedState)
         {
@@ -150,6 +160,8 @@ namespace door
             }
             return false;
         }
+        
+        #endregion
 
         private class Operation
         {
