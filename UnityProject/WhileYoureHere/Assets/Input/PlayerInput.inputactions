@@ -52,13 +52,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseDeltaRaw",
-                    "type": "PassThrough",
-                    "id": "13172998-3812-4ff4-bbf1-570fadea98ae",
-                    "expectedControlType": "Vector2",
+                    "name": "SkipDialogue",
+                    "type": "Button",
+                    "id": "14e4c641-a6c2-4103-8459-7697deecdc8a",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -130,6 +130,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ef00abdf-add6-48b1-b6f3-36d800198229",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "19a50344-fd15-450c-966d-793ac7185267",
                     "path": "<Keyboard>/g",
                     "interactions": "",
@@ -152,23 +163,12 @@
                 },
                 {
                     "name": "",
-                    "id": "f7969ad4-fdfa-4039-977e-cd53a603541d",
-                    "path": "<Keyboard>/e",
+                    "id": "808dd36d-bead-4c2d-a055-b4e32cd389e2",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dcbe744a-56f7-4f08-a9a9-eed7aa6aee28",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad;Keyboard&Mouse",
-                    "action": "MouseDeltaRaw",
+                    "action": "SkipDialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
