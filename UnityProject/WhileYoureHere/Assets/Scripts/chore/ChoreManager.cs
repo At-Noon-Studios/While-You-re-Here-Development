@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ScriptableObjects.chores;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace chore
 {
@@ -15,7 +16,12 @@ namespace chore
         {
             InitializeChores();
         }
-
+        
+        public void StartChoreWithSo(SoChore soChore)
+        {
+            StartChore(soChore.id);
+        }
+        
         private bool StartChore(int id)
         {
             if (!_chores.ContainsKey(id)) return false;
