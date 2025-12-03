@@ -30,7 +30,6 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            // Zoek speler camera
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -60,13 +59,13 @@ namespace Interactable.Holdable
         {
             PickUp(interactor);
 
-            // UI uitzetten wanneer opgepakt
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
 
         private void PickUp(IInteractor interactor)
         {
+            GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -117,15 +116,11 @@ namespace Interactable.Holdable
             gameObject.layer = _originalLayer;
         }
 
-        // ------------------------------
-        // UI BEHAVIOUR OVERRIDES
-        // ------------------------------
-
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
 
-            bool canInteract = _holder == null; // Alleen tonen als het niet vastgehouden wordt
+            bool canInteract = _holder == null;
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(canInteract);
@@ -141,7 +136,6 @@ namespace Interactable.Holdable
 
         public override string InteractionText(IInteractor interactor)
         {
-            // Geen tekst — alleen Canvas UI
             return string.Empty;
         }
     }
