@@ -1,4 +1,3 @@
-using gamestate;
 using Interactable;
 using Interactable.Holdable;
 using player_controls;
@@ -14,6 +13,8 @@ namespace chopping_logs
         
         [Header("UI References")]
         [SerializeField] private ChopUIManager uiManager;
+
+        public static bool CurrentMinigameActive { get; private set; }
 
         public bool HasLog => _hasLog;
         public bool MinigameActive { get; private set; }
@@ -38,7 +39,6 @@ namespace chopping_logs
             if (held is HoldableObjectBehaviour p && p.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 StartMinigame();
-
             }
         }
 
@@ -53,7 +53,12 @@ namespace chopping_logs
                 rb.constraints = RigidbodyConstraints.FreezeAll;
             }
 
-            pickableLog.enabled = false;
+            var holdable = pickableLog.GetComponent<HoldableObjectBehaviour>();
+            if (holdable != null)
+            {
+                holdable.enabled = false;
+                Debug.Log($"HoldableObjectBehaviour disabled for log: {pickableLog.name}");
+            }
 
             _logObject = pickableLog.gameObject;
             _hasLog = true;
@@ -67,40 +72,55 @@ namespace chopping_logs
             controller.SetHeldObject(null);
         }
 
+
         private void StartMinigame()
         {
             if (!_hasLog) return;
 
             MinigameActive = true;
+            CurrentMinigameActive = true;
 
+            var camera = GameObject.FindWithTag("MainCamera");
             var player = GameObject.FindWithTag("Player");
             if (player != null && minigameStartPoint != null)
             {
+                player.transform.SetParent(minigameStartPoint);
+                
                 player.transform.position = minigameStartPoint.position;
                 player.transform.rotation = minigameStartPoint.rotation;
+                camera.transform.rotation = minigameStartPoint.rotation;
+                
             }
 
             player?.GetComponent<MovementController>()?.PauseMovement();
-            Camera.main?.GetComponent<CameraController>()?.LockVerticalLook();
 
-            // Show centralized Chop UI
+            Camera.main?.GetComponent<CameraController>()?.PauseCameraMovement();
+
             ChopUIManager.Instance?.ShowUI();
+            
+            var axeDetector = player.GetComponentInChildren<AxeHitDetector>();
+            if (axeDetector != null)
+            {
+                axeDetector.SetBaseRotation();
+                Debug.Log("Base rotation set at minigame start.");
+            }
         }
 
         public void EndMinigame()
         {
             MinigameActive = false;
+            CurrentMinigameActive = false;
 
             var player = GameObject.FindWithTag("Player");
-            player?.GetComponent<MovementController>()?.ResumeMovement();
-            Camera.main?.GetComponent<CameraController>()?.UnlockVerticalLook();
+            player.transform.SetParent(null);
 
-            // Hide centralized Chop UI
+            player?.GetComponent<MovementController>()?.ResumeMovement();
+            Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
+
             ChopUIManager.Instance?.HideAllUI();
 
             ClearLog();
         }
-
 
         private void ClearLog()
         {

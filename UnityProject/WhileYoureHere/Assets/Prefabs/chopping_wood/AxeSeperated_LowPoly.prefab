@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2798020939112451261}
   - component: {fileID: 7404436193462552548}
+  - component: {fileID: 4363673623908903290}
   - component: {fileID: 9170025317121311264}
   - component: {fileID: 20427140911299370}
   m_Layer: 0
@@ -32,9 +33,9 @@ Transform:
   m_LocalScale: {x: 0.15525685, y: 0.1552569, z: 0.1552569}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3920892091115130526}
   - {fileID: 1551969272117585554}
   - {fileID: 1082155049890177852}
-  - {fileID: 3920892091115130526}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 75.489, y: 0, z: 0}
 --- !u!54 &7404436193462552548
@@ -64,6 +65,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4363673623908903290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287418359856453127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e9c3c0eb51da164ba0f675294f9dc9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.AxeHitDetector
+  axeModel: {fileID: 2798020939112451261}
+  swingSensitivity: 1
+  minZRotation: -45
+  maxZRotation: 45
 --- !u!114 &9170025317121311264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::picking_up_objects.Pickable
-  data: {fileID: 11400000, guid: ba71d640addd0874e947b91827bb252c, type: 2}
+  data: {fileID: 11400000, guid: 2395463c113c27844b9ad7dbcc3645b3, type: 2}
 --- !u!65 &20427140911299370
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -107,11 +124,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3920892091115130526}
-  - component: {fileID: 5880964410434994818}
   - component: {fileID: 347945847798461021}
   - component: {fileID: 698435521397043585}
   - component: {fileID: 6531437257437960455}
-  - component: {fileID: 396081283885238029}
   m_Layer: 0
   m_Name: HitDetector
   m_TagString: Axe
@@ -134,18 +149,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2798020939112451261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5880964410434994818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3766162088716841073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e9c3c0eb51da164ba0f675294f9dc9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.AxeHitDetector
 --- !u!65 &347945847798461021
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -197,21 +200,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3766162088716841073}
   m_Mesh: {fileID: 2136736419083580713, guid: 90ea49f2f9bf3404381e79ee80d8a444, type: 3}
---- !u!114 &396081283885238029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3766162088716841073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1489d2aceedfb5a43a6b1349d66130a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.AxeMinigameController
-  stump: {fileID: 0}
-  moveSpeed: 0.01
-  rotateSpeed: 1
 --- !u!1 &4018947410937743323
 GameObject:
   m_ObjectHideFlags: 0

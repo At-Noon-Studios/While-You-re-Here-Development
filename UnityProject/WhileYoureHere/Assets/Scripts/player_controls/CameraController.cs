@@ -7,73 +7,64 @@ namespace player_controls
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private CameraData data;
-    
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
 
         public event Action<Quaternion> OnRotate;
 
-        private const float CircleDegrees = 360;
-
         private float _xRotation;
         private float _yRotation;
-    
+
+        private bool _lookSubscribed;
         public bool canLook = true;
-        public bool lockVertical = false;
 
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            SubscribeLook();
         }
 
-        private void OnEnable()
+        private void OnEnable()     => SubscribeLook();
+        private void OnDisable()    => UnsubscribeLook();
+
+        private void SubscribeLook()
         {
+            if (_lookSubscribed) return;
             look.OnRaise += OnLookInput;
+            _lookSubscribed = true;
         }
 
-        private void OnDisable()
+        private void UnsubscribeLook()
         {
+            if (!_lookSubscribed) return;
             look.OnRaise -= OnLookInput;
+            _lookSubscribed = false;
         }
-    
+
         private void OnLookInput(Vector2 mouseDelta)
         {
-            if (!canLook) return; 
-        
-            _yRotation += (mouseDelta.x * data.Sensitivity) % CircleDegrees;
-            _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
+            if (!canLook) return;
+
+            _yRotation += mouseDelta.x * data.Sensitivity;
+            _xRotation += -mouseDelta.y * data.Sensitivity;
             _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
-        
-            var rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-            transform.rotation = rotation;
-            OnRotate?.Invoke(rotation);
-            
-            if (!lockVertical)
-            {
-                _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
-                _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
-            }
+
+            var rot = Quaternion.Euler(_xRotation, _yRotation, 0);
+            transform.rotation = rot;
+
+            OnRotate?.Invoke(rot);
         }
 
         public void PauseCameraMovement()
         {
             canLook = false;
+            UnsubscribeLook();
         }
-
+        
         public void ResumeCameraMovement()
         {
             canLook = true;
+            SubscribeLook();
         }
-
-        public void LockVerticalLook()
-        {
-            lockVertical = true;
-        }
-
-        public void UnlockVerticalLook()
-        {
-            lockVertical = false;
-        }
-
     }
 }

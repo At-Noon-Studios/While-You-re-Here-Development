@@ -13,8 +13,6 @@ namespace chopping_logs
         [SerializeField] private Image mouseDownImage;
         [SerializeField] private Image guideLineImage;
 
-        [SerializeField] private Stump stump;
-
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -49,14 +47,14 @@ namespace chopping_logs
 
         public void OnLook(InputValue value)
         {
-            if (!stump.MinigameActive)
+            if (!Stump.CurrentMinigameActive)
             {
                 Debug.Log("ChopUIManager: Mouse input ignored, minigame not active.");
                 return;
             }
 
-            Vector2 delta = value.Get<Vector2>();
-            float yDelta = delta.y;
+            var delta = value.Get<Vector2>();
+            var yDelta = delta.y;
             Debug.Log($"ChopUIManager: OnLook called, Y delta = {yDelta}");
 
             if (guideLineImage != null && !guideLineImage.enabled)
@@ -65,13 +63,13 @@ namespace chopping_logs
                 Debug.Log("ChopUIManager: Guideline image enabled.");
             }
 
-            if (yDelta > 1.5f)
+            if (yDelta > 5.0f)
             {
                 if (mouseUpImage != null) mouseUpImage.enabled = false;
                 if (mouseDownImage != null) mouseDownImage.enabled = true;
                 Debug.Log("ChopUIManager: Mouse moved UP → showing MouseDown icon.");
             }
-            else if (yDelta < -1.5f)
+            else if (yDelta < -5.0f)
             {
                 if (mouseUpImage != null) mouseUpImage.enabled = true;
                 if (mouseDownImage != null) mouseDownImage.enabled = false;
