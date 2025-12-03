@@ -22,7 +22,8 @@ namespace gamestate
         private AudioSource _playerAudioSource;
         
         public int currentDay;
-        public static Dictionary<string, bool> States = new Dictionary<string, bool>();
+        [SerializeField]
+        public Dictionary<string, bool> States = new Dictionary<string, bool>();
 
         private void Awake()
         {
