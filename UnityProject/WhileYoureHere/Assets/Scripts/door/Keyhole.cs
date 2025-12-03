@@ -14,10 +14,10 @@ namespace door
         [SerializeField] private Transform keyHolePosition;
         [SerializeField] private Vector3 keyRotation;
         
-        [Header("Camera controller")]
-        [SerializeField] private CameraController cameraController;
-        [Header("Movement controller")]
-        [SerializeField] private MovementController movementController;
+        
+        private CameraController _cameraController;
+        private MovementController _movementController;
+        
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
         [SerializeField] private EventChannel interact;
@@ -35,6 +35,13 @@ namespace door
         {
             _uiManager = UIManager.Instance;
             if (_uiManager == null) Debug.LogError("UI Manager not found");
+            
+            var player = GameObject.FindWithTag("Player");
+            
+            _cameraController = player.GetComponentInChildren<CameraController>();
+            if (_cameraController == null) Debug.LogError("Camera controller not found");
+            _movementController = player.GetComponentInChildren<MovementController>();
+            if (_movementController == null) Debug.LogError("Movement controller not found");
         }
 
         private void OnEnable()
@@ -92,8 +99,8 @@ namespace door
 
         private void PausePlayer()
         {
-            cameraController.PauseCameraMovement();
-            movementController.PauseMovement();
+            _cameraController.PauseCameraMovement();
+            _movementController.PauseMovement();
         }
 
         private void FinishOperatingLock(bool isLocked)
@@ -123,8 +130,8 @@ namespace door
 
         private void ResumePlayer()
         {
-            cameraController.ResumeCameraMovement();
-            movementController.ResumeMovement();
+            _cameraController.ResumeCameraMovement();
+            _movementController.ResumeMovement();
         }
 
         private void RotateKey(Vector2 mouseDelta)
