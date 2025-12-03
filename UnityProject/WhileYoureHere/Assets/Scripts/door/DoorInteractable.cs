@@ -17,17 +17,18 @@ namespace door
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
 
+        private bool _isLocked;
         private bool _isOpen = false;
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
         
-        public void LockDoor(bool locked) { config.isLocked = locked; }
+        public void LockDoor(bool locked) { _isLocked = locked; }
 
         protected new void Awake()
         {
             base.Awake();
-
+            _isLocked = config.isLocked;
             if (!doorPivot) doorPivot = transform;
 
             _closeRotation = doorPivot.localRotation;
@@ -66,7 +67,7 @@ namespace door
 
         public override void Interact(IInteractor interactor)
         {
-            if (config.isLocked)
+            if (_isLocked)
             {
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
@@ -84,7 +85,7 @@ namespace door
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
-            if (_playerCamera == null || interactionCanvases == null || config.isLocked) return;
+            if (_playerCamera == null || interactionCanvases == null || _isLocked) return;
 
             bool isFront = Vector3.Dot(doorPivot.forward, (_playerCamera.position - doorPivot.position).normalized) > 0f;
 
