@@ -81,10 +81,9 @@ namespace chopping_logs
                     Debug.LogWarning($"Missing spawn point {i} for chopped log quarter.");
                 }
             }
-            Debug.Log("Log fully chopped! Spawning quarters and ending minigame.");
+            Debug.Log("Log fully chopped! Spawning half's and ending minigame.");
             _hits = 0;
             _stump.EndMinigame();
-            GamestateManager.GetInstance().EndChopMinigame();
         }
 
 

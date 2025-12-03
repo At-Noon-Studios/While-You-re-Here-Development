@@ -38,7 +38,6 @@ namespace chopping_logs
             if (held is HoldableObjectBehaviour p && p.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 StartMinigame();
-                GamestateManager.GetInstance().StartChopMinigame();
 
             }
         }
@@ -70,7 +69,7 @@ namespace chopping_logs
 
         private void StartMinigame()
         {
-            if (!_hasLog){ return;}
+            if (!_hasLog) return;
 
             MinigameActive = true;
 
@@ -81,31 +80,27 @@ namespace chopping_logs
                 player.transform.rotation = minigameStartPoint.rotation;
             }
 
-            var movement = player?.GetComponent<MovementController>();
-            if (movement)
-                movement.PauseMovement();
-            
-            var cameraController = Camera.main?.GetComponent<CameraController>();
-            if (cameraController)
-                cameraController.LockVerticalLook();
+            player?.GetComponent<MovementController>()?.PauseMovement();
+            Camera.main?.GetComponent<CameraController>()?.LockVerticalLook();
+
+            // Show centralized Chop UI
+            ChopUIManager.Instance?.ShowUI();
         }
 
         public void EndMinigame()
         {
             MinigameActive = false;
 
-            var movement = GameObject.FindWithTag("Player")?.GetComponent<MovementController>();
-            if (movement)
-                movement.ResumeMovement();
-            
-            var cameraController = Camera.main?.GetComponent<CameraController>();
-            if (cameraController)
-            {
-                cameraController.ResumeCameraMovement();
-                cameraController.UnlockVerticalLook();
-            }
+            var player = GameObject.FindWithTag("Player");
+            player?.GetComponent<MovementController>()?.ResumeMovement();
+            Camera.main?.GetComponent<CameraController>()?.UnlockVerticalLook();
+
+            // Hide centralized Chop UI
+            ChopUIManager.Instance?.HideAllUI();
+
             ClearLog();
         }
+
 
         private void ClearLog()
         {

@@ -1,61 +1,47 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using gamestate;
 
 namespace chopping_logs
 {
     public class ChopUIManager : MonoBehaviour
     {
+        public static ChopUIManager Instance { get; private set; }
+
         [Header("UI References")]
         [SerializeField] private Image mouseUpImage;
         [SerializeField] private Image mouseDownImage;
         [SerializeField] private Image guideLineImage;
 
-        private bool _minigameActive = false;
+        [SerializeField] private Stump stump;
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                Debug.LogWarning("Duplicate ChopUIManager destroyed.");
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            Debug.Log("ChopUIManager Awake: initialized and hiding all UI.");
             HideAllUI();
         }
 
-        private void OnEnable()
+        public void ShowUI()
         {
-            var gsm = GamestateManager.GetInstance();
-            gsm.OnChopMinigameStarted += OnMinigameStarted;
-            gsm.OnChopMinigameEnded += OnMinigameEnded;
-        }
-
-        private void OnDisable()
-        {
-            var gsm = GamestateManager.GetInstance();
-            gsm.OnChopMinigameStarted -= OnMinigameStarted;
-            gsm.OnChopMinigameEnded -= OnMinigameEnded;
-        }
-
-        private void OnMinigameStarted()
-        {
-            _minigameActive = true;
-            ResetUI();
-            Debug.Log("Minigame started → UI activated.");
-        }
-
-        private void OnMinigameEnded()
-        {
-            _minigameActive = false;
-            HideAllUI();
-            Debug.Log("Minigame ended → UI hidden.");
-        }
-
-        private void ResetUI()
-        {
+            Debug.Log("ChopUIManager: Showing UI.");
             if (mouseUpImage != null) mouseUpImage.enabled = true;
             if (mouseDownImage != null) mouseDownImage.enabled = false;
             if (guideLineImage != null) guideLineImage.enabled = true;
         }
 
-        private void HideAllUI()
+        public void HideAllUI()
         {
+            Debug.Log("ChopUIManager: Hiding all UI.");
             if (mouseUpImage != null) mouseUpImage.enabled = false;
             if (mouseDownImage != null) mouseDownImage.enabled = false;
             if (guideLineImage != null) guideLineImage.enabled = false;
@@ -63,25 +49,37 @@ namespace chopping_logs
 
         public void OnLook(InputValue value)
         {
-            if (!_minigameActive) return;
+            if (!stump.MinigameActive)
+            {
+                Debug.Log("ChopUIManager: Mouse input ignored, minigame not active.");
+                return;
+            }
 
-            var delta = value.Get<Vector2>();
-            var yDelta = delta.y;
+            Vector2 delta = value.Get<Vector2>();
+            float yDelta = delta.y;
+            Debug.Log($"ChopUIManager: OnLook called, Y delta = {yDelta}");
 
             if (guideLineImage != null && !guideLineImage.enabled)
+            {
                 guideLineImage.enabled = true;
+                Debug.Log("ChopUIManager: Guideline image enabled.");
+            }
 
-            if (yDelta > 1f)
+            if (yDelta > 1.5f)
             {
                 if (mouseUpImage != null) mouseUpImage.enabled = false;
                 if (mouseDownImage != null) mouseDownImage.enabled = true;
-                Debug.Log("Mouse moved UP → showing MouseDown icon.");
+                Debug.Log("ChopUIManager: Mouse moved UP → showing MouseDown icon.");
             }
-            else if (yDelta < -1f)
+            else if (yDelta < -1.5f)
             {
                 if (mouseUpImage != null) mouseUpImage.enabled = true;
                 if (mouseDownImage != null) mouseDownImage.enabled = false;
-                Debug.Log("Mouse moved DOWN → showing MouseUp icon.");
+                Debug.Log("ChopUIManager: Mouse moved DOWN → showing MouseUp icon.");
+            }
+            else
+            {
+                Debug.Log("ChopUIManager: Mouse movement minimal → no icon change.");
             }
         }
     }
