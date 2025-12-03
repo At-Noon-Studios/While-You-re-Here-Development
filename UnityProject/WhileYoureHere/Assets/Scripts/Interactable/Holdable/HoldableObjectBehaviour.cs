@@ -8,10 +8,17 @@ namespace Interactable.Holdable
     [RequireComponent(typeof(Rigidbody))]
     public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
     {
+        [Header("Interaction UI")]
+        [SerializeField] private Canvas interactionCanvas;
+
+        [Header("Holdable Data")]
         [SerializeField] private HoldableObjectData data;
+
         private Rigidbody _rigidbody;
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
+
+        private Transform _playerCamera;
 
         public float Weight => data.Weight;
 
@@ -19,16 +26,43 @@ namespace Interactable.Holdable
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+
+            // Zoek speler camera
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                var cam = player.GetComponentInChildren<Camera>();
+                if (cam != null)
+                    _playerCamera = cam.transform;
+            }
         }
-        
+
         protected void Start()
         {
             _originalLayer = gameObject.layer;
         }
-        
+
+        private void Update()
+        {
+            if (interactionCanvas != null &&
+                interactionCanvas.gameObject.activeSelf &&
+                _playerCamera != null)
+            {
+                interactionCanvas.transform.LookAt(_playerCamera);
+                interactionCanvas.transform.Rotate(0f, 180f, 0f);
+            }
+        }
+
         public override void Interact(IInteractor interactor)
         {
             PickUp(interactor);
+
+            // UI uitzetten wanneer opgepakt
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
 
         private void PickUp(IInteractor interactor)
@@ -39,12 +73,15 @@ namespace Interactable.Holdable
             AttachTo(interactor);
             EnableCollider(false);
         }
-        
+
         public void Drop()
         {
-            if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
+            if (_holder == null)
+                throw new Exception("Tried to drop an item that wasn't being held");
+
             _holder.SetHeldObject(null);
             _holder = null;
+
             Detach();
             EnableCollider(true);
         }
@@ -53,14 +90,17 @@ namespace Interactable.Holdable
         {
             _holder?.SetHeldObject(null);
             _holder = null;
+
             _rigidbody.isKinematic = true;
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
+
             transform.position = position;
             transform.rotation = rotation ?? Quaternion.identity;
+
             EnableCollider(true);
         }
-        
+
         private void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
@@ -75,6 +115,34 @@ namespace Interactable.Holdable
             _rigidbody.AddForce((transform.parent?.forward ?? Vector3.zero) * data.DroppingForce);
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
+        }
+
+        // ------------------------------
+        // UI BEHAVIOUR OVERRIDES
+        // ------------------------------
+
+        public override void OnHoverEnter(IInteractor interactor)
+        {
+            base.OnHoverEnter(interactor);
+
+            bool canInteract = _holder == null; // Alleen tonen als het niet vastgehouden wordt
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(canInteract);
+        }
+
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            base.OnHoverExit(interactor);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+        }
+
+        public override string InteractionText(IInteractor interactor)
+        {
+            // Geen tekst — alleen Canvas UI
+            return string.Empty;
         }
     }
 }
