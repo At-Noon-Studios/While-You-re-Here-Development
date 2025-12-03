@@ -1,5 +1,5 @@
+using System.Collections;
 using player_controls;
-using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,142 +8,119 @@ namespace radio_interaction
     public class RadioController : MonoBehaviour
     {
         [SerializeField] private RadioTracks[] radioTracks;
-        [SerializeField] private AudioClip staticClip;
         [SerializeField] private Transform player;
-        [SerializeField] private EventChannel clickTune;
-
+        [SerializeField] private Transform slider;
+        [SerializeField] private RadioData radioData;
+        
         private AudioSource audioSource;
-        private int currentRadioIndex = -1;
-        private float tuneThreshold = 0.1f;
-        public bool radioOn;
-        private bool previousRadioState;
+        private int currentRadioIndex;
+        private bool _radioOn;
+        private bool _tuningLock;
         private float tuneValue;
-        private bool isTuning;
         private Vector2 lastMousePos;
-        public float sensitivity = 0.002f;
-        private bool leftMouseButtonPressed;
-        MovementController movementController;
-        CameraController cameraController;
-
-
-        public void OnEnable()
-        {
-            clickTune.OnClick += mouseDown;
-        }
-    
-        public void OnDisable()
-        {
-            clickTune.OnClick -= mouseDown;
-        }
-
-        public void mouseDown(bool isPressed)
-        {
-            leftMouseButtonPressed=isPressed;
-        }
-    
+        private bool isTuning;
+        private MovementController movementController;
+        private CameraController cameraController;
+        
         private void Start()
         {
             audioSource = GetComponent<AudioSource>();
             movementController = player.GetComponent<MovementController>();
             cameraController = player.GetComponentInChildren<CameraController>();
+            tuneValue = 1f/radioTracks.Length;
             isTuning = false;
         }
-
-
+        
 
         private void Update()
         {
-            // Handle tuning mode input
-            if (isTuning)
-            {
-                    Vector2 current = Mouse.current.position.ReadValue();
-                    float deltaX = current.x - lastMousePos.x;
-                    tuneValue = Mathf.Clamp01(tuneValue + deltaX * sensitivity);
-                    lastMousePos = current;
-            }
-
-            // Perform radio tuning while on
-            if (radioOn)
-            {
-                TuneRadio(tuneValue);
-            }
-
-            // Detect radio turning off
-            if (!radioOn && previousRadioState)
-            {
-                Debug.Log("Radio turned OFF — stopping audio.");
-                audioSource.Stop();
-                currentRadioIndex = -1;
-            }
-
-            previousRadioState = radioOn;
+            HandleMouseMovement();
+            if (_radioOn && !_tuningLock) TuneRadio(tuneValue);
         }
 
-        public bool tuning()=>isTuning;
-   
+        private void HandleMouseMovement()
+        {
+            if (!isTuning || _tuningLock) return;
+            var current = Mouse.current.position.ReadValue();
+            var deltaX = current.x - lastMousePos.x;
+            tuneValue = Mathf.Clamp01(tuneValue + deltaX * radioData.sensitivity);
+            lastMousePos = current;
+            slider.transform.Translate(slider.transform.forward * (deltaX * Time.deltaTime * radioData.sensitivity));
+        }
+
+        public bool Tuning()=>isTuning;
+        public bool RadioOnStatus() => _radioOn;
+
+        private IEnumerator TuningState()
+        {
+            if (_tuningLock) yield break;
+            var holdTimer = 0f;
+            while (holdTimer < radioData.tuningWaitTime)
+            {
+                if (audioSource.isPlaying && audioSource.clip == radioTracks[2].audioClip)
+                {
+                    holdTimer += Time.deltaTime;  
+                }
+                else
+                {
+                    holdTimer = 0f;                
+                }
+                yield return null;
+            }
+            _tuningLock = true;
+            isTuning = false;
+            yield return new WaitForSeconds(radioData.tuningWaitTime);
+            ExitTuningMode();
+            _tuningLock = false;
+        }
+        
         public void EnterTuningMode()
         {
-            if (!radioOn)
-            {
-                return;
-            }
-        
+            if (!_radioOn) return;
             if (isTuning) return;
             isTuning = true;
             //pause screen
             movementController?.PauseMovement();
             cameraController?.PauseCameraMovement();
-        
             lastMousePos = Mouse.current.position.ReadValue();
-
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-
+            
+  
         }
 
         public void ExitTuningMode()
         {
             isTuning = false;
-
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-        
-            //unpause screen
             movementController?.ResumeMovement();
             cameraController?.ResumeCameraMovement();
         }
    
         public void TurnRadioOn()
         {
-            radioOn = true;
+            var staticClip = radioTracks[0].audioClip;
+            _radioOn = true;
+            PlayClip(staticClip);
         }
 
         public void TurnRadioOff()
         {
-            radioOn = false;
+            _radioOn = false;
+            audioSource.Stop();
+            ExitTuningMode();
         }
+        
         private void TuneRadio(float value)
         {
             var stationSpacing = 1f / radioTracks.Length;
-
             var newIndex = Mathf.FloorToInt(value / stationSpacing);
-            var stationCenter = newIndex * stationSpacing;
-
-            var isTuned = Mathf.Abs(value - stationCenter) < tuneThreshold;
-
-            switch (isTuned)
-            {
-                case true when newIndex != currentRadioIndex:
-                    currentRadioIndex = newIndex;
-                    Debug.Log("Tuned to station: " + newIndex);
-                    PlayClip(radioTracks[newIndex].audioClip);
-                    break;
-                case false when audioSource.clip != staticClip:
-                    currentRadioIndex = -1;
-                    Debug.Log("Static");
-                    PlayClip(staticClip);
-                    break;
-            }
+            newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
+            if (currentRadioIndex == newIndex && audioSource.clip == radioTracks[newIndex].audioClip) return;
+            currentRadioIndex = newIndex;
+            PlayClip(radioTracks[newIndex].audioClip);
+            if (newIndex == 2) StartCoroutine(TuningState());
         }
 
         private void PlayClip(AudioClip clip)

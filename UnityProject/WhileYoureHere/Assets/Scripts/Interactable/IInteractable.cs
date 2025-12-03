@@ -12,7 +12,7 @@
         public string InteractionText(IInteractor interactor);
         
         /// <summary>
-        /// Determines whether <paramref name="interactor"/> is allowed to interact with this this <see cref="IInteractable"/> component.
+        /// Determines whether <paramref name="interactor"/> is allowed to interact with  this <see cref="IInteractable"/> component.
         /// <returns>A bool that is used to determine whether an interaction can occur.</returns>
         /// </summary>
         /// <param name="interactor">

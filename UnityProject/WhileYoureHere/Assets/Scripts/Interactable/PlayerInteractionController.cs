@@ -78,7 +78,6 @@ namespace Interactable
             else if (TargetInteractable)
             {
                 if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
-                print(_currentTarget.GetType());
                 InteractWithTarget();
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
@@ -90,9 +89,7 @@ namespace Interactable
             if (NoTarget) HeldObject?.Drop();
             else if (_currentTarget is IClickInteractable&& ClickInteract.OnRaise != null)
             {
-                print(_currentTarget.GetType()+ " hallo click");
                 InteractWithTarget();
-                print(_currentTarget.GetType());
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }

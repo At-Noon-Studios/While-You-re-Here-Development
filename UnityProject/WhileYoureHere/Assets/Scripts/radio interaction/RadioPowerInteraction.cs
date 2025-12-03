@@ -4,8 +4,7 @@ namespace radio_interaction
 {
     public class RadioPowerInteraction : InteractableBehaviour, IEInteractable
     {
-
-        RadioController radioController ;
+        private RadioController radioController ;
         public void Start()
         {
             radioController = GetComponentInParent<RadioController>();
@@ -13,7 +12,7 @@ namespace radio_interaction
     
         public override void Interact(IInteractor interactor)
         {
-            switch (radioController.radioOn)
+            switch (radioController.RadioOnStatus())
             {
                 case false:
                     radioController.TurnRadioOn();
@@ -22,6 +21,6 @@ namespace radio_interaction
                     radioController.TurnRadioOff();
                     break;
             }
-            print(radioController.radioOn);    }
+        }
     }
 }

@@ -1,7 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RadioTracks", menuName = "Scriptable Objects/RadioTracks")]
-public class RadioTracks : ScriptableObject
+namespace radio_interaction
 {
-    public AudioClip audioClip;
+    [CreateAssetMenu(fileName = "RadioTracks", menuName = "Scriptable Objects/RadioTracks")]
+    public class RadioTracks : ScriptableObject
+    {
+        public AudioClip audioClip;    
+    }
 }
