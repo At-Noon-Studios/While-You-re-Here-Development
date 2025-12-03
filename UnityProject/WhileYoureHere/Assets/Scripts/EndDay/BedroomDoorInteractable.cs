@@ -1,13 +1,12 @@
 using chore;
-using UnityEngine;
 using Interactable;
 using ScriptableObjects.door;
+using UnityEngine;
 
-namespace door
+namespace EndDay
 {
-    public class DoorInteractable : InteractableBehaviour
+    public class BedroomDoorInteractable : InteractableBehaviour
     {
-        [SerializeField] private int doorID;
         [Header("Door Config")]
         [SerializeField] private DoorConfig config;
 
@@ -18,10 +17,16 @@ namespace door
         private bool _isOpen = false;
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
+        
+        private ChoreManager _chores;
 
         protected new void Awake()
         {
             base.Awake();
+            
+            _chores = FindFirstObjectByType<ChoreManager>();
+
+            config.isLocked = true;
 
             if (!doorPivot)
                 doorPivot = transform;
@@ -43,10 +48,6 @@ namespace door
             }
 
             _isOpen = !_isOpen;
-            
-            // only to test EndDay
-            if (_isOpen)
-                ChoreEvents.TriggerDoorOpened(doorID);
 
             if (audioSource)
             {
@@ -68,12 +69,15 @@ namespace door
                 target,
                 Time.deltaTime * speed
             );
+
+            if (_chores != null && _chores.AreAllChoresCompleted())
+                config.isLocked = false;
         }
 
         public override string InteractionText(IInteractor interactor)
         {
             if (config.isLocked)
-                return "Door is locked";
+                return "Bedroom door is locked";
 
             return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
