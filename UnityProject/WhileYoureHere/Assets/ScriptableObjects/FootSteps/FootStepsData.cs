@@ -10,6 +10,7 @@ namespace ScriptableObjects.FootSteps
         [SerializeField] AudioClip[] leaves;
         [SerializeField] AudioClip[] snow;
         [SerializeField] AudioClip[] grass;
+        [SerializeField] AudioClip[] stone;
         [SerializeField] AudioClip[] floor;
 
         [Header("Interval between each footstep sound")]
@@ -19,6 +20,7 @@ namespace ScriptableObjects.FootSteps
         public AudioClip[] Leaves => leaves;
         public AudioClip[] Snow => snow;
         public AudioClip[] Grass => grass;
+        public AudioClip[] Stone => stone;
         public AudioClip[] Floor => floor;
         public float FootStepOffset => footstepOffset;
     }
