@@ -35,7 +35,6 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            // Zoek speler camera
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -64,7 +63,6 @@ namespace Interactable.Holdable
         {
             PickUp(interactor);
 
-            // UI uitzetten wanneer opgepakt
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
@@ -72,6 +70,7 @@ namespace Interactable.Holdable
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
+            GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             var heldObject = this;
             interactor.HeldObject?.Drop();
@@ -148,15 +147,11 @@ namespace Interactable.Holdable
             if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
 
-        // ------------------------------
-        // UI BEHAVIOUR OVERRIDES
-        // ------------------------------
-
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
 
-            var canInteract = _holder == null; // Alleen tonen als het niet vastgehouden wordt
+            bool canInteract = _holder == null;
 
             if (interactionCanvas)
                 interactionCanvas.gameObject.SetActive(canInteract);
@@ -172,7 +167,6 @@ namespace Interactable.Holdable
 
         public override string InteractionText(IInteractor interactor)
         {
-            // Geen tekst — alleen Canvas UI
             return string.Empty;
         }
     }
