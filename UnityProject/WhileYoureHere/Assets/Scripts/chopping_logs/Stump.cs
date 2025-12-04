@@ -1,3 +1,4 @@
+using System.Collections;
 using Interactable;
 using Interactable.Holdable;
 using player_controls;
@@ -115,9 +116,9 @@ namespace chopping_logs
             player.transform.SetParent(null);
 
             player?.GetComponent<MovementController>()?.ResumeMovement();
-            Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
 
             ChopUIManager.Instance?.HideAllUI();
+            StartCoroutine(ResumeCameraAfterDelay(2f));
 
             ClearLog();
         }
@@ -157,5 +158,13 @@ namespace chopping_logs
         {
             return MinigameActive && _hasLog;
         }
+
+        private static IEnumerator ResumeCameraAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
+            Debug.Log("Camera movement resumed after delay.");
+        }
+
     }
 }
