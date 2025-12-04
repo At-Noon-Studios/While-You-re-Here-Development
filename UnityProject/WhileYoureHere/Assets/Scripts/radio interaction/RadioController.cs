@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using player_controls;
 using UnityEngine;
@@ -7,7 +8,9 @@ namespace radio_interaction
 {
     public class RadioController : MonoBehaviour
     {
+        [Header("audio tracks")]
         [SerializeField] private RadioTracks[] radioTracks;
+        [Header("radio data")]
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
@@ -21,7 +24,7 @@ namespace radio_interaction
         private bool isTuning;
         private MovementController movementController;
         private CameraController cameraController;
-        
+
         private void Start()
         {
             audioSource = GetComponent<AudioSource>();
@@ -44,10 +47,18 @@ namespace radio_interaction
             var current = Mouse.current.position.ReadValue();
             var deltaX = current.x - lastMousePos.x;
             tuneValue = Mathf.Clamp01(tuneValue + deltaX * radioData.sensitivity);
+            MoveSlider(deltaX);
             lastMousePos = current;
-            slider.transform.Translate(slider.transform.forward * (deltaX * Time.deltaTime * radioData.sensitivity));
-        }
 
+        }
+        private void MoveSlider(float deltaX)
+        {
+            var move = deltaX *radioData.SliderSensitivity();
+            var pos = slider.localPosition;
+            pos.z -= move;
+            pos.z = Mathf.Clamp(pos.z, radioData.MinSliderPos(), radioData.MaxSliderPos());
+            slider.localPosition = pos;
+        }
         public bool Tuning()=>isTuning;
         public bool RadioOnStatus() => _radioOn;
 
