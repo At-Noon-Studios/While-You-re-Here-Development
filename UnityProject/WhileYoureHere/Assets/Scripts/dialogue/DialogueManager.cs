@@ -34,12 +34,15 @@ namespace dialogue
         private Coroutine _sentenceRoutine;
         private bool _isTyping;
 
+        [SerializeField] private float volume = 1;
+
         private void Start()
         {
             _ui = UIManager.Instance;
 
             _audioSource = gameObject.AddComponent<AudioSource>();
             _audioSource.playOnAwake = false;
+            _audioSource.volume = volume;
 
             var player = GameObject.FindWithTag("Player");
             if (player != null)
