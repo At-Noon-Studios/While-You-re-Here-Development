@@ -40,10 +40,6 @@ namespace dialogue
         {
             _ui = UIManager.Instance;
 
-            _audioSource = gameObject.AddComponent<AudioSource>();
-            _audioSource.playOnAwake = false;
-            _audioSource.volume = volume;
-
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -134,7 +130,11 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
+                Debug.Log(sentence.tagOfAudioSource);
+                if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
+                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                _audioSource.volume = volume;
                 _audioSource.clip = sentence.audio;
                 _audioSource.Play();
             }
