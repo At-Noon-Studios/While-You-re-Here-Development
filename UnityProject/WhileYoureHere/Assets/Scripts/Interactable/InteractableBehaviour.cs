@@ -1,55 +1,96 @@
 ﻿using System.Linq;
-using UI;
 using UnityEngine;
 
 namespace Interactable
 {
-    [RequireComponent(typeof(Renderer))]
-    [RequireComponent(typeof(Collider))] //Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
+    /// <summary>
+    /// A generic implementation of <see cref="IInteractable"></see>. A script should inherit from this class if you wish to create an interactable that already implements some standard visual feedback.
+    /// </summary>
+    [RequireComponent(typeof(Collider))] // Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
+        private Collider _collider;
+        private Renderer[] _renderers;
         private Material _outlineMaterial;
-        private UIManager _uiManager;
-        private Renderer _renderer;
-
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
-        protected void Awake()
+        #region Unity event functions
+        
+        /// <remarks>
+        /// Be sure to call <c>base.Awake();</c> when overriding this method. Not doing so will prevent outlines from being rendered.
+        /// </remarks>
+        protected virtual void Awake()
         {
-            _renderer = GetComponent<Renderer>();
+            _collider = GetComponent<Collider>();
+            if (_collider == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
+            _renderers = GetComponentsInChildren<Renderer>();
+            if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
-            _uiManager = UIManager.Instance;
         }
         
-        public abstract void Interact();
+        #endregion
         
-        public virtual void OnHoverEnter()
+        #region Interface implementation
+        
+        public virtual bool InteractableBy(IInteractor interactor) => true;
+
+        public abstract void Interact(IInteractor interactor);
+        
+        public virtual void OnHoverEnter(IInteractor interactor)
         {
-            AddOutlineMaterialToRenderer();
-            _uiManager?.ShowInteractPrompt(gameObject.name);
+            AddOutlineMaterialToRenderers();
+        }
+        
+        public virtual void OnHoverExit(IInteractor interactor)
+        {
+            RemoveOutlineMaterialFromRenderers();
+        }
+        
+        public virtual string InteractionText(IInteractor interactor) => gameObject.name;
+        
+        public void EnableCollider(bool state)
+        {
+            _collider.enabled = state;
+        }
+        
+        #endregion
+        
+        #region Private methods
+        
+        private void AddOutlineMaterialToRenderers()
+        {
+            foreach (var rendererComponent in _renderers)
+            {
+                AddOutlineMaterialToRenderer(rendererComponent);
+            }
         }
 
-        public virtual void OnHoverExit()
+        private void AddOutlineMaterialToRenderer(Renderer rendererComponent)
         {
-            RemoveOutlineMaterialFromRenderer();
-            _uiManager?.HideInteractPrompt();
-        }
-        
-        private void AddOutlineMaterialToRenderer()
-        {
-            if (!_renderer || !_outlineMaterial) return;
-            var materials = _renderer.materials;
+            if (!rendererComponent || !_outlineMaterial) return;
+            var materials = rendererComponent.materials;
             if (materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
                 return;
-            _renderer.materials = materials.Append(_outlineMaterial).ToArray();
+            rendererComponent.materials = materials.Append(_outlineMaterial).ToArray();
         }
 
-        private void RemoveOutlineMaterialFromRenderer() {
-            if (!_renderer || !_outlineMaterial) return;
-            var materials = _renderer.materials;
+        private void RemoveOutlineMaterialFromRenderers()
+        {
+            foreach (var rendererComponent in _renderers)
+            {
+                RemoveOutlineMaterialFromRenderer(rendererComponent);
+            }
+        }
+
+        private void RemoveOutlineMaterialFromRenderer(Renderer rendererComponent)
+        {
+            if (!rendererComponent || !_outlineMaterial) return;
+            var materials = rendererComponent.materials;
             if (!materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
                 return;
-            _renderer.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
+            rendererComponent.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
         }
+        
+        #endregion
     }
 }
