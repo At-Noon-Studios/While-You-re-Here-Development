@@ -10,7 +10,6 @@ namespace player_controls
         [SerializeField] private Vector2EventChannel look;
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private EventChannel interact;
-        [SerializeField] private EventChannel drop;
         
         private void OnLook(InputValue inputValue)
         {
@@ -25,11 +24,6 @@ namespace player_controls
         private void OnInteract()
         {
             interact.Raise();
-        }
-
-        private void OnDrop()
-        {
-            drop.Raise();
         }
     }
 }

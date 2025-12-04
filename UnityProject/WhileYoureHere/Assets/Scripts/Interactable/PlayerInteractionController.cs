@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace Interactable
 {
+    [DisallowMultipleComponent]
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
         [SerializeField] private PlayerInteractionData data;
@@ -83,7 +84,6 @@ namespace Interactable
             var closestDistance = float.MaxValue;
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) && HeldObject != null) break;
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
             }
 
@@ -97,11 +97,12 @@ namespace Interactable
             return Physics.SphereCastNonAlloc(ray, data.InteractionAssistRadius, result, data.InteractionReach);
         }
 
-        private static void UpdateBestTarget(RaycastHit candidate, ref float closestDistance,
+        private void UpdateBestTarget(RaycastHit candidate, ref float closestDistance,
             ref IInteractable bestTarget)
         {
             if (candidate.distance >= closestDistance ||
-                !candidate.collider.TryGetComponent<IInteractable>(out var interactable)) return;
+                !candidate.collider.TryGetComponent<IInteractable>(out var interactable) || !interactable.IsDetectableBy(this)) return;
+            
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
@@ -116,7 +117,7 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.IsInteractableBy(this));
             target.OnHoverEnter(this);
         }
 
@@ -128,7 +129,7 @@ namespace Interactable
         
         private bool NoTarget => _currentTarget == null;
         
-        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
+        private bool TargetInteractable => _currentTarget != null && _currentTarget.IsInteractableBy(this);
         
         private void InteractWithTarget()
         {

@@ -16,19 +16,17 @@ namespace door
         [Header("References")]
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
-
-        private bool _isLocked;
-        private bool _isOpen = false;
+        [SerializeField] private Keyhole keyhole;
+        
+        private bool _isOpen;
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
         
-        public void LockDoor(bool locked) { _isLocked = locked; }
 
-        protected new void Awake()
+        protected override void Awake()
         {
             base.Awake();
-            _isLocked = config.isLocked;
             if (!doorPivot) doorPivot = transform;
 
             _closeRotation = doorPivot.localRotation;
@@ -36,8 +34,7 @@ namespace door
 
             if (!audioSource) audioSource = gameObject.AddComponent<AudioSource>();
 
-            if (interactionCanvases != null)
-                interactionCanvases.ForEach(c => c.gameObject.SetActive(false));
+            interactionCanvases?.ForEach(c => c.gameObject.SetActive(false));
 
             var player = GameObject.FindWithTag("Player");
             if (player != null)
@@ -64,15 +61,14 @@ namespace door
                 });
             }
         }
-
         public override void Interact(IInteractor interactor)
         {
-            if (_isLocked)
+            if (keyhole?.IsLocked ?? false)
             {
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
-
+            if (keyhole) keyhole.detectable = _isOpen;
             _isOpen = !_isOpen;
 
             if (audioSource)
@@ -85,7 +81,7 @@ namespace door
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
-            if (_playerCamera == null || interactionCanvases == null || _isLocked) return;
+            if (_playerCamera == null || interactionCanvases == null || (keyhole?.IsLocked ?? false)) return;
 
             bool isFront = Vector3.Dot(doorPivot.forward, (_playerCamera.position - doorPivot.position).normalized) > 0f;
 
@@ -103,6 +99,16 @@ namespace door
             interactionCanvases.ForEach(c => c.gameObject.SetActive(false));
         }
 
-        public override string InteractionText(IInteractor interactor) => string.Empty;
+        public override bool IsInteractableBy(IInteractor interactor) => !keyhole?.IsLocked ?? true;
+        
+        public override bool IsDetectableBy(IInteractor interactor) => !keyhole?.CurrentlyBeingOperated ?? true;
+        
+        public override string InteractionText(IInteractor interactor)
+        {
+            if (keyhole?.IsLocked ?? false)
+                return "Door is locked"; 
+
+            return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
+        }
     }
 }

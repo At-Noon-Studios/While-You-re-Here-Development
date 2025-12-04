@@ -13,8 +13,5 @@ namespace ScriptableObjects.door
         public AudioClip openSound;
         public AudioClip closeSound;
         public AudioClip lockedSound;
-
-        [Header("Door Lock")]
-        public bool isLocked = false;
     }
 }

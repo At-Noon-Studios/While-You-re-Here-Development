@@ -18,8 +18,6 @@ namespace player_controls
 
         private float _xRotation;
         private float _yRotation;
-    
-        public bool canLook = true;
 
         private void Start()
         {
@@ -38,8 +36,6 @@ namespace player_controls
     
         private void OnLookInput(Vector2 mouseDelta)
         {
-            if (!canLook) return; 
-        
             _yRotation += (mouseDelta.x * data.Sensitivity) % CircleDegrees;
             _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
             _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
@@ -51,12 +47,12 @@ namespace player_controls
 
         public void PauseCameraMovement()
         {
-            canLook = false;
+            OnDisable();
         }
 
         public void ResumeCameraMovement()
         {
-            canLook = true;
+            OnEnable();
         }
     }
 }
