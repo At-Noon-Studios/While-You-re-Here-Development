@@ -1,5 +1,7 @@
-﻿using Interactable;
+﻿using System.Collections;
+using Interactable;
 using Interactable.Concrete.Key;
+using Interactable.Holdable;
 using player_controls;
 using ScriptableObjects.Events;
 using UI;
@@ -122,9 +124,15 @@ namespace door
         private void ResetCurrentKey()
         {
             if (!CurrentlyBeingOperated) return;
-            _currentOperation.Key.Interact(_currentOperation.Interactor);
+            StartCoroutine(PickupKey(_currentOperation));
             _currentOperation.Key.ResetRotation();
             _currentOperation.Key.detectable = true;
+        }
+
+        private static IEnumerator PickupKey(Operation operation)
+        {
+            yield return new WaitForEndOfFrame();
+            operation.Key.Interact(operation.Interactor);
         }
 
         private void ResumePlayer()
