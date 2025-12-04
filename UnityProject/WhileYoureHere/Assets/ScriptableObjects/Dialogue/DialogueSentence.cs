@@ -11,5 +11,8 @@ namespace ScriptableObjects.Dialogue
 
         [Header("Voice line for this sentence")]
         public AudioClip audio;
+        
+        [Header("Audio source to play this on")]
+        public string tagOfAudioSource;
     }
 }
