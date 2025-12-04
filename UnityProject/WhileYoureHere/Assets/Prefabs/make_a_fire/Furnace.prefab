@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 254522984648685615}
   - component: {fileID: 4216623388001558033}
   - component: {fileID: 4314426717685961257}
-  - component: {fileID: 3753779223324575124}
+  - component: {fileID: 4834782212091153763}
   m_Layer: 0
   m_Name: DoorRight
   m_TagString: Untagged
@@ -333,7 +333,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1856344252225202068, guid: 7d5c59fb97ca343a2960704e22b52834, type: 3}
---- !u!114 &3753779223324575124
+--- !u!114 &4834782212091153763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -347,7 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   config: {fileID: 11400000, guid: e9761dc17e12f4c65ac1b7c434d1608f, type: 2}
   doorPivot: {fileID: 4265898861899204999}
-  audioSource: {fileID: 5975275614097879126}
+  audioSource: {fileID: 0}
 --- !u!1 &2937383531319287576
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,20 +463,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4098316939324539096}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.8796764, z: -0, w: 0.47557282}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -1.8067436, y: 0.82442737, z: 1.5806248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1102271693026861284}
   - {fileID: 5651879483283805322}
+  - {fileID: 5724960534126554825}
   - {fileID: 3673873267991648524}
   - {fileID: 3970050994473932201}
   - {fileID: 5776013707878480417}
   - {fileID: 2125726146316253319}
   - {fileID: 4265898861899204999}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -123.207, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &5440623825110598179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,6 +937,74 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8772360579351681551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5724960534126554825}
+  - component: {fileID: 1832057303654208169}
+  - component: {fileID: 7959929777622727380}
+  m_Layer: 0
+  m_Name: FurnaceFloor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5724960534126554825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772360579351681551}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.01, y: -0.599, z: 0.033}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1196154885699362106}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1832057303654208169
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772360579351681551}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7959929777622727380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772360579351681551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+  placePoint: {fileID: 5724960534126554825}
+  placedObjectRotation: {x: 0, y: 2, z: 0}
 --- !u!1 &8801174830187914915
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,7 +1017,7 @@ GameObject:
   - component: {fileID: 1265792002354713393}
   - component: {fileID: 391162575660653916}
   - component: {fileID: 6183567877083797544}
-  - component: {fileID: 1053713952303227699}
+  - component: {fileID: 8025829305654498084}
   m_Layer: 0
   m_Name: DoorLeft
   m_TagString: Untagged
@@ -1050,7 +1119,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4479033128728167805, guid: 7d5c59fb97ca343a2960704e22b52834, type: 3}
---- !u!114 &1053713952303227699
+--- !u!114 &8025829305654498084
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1064,4 +1133,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   config: {fileID: 11400000, guid: 76db3f9c6bf4d4c4fba935a29097d0ee, type: 2}
   doorPivot: {fileID: 2125726146316253319}
-  audioSource: {fileID: 1079658901248154861}
+  audioSource: {fileID: 0}

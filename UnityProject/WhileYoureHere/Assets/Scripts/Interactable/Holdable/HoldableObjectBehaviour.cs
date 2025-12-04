@@ -17,6 +17,8 @@ namespace Interactable.Holdable
 
         public float Weight => data.Weight;
 
+        public bool IsPlaced { get; private set; }
+
         private const int HoldLayer = 3;
 
         protected override void Awake()
@@ -25,13 +27,13 @@ namespace Interactable.Holdable
             _rigidbody = GetComponent<Rigidbody>();
             Renderers = GetComponentsInChildren<Renderer>();
         }
-        
+
         protected void Start()
         {
             _originalLayer = gameObject.layer;
             InitializeHeldVersion();
         }
-        
+
         public override void Interact(IInteractor interactor)
         {
             PickUp(interactor);
@@ -46,16 +48,18 @@ namespace Interactable.Holdable
             interactor.SetHeldObject(heldObject);
             AttachTo(interactor);
             EnableCollider(false);
+            IsPlaced = false;
         }
-        
-        private void SetHeldVisual(bool state, GameObject heldVisual) {
+
+        private void SetHeldVisual(bool state, GameObject heldVisual)
+        {
             heldVisual.SetActive(state);
             foreach (var r in Renderers)
             {
                 r.enabled = !state;
             }
         }
-        
+
         public virtual void Drop()
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
@@ -64,6 +68,7 @@ namespace Interactable.Holdable
             _holder = null;
             Detach();
             EnableCollider(true);
+            IsPlaced = false;
         }
 
         public virtual void Place(Vector3 position, Quaternion? rotation = null)
@@ -77,8 +82,9 @@ namespace Interactable.Holdable
             transform.position = position;
             transform.rotation = rotation ?? Quaternion.identity;
             EnableCollider(true);
+            IsPlaced = true;
         }
-        
+
         private void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
@@ -95,7 +101,7 @@ namespace Interactable.Holdable
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
         }
-        
+
         private void InitializeHeldVersion()
         {
             if (!data.HoldingPrefab) return;
@@ -109,7 +115,8 @@ namespace Interactable.Holdable
         {
             var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
             heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
-            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
+            if (heldVersionColliders is { Length: > 0 })
+                Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
     }
 }
