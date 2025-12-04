@@ -78,8 +78,7 @@ namespace door
         
         private void AttemptFinishOperatingLock()
         {
-            if (!CanStopOperating(out var lockedState)) return;
-            FinishOperatingLock(lockedState);
+            StartCoroutine(DelayInteract());
         }
         
         private void StartOperatingLock(Operation operation)
@@ -124,15 +123,16 @@ namespace door
         private void ResetCurrentKey()
         {
             if (!CurrentlyBeingOperated) return;
-            StartCoroutine(PickupKey(_currentOperation));
+            _currentOperation.Key.Interact(_currentOperation.Interactor);
             _currentOperation.Key.ResetRotation();
             _currentOperation.Key.detectable = true;
         }
 
-        private static IEnumerator PickupKey(Operation operation)
+        private IEnumerator DelayInteract()
         {
             yield return new WaitForEndOfFrame();
-            operation.Key.Interact(operation.Interactor);
+            if (!CanStopOperating(out var lockedState)) yield break;
+            FinishOperatingLock(lockedState);
         }
 
         private void ResumePlayer()
