@@ -1,5 +1,4 @@
-﻿using EventChannels;
-using Interactable;
+﻿using Interactable;
 using Interactable.Concrete.Key;
 using player_controls;
 using ScriptableObjects.Events;
@@ -14,7 +13,6 @@ namespace door
         [SerializeField] private Transform keyHolePosition;
         [SerializeField] private Vector3 keyRotation;
         
-        
         private CameraController _cameraController;
         private MovementController _movementController;
         
@@ -26,6 +24,7 @@ namespace door
         
         [HideInInspector] public bool detectable = true;
         public bool IsLocked { get; private set; }
+        public void LockDoor(bool locked) { IsLocked = locked; }
         
         private Operation _currentOperation;
 

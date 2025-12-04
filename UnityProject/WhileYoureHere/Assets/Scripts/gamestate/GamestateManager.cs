@@ -22,16 +22,19 @@ namespace gamestate
         private AudioSource _playerAudioSource;
         
         public int currentDay;
-
+        
+        [HideInInspector]
+        public bool notebookPickedUp = false;
+        
         private void Awake()
         {
             _instance = this;
+            _timeManager = GetComponent<TimeManager>();
+            _choreManager = GetComponent<ChoreManager>();
         }
         
         private void Start()
         {
-            GetComponent<TimeManager>();
-            GetComponent<ChoreManager>();
             _player = GameObject.FindWithTag("Player");
             _playerAudioSource = _player.GetComponent<AudioSource>();
             _currentActivity = activities[0];
