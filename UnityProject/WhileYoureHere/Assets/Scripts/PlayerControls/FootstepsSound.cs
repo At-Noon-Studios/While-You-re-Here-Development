@@ -1,58 +1,65 @@
 using player_controls;
 using ScriptableObjects.FootSteps;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
 
-[RequireComponent(typeof(AudioSource))]
-[RequireComponent(typeof(MovementController))]
-public class FootstepsSound : MonoBehaviour
+namespace PlayerControls
 {
-    [SerializeField] AudioSource _audioSource;
-    [SerializeField] FootStepsData fs;
-
-    private MovementController movementController;
-    private float time;
-
-    void Awake()
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(MovementController))]
+    public class FootstepsSound : MonoBehaviour
     {
-        _audioSource = GetComponent<AudioSource>();
-        movementController = GetComponent<MovementController>();
-    }
+        [FormerlySerializedAs("_audioSource")] [SerializeField] AudioSource audioSource;
+        [SerializeField] FootStepsData fs;
 
-    void Update()
-    {
-        HandleFootsteps();
-    }
+        private MovementController _movementController;
+        private float _time;
 
-    void HandleFootsteps()
-    {
-        time -= Time.deltaTime;
-        if (movementController.IsInput)
+        void Awake()
         {
-            if (time < 0.0f)
+            audioSource = GetComponent<AudioSource>();
+            _movementController = GetComponent<MovementController>();
+        }
+
+        void Update()
+        {
+            HandleFootsteps();
+        }
+
+        void HandleFootsteps()
+        {
+            _time -= Time.deltaTime;
+            if (_movementController.IsInput)
             {
-                if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
+                if (_time < 0.0f)
                 {
-                    switch (hit.collider.tag)
+                    if (Physics.Raycast(transform.position + Vector3.up * .01f, Vector3.down, out var hit, 1f))
                     {
-                        case "GROUND/snow":
-                            _audioSource.PlayOneShot(fs.Snow[Random.Range(0, fs.Snow.Length - 1)]);
-                            break;
-                        case "GROUND/leaves":
-                            _audioSource.PlayOneShot(fs.Leaves[Random.Range(0, fs.Leaves.Length - 1)]);
-                            break;
-                        case "GROUND/floor":
-                            _audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
-                            break;
-                        case "GROUND/grass":
-                            _audioSource.PlayOneShot(fs.Grass[Random.Range(0, fs.Grass.Length - 1)]);
-                            break;
-                        default:
-                            _audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
-                            break;
+                        switch (hit.collider.tag)
+                        {
+                            case "GROUND/leaves":
+                                audioSource.PlayOneShot(fs.Leaves[Random.Range(0, fs.Leaves.Length - 1)]);
+                                break;
+                            case "GROUND/snow":
+                                audioSource.PlayOneShot(fs.Snow[Random.Range(0, fs.Snow.Length - 1)]);
+                                break;
+                            case "GROUND/grass":
+                                audioSource.PlayOneShot(fs.Grass[Random.Range(0, fs.Grass.Length - 1)]);
+                                break;
+                            case "GROUND/path":
+                                audioSource.PlayOneShot(fs.Path[Random.Range(0, fs.Path.Length - 1)]);
+                                break;
+                            case "GROUND/floor":
+                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
+                                break;
+                            default:
+                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
+                                break;
+                        }
                     }
+                    _time = fs.FootStepOffset;
                 }
-                time = fs.FootStepOffset;
             }
         }
     }
