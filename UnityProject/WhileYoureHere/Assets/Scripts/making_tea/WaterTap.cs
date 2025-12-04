@@ -10,14 +10,14 @@ namespace making_tea
         public AudioSource tapSound;
 
         [SerializeField]
-        private bool _isRunning = false;
+        private bool isRunning;
 
-        public bool isRunning
+        public bool IsRunning
         {
-            get => _isRunning;
+            get => isRunning;
             private set
             {
-                _isRunning = value;
+                isRunning = value;
                 UpdateWaterState();
             }
         }
@@ -34,14 +34,14 @@ namespace making_tea
 
         public void ToggleTap()
         {
-            isRunning = !isRunning;
+            IsRunning = !IsRunning;
         }
 
         private void UpdateWaterState()
         {
             if (waterStream == null) return;
 
-            if (_isRunning)
+            if (isRunning)
             {
                 waterStream.Play();
 

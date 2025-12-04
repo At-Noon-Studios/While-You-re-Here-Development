@@ -8,13 +8,11 @@ namespace making_tea
         public KettleFill kettle;
         public float threshold = 0.2f;
 
-        void Update()
+        private void Update()
         {
-            if (kettle.fillAmount >= threshold)
-            {
-                ChoreEvents.TriggerKettleFilled();
-                enabled = false;
-            }
+            if (!(kettle.fillAmount >= threshold)) return;
+            ChoreEvents.TriggerKettleFilled();
+            enabled = false;
         }
     }
 }

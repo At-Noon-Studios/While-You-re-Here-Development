@@ -1,5 +1,7 @@
-﻿using Interactable.Holdable;
+﻿using Interactable.Concrete.ObjectHolder;
+using Interactable.Holdable;
 using JetBrains.Annotations;
+using making_tea;
 using player_controls;
 using ScriptableObjects.Events;
 using ScriptableObjects.Interactable;
@@ -20,8 +22,10 @@ namespace Interactable
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
+
+        private ChairInteractable _sittingChair;
         
-        public bool TableMode { get; private set; } = false;
+        public bool TableMode { get; private set; }
         public Camera PlayerCamera => GetComponentInChildren<Camera>();
         
         private const int InteractableRaycastAllocation = 16;
@@ -69,15 +73,38 @@ namespace Interactable
         
         #endregion
         
+        #region Public chair helpers (vom Chair benutzt)
+
+        public void SetSittingChair(ChairInteractable chair)
+        {
+            _sittingChair = chair;
+        }
+
+        public void ClearSittingChair()
+        {
+            _sittingChair = null;
+        }
+
+        #endregion
+
         #region Private methods
         
         private void Interact()
         {
             if (TableMode)
             {
+                if (HeldObject == null && TryDropTablePickup())
+                    return;
+
                 if (_currentTarget != null)
+                {
                     _currentTarget.Interact(this);
-                return;
+                    return;
+                }
+
+                if (_sittingChair == null) return;
+                _sittingChair.ForceStandUp();
+           
             }
             
             if (NoTarget) HeldObject?.Drop();
@@ -85,7 +112,6 @@ namespace Interactable
             else _uiManager.PulseInteractPrompt();
         }
 
-        
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
@@ -94,7 +120,7 @@ namespace Interactable
             var closestDistance = float.MaxValue;
             for (var i = 0; i < hitCount; i++)
             {
-                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
+                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, TableMode);
             }
 
             if (bestTarget == _currentTarget) return;
@@ -107,11 +133,29 @@ namespace Interactable
             return Physics.SphereCastNonAlloc(ray, data.InteractionAssistRadius, result, data.InteractionReach);
         }
 
-        private static void UpdateBestTarget(RaycastHit candidate, ref float closestDistance,
-            ref IInteractable bestTarget)
+        private static void UpdateBestTarget(
+            RaycastHit candidate,
+            ref float closestDistance,
+            ref IInteractable bestTarget,
+            bool tableMode)
         {
-            if (candidate.distance >= closestDistance ||
-                !candidate.collider.TryGetComponent<IInteractable>(out var interactable)) return;
+            if (candidate.distance >= closestDistance) return;
+
+            var col = candidate.collider;
+
+            switch (tableMode)
+            {
+                case true when col.TryGetComponent<ITablePickup>(out var tablePickup):
+                    bestTarget = tablePickup;
+                    closestDistance = candidate.distance;
+                    return;
+                case false when col.TryGetComponent<Placeable>(out var placeable):
+                    bestTarget = placeable;
+                    closestDistance = candidate.distance;
+                    return;
+            }
+
+            if (!col.TryGetComponent<IInteractable>(out var interactable)) return;
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
@@ -143,7 +187,7 @@ namespace Interactable
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
-            OnHoverEnter(_currentTarget); // Refresh
+            OnHoverEnter(_currentTarget);
         }
         
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
@@ -173,6 +217,19 @@ namespace Interactable
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
+        }
+        
+        private static bool TryDropTablePickup()
+        {
+            var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
+
+            foreach (var p in pickups)
+            {
+                if (!p.IsTableHeld) continue;
+                p.Drop();
+                return true;
+            }
+            return false;
         }
         
         #endregion

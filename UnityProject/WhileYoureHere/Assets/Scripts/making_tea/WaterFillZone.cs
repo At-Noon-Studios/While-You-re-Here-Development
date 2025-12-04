@@ -11,7 +11,7 @@ namespace making_tea
             var kettle = other.GetComponentInParent<KettleFill>();
 
             if (kettle == null) return;
-            if (tap.isRunning)
+            if (tap.IsRunning)
                 kettle.StartFilling();
             else
                 kettle.StopFilling();

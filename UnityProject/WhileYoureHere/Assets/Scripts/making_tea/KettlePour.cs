@@ -18,13 +18,12 @@ namespace making_tea
         public float rotateSpeed = 8f;
         public float pourSpeed = 0.25f;
 
-        private Rigidbody _rb;
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
 
         private void Start()
         {
-            _rb = GetComponent<Rigidbody>();
+            GetComponent<Rigidbody>();
 
             if (pivot == null)
                 pivot = transform;

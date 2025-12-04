@@ -7,10 +7,9 @@ namespace making_tea
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Teabag"))
-            {
-                ChoreEvents.TriggerTeabagAdded();
-            }
+            if (!other.CompareTag("Teabag")) return;
+            ChoreEvents.TriggerTeabagAdded();
+            Destroy(other.gameObject);
         }
     }
 }

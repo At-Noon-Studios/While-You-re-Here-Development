@@ -1,69 +1,39 @@
 ﻿using UnityEngine;
-using Interactable;
+using UnityEngine.InputSystem;
 
-public class KettleTablePickup : MonoBehaviour, IInteractable
+namespace making_tea
 {
-    private bool lifted = false;
-    private PlayerInteractionController pic;
-
-    public float liftHeight = 1.0f;
-
-    public bool IsTableHeld => lifted;
-
-    public string InteractionText(IInteractor i)
-        => lifted ? "[E] Drop" : "[E] Pick up";
-
-    public bool InteractableBy(IInteractor i)
+    public class KettleTablePickup : TablePickup
     {
-        var p = i as PlayerInteractionController;
-        return p != null && p.TableMode;
-    }
+        private Collider _col;
 
-    public void EnableCollider(bool s)
-    {
-        var c = GetComponent<Collider>();
-        if (c) c.enabled = s;
-    }
-
-    public void OnHoverEnter(IInteractor i) {}
-    public void OnHoverExit(IInteractor i) {}
-
-    public void Interact(IInteractor i)
-    {
-        var p = i as PlayerInteractionController;
-        if (p == null) return;
-
-        pic = p;
-        lifted = !lifted;
-
-        if (!lifted)
+        protected override void Awake()
         {
-            transform.position = new Vector3(
-                transform.position.x,
-                0.75f,
-                transform.position.z
-            );
-        }
-    }
-
-    private void Update()
-    {
-        if (!lifted || pic == null || !pic.TableMode) return;
-
-        var cam = pic.PlayerCamera;
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
-        {
-            Vector3 pos = hit.point;
-            pos.y = liftHeight;
-            transform.position = pos;
+            base.Awake();
+            _col = GetComponent<Collider>();
         }
 
-        // gießen über KettlePour (TableMode-Hold)
-        if (UnityEngine.Input.GetMouseButton(0))
+        public override void EnableCollider(bool s)
         {
-            var pour = GetComponent<making_tea.KettlePour>();
+            if (_col) _col.enabled = s;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!Lifted || Pic == null || !Pic.TableMode)
+                return;
+
+            HandlePour();
+        }
+
+        private void HandlePour()
+        {
+            if (!Mouse.current.leftButton.isPressed)
+                return;
+
+            var pour = GetComponent<KettlePour>();
             if (pour != null)
                 pour.enabled = true;
         }

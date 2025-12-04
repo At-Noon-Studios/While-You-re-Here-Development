@@ -1,96 +1,101 @@
+using Interactable;
+using player_controls;
 using UnityEngine;
-using player_controls;   // Für MovementController, CameraController, PlayerInteractionController
-using Interactable;      // Für IInteractable, IInteractor
 
-public class ChairInteractable : MonoBehaviour, IInteractable
+namespace making_tea
 {
-    [Header("References")]
-    [SerializeField] private Transform sitPoint;
-    [SerializeField] private Transform lookTarget;
-
-    private bool isSitting = false;
-
-    private PlayerInteractionController pic;
-    private MovementController movement;
-    private CameraController cameraController;
-    private Transform player;
-    private Camera playerCam;
-
-    public bool InteractableBy(IInteractor interactor)
+    public class ChairInteractable : MonoBehaviour, IInteractable
     {
-        return true;
-    }
+        [Header("References")]
+        [SerializeField] private Transform sitPoint;
+        [SerializeField] private Transform lookTarget;
 
-    public string InteractionText(IInteractor interactor)
-    {
-        return isSitting ? "[F] Stand up" : "[E] Sit";
-    }
+        private bool _isSitting;
 
-    public void EnableCollider(bool enable)
-    {
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-            col.enabled = enable;
-    }
+        private PlayerInteractionController _pic;
+        private MovementController _movement;
+        private CameraController _cameraController;
+        private Transform _player;
+        private Camera _playerCam;
 
-    public void OnHoverEnter(IInteractor interactor)
-    {
-    }
-
-    public void OnHoverExit(IInteractor interactor)
-    {
-    }
-
-    // Haupt-Interact-Methode
-    public void Interact(IInteractor interactor)
-    {
-        if (!isSitting)
-            Sit(interactor);
-        else
-            StandUp();
-    }
-    
-    private void Sit(IInteractor interactor)
-    {
-        var p = interactor as PlayerInteractionController;
-        if (p == null)
+        public bool InteractableBy(IInteractor interactor)
         {
-            Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
-            return;
+            return true;
         }
 
-        player = p.transform;
-        movement = p.GetComponent<MovementController>();
-        playerCam = p.GetComponentInChildren<Camera>();
-        cameraController = p.GetComponentInChildren<CameraController>();
-
-        if (movement != null) movement.enabled = false;
-        if (cameraController != null) cameraController.enabled = false;
-
-        player.position = sitPoint.position;
-        player.rotation = sitPoint.rotation;
-
-        if (lookTarget != null && playerCam != null)
+        public string InteractionText(IInteractor interactor)
         {
-            Vector3 dir = lookTarget.position - playerCam.transform.position;
-            playerCam.transform.rotation = Quaternion.LookRotation(dir);
+            return _isSitting ? "[E] Stand up" : "[E] Sit";
         }
 
-        isSitting = true;
-        
-        pic = interactor as PlayerInteractionController;
-        pic.EnableTableMode(true);
+        public void EnableCollider(bool enable)
+        {
+            var col = GetComponent<Collider>();
+            if (col != null)
+                col.enabled = enable;
+        }
 
-    }
+        public void OnHoverEnter(IInteractor interactor) { }
 
-    private void StandUp()
-    {
-        if (movement != null) movement.enabled = true;
-        if (cameraController != null) cameraController.enabled = true;
+        public void OnHoverExit(IInteractor interactor) { }
 
-        isSitting = false;
+        public void Interact(IInteractor interactor)
+        {
+            if (!_isSitting)
+                Sit(interactor);
+            else
+                StandUp();
+        }
+
+        private void Sit(IInteractor interactor)
+        {
+            var p = interactor as PlayerInteractionController;
+            if (p == null)
+            {
+                Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
+                return;
+            }
+
+            _player = p.transform;
+            _movement = p.GetComponent<MovementController>();
+            _playerCam = p.GetComponentInChildren<Camera>();
+            _cameraController = p.GetComponentInChildren<CameraController>();
+
+            if (_movement != null) _movement.enabled = false;
+            if (_cameraController != null) _cameraController.enabled = false;
+
+            _player.position = sitPoint.position;
+            _player.rotation = sitPoint.rotation;
+
+            if (lookTarget != null && _playerCam != null)
+            {
+                var dir = lookTarget.position - _playerCam.transform.position;
+                _playerCam.transform.rotation = Quaternion.LookRotation(dir);
+            }
+
+            _isSitting = true;
+
+            _pic = p;
+            _pic.EnableTableMode(true);
+            _pic.SetSittingChair(this);
+        }
+
+        private void StandUp()
+        {
+            if (_movement != null) _movement.enabled = true;
+            if (_cameraController != null) _cameraController.enabled = true;
+
+            _isSitting = false;
+
+            if (_pic == null) return;
+            _pic.EnableTableMode(false);
+            _pic.ClearSittingChair();
+        }
         
-        pic.EnableTableMode(false);
-        
+        public void ForceStandUp()
+        {
+            if (_isSitting)
+                StandUp();
+        }
     }
 }

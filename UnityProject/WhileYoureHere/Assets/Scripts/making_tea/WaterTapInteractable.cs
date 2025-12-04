@@ -8,7 +8,7 @@ namespace making_tea
 
         public override string InteractionText(IInteractor interactor)
         {
-            return tap.isRunning ? "Tap close" : "Tap open";
+            return tap.IsRunning ? "Tap close" : "Tap open";
         }
 
         public override void Interact(IInteractor interactor)

@@ -17,10 +17,10 @@ namespace making_tea
         public float steamStopDelay = 3f;
 
         private float _heatTimer;
-        private Coroutine steamStopRoutine;
+        private Coroutine _steamStopRoutine;
 
-        public bool isOn = false;
-        private KettleFill currentKettle;  // track the kettle on the stove
+        public bool isOn;
+        private KettleFill _currentKettle;
 
         private void OnTriggerStay(Collider other)
         {
@@ -29,7 +29,7 @@ namespace making_tea
             var kettle = other.GetComponentInParent<KettleFill>();
             if (kettle == null) return;
 
-            currentKettle = kettle;
+            _currentKettle = kettle;
 
             if (kettle.fillAmount < requiredFill)
                 return;
@@ -41,16 +41,14 @@ namespace making_tea
 
             _heatTimer += Time.deltaTime;
 
-            if (_heatTimer >= heatTime)
-            {
-                if (steam != null && !steam.isPlaying)
-                    steam.Play();
+            if (!(_heatTimer >= heatTime)) return;
+            if (steam != null && !steam.isPlaying)
+                steam.Play();
 
-                if (!whistleSound.isPlaying)
-                    whistleSound.Play();
+            if (!whistleSound.isPlaying)
+                whistleSound.Play();
 
-                ChoreEvents.TriggerWaterBoiled();
-            }
+            ChoreEvents.TriggerWaterBoiled();
         }
 
         private void OnTriggerExit(Collider other)
@@ -66,12 +64,10 @@ namespace making_tea
         {
             isOn = !isOn;
 
-            if (!isOn)
-            {
-                Debug.Log("Stove turned OFF");
-                if (currentKettle != null)
-                    StopSteamWithDelay(currentKettle);
-            }
+            if (isOn) return;
+            Debug.Log("Stove turned OFF");
+            if (_currentKettle != null)
+                StopSteamWithDelay(_currentKettle);
         }
 
         private void StopSteamWithDelay(KettleFill kettle)
@@ -86,10 +82,10 @@ namespace making_tea
             var steam = kettle.GetComponentInChildren<ParticleSystem>();
             if (steam == null) return;
 
-            if (steamStopRoutine != null)
-                StopCoroutine(steamStopRoutine);
+            if (_steamStopRoutine != null)
+                StopCoroutine(_steamStopRoutine);
 
-            steamStopRoutine = StartCoroutine(StopSteamAfterDelay(steam));
+            _steamStopRoutine = StartCoroutine(StopSteamAfterDelay(steam));
         }
 
         private IEnumerator StopSteamAfterDelay(ParticleSystem steam)
