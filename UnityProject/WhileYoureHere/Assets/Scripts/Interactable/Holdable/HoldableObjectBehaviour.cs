@@ -134,8 +134,8 @@ namespace Interactable.Holdable
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
             gameObject.layer = HoldLayer;
-            transform.localRotation = Quaternion.Euler(data.Rotation);
-            transform.localPosition = data.Offset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+            transform.localPosition = data.HoldingOffset;
         }
 
         private void Detach()
@@ -159,7 +159,9 @@ namespace Interactable.Holdable
         {
             var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
             heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
-            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
+            if (heldVersionColliders is { Length: > 0 })
+                Debug.LogError("Held prefab has colliders. They have been disabled.");
+        }
 
         public override void OnHoverEnter(IInteractor interactor)
         {
