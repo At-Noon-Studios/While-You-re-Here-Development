@@ -15,6 +15,7 @@ namespace Interactable
         [SerializeField] private Camera playerCamera;
         [Header("Listen to")]
         [SerializeField] private EventChannel interact;
+        [SerializeField] private EventChannel ClickInteract;
         [SerializeField] private Transform holdPoint;
         
         [CanBeNull] private IInteractable _currentTarget;
@@ -43,11 +44,13 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
+            ClickInteract.OnRaise+= clickInteract;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
+            ClickInteract.OnRaise -= clickInteract;
         }
         
         #endregion
@@ -70,11 +73,26 @@ namespace Interactable
         
         private void Interact()
         {
+
             if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable) InteractWithTarget();
+            else if (TargetInteractable)
+            {
+                if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
+                InteractWithTarget();
+            }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
         
+        private void clickInteract( )
+        {
+        
+            if (NoTarget) HeldObject?.Drop();
+            else if (_currentTarget is IClickInteractable&& ClickInteract.OnRaise != null)
+            {
+                InteractWithTarget();
+            }
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+        }
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
