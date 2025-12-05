@@ -25,18 +25,15 @@ namespace time
 
         private void Awake()
         {
-            _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+            _sunLight = GameObject.Find("Sun").GetComponent<Light>();
         }
 
-        public void ChangeTime(int day, int hour)
+        private void Start()
         {
-            if (day == _lastDay && hour == _lastHour) return;
-            days = day;
-            hours = hour;
-            Validate();
+            TryStartTransition(days, hours);
         }
         
-        private void Validate()
+        private void OnValidate()
         {
             if (days == _lastDay && hours == _lastHour) return;
             _lastDay = days;

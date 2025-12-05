@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using component;
 using UnityEngine;
 
 namespace ScriptableObjects.chores
 {
-    [CreateAssetMenu(fileName = "Chore", menuName = "ScriptableObjects/ChoreSystem/Chore", order = 0)]
+    [CreateAssetMenu(fileName = "Chore", menuName = "ChoreSystem/Chore", order = 0)]
     public class SoChore : ScriptableObject
     {
         [Header("Chore Settings")]

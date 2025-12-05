@@ -1,26 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using ScriptableObjects.Dialogue;
+using UnityEngine;
 
 namespace dialogue
 {
     public class DialogueLoader : MonoBehaviour
     {
+        [Header("Dialogue Configuration")]
         [SerializeField] private List<DialogueNode> dialogueNodes;
         [SerializeField] private string startingNodeId = "start";
+
+        [Header("Dialogue References")]
         [SerializeField] private DialogueManager dialogueManager;
 
-        public void StartDialogue(List<DialogueNode> configDialogueNodes)
+        private void Awake()
         {
-            if (dialogueNodes.Count == 0 || dialogueManager == null) return;
+            if (dialogueManager == null)
+            {
+                Debug.LogError("DialogueManager not found in the scene!");
+            }
+        }
+
+        public void StartDialogue()
+        {
+            if (dialogueManager == null || dialogueNodes.Count == 0) return;
+
+            // Wacht 1 frame zodat UI & EventSystem klaar zijn
             StartCoroutine(StartDialogueNextFrame());
         }
 
         private IEnumerator StartDialogueNextFrame()
         {
-            yield return null;
+            yield return null; // wacht tot einde van frame
+
             dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
         }
+
     }
 }

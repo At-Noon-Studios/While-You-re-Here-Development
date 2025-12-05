@@ -1,23 +1,16 @@
 using System.Collections.Generic;
-using UnityEngine;
 using dialogue;
+using UnityEngine;
 
 namespace ScriptableObjects.Dialogue
 {
-    [CreateAssetMenu(fileName = "DialogueNode", menuName = "ScriptableObjects/Dialogue/Node")]
+    [CreateAssetMenu(fileName = "DialogueNode", menuName = "Dialogue/Node")]
     public class DialogueNode : ScriptableObject
     {
-        [Header("Node Info")]
         public string nodeID;
         public string speakerName;
-
-        [Header("Dialogue Sentences")]
-        public List<DialogueSentence> sentences;
-
-        [Header("Choices")]
+        [TextArea(3, 10)]
+        public string dialogueText;
         public List<DialogueChoice> choices;
-
-        [Header("Next Node (if no choices)")]
-        public string targetNodeID;
     }
 }

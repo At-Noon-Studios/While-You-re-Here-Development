@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ScriptableObjects.chores
 {
-    [CreateAssetMenu(fileName = "ChoreComponent", menuName = "ChoreSystem/ChoreComponent", order = 0)]
     public abstract class SoChoreComponent : ScriptableObject
     {
         [Header("Component Settings")]

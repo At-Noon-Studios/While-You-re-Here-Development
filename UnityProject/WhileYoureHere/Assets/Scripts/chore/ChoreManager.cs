@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ScriptableObjects.chores;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace chore
 {
@@ -16,12 +15,13 @@ namespace chore
         {
             InitializeChores();
         }
-        
-        public void StartChoreWithSo(SoChore soChore)
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            StartChore(soChore.id);
+            StartChore(0); // Starting first chore
         }
-        
+
         private bool StartChore(int id)
         {
             if (!_chores.ContainsKey(id)) return false;
@@ -60,11 +60,6 @@ namespace chore
 
                 Debug.Log($"Chore {chore.ChoreName} has been initialized");
             }
-        }
-
-        public bool CheckChoreCompletion(int id)
-        {
-            return _chores[id].ChoreStatus == ChoreStatus.Completed;
         }
     }
 }
