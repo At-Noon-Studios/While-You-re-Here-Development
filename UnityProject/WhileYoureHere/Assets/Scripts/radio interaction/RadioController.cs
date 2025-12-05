@@ -14,7 +14,7 @@ namespace radio_interaction
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
-        
+        [SerializeField] private Transform camera;
         private AudioSource audioSource;
         private int currentRadioIndex;
         private bool _radioOn;
@@ -37,8 +37,35 @@ namespace radio_interaction
 
         private void Update()
         {
+            if (isTuning)
+            {
+                PositionCamera();
+            }
+            else camera.position = player.position+transform.up*3;
+            
             HandleMouseMovement();
             if (_radioOn && !_tuningLock) TuneRadio(tuneValue);
+        }
+
+        private void PositionCamera()
+        {
+            var position = Vector3.Lerp(
+                camera.transform.position,
+                transform.position + -transform.right*2,
+                Time.deltaTime * 1f
+            );
+            camera.position=position;
+                
+            var targetRotation = Quaternion.LookRotation(
+                transform.position - camera.transform.position,
+                Vector3.up
+            );
+                
+            camera.transform.rotation = Quaternion.Lerp(
+                camera.transform.rotation,
+                targetRotation,
+                Time.deltaTime * 5f
+            );
         }
 
         private void HandleMouseMovement()
@@ -49,6 +76,7 @@ namespace radio_interaction
             tuneValue = Mathf.Clamp01(tuneValue + deltaX * radioData.sensitivity);
             MoveSlider(deltaX);
             lastMousePos = current;
+            
 
         }
         private void MoveSlider(float deltaX)
@@ -64,6 +92,7 @@ namespace radio_interaction
 
         private IEnumerator TuningState()
         {
+            
             if (_tuningLock) yield break;
             var holdTimer = 0f;
             while (holdTimer < radioData.tuningWaitTime)
@@ -87,8 +116,11 @@ namespace radio_interaction
         
         public void EnterTuningMode()
         {
+            
             if (!_radioOn) return;
             if (isTuning) return;
+            
+            
             isTuning = true;
             //pause screen
             movementController?.PauseMovement();
