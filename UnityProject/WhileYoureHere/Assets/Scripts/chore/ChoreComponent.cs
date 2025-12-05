@@ -16,6 +16,7 @@ namespace chore
             WaterBoiled,
             TeabagAdded,
             CupFilled
+            ItemCollected
         }
         
         public event Action<ChoreComponent> OnComponentCompleted;
