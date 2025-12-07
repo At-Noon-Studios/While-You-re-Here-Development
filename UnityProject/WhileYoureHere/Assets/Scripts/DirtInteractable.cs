@@ -8,26 +8,29 @@ public class DirtInteractable : InteractableBehaviour
     [SerializeField] Color[] colorTransition;
 
     Color secondColor = new(255, 0, 0);
-    BroomScript broom;
+    [SerializeField] BroomScript broom;
 
     protected new void Awake()
     {
         base.Awake();
         materialColor = GetComponent<Renderer>();
-        broom = GetComponent<BroomScript>();
     }
 
     public override void Interact(IInteractor interactor)
     {
-        Debug.Log("status of holding the broom is: " + broom.IsHolding);
-        if (broom.IsHolding)
+        if (broom == null) { Debug.LogWarning("Broom can't be found!"); return; }
+
+        if (!broom.IsHolding)
         {
-            materialColor.material.color = secondColor;
-        }
-        else
-        {
+            Debug.Log("Broom holding boolean is: " + broom.IsHolding);
             Debug.Log("You need to hold the broom for this!");
             return;
+        }
+        else if (broom.IsHolding)
+        {
+            Debug.Log("Broom holding boolean is: " + broom.IsHolding);
+            Debug.Log("How nice of you to hold the broom before interacting!");
+            materialColor.material.color = secondColor;
         }
         Debug.Log("You just interacted with a pile of shit... gross...");
         // ColorTransition();

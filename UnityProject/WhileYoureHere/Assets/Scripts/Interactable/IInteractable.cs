@@ -10,7 +10,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public string InteractionText(IInteractor interactor);
-        
+
         /// <summary>
         /// Determines whether <paramref name="interactor"/> is allowed to interact with this this <see cref="IInteractable"/> component.
         /// <returns>A bool that is used to determine whether an interaction can occur.</returns>
@@ -19,7 +19,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public bool InteractableBy(IInteractor interactor);
-        
+
         /// <summary>
         /// Called when a <see cref="PlayerInteractionController"/> 
         /// triggers an interaction while the player is detecting a Collider containing 
@@ -29,7 +29,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public void Interact(IInteractor interactor);
-        
+
         /// <summary>
         /// OnHoverEnter is called when a <see cref="PlayerInteractionController"/> 
         /// starts detecting a Collider containing 
@@ -39,7 +39,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public void OnHoverEnter(IInteractor interactor);
-        
+
         /// <summary>
         /// OnHoverExit is called when a <see cref="PlayerInteractionController"/> 
         /// stops detecting a Collider containing 

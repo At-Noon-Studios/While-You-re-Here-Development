@@ -18,7 +18,8 @@ namespace Interactable.Holdable
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
 
-        public bool IsHeld => _holder != null;
+        public bool IsHeld { get; private set; }
+
         private Transform _playerCamera;
 
         public float Weight => data.Weight;
@@ -67,7 +68,8 @@ namespace Interactable.Holdable
 
         private void PickUp(IInteractor interactor)
         {
-            GetComponent<PickUpSound>().PlayPickUpSound();
+            IsHeld = true;
+            // GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -112,6 +114,7 @@ namespace Interactable.Holdable
 
         private void Detach()
         {
+            IsHeld = false;
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce((transform.parent?.forward ?? Vector3.zero) * data.DroppingForce);
             transform.SetParent(null);
