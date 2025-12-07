@@ -2,6 +2,7 @@ using Interactable;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(AudioSource))]
 public class DirtInteractable : InteractableBehaviour
 {
     Renderer materialColor;
@@ -10,10 +11,14 @@ public class DirtInteractable : InteractableBehaviour
     Color secondColor = new(255, 0, 0);
     [SerializeField] BroomScript broom;
 
+    AudioSource audioSource;
+    [SerializeField] AudioClip sweepingClip;
+
     protected new void Awake()
     {
         base.Awake();
         materialColor = GetComponent<Renderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public override void Interact(IInteractor interactor)
@@ -32,6 +37,7 @@ public class DirtInteractable : InteractableBehaviour
             Debug.Log("How nice of you to hold the broom before interacting!");
             // materialColor.material.color = secondColor;
             ColorTransition();
+            audioSource.PlayOneShot(sweepingClip);
         }
         Debug.Log("You just interacted with a pile of shit... gross...");
     }
