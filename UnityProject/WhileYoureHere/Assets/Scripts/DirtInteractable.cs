@@ -12,7 +12,10 @@ public class DirtInteractable : InteractableBehaviour
     [SerializeField] BroomScript broom;
 
     AudioSource audioSource;
-    [SerializeField] AudioClip sweepingClip;
+    [SerializeField] SweepingData sweepingData;
+
+    // [SerializeField] AudioClip sweepingClip;
+    // public AudioClip sweepingData.sweepingClip;
 
     protected new void Awake()
     {
@@ -37,7 +40,7 @@ public class DirtInteractable : InteractableBehaviour
             Debug.Log("How nice of you to hold the broom before interacting!");
             // materialColor.material.color = secondColor;
             ColorTransition();
-            audioSource.PlayOneShot(sweepingClip);
+            audioSource.PlayOneShot(sweepingData.SweepingClip);
         }
         Debug.Log("You just interacted with a pile of shit... gross...");
     }
