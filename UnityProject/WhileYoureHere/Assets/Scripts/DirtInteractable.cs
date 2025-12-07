@@ -30,10 +30,10 @@ public class DirtInteractable : InteractableBehaviour
         {
             Debug.Log("Broom holding boolean is: " + broom.IsHolding);
             Debug.Log("How nice of you to hold the broom before interacting!");
-            materialColor.material.color = secondColor;
+            // materialColor.material.color = secondColor;
+            ColorTransition();
         }
         Debug.Log("You just interacted with a pile of shit... gross...");
-        // ColorTransition();
     }
 
     public void ColorTransition()
