@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace ScriptableObjects.picking_up_objects
+namespace ScriptableObjects.Pickable
 {
-    [CreateAssetMenu(fileName = "PickableData", menuName = "Scriptable Objects/PickableData")]
+    [CreateAssetMenu(fileName = "PickableData", menuName = "ScriptableObjects/PickableData")]
     public class PickableData : ScriptableObject
     {
         [Range(1f, 100f)]
