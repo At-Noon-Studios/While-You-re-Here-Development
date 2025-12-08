@@ -35,7 +35,8 @@ namespace Interactable
         public virtual bool InteractableBy(IInteractor interactor) => true;
 
         public abstract void Interact(IInteractor interactor);
-        
+        public abstract void ClickInteract(IInteractor interactor);
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             AddOutlineMaterialToRenderers();

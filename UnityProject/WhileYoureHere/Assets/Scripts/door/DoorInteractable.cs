@@ -82,6 +82,11 @@ namespace door
             }
         }
 
+        public override void ClickInteract(IInteractor interactor)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);

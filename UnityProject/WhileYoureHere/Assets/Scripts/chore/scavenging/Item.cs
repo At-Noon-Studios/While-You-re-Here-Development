@@ -26,6 +26,12 @@ namespace chore.scavenging
             AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
             Destroy(gameObject);
         }
+
+        public override void ClickInteract(IInteractor interactor)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override string InteractionText(IInteractor interactor) => "";
     }
 }

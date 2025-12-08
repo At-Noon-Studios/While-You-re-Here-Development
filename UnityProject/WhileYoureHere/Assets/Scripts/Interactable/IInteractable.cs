@@ -29,6 +29,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public void Interact(IInteractor interactor);
+        public void ClickInteract(IInteractor interactor);
         
         /// <summary>
         /// OnHoverEnter is called when a <see cref="PlayerInteractionController"/> 

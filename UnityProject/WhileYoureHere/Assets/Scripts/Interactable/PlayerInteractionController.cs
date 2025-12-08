@@ -89,7 +89,7 @@ namespace Interactable
             if (NoTarget) HeldObject?.Drop();
             else if (_currentTarget is IClickInteractable&& ClickInteract.OnRaise != null)
             {
-                InteractWithTarget();
+                ClickInteractWithTarget();
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
@@ -152,6 +152,12 @@ namespace Interactable
         {
             _currentTarget?.Interact(this);
             OnHoverEnter(_currentTarget); // Refresh
+        }
+
+        private void ClickInteractWithTarget()
+        {
+            _currentTarget?.ClickInteract(this);
+            OnHoverExit(_currentTarget);
         }
         
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)

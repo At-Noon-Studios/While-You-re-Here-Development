@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using player_controls;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,8 +26,13 @@ namespace radio_interaction
         private MovementController movementController;
         private CameraController cameraController;
 
+        [SerializeField] private Canvas OnCanvas;
+        [SerializeField] private Canvas OfTuneCanvas;
+        [SerializeField] private Canvas SlideCanvas;
+
         private void Start()
         {
+
             audioSource = GetComponent<AudioSource>();
             movementController = player.GetComponent<MovementController>();
             cameraController = player.GetComponentInChildren<CameraController>();
@@ -120,7 +126,8 @@ namespace radio_interaction
             if (!_radioOn) return;
             if (isTuning) return;
             
-            
+            SlideCanvas.gameObject.SetActive(true);
+            OfTuneCanvas.gameObject.SetActive(false);
             isTuning = true;
             //pause screen
             movementController?.PauseMovement();
@@ -139,12 +146,15 @@ namespace radio_interaction
             Cursor.lockState = CursorLockMode.Locked;
             movementController?.ResumeMovement();
             cameraController?.ResumeCameraMovement();
+            SlideCanvas.gameObject.SetActive(false);
+            OfTuneCanvas.gameObject.SetActive(true);
         }
    
         public void TurnRadioOn()
         {
             var staticClip = radioTracks[0].audioClip;
             _radioOn = true;
+            OfTuneCanvas.gameObject.SetActive(true);
             PlayClip(staticClip);
         }
 
@@ -152,6 +162,8 @@ namespace radio_interaction
         {
             _radioOn = false;
             audioSource.Stop();
+            OfTuneCanvas.gameObject.SetActive(false);
+            OnCanvas.gameObject.SetActive(true);
             ExitTuningMode();
         }
         
