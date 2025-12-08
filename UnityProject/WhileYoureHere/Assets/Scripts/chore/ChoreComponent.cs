@@ -7,7 +7,6 @@ namespace chore
     {
         public enum ChoreComponentType
         {
-            EnemyKilled,
             ItemCollected
         }
         
