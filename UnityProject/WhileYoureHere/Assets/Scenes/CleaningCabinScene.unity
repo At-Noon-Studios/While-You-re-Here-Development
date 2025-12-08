@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 70207088}
   - component: {fileID: 70207087}
   - component: {fileID: 70207091}
+  - component: {fileID: 70207092}
   m_Layer: 0
   m_Name: Garbage3
   m_TagString: Untagged
@@ -243,7 +244,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af45beb78b3c24619897bab0ab9fc1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GarbageInteraction
+  interactionCanvas: {fileID: 0}
+  data: {fileID: 11400000, guid: ba71d640addd0874e947b91827bb252c, type: 2}
   broom: {fileID: 943800910}
+--- !u!54 &70207092
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70207086}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &96847878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -431,6 +461,7 @@ GameObject:
   - component: {fileID: 218248955}
   - component: {fileID: 218248954}
   - component: {fileID: 218248958}
+  - component: {fileID: 218248959}
   m_Layer: 0
   m_Name: Garbage2
   m_TagString: Untagged
@@ -542,7 +573,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af45beb78b3c24619897bab0ab9fc1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GarbageInteraction
+  interactionCanvas: {fileID: 0}
+  data: {fileID: 11400000, guid: ba71d640addd0874e947b91827bb252c, type: 2}
   broom: {fileID: 943800910}
+--- !u!54 &218248959
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218248953}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!223 &222505987 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 8927152034907055843, guid: 93c23ecb78139fb43815763601cfcbc0, type: 3}
@@ -631,6 +691,10 @@ PrefabInstance:
     - target: {fileID: 2741701374386415614, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5161706886281970434, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: field of view
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6642764398237555488, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: drop
@@ -909,7 +973,8 @@ GameObject:
   - component: {fileID: 855661450}
   - component: {fileID: 855661449}
   - component: {fileID: 855661448}
-  - component: {fileID: 855661447}
+  - component: {fileID: 855661452}
+  - component: {fileID: 855661453}
   m_Layer: 0
   m_Name: Garbage1
   m_TagString: Untagged
@@ -917,19 +982,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &855661447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855661446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af45beb78b3c24619897bab0ab9fc1e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  broom: {fileID: 943800910}
 --- !u!65 &855661448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1022,6 +1074,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &855661452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855661446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af45beb78b3c24619897bab0ab9fc1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GarbageInteraction
+  interactionCanvas: {fileID: 0}
+  data: {fileID: 11400000, guid: ba71d640addd0874e947b91827bb252c, type: 2}
+  broom: {fileID: 943800910}
+--- !u!54 &855661453
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855661446}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &943800902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1285,6 +1379,10 @@ PrefabInstance:
       propertyPath: broom
       value: 
       objectReference: {fileID: 943800910}
+    - target: {fileID: 3229561272721094442, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3229561272721094442, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: sweepingClip
       value: 

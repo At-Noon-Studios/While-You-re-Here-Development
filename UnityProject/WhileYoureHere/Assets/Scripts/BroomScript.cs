@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class BroomScript : HoldableObjectBehaviour
 {
-    public bool IsHolding { get; private set; }
-
-    CharacterController characterController;
     protected override void Awake()
     {
         base.Awake();
-        characterController = GetComponentInParent<CharacterController>();
     }
 
     void Update()
@@ -18,12 +14,10 @@ public class BroomScript : HoldableObjectBehaviour
         CheckBroomCollision();
     }
 
+    public bool IsBroomBeingHeld => IsHeld;
+
     public void CheckBroomCollision()
     {
-        if (IsHeld)
-        {
-            IsHolding = true;
-            Debug.Log(gameObject.name + " is am being held!");
-        }
+        if (IsHeld) { Debug.Log(gameObject.name + " is am being held!"); }
     }
 }
