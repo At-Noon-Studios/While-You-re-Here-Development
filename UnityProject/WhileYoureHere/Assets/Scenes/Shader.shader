@@ -13,6 +13,8 @@ Shader "Custom/Green"
             #pragma vertex vert
             #pragma fragment frag
 
+            float4 _BaseColor;
+
             // Vertex shader: transform vertex to clip space
             float4x4 unity_matrix_mvp;
 
@@ -23,7 +25,7 @@ Shader "Custom/Green"
             
             float4 frag() : SV_Target
             {
-                return float4(0, 1, 0, 1);
+                return _BaseColor;
             }
 
             ENDHLSL

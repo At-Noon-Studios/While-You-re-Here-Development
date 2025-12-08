@@ -1,23 +1,28 @@
-Shader "Custom/NewUnlitUniversalRenderPipelineShader"
+
+Shader "Custom/SobelColor_URP"
 {
     Properties
     {
-        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
-        [MainTexture] _BaseMap("Base Map", 2D) = "white"
+        _BlitTexture("Source", 2D) = "white" {}
     }
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        Tags { "RenderType"="Opaque" }
 
         Pass
         {
+            Name "SobelPass"
+
+            
             HLSLPROGRAM
+            #include "UnityCG.cginc"
+            
+            #pragma vertex Vert
+            #pragma fragment Frag
 
-            #pragma vertex vert
-            #pragma fragment frag
-
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            sampler2D _BlitTexture;
+            float4 _BlitTexture_TexelSize;
 
             struct Attributes
             {
@@ -31,25 +36,35 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
                 float2 uv : TEXCOORD0;
             };
 
-            TEXTURE2D(_BaseMap);
-            SAMPLER(sampler_BaseMap);
-
-            CBUFFER_START(UnityPerMaterial)
-                half4 _BaseColor;
-                float4 _BaseMap_ST;
-            CBUFFER_END
-
-            Varyings vert(Attributes IN)
+            Varyings Vert(Attributes v)
             {
-                Varyings OUT;
-                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
-                return OUT;
+                Varyings o = (Varyings)0;
+                o.positionHCS = UnityObjectToClipPos(v.positionOS);
+                o.uv = v.uv;
+                return o;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            float4 Frag(Varyings i) : SV_Target
             {
-                return half4(0, 0, 0, 1);
+                float2 texel = _BlitTexture_TexelSize.xy;
+
+                float3 tl = tex2D(_BlitTexture, i.uv + texel * float2(-1,  1)).rgb;
+                float3  l = tex2D(_BlitTexture, i.uv + texel * float2(-1,  0)).rgb;
+                float3 bl = tex2D(_BlitTexture, i.uv + texel * float2(-1, -1)).rgb;
+
+                float3 tr = tex2D(_BlitTexture, i.uv + texel * float2( 1,  1)).rgb;
+                float3  r = tex2D(_BlitTexture, i.uv + texel * float2( 1,  0)).rgb;
+                float3 br = tex2D(_BlitTexture, i.uv + texel * float2( 1, -1)).rgb;
+
+                float3 t = tex2D(_BlitTexture, i.uv + texel * float2(0,  1)).rgb;
+                float3 b = tex2D(_BlitTexture, i.uv + texel * float2(0, -1)).rgb;
+
+                float3 gx = -tl - 2*l - bl + tr + 2*r + br;
+                float3 gy =  tl + 2*t + tr - bl - 2*b - br;
+
+                float3 edge = sqrt(gx * gx + gy * gy);
+
+                return float4(edge, 1);
             }
             ENDHLSL
         }
