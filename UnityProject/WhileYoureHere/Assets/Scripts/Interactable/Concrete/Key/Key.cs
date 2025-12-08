@@ -1,10 +1,14 @@
-﻿using Interactable.Holdable;
+﻿using door;
+using Interactable.Holdable;
 using UnityEngine;
 
 namespace Interactable.Concrete.Key
 {
     public class Key : HoldableObjectBehaviour
     {
+        [SerializeField] private Keyhole[] keyholes;
+        public Keyhole[] Keyholes  => keyholes;
+        
         [HideInInspector] public bool detectable = true;
         
         public float Rotation { get; private set; }

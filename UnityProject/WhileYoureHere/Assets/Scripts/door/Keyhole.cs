@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using System.Linq;
 using Interactable;
 using Interactable.Concrete.Key;
 using Interactable.Holdable;
 using player_controls;
 using ScriptableObjects.Events;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace door
@@ -23,14 +25,32 @@ namespace door
         [SerializeField] private EventChannel interact;
         
         private UIManager _uiManager;
+        private DoorInteractable _door;
         
         [HideInInspector] public bool detectable = true;
-        public bool IsLocked { get; private set; }
-        public void LockDoor(bool locked) { IsLocked = locked; }
         
         private Operation _currentOperation;
 
         #region Unity event functions
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _door = GetComponentInParent<DoorInteractable>();
+            var parent = transform.parent;
+            if (_door == null && transform.parent != null)
+            {
+                foreach (Transform sibling in parent.parent)
+                {
+                    if (sibling == parent) continue;
+
+                    if (!sibling.TryGetComponent(out DoorInteractable door)) continue;
+                    _door = door;
+                    break;
+                }
+            }
+            if (_door == null) Debug.LogError("Keyhole should have a " + nameof(DoorInteractable) + " parent", this);
+        }
         
         private void Start()
         {
@@ -106,7 +126,7 @@ namespace door
         private void FinishOperatingLock(bool isLocked)
         {
             StopOperatingLock();
-            IsLocked = isLocked;
+            _door.IsLocked = isLocked;
         }
 
         private void StopOperatingLock()
@@ -157,11 +177,11 @@ namespace door
             _uiManager.HideInteractPrompt();
         }
 
-        private bool CanStartOperating(IInteractor interactor) => interactor.HeldObject is Key && _currentOperation == null;
+        private bool CanStartOperating(IInteractor interactor) => interactor.HeldObject is Key key && key.Keyholes.Contains(this) && _currentOperation == null;
 
         private bool CanStopOperating(out bool lockedState)
         {
-            lockedState = IsLocked;
+            lockedState = _door.IsLocked;
             if (!CurrentlyBeingOperated) return false;
             switch (_currentOperation.Key.Rotation)
             {
