@@ -81,11 +81,7 @@ namespace door
                 else if (!_isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
-
-        public override void ClickInteract(IInteractor interactor)
-        {
-            throw new System.NotImplementedException();
-        }
+        
 
         public override void OnHoverEnter(IInteractor interactor)
         {

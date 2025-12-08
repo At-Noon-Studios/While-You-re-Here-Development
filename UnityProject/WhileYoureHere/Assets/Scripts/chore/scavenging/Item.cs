@@ -27,11 +27,6 @@ namespace chore.scavenging
             Destroy(gameObject);
         }
 
-        public override void ClickInteract(IInteractor interactor)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string InteractionText(IInteractor interactor) => "";
     }
 }

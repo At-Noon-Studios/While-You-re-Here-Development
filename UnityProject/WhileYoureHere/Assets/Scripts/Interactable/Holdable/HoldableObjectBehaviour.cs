@@ -62,12 +62,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-
-        public override void ClickInteract(IInteractor interactor)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private void PickUp(IInteractor interactor)
         {
             GetComponent<PickUpSound>().PlayPickUpSound();
