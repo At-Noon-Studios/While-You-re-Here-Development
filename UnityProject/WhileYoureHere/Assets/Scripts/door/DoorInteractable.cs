@@ -19,8 +19,8 @@ namespace door
         [SerializeField] private Keyhole keyhole;
 
         public bool IsLocked { get; set; }
+        public bool IsOpen { get; set; }
         
-        private bool _isOpen;
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
@@ -48,7 +48,7 @@ namespace door
 
         private void Update()
         {
-            Quaternion target = _isOpen ? _openRotation : _closeRotation;
+            Quaternion target = IsOpen ? _openRotation : _closeRotation;
             doorPivot.localRotation = Quaternion.Lerp(doorPivot.localRotation, target, Time.deltaTime * (config?.openSpeed ?? 2f));
 
             if (_playerCamera != null && interactionCanvases != null)
@@ -70,13 +70,13 @@ namespace door
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
-            if (keyhole) keyhole.detectable = _isOpen;
-            _isOpen = !_isOpen;
+            if (keyhole) keyhole.detectable = IsOpen;
+            IsOpen = !IsOpen;
 
             if (audioSource)
             {
-                if (_isOpen && config.openSound) audioSource.PlayOneShot(config.openSound);
-                else if (!_isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
+                if (IsOpen && config.openSound) audioSource.PlayOneShot(config.openSound);
+                else if (!IsOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
 
@@ -89,7 +89,7 @@ namespace door
 
             interactionCanvases.ForEach(c => c.gameObject.SetActive(false));
 
-            int index = !_isOpen ? (isFront ? 0 : 1) : (isFront ? 2 : 3);
+            int index = !IsOpen ? (isFront ? 0 : 1) : (isFront ? 2 : 3);
             if (index < interactionCanvases.Count)
                 interactionCanvases[index].gameObject.SetActive(true);
         }
@@ -109,7 +109,7 @@ namespace door
             if (IsLocked)
                 return "Door is locked"; 
 
-            return _isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
+            return IsOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
     }
 }

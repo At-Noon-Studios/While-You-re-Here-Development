@@ -36,19 +36,7 @@ namespace door
         protected override void Awake()
         {
             base.Awake();
-            _door = GetComponentInParent<DoorInteractable>();
-            var parent = transform.parent;
-            if (_door == null && transform.parent != null)
-            {
-                foreach (Transform sibling in parent.parent)
-                {
-                    if (sibling == parent) continue;
-
-                    if (!sibling.TryGetComponent(out DoorInteractable door)) continue;
-                    _door = door;
-                    break;
-                }
-            }
+            FindDoorInParentOrParentSibling();
             if (_door == null) Debug.LogError("Keyhole should have a " + nameof(DoorInteractable) + " parent", this);
         }
         
@@ -127,6 +115,7 @@ namespace door
         {
             StopOperatingLock();
             _door.IsLocked = isLocked;
+            if (!isLocked) _door.IsOpen = true;
         }
 
         private void StopOperatingLock()
@@ -193,6 +182,22 @@ namespace door
                     return true;
             }
             return false;
+        }
+
+        private void FindDoorInParentOrParentSibling()
+        {
+            _door = GetComponentInParent<DoorInteractable>();
+            if (_door != null) return;
+            var parent = transform.parent;
+            if (_door != null || transform.parent == null) return;
+            foreach (Transform sibling in parent.parent)
+            {
+                if (sibling == parent) continue;
+
+                if (!sibling.TryGetComponent(out DoorInteractable door)) continue;
+                _door = door;
+                break;
+            }
         }
         
         #endregion
