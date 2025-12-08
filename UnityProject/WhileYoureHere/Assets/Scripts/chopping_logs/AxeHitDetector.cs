@@ -5,9 +5,6 @@ namespace chopping_logs
 {
     public class AxeHitDetector : MonoBehaviour
     {
-        private Vector3 _lastPos;
-        public float SwingSpeed { get; private set; }
-
         [Header("Axe Swing Settings")]
         [SerializeField] private Transform axeModel;
         [SerializeField] private float swingSensitivity = 2f;
@@ -17,25 +14,26 @@ namespace chopping_logs
         public float maxZRotation = 45f;
 
         private float _axeZRotation;
+        private Vector3 _lastPos;
+        
         private Quaternion _baseRotation;
-        private bool baseRotationSet = false;
+        private bool _baseRotationSet;
 
         private void Update()
         {
-            SwingSpeed = Vector3.Distance(transform.position, _lastPos) / Time.deltaTime;
             _lastPos = transform.position;
         }
         
         public void SetBaseRotation()
         {
             _baseRotation = axeModel.localRotation;
-            baseRotationSet = true;
+            _baseRotationSet = true;
         }
         
         public void OnSwing(InputValue value)
         {
             if (!stump.MinigameActive) return;
-            if (!baseRotationSet) return;
+            if (!_baseRotationSet) return;
 
             var delta = value.Get<Vector2>();
             
@@ -45,11 +43,6 @@ namespace chopping_logs
             axeModel.localRotation = _baseRotation * Quaternion.Euler(0f, 0f, _axeZRotation);
 
             Debug.Log($"Axe rotated: {_axeZRotation}°");
-        }
-
-        public void ConsumeHit()
-        {
-            SwingSpeed = 0f;
         }
     }
 }

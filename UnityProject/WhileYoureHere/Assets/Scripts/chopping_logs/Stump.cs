@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Interactable;
 using Interactable.Holdable;
@@ -8,21 +9,38 @@ namespace chopping_logs
 {
     public class Stump : InteractableBehaviour
     {
-        [Header("Minigame Settings")]
-        [SerializeField] private Transform logPlaceholder;
+        [Header("Minigame Settings")] [SerializeField]
+        private Transform logPlaceholder;
+
         [SerializeField] private Transform minigameStartPoint;
-        
-        [Header("UI References")]
-        [SerializeField] private ChopUIManager uiManager;
+
+        [Header("UI References")] [SerializeField]
+        private ChopUIManager uiManager;
+
+        [Header("Sound Settings")] [SerializeField]
+        private AudioClip logPlaceSound;
+
+        [SerializeField] private AudioClip logCrackSound;
 
         public static bool CurrentMinigameActive { get; private set; }
-
-        public bool HasLog => _hasLog;
         public bool MinigameActive { get; private set; }
 
         private GameObject _logObject;
         private bool _hasLog;
-        
+        private AudioSource _audioSource;
+
+
+        private void Start()
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+                _audioSource.playOnAwake = false;
+                _audioSource.spatialBlend = 0f;
+            }
+        }
+
         public override void Interact(IInteractor interactor)
         {
             var player = GameObject.FindWithTag("Player");
@@ -67,6 +85,11 @@ namespace chopping_logs
             var chopTargets = _logObject.GetComponentsInChildren<LogChopTarget>();
             foreach (var chopTarget in chopTargets)
             {
+                if (_audioSource != null && logPlaceSound != null)
+                {
+                    _audioSource.PlayOneShot(logPlaceSound);
+                }
+
                 chopTarget.SetStump(this);
             }
 
@@ -86,11 +109,10 @@ namespace chopping_logs
             if (player != null && minigameStartPoint != null)
             {
                 player.transform.SetParent(minigameStartPoint);
-                
+
                 player.transform.position = minigameStartPoint.position;
                 player.transform.rotation = minigameStartPoint.rotation;
                 camera.transform.rotation = minigameStartPoint.rotation;
-                
             }
 
             player?.GetComponent<MovementController>()?.PauseMovement();
@@ -98,7 +120,7 @@ namespace chopping_logs
             Camera.main?.GetComponent<CameraController>()?.PauseCameraMovement();
 
             ChopUIManager.Instance?.ShowUI();
-            
+
             var axeDetector = player.GetComponentInChildren<AxeHitDetector>();
             if (axeDetector != null)
             {
@@ -119,6 +141,8 @@ namespace chopping_logs
 
             ChopUIManager.Instance?.HideAllUI();
             StartCoroutine(ResumeCameraAfterDelay(2f));
+
+            StartCoroutine(PlayCrackTwice(0.12f));
 
             ClearLog();
         }
@@ -165,6 +189,14 @@ namespace chopping_logs
             Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
             Debug.Log("Camera movement resumed after delay.");
         }
+        
+        private IEnumerator PlayCrackTwice(float delayBetween)
+        {
+            if (_audioSource == null || logCrackSound == null) yield break;
 
+            _audioSource.PlayOneShot(logCrackSound);
+            yield return new WaitForSeconds(delayBetween);
+            _audioSource.PlayOneShot(logCrackSound);
+        }
     }
 }

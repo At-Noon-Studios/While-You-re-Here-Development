@@ -1,4 +1,3 @@
-using gamestate;
 using UnityEngine;
 
 namespace chopping_logs
@@ -6,52 +5,33 @@ namespace chopping_logs
     public class LogChopTarget : MonoBehaviour
     {
         private const int TotalHits = 3;
-        private int _hits = 0;
+        private int _hits;
         private Stump _stump;
 
         public GameObject choppedLogQuarterPrefab;
         public Transform[] spawnPoints = new Transform[2];
-
+        
         private void Start()
         {
             _stump = GetComponentInParent<Stump>();
-            Debug.Log($"LogChopTarget initialized. Stump found: {_stump != null}");
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"Trigger entered by: {other.name} | Tag: {other.tag}");
-
-            if (_stump == null)
-            {
-                Debug.LogWarning("No stump reference in LogChopTarget.");
-                return;
-            }
-
-            Debug.Log($"Stump state → MinigameActive: {_stump.MinigameActive}, HasLog: {_stump.HasLog}");
-
-            if (!_stump.IsReadyForChop())
-            {
-                Debug.Log("Hit ignored: stump inactive or no log.");
-                return;
-            }
+            if (_stump == null) return;
+            
+            if (!_stump.IsReadyForChop()) return;
 
             var axe = other.GetComponent<AxeHitDetector>()
                       ?? other.GetComponentInParent<AxeHitDetector>()
                       ?? other.GetComponentInChildren<AxeHitDetector>();
 
-            if (axe == null)
-            {
-                Debug.Log("No AxeHitDetector found — ignoring non-axe collider.");
-                return;
-            }
+            if (axe == null) return;
 
-            Debug.Log("Valid hit detected!");
-            axe.ConsumeHit();
             RegisterHit();
         }
 
-        public void RegisterHit()
+        private void RegisterHit()
         {
             _hits++;
             Debug.Log($"LOG HIT: {_hits}/{TotalHits}");
@@ -64,11 +44,7 @@ namespace chopping_logs
 
         private void ChopLog()
         {
-            if (choppedLogQuarterPrefab == null)
-            {
-                Debug.LogWarning("No choppedLogQuarterPrefab assigned!");
-                return;
-            }
+            if (choppedLogQuarterPrefab == null) { return; }
 
             for (var i = 0; i < spawnPoints.Length; i++)
             {
@@ -76,17 +52,11 @@ namespace chopping_logs
                 {
                     Instantiate(choppedLogQuarterPrefab, spawnPoints[i].position, spawnPoints[i].rotation);
                 }
-                else
-                {
-                    Debug.LogWarning($"Missing spawn point {i} for chopped log quarter.");
-                }
             }
-            Debug.Log("Log fully chopped! Spawning half's and ending minigame.");
             _hits = 0;
             _stump.EndMinigame();
         }
-
-
+        
         public void SetStump(Stump stump) => _stump = stump;
     }
 }
