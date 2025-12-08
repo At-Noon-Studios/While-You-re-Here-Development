@@ -27,8 +27,6 @@ namespace door
         private UIManager _uiManager;
         private DoorInteractable _door;
         
-        [HideInInspector] public bool detectable = true;
-        
         private Operation _currentOperation;
 
         #region Unity event functions
@@ -75,7 +73,7 @@ namespace door
         
         public override bool IsDetectableBy(IInteractor interactor)
         {
-            return CanStartOperating(interactor) && detectable;
+            return CanStartOperating(interactor) && !_door.IsOpen && _door.IsFinishedMoving();
         }
         
         public override string InteractionText(IInteractor interactor) => "Operate the lock";

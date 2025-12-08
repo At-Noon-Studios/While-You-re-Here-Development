@@ -46,6 +46,8 @@ namespace door
             }
         }
 
+        public bool IsFinishedMoving() => doorPivot.localRotation == (IsOpen ? _openRotation : _closeRotation);
+
         private void Update()
         {
             Quaternion target = IsOpen ? _openRotation : _closeRotation;
@@ -70,7 +72,6 @@ namespace door
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
-            if (keyhole) keyhole.detectable = IsOpen;
             IsOpen = !IsOpen;
 
             if (audioSource)
