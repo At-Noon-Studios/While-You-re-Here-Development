@@ -24,8 +24,6 @@ namespace chore
         public ChoreStatus ChoreStatus;
         private readonly List<ChoreComponent> _choreComponents = new List<ChoreComponent>();
 
-        private int _componentsCompleted;
-
         private readonly Dictionary<ChoreComponent.ChoreComponentType, System.Func<SoChoreComponent, ChoreComponent>>
             _componentFactory
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
@@ -36,10 +34,12 @@ namespace chore
                     { ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.WaterBoiled, CcWaterBoiled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.TeabagAdded, CcTeabagAdded.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory }
+                    { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }
 
                 };
+
+        private int _componentsCompleted;
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)
         {

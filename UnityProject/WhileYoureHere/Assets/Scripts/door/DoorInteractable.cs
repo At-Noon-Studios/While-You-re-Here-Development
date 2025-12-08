@@ -48,7 +48,6 @@ namespace door
         }
 
         //IInteractor interactor hinzugefügt -> davor gar nichts
-        public override void Interact(IInteractor interactor)
         private void Update()
         {
             Quaternion target = _isOpen ? _openRotation : _closeRotation;
@@ -100,7 +99,6 @@ namespace door
 
         //protected zu public geändert
         //IInteractor interactor hinzugefügt -> davor gar nichts
-        public override string InteractionText(IInteractor interactor)
         public override void OnHoverExit(IInteractor interactor)
         {
             base.OnHoverExit(interactor);

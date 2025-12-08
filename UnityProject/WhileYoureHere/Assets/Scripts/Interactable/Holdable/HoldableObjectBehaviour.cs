@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
@@ -18,21 +17,16 @@ namespace Interactable.Holdable
         private Rigidbody _rigidbody;
         private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
-        [CanBeNull] private GameObject _heldVersion;
-        
-        public bool IsCurrentlyHeld => _holder != null;
 
         private Transform _playerCamera;
 
         public float Weight => data.Weight;
-
-        private const int HoldLayer = 3;
+        public bool IsCurrentlyHeld => _holder != null;
 
         protected override void Awake()
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
-            Renderers = GetComponentsInChildren<Renderer>();
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
@@ -49,15 +43,6 @@ namespace Interactable.Holdable
         protected void Start()
         {
             _originalLayer = gameObject.layer;
-            InitializeHeldVersion();
-        }
-        
-        public override bool InteractableBy(IInteractor interactor)
-        {
-            if (interactor is PlayerInteractionController p && p.TableMode)
-                return false;
-
-            return base.InteractableBy(interactor);
         }
 
         private void Update()
@@ -73,9 +58,6 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController p && p.TableMode)
-                return;
-
             PickUp(interactor);
 
             if (interactionCanvas != null)
@@ -84,28 +66,18 @@ namespace Interactable.Holdable
 
         private void PickUp(IInteractor interactor)
         {
-            if (_heldVersion) SetHeldVisual(true, _heldVersion);
             GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
-            var heldObject = this;
             interactor.HeldObject?.Drop();
-            interactor.SetHeldObject(heldObject);
+            interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
         }
-        
-        private void SetHeldVisual(bool state, GameObject heldVisual) {
-            heldVisual.SetActive(state);
-            foreach (var r in Renderers)
-            {
-                r.enabled = !state;
-            }
-        }
-        
-        public virtual void Drop()
+
+        public void Drop()
         {
-            if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
-            if (_heldVersion) SetHeldVisual(false, _heldVersion);
+            if (_holder == null)
+                throw new Exception("Tried to drop an item that wasn't being held");
 
             _holder.SetHeldObject(null);
             _holder = null;
@@ -114,9 +86,8 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public virtual void Place(Vector3 position, Quaternion? rotation = null)
+        public void Place(Vector3 position, Quaternion? rotation = null)
         {
-            if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
             _holder = null;
 
@@ -134,9 +105,8 @@ namespace Interactable.Holdable
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
-            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
-            transform.localPosition = data.HoldingOffset;
-            gameObject.layer = HoldLayer;
+            transform.localRotation = Quaternion.Euler(data.Rotation);
+            transform.localPosition = data.Offset;
         }
 
         private void Detach()
@@ -146,21 +116,6 @@ namespace Interactable.Holdable
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
         }
-        
-        private void InitializeHeldVersion()
-        {
-            if (!data.HoldingPrefab) return;
-            _heldVersion = Instantiate(data.HoldingPrefab, transform, true);
-            _heldVersion!.transform.localPosition = data.HoldingPrefab.transform.position;
-            _heldVersion.SetActive(false);
-            DisableHeldVersionColliders();
-        }
-
-        private void DisableHeldVersionColliders()
-        {
-            var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
-            heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
-            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
 
         public override void OnHoverEnter(IInteractor interactor)
         {
