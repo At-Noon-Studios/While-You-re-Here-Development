@@ -10,6 +10,8 @@ namespace gamestate
 {
     public class GamestateManager : MonoBehaviour
     {
+        public GamestateFlagList listOfFlags = new GamestateFlagList();
+        
         [Header("List with activities of this day")]
         [SerializeField] private List<Activity>  activities = new List<Activity>();
         
@@ -22,17 +24,10 @@ namespace gamestate
         private AudioSource _playerAudioSource;
         
         public int currentDay;
-        [SerializeField]
-        public Dictionary<string, bool> States = new Dictionary<string, bool>();
-
+        
         private void Awake()
         {
             _instance = this;
-        }
-
-        private void OnValidate()
-        {
-            
         }
 
         private void Start()
@@ -64,7 +59,8 @@ namespace gamestate
         {
             foreach (var boolean in gameplayEvent.booleansToBeTrue)
             {
-                if (!States.TryGetValue(boolean, out var value) || !value) return;
+                var flag = listOfFlags.GetFlagWithName(boolean);
+                if (flag == null || flag.value) return;
                 HandleTrigger(gameplayEvent);
             }
         }
@@ -112,7 +108,7 @@ namespace gamestate
 
         private void BooleanChange(string boolName, bool value)
         {
-            States[boolName] = value;
+            listOfFlags.GetFlagWithName(boolName).value = value;
         }
 
         private void SkyboxChange(int hourOfDay)
