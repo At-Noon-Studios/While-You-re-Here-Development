@@ -6,7 +6,7 @@ using ScriptableObjects.Interactable;
 
 namespace dialogue
 {
-    public class DialogueInteraction : InteractableBehaviour
+    public class DialogueInteraction : InteractableBehaviour,IEInteractable
     {
         [Header("Interaction")]
         [SerializeField] private Canvas interactionCanvas;
@@ -44,6 +44,7 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
+            print ("dialog interact");
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)

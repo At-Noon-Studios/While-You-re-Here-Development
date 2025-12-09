@@ -32,7 +32,7 @@ namespace radio_interaction
         {
             base.OnHoverExit(interactor);
            
-                InteractiveCanvas?.gameObject.SetActive(false);
+                // InteractiveCanvas?.gameObject.SetActive(false);
                   
         }
     }

@@ -15,7 +15,7 @@ namespace radio_interaction
         
         public void Update()
         {
-            _radioController. PositionCamera();
+            _radioController. PositionTuningCamera();
             _radioController.HandleMouseMovement();
             _radioController.TuneRadio();
             if (!_radioController.OnCorrectChannel())
@@ -26,16 +26,16 @@ namespace radio_interaction
             }
 
             timer +=Time.deltaTime;
-            ;
+           
             if (timer >= _radioController.getTuningTimer())
             {
                 _radioController.radioStateMachine.ChangeState(new RadioOnState(_radioController));                
             }
         }
-        
+
         public void Exit()
         {
-            _radioController.ExitTuningMode();
+            
         }
     }
 }
