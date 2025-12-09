@@ -41,8 +41,6 @@ namespace chopping_logs
             _axeZRotation = Mathf.Clamp(_axeZRotation, minZRotation, maxZRotation);
             
             axeModel.localRotation = _baseRotation * Quaternion.Euler(0f, 0f, _axeZRotation);
-
-            Debug.Log($"Axe rotated: {_axeZRotation}°");
         }
     }
 }

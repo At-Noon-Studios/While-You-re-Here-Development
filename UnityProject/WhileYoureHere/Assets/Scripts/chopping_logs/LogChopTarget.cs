@@ -1,3 +1,4 @@
+using chore;
 using UnityEngine;
 
 namespace chopping_logs
@@ -10,6 +11,10 @@ namespace chopping_logs
 
         public GameObject choppedLogQuarterPrefab;
         public Transform[] spawnPoints = new Transform[2];
+        
+        [SerializeField] private int logID;
+        
+        
         
         private void Start()
         {
@@ -58,5 +63,7 @@ namespace chopping_logs
         }
         
         public void SetStump(Stump stump) => _stump = stump;
+
+        public int GetLog() => logID;
     }
 }

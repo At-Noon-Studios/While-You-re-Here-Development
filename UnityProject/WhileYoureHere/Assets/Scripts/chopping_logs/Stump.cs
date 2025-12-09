@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using chore;
 using Interactable;
 using Interactable.Holdable;
 using player_controls;
@@ -29,7 +29,6 @@ namespace chopping_logs
         private bool _hasLog;
         private AudioSource _audioSource;
 
-
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
@@ -51,9 +50,16 @@ namespace chopping_logs
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
                 {
+                    var chopTarget = pickableLog.GetComponentInChildren<LogChopTarget>();
+                    if (chopTarget != null)
+                    {
+                        ChoreEvents.TriggerLogPlaced(chopTarget.GetLog());
+                    }
+
                     PlaceLog(pickableLog, heldController);
                 }
             }
+
 
             if (held is HoldableObjectBehaviour p && p.GetComponentInChildren<AxeHitDetector>() != null)
             {
@@ -144,7 +150,14 @@ namespace chopping_logs
 
             StartCoroutine(PlayCrackTwice(0.12f));
 
+            var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
+
             ClearLog();
+
+            if (chopTarget != null)
+            {
+                ChoreEvents.TriggerLogChopped(chopTarget.GetLog());
+            }
         }
 
         private void ClearLog()
@@ -189,7 +202,7 @@ namespace chopping_logs
             Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
             Debug.Log("Camera movement resumed after delay.");
         }
-        
+
         private IEnumerator PlayCrackTwice(float delayBetween)
         {
             if (_audioSource == null || logCrackSound == null) yield break;

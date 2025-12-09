@@ -17,6 +17,12 @@ namespace chore
             InitializeChores();
         }
         
+        //
+        // private void Start()
+        // {
+        //     StartChore(0);
+        // }
+        
         public void StartChoreWithSo(SoChore soChore)
         {
             StartChore(soChore.id);
