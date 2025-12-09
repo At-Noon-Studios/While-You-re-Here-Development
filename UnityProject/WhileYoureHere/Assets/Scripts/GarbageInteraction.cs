@@ -8,10 +8,10 @@ public class GarbageInteraction : InteractableBehaviour
 
     public override void Interact(IInteractor interactor)
     {
-        Debug.Log("Is held status is: " + broom.IsBroomBeingHeld);
+        // Debug.Log("Is held status is: " + broom.IsBroomBeingHeld);
         if (broom.IsBroomBeingHeld)
         {
-
+            // Debug.Log("Holding da garbage!");
             Destroy(gameObject);
         }
         else if (!broom.IsBroomBeingHeld)
