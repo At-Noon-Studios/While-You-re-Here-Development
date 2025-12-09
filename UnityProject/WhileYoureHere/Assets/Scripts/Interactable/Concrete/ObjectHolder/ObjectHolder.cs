@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using Interactable.Holdable;
 using JetBrains.Annotations;
+using make_a_fire;
 using UnityEngine;
 
 namespace Interactable.Concrete.ObjectHolder
@@ -7,28 +10,36 @@ namespace Interactable.Concrete.ObjectHolder
     public class ObjectHolder : InteractableBehaviour
     {
         [SerializeField] private Transform placePoint;
-        [SerializeField] private Vector3 placedObjectRotation;
-        [CanBeNull] private IHoldableObject _heldObject;
-    
+        [SerializeField] private List<PlacedObjectData> placedObjects;
+        private readonly List<PlacedObjectData> _placedObjectsInHolders;
+        
         public override void Interact(IInteractor interactor)
         {
-            if (_heldObject == null)
+            var heldObject = interactor.HeldObject;
+            if (heldObject == null) return;
+
+            var placedData = placedObjects.FirstOrDefault(e =>
+                e.objectPrefab == (heldObject as Component)?.gameObject
+            );
+
+            if (placedData != null)
             {
-                _heldObject = interactor.HeldObject;
-                _heldObject!.Place(placePoint.position, Quaternion.Euler(placedObjectRotation));
-                _heldObject.EnableCollider(false);
-                return;
+                heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
+                _placedObjectsInHolders.Add(placedData);
             }
-            _heldObject.Interact(interactor);
-            _heldObject = null;
+
+            interactor.SetHeldObject(null);
         }
 
         public override bool InteractableBy(IInteractor interactor)
         {
-            if (_heldObject == null) return interactor.HeldObject is IPlaceable;
-            return true;
+            return interactor.HeldObject is IPlaceable placeable &&
+                   placedObjects.Any(p =>
+                       p.objectPrefab == (placeable as Component)?.gameObject
+                   );
         }
-
-        public override string InteractionText(IInteractor interactor) => _heldObject == null ? "Place " + (interactor.HeldObject?.InteractionText(interactor) ?? "held object") : "Pick up " + _heldObject.InteractionText(interactor);
+        
+        public override string InteractionText(IInteractor interactor) => interactor.HeldObject != null
+                ? "Place " + (interactor.HeldObject.InteractionText(interactor) ?? "held object") : null;
     }
 }

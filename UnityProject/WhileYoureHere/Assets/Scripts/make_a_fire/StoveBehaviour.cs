@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interactable.Holdable;
 using Mono.Cecil.Cil;
+using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -12,15 +13,19 @@ namespace make_a_fire
     {
         [Header("Fire Effect")] 
         [SerializeField] private VisualEffect fireParticle;
-
+        
         [Header("Burning Objects")] 
         [SerializeField] private HoldableObjectBehaviour newspaper;
-
         [SerializeField] private List<HoldableObjectBehaviour> logs;
 
-        private int _placedLogsCount = 0;
-        private bool _fireStarted = false;
-
+        [Header("Blow Event")] 
+        [SerializeField] private EventChannel blowAllowedEvent;
+        
+        private int _placedLogsCount;
+        private bool _fireStarted;
+      
+       
+        
         private void Awake()
         {
             PlayFireEffect(false);
@@ -28,48 +33,59 @@ namespace make_a_fire
 
         private void Update()
         {
-            if (!newspaper.IsPlaced) return;
+            if (!newspaper.IsPlaced) 
+                return;
             
-            var currentPlacedLogs = CountPlacedLogs();
-
+            int currentPlacedLogs = CountPlacedLogs();
 
             if (currentPlacedLogs > _placedLogsCount)
             {
-                var newLogs = currentPlacedLogs - _placedLogsCount;
                 _placedLogsCount = currentPlacedLogs;
 
-                switch (_fireStarted)
+                if (!_fireStarted && _placedLogsCount == 1)
                 {
-                    case false when _placedLogsCount >= 1:
-                        PlayFireEffect(true);
-                        _fireStarted = true;
-                        break;
-                    case true:
-                        IncreaseFireVelocity(newLogs);
-                        break;
+                    StartSmallFire();
+                }
+                else if (_fireStarted && _placedLogsCount == 3)
+                {
+                    // enable space press
+                  
+                    // if pressing space is enabled execute 
+                    StartBigFire();
+                    
+                    blowAllowedEvent?.Raise();
+                    
+                    
                 }
             }
         }
+        
+        
 
         private int CountPlacedLogs()
         {
             return logs.Count(log => log.IsPlaced);
         }
 
-        private void IncreaseFireVelocity(int amount)
+        private void StartSmallFire()
         {
-            var currentVelocity = fireParticle.GetVector3("FireVelocity");
-            currentVelocity.y += 0.5f * amount;
-            fireParticle.SetVector3("FireVelocity", currentVelocity);
+            _fireStarted = true;
+            fireParticle.gameObject.SetActive(true);
+            fireParticle.SetVector3("FireVelocity", new Vector3(0, 0.1f, 0));
+            fireParticle.Play();
+        }
+
+        private void StartBigFire()
+        {
+            var velocity = new Vector3(0, 2f, 0);
+            fireParticle.SetVector3("FireVelocity", velocity);
         }
 
         private void PlayFireEffect(bool status)
         {
             fireParticle.gameObject.SetActive(status);
             if (status)
-            {
                 fireParticle.Play();
-            }
         }
     }
 }

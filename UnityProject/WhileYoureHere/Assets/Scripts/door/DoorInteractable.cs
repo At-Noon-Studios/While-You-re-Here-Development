@@ -22,14 +22,15 @@ namespace door
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
-        
+
         public void LockDoor(bool locked) { _isLocked = locked; }
 
         protected new void Awake()
         {
             base.Awake();
-            _isLocked = config.isLocked;
-            if (!doorPivot) doorPivot = transform;
+
+            if (!doorPivot)
+                doorPivot = transform;
 
             _closeRotation = doorPivot.localRotation;
             _openRotation = Quaternion.Euler(0, config.openAngle, 0) * _closeRotation;

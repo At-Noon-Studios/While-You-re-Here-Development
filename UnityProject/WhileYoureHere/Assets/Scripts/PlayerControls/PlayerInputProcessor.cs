@@ -2,7 +2,7 @@ using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace player_controls
+namespace PlayerControls
 {
     public class PlayerInputProcessor : MonoBehaviour
     {
@@ -11,6 +11,8 @@ namespace player_controls
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel drop;
+        [SerializeField] private EventChannel mouthBlow;
+
         
         private void OnLook(InputValue inputValue)
         {
@@ -30,6 +32,11 @@ namespace player_controls
         private void OnDrop()
         {
             drop.Raise();
+        }
+
+        private void OnMouthBlow()
+        {
+            mouthBlow.Raise();
         }
     }
 }
