@@ -4,6 +4,7 @@ using Interactable;
 using Interactable.Holdable;
 using player_controls;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace chopping_logs
 {
@@ -21,6 +22,11 @@ namespace chopping_logs
         private AudioClip logPlaceSound;
 
         [SerializeField] private AudioClip logCrackSound;
+        
+        [Header("Sprite settings")]
+        [SerializeField] private Image cutLogSprite;
+
+        [SerializeField] private Image placeLogSprite;
 
         public static bool CurrentMinigameActive { get; private set; }
         public bool MinigameActive { get; private set; }
@@ -171,25 +177,47 @@ namespace chopping_logs
 
         public override string InteractionText(IInteractor interactor)
         {
-            if (MinigameActive) return string.Empty;
+            // Always reset the sprites first
+            if (placeLogSprite != null)
+                placeLogSprite.enabled = false;
+
+            if (cutLogSprite != null)
+                cutLogSprite.enabled = false;
+
+            if (MinigameActive)
+                return string.Empty;
 
             var held = GameObject.FindWithTag("Player")
                 ?.GetComponent<PlayerInteractionController>()
                 ?.HeldObject;
 
+            // No log on stump
             if (!_hasLog)
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
-                    return "Place Log (E)";
+                {
+                    if (placeLogSprite != null)
+                        placeLogSprite.enabled = true;
+                }
 
-                return "Stump (Empty)";
+                // No text, only sprite
+                return string.Empty;
             }
 
+            // Log is on stump, check for axe
             if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
-                return "Start Chopping (E)";
+            {
+                if (cutLogSprite != null)
+                    cutLogSprite.enabled = true;
 
-            return "Stump (Occupied)";
+                return string.Empty;
+            }
+
+            // Default: no prompt
+            return string.Empty;
         }
+
+
 
         public bool IsReadyForChop()
         {
