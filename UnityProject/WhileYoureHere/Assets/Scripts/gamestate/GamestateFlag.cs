@@ -16,11 +16,6 @@ namespace gamestate
     {
         public List<GamestateFlag> flags;
 
-        public void OnValidate()
-        {
-            Debug.Log("OnValidate");
-        }
-
         public GamestateFlag GetFlagWithName(string name)
         {
             foreach (GamestateFlag flag in flags)
