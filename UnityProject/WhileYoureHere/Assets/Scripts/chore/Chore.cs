@@ -31,11 +31,11 @@ namespace chore
                     { ChoreComponent.ChoreComponentType.WateringCanPickedUp, CcWateringCanPickedUp.CreateFactory },
                     { ChoreComponent.ChoreComponentType.WateringCanFilled , CcWateringCanFilled.CreateFactory},
                     { ChoreComponent.ChoreComponentType.PlantWatered, CcPlantWatered.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
+                    /*{ ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.WaterBoiled, CcWaterBoiled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.TeabagAdded, CcTeabagAdded.CreateFactory },
                     { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }
+                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }*/
 
                 };
 

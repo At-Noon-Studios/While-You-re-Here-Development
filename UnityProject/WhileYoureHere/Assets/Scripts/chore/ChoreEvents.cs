@@ -5,12 +5,10 @@ namespace chore
     public static class ChoreEvents
     {
         public static event Action<Chore> OnChoreCompleted;
-        public static void TriggerQuestCompleted(Chore chore) => OnChoreCompleted?.Invoke(chore);
+        public static void TriggerChoreCompleted(Chore chore) => OnChoreCompleted?.Invoke(chore);
 
         public static event Action<int> OnWateringCanPickedUp;
-
-        public static void TriggerWateringCanPickedUp(int wateringCanID) =>
-            OnWateringCanPickedUp?.Invoke(wateringCanID);
+        public static void TriggerWateringCanPickedUp(int wateringCanID) => OnWateringCanPickedUp?.Invoke(wateringCanID);
 
         public static event Action<int> OnWateringCanFilled;
         public static void TriggerWateringCanFilled(int wateringCanID) => OnWateringCanFilled?.Invoke(wateringCanID);
@@ -29,11 +27,6 @@ namespace chore
 
         public static event Action OnCupFilled;
         public static void TriggerCupFilled() => OnCupFilled?.Invoke();
-
-        public static void TriggerChoreCompleted(Chore chore)
-        {
-            OnChoreCompleted?.Invoke(chore);
-        }
 
         public static event Action<int> OnItemCollected;
 
