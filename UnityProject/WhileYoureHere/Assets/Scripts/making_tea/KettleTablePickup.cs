@@ -25,14 +25,8 @@ namespace making_tea
             if (!Lifted || Pic == null || !Pic.TableMode)
                 return;
 
-            HandlePour();
-        }
-
-        private void HandlePour()
-        {
-            if (!Mouse.current.leftButton.isPressed)
-                return;
-
+            if (!Mouse.current.leftButton.isPressed) return;
+            
             var pour = GetComponent<KettlePour>();
             if (pour != null)
                 pour.enabled = true;

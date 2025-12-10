@@ -93,8 +93,13 @@ namespace Interactable
         {
             if (TableMode)
             {
-                if (HeldObject == null && TryDropTablePickup())
+                if (HeldObject == null 
+                    && !(_currentTarget is ObjectHolder) 
+                    && TryDropTablePickup())
+                {
                     return;
+                }
+
 
                 if (_currentTarget != null)
                 {
@@ -103,10 +108,10 @@ namespace Interactable
                 }
 
                 if (_sittingChair == null) return;
+
                 _sittingChair.ForceStandUp();
-           
             }
-            
+
             if (NoTarget) HeldObject?.Drop();
             else if (TargetInteractable) InteractWithTarget();
             else _uiManager.PulseInteractPrompt();
@@ -116,18 +121,24 @@ namespace Interactable
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
             var hitCount = LookForHits(hits);
+
             IInteractable bestTarget = null;
-            var closestDistance = float.MaxValue;
-            for (var i = 0; i < hitCount; i++)
+            float closestDistance = float.MaxValue;
+
+            for (int i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) && HeldObject != null) break;
+                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) &&
+                    HeldObject != null)
+                    break;
+
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, TableMode);
             }
 
             if (bestTarget == _currentTarget) return;
+
             SetCurrentTarget(bestTarget);
         }
-        
+
         private int LookForHits(RaycastHit[] result)
         {
             var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -143,22 +154,39 @@ namespace Interactable
             if (candidate.distance >= closestDistance) return;
 
             var col = candidate.collider;
-
-            switch (tableMode)
+            
+            if (tableMode)
             {
-                case true when col.TryGetComponent<ITablePickup>(out var tablePickup):
+                if (col.TryGetComponent<ITablePickup>(out var tablePickup))
+                {
                     bestTarget = tablePickup;
                     closestDistance = candidate.distance;
                     return;
-                case false when col.TryGetComponent<Placeable>(out var placeable):
+                }
+
+                if (col.TryGetComponent<ObjectHolder>(out var holder))
+                {
+                    bestTarget = holder;
+                    closestDistance = candidate.distance;
+                    return;
+                }
+            }
+
+            else
+            {
+                if (col.TryGetComponent<Placeable>(out var placeable))
+                {
                     bestTarget = placeable;
                     closestDistance = candidate.distance;
                     return;
+                }
             }
 
-            if (!col.TryGetComponent<IInteractable>(out var interactable)) return;
-            bestTarget = interactable;
-            closestDistance = candidate.distance;
+            if (col.TryGetComponent<IInteractable>(out var interactable))
+            {
+                bestTarget = interactable;
+                closestDistance = candidate.distance;
+            }
         }
 
         private void SetCurrentTarget(IInteractable newTarget)
@@ -171,7 +199,10 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+
+            _uiManager.ShowInteractPrompt(target.InteractionText(this),
+                                          target.InteractableBy(this));
+
             target.OnHoverEnter(this);
         }
 
@@ -180,30 +211,35 @@ namespace Interactable
             _uiManager.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
-        
+
         private bool NoTarget => _currentTarget == null;
-        
-        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
-        
+
+        private bool TargetInteractable =>
+            _currentTarget != null &&
+            _currentTarget.InteractableBy(this);
+
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
             OnHoverEnter(_currentTarget);
         }
-        
+
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
         {
             if (_movementController == null) return;
+
             if (holdableObject == null)
             {
                 _movementController.SetMovementModifier(1f);
                 return;
             }
-            var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
-            var modifier = Mathf.Max(1f - weight, 0.4f);
+
+            float weight = Mathf.Clamp01(holdableObject.Weight / 100f);
+            float modifier = Mathf.Max(1f - weight, 0.4f);
+
             _movementController.SetMovementModifier(modifier);
         }
-        
+
         public void EnableTableMode(bool enable)
         {
             TableMode = enable;
@@ -219,7 +255,7 @@ namespace Interactable
                 Cursor.visible = false;
             }
         }
-        
+
         private static bool TryDropTablePickup()
         {
             var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);

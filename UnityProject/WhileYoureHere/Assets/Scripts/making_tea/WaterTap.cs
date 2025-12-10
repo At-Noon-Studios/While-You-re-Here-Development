@@ -7,7 +7,9 @@ namespace making_tea
         public ParticleSystem waterStream;
 
         [Header("Audio")]
-        public AudioSource tapSound;
+        public AudioClip waterLoopClip;
+
+        private AudioSource _audio;
 
         [SerializeField]
         private bool isRunning;
@@ -22,6 +24,18 @@ namespace making_tea
             }
         }
 
+        private void Awake()
+        {
+            if (_audio == null)
+                _audio = GetComponent<AudioSource>();
+
+            if (_audio == null)
+                _audio = gameObject.AddComponent<AudioSource>();
+
+            _audio.loop = true;
+            _audio.playOnAwake = false;
+        }
+
         private void Start()
         {
             UpdateWaterState();
@@ -29,6 +43,17 @@ namespace making_tea
 
         private void OnValidate()
         {
+            if (!Application.isPlaying)
+            {
+                if (waterStream == null) return;
+                
+                if (isRunning)
+                    waterStream.Play();
+                else
+                    waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                return;
+            }
+
             UpdateWaterState();
         }
 
@@ -39,21 +64,27 @@ namespace making_tea
 
         private void UpdateWaterState()
         {
-            if (waterStream == null) return;
+            if (_audio == null)
+                return;
 
             if (isRunning)
             {
-                waterStream.Play();
+                if (waterStream != null && !waterStream.isPlaying)
+                    waterStream.Play();
 
-                if (tapSound && !tapSound.isPlaying)
-                    tapSound.Play();
+                if (waterLoopClip == null) return;
+                
+                _audio.clip = waterLoopClip;
+                if (!_audio.isPlaying)
+                    _audio.Play();
             }
             else
             {
-                waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                if (waterStream != null)
+                    waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-                if (tapSound && tapSound.isPlaying)
-                    tapSound.Stop();
+                if (_audio.isPlaying)
+                    _audio.Stop();
             }
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ScriptableObjects.chores;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace chore
         {
             InitializeChores();
         }
-        
+
         public void StartChoreWithSo(SoChore soChore)
         {
             StartChore(soChore.id);

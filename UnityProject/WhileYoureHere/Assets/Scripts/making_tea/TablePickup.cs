@@ -4,18 +4,73 @@ using UnityEngine.InputSystem;
 
 namespace making_tea
 {
-    public abstract class TablePickup : MonoBehaviour, ITablePickup
+    public abstract class TablePickup : InteractableBehaviour, ITablePickup
     {
+        [SerializeField] private Canvas interactionCanvasPrimary;
+        [SerializeField] private Canvas interactionCanvasSecondary;
+
         protected bool Lifted;
         protected PlayerInteractionController Pic;
+
         private Rigidbody _rb;
+        private Transform _playerCamera;
 
         private const float FixedLiftHeight = 1.5f;
         private const float FixedRayDistance = 10f;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _rb = GetComponent<Rigidbody>();
+
+            if (interactionCanvasPrimary != null)
+                interactionCanvasPrimary.gameObject.SetActive(false);
+
+            if (interactionCanvasSecondary != null)
+                interactionCanvasSecondary.gameObject.SetActive(false);
+
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+                _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
+        }
+
+        protected virtual void Update()
+        {
+            RotateUI();
+
+            if (!Lifted || Pic == null || !Pic.TableMode)
+                return;
+
+            FollowMouse();
+        }
+
+        private void RotateUI()
+        {
+            if (_playerCamera == null) return;
+
+            if (interactionCanvasPrimary != null && interactionCanvasPrimary.gameObject.activeSelf)
+            {
+                interactionCanvasPrimary.transform.LookAt(_playerCamera);
+                interactionCanvasPrimary.transform.Rotate(0f, 180f, 0f);
+            }
+
+            if (interactionCanvasSecondary == null || !interactionCanvasSecondary.gameObject.activeSelf) return;
+            
+            interactionCanvasSecondary.transform.LookAt(_playerCamera);
+            interactionCanvasSecondary.transform.Rotate(0f, 180f, 0f);
+        }
+
+        private void FollowMouse()
+        {
+            var cam = Pic.PlayerCamera;
+            var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+            if (!Physics.Raycast(ray, out var hit, FixedRayDistance))
+                return;
+
+            var pos = hit.point;
+            pos.y = FixedLiftHeight;
+            transform.position = pos;
         }
 
         public bool IsTableHeld => Lifted;
@@ -25,27 +80,35 @@ namespace making_tea
             Lifted = true;
             Pic = p;
 
-            if (_rb) _rb.isKinematic = true;
+            if (_rb != null)
+                _rb.isKinematic = true;
+
             EnableCollider(false);
+            ShowSecondaryUI();
         }
 
         public virtual void Drop()
         {
             Lifted = false;
+            Pic = null;
 
-            if (_rb) _rb.isKinematic = false;
+            if (_rb != null)
+                _rb.isKinematic = false;
+
             EnableCollider(true);
+            ShowPrimaryUI();
         }
 
         public virtual void ForceDropFromTableMode() => Drop();
 
-        public virtual string InteractionText(IInteractor i)
-            => Lifted ? "Drop" : "Pick up";
+        public override string InteractionText(IInteractor i) => string.Empty;
 
-        public virtual bool InteractableBy(IInteractor i)
-            => (i as PlayerInteractionController)?.TableMode ?? false;
+        public override bool InteractableBy(IInteractor i)
+        {
+            return (i as PlayerInteractionController)?.TableMode ?? false;
+        }
 
-        public virtual void Interact(IInteractor i)
+        public override void Interact(IInteractor i)
         {
             var p = i as PlayerInteractionController;
             if (p == null) return;
@@ -54,28 +117,52 @@ namespace making_tea
             else Drop();
         }
 
-        public abstract void EnableCollider(bool s);
-
-        public virtual void OnHoverEnter(IInteractor i) { }
-        public virtual void OnHoverExit(IInteractor i) { }
-
-        protected virtual void Update()
+        public override void OnHoverEnter(IInteractor interactor)
         {
-            if (!Lifted || Pic == null || !Pic.TableMode)
-                return;
+            base.OnHoverEnter(interactor);
 
-            FollowMouse();
+            var p = interactor as PlayerInteractionController;
+            if (p == null || !p.TableMode) return;
+
+            if (!Lifted) ShowPrimaryUI();
+            else ShowSecondaryUI();
         }
 
-        private void FollowMouse()
+        public override void OnHoverExit(IInteractor interactor)
         {
-            var cam = Pic.PlayerCamera;
-            var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+            base.OnHoverExit(interactor);
 
-            if (!Physics.Raycast(ray, out var hit, FixedRayDistance)) return;
-            var pos = hit.point;
-            pos.y = FixedLiftHeight;
-            transform.position = pos;
+            if (!Lifted)
+                HideAllUI();
         }
+
+        private void ShowPrimaryUI()
+        {
+            if (interactionCanvasPrimary != null)
+                interactionCanvasPrimary.gameObject.SetActive(true);
+
+            if (interactionCanvasSecondary != null)
+                interactionCanvasSecondary.gameObject.SetActive(false);
+        }
+
+        private void ShowSecondaryUI()
+        {
+            if (interactionCanvasPrimary != null)
+                interactionCanvasPrimary.gameObject.SetActive(false);
+
+            if (interactionCanvasSecondary != null)
+                interactionCanvasSecondary.gameObject.SetActive(true);
+        }
+
+        private void HideAllUI()
+        {
+            if (interactionCanvasPrimary != null)
+                interactionCanvasPrimary.gameObject.SetActive(false);
+        
+            if (interactionCanvasSecondary != null)
+                interactionCanvasSecondary.gameObject.SetActive(false);
+        }
+
+        public abstract override void EnableCollider(bool state);
     }
 }

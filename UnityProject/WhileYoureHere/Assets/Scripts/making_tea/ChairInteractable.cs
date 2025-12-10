@@ -4,11 +4,20 @@ using UnityEngine;
 
 namespace making_tea
 {
-    public class ChairInteractable : MonoBehaviour, IInteractable
+    public class ChairInteractable : InteractableBehaviour
     {
+        [Header("Interaction UI")]
+        [SerializeField] private Canvas interactionCanvas;
+
         [Header("References")]
         [SerializeField] private Transform sitPoint;
         [SerializeField] private Transform lookTarget;
+
+        [Header("Camera Sitting Position Offset")]
+        [SerializeField] private Vector3 cameraSitOffset = new Vector3(0f, 0f, 0f);
+
+        [Header("Camera Sitting Rotation Offset")]
+        [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
 
         private bool _isSitting;
 
@@ -18,28 +27,50 @@ namespace making_tea
         private Transform _player;
         private Camera _playerCam;
 
-        public bool InteractableBy(IInteractor interactor)
+        private Transform _playerCamera;
+
+        private Vector3 _originalCameraLocalPos;
+        private Quaternion _originalCameraLocalRot;
+
+        protected override void Awake()
         {
-            return true;
+            base.Awake();
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+                _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
         }
 
-        public string InteractionText(IInteractor interactor)
+        private void Update()
         {
-            return _isSitting ? "[E] Stand up" : "[E] Sit";
+            if (interactionCanvas == null ||
+                !interactionCanvas.gameObject.activeSelf ||
+                _playerCamera == null) return;
+            
+            interactionCanvas.transform.LookAt(_playerCamera);
+            interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
 
-        public void EnableCollider(bool enable)
+        public override void OnHoverEnter(IInteractor interactor)
         {
-            var col = GetComponent<Collider>();
-            if (col != null)
-                col.enabled = enable;
+            base.OnHoverEnter(interactor);
+
+            if (!_isSitting && interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(true);
         }
 
-        public void OnHoverEnter(IInteractor interactor) { }
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            base.OnHoverExit(interactor);
 
-        public void OnHoverExit(IInteractor interactor) { }
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+        }
 
-        public void Interact(IInteractor interactor)
+        public override void Interact(IInteractor interactor)
         {
             if (!_isSitting)
                 Sit(interactor);
@@ -67,17 +98,32 @@ namespace making_tea
             _player.position = sitPoint.position;
             _player.rotation = sitPoint.rotation;
 
+            if (_playerCam != null)
+            {
+                _originalCameraLocalPos = _playerCam.transform.localPosition;
+                _originalCameraLocalRot = _playerCam.transform.localRotation;
+            }
+
             if (lookTarget != null && _playerCam != null)
             {
                 var dir = lookTarget.position - _playerCam.transform.position;
                 _playerCam.transform.rotation = Quaternion.LookRotation(dir);
             }
 
+            if (_playerCam != null)
+                _playerCam.transform.localPosition += cameraSitOffset;
+
+            if (_playerCam != null)
+                _playerCam.transform.localRotation *= Quaternion.Euler(cameraSitRotationOffset);
+
             _isSitting = true;
 
             _pic = p;
             _pic.EnableTableMode(true);
             _pic.SetSittingChair(this);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
 
         private void StandUp()
@@ -85,13 +131,19 @@ namespace making_tea
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 
+            if (_playerCam != null)
+            {
+                _playerCam.transform.localPosition = _originalCameraLocalPos;
+                _playerCam.transform.localRotation = _originalCameraLocalRot;
+            }
+
             _isSitting = false;
 
             if (_pic == null) return;
             _pic.EnableTableMode(false);
             _pic.ClearSittingChair();
         }
-        
+
         public void ForceStandUp()
         {
             if (_isSitting)

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Interactable.Holdable;
 using JetBrains.Annotations;
@@ -8,10 +9,43 @@ namespace Interactable.Concrete.ObjectHolder
 {
     public class ObjectHolder : InteractableBehaviour
     {
+        [Header("Placement")]
         [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
 
+        [Header("Interaction UI")]
+        [SerializeField] private Canvas interactionCanvas;
+
         [CanBeNull] private IHoldableObject _heldObject;
+        private Transform _playerCamera;
+
+        public event Action<IHoldableObject> OnPlaced;
+        public event Action<IHoldableObject> OnRemoved;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+
+            var player = GameObject.FindWithTag("Player");
+            if (player == null) return;
+            
+            var cam = player.GetComponentInChildren<Camera>();
+            if (cam != null)
+                _playerCamera = cam.transform;
+        }
+
+        private void Update()
+        {
+            if (interactionCanvas == null ||
+                !interactionCanvas.gameObject.activeSelf ||
+                _playerCamera == null) return;
+            
+            interactionCanvas.transform.LookAt(_playerCamera);
+            interactionCanvas.transform.Rotate(0f, 180f, 0f);
+        }
 
         public override void Interact(IInteractor interactor)
         {
@@ -23,40 +57,46 @@ namespace Interactable.Concrete.ObjectHolder
                 return;
             }
 
-            if (_heldObject == null)
-            {
-                _heldObject = interactor.HeldObject;
-
-                if (_heldObject == null)
-                    return;
-
-                _heldObject.Place(placePoint.position, Quaternion.Euler(placedObjectRotation));
-                var go = ((MonoBehaviour)_heldObject).gameObject;
-                go.transform.SetParent(placePoint);
-                go.transform.localPosition = Vector3.zero;
-                go.transform.localRotation = Quaternion.Euler(placedObjectRotation);
-
+            if (_heldObject != null)
                 return;
-            }
 
-            _heldObject.Interact(interactor);
-            _heldObject = null;
+            if (interactor.HeldObject == null)
+                return;
+
+            _heldObject = interactor.HeldObject;
+
+            _heldObject.Place(placePoint.position,
+                              Quaternion.Euler(placedObjectRotation),
+                              this);
+
+            var go = ((MonoBehaviour)_heldObject).gameObject;
+            go.transform.SetParent(placePoint);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.Euler(placedObjectRotation);
+
+            OnPlaced?.Invoke(_heldObject);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
 
+        public void ClearHeldObject(IHoldableObject obj)
+        {
+            if (_heldObject != obj) return;
+            OnRemoved?.Invoke(obj);
+
+            _heldObject = null;
+        }
 
         private void HandleTableModePlacement()
         {
             var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
-
             var pickup = pickups.FirstOrDefault(p => p.IsTableHeld);
-            if (pickup == null)
-                return;
+            if (pickup == null) return;
 
             var obj = pickup.gameObject;
             var rb = obj.GetComponent<Rigidbody>();
-
-            if (rb != null)
-                rb.isKinematic = true;
+            if (rb != null) rb.isKinematic = true;
 
             obj.transform.SetParent(null);
             obj.transform.position = placePoint.position;
@@ -67,23 +107,30 @@ namespace Interactable.Concrete.ObjectHolder
 
         public override bool InteractableBy(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController pic && pic.TableMode)
+            if (interactor is PlayerInteractionController { TableMode: true })
                 return true;
 
-            if (_heldObject == null)
-                return interactor.HeldObject is IPlaceable;
-
-            return true;
+            return _heldObject == null &&
+                   interactor.HeldObject is IPlaceable;
         }
 
-        public override string InteractionText(IInteractor interactor)
+        public override void OnHoverEnter(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController pic && pic.TableMode)
-                return "Place Object";
+            base.OnHoverEnter(interactor);
 
-            return _heldObject == null
-                ? "Place " + (interactor.HeldObject?.InteractionText(interactor) ?? "held object")
-                : "Pick up " + _heldObject.InteractionText(interactor);
+            var canInteract = _heldObject == null &&
+                              interactor.HeldObject is IPlaceable;
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(canInteract);
+        }
+
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            base.OnHoverExit(interactor);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
     }
 }
