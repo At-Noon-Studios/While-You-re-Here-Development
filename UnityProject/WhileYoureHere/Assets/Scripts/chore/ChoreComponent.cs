@@ -8,9 +8,7 @@ namespace chore
         public enum ChoreComponentType
         {
             ItemCollected,
-            LogPickup,
             LogPlacement,
-            AxePickup,
             LogChop
         }
         

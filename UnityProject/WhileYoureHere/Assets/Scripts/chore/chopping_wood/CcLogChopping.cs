@@ -52,7 +52,7 @@ namespace chore.chopping_wood
 
         public static ChoreComponent CreateFactory(SoChoreComponent soChoreComponent)
         {
-            var local = soChoreComponent as ScriptableObjects.chores.ChoppingWood.CcLogChopped;
+            var local = soChoreComponent as ScriptableObjects.chores.ChoppingWood.CcChoppingWood;
 
             if (local == null)
             {

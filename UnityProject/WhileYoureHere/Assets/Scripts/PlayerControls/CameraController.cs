@@ -16,7 +16,7 @@ namespace player_controls
         private float _xRotation;
         private float _yRotation;
 
-        private bool _lookSubscribed;
+        private bool _isLookSubscribed;
         public bool canLook = true;
 
         private void Start()
@@ -25,21 +25,21 @@ namespace player_controls
             SubscribeLook();
         }
 
-        private void OnEnable()     => SubscribeLook();
-        private void OnDisable()    => UnsubscribeLook();
+        private void OnEnable() => SubscribeLook();
+        private void OnDisable() => UnsubscribeLook();
 
         private void SubscribeLook()
         {
-            if (_lookSubscribed) return;
+            if (_isLookSubscribed) return;
             look.OnRaise += OnLookInput;
-            _lookSubscribed = true;
+            _isLookSubscribed = true;
         }
 
         private void UnsubscribeLook()
         {
-            if (!_lookSubscribed) return;
+            if (!_isLookSubscribed) return;
             look.OnRaise -= OnLookInput;
-            _lookSubscribed = false;
+            _isLookSubscribed = false;
         }
 
         private void OnLookInput(Vector2 mouseDelta)

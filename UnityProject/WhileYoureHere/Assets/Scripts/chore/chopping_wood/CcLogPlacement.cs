@@ -23,7 +23,6 @@ namespace chore.chopping_wood
             base.EnableComponent();
             _logCount = 0;
 
-            // ✅ Subscribe
             ChoreEvents.OnLogPlaced += LogPlaced;
         }
 
@@ -31,7 +30,6 @@ namespace chore.chopping_wood
         {
             base.MarkCompleted();
 
-            // ✅ Unsubscribe
             ChoreEvents.OnLogPlaced -= LogPlaced;
 
             TriggerComponentCompleted(this);
@@ -52,7 +50,7 @@ namespace chore.chopping_wood
 
         public static ChoreComponent CreateFactory(SoChoreComponent soChoreComponent)
         {
-            var local = soChoreComponent as ScriptableObjects.chores.ChoppingWood.CcLogPlacement;
+            var local = soChoreComponent as ScriptableObjects.chores.ChoppingWood.CcChoppingWood;
 
             if (local == null)
             {

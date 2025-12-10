@@ -6,18 +6,19 @@ namespace chopping_logs
     public class AxeHitDetector : MonoBehaviour
     {
         [Header("Axe Swing Settings")]
-        [SerializeField] private Transform axeModel;
         [SerializeField] private float swingSensitivity = 2f;
+        [SerializeField] private float minZRotation = -45f;
+        [SerializeField] private float maxZRotation = 45f;
+
+        [Header("Transform References")]
+        [SerializeField] private Transform axeModel;
         [SerializeField] private Stump stump;
-
-        public float minZRotation = -45f;
-        public float maxZRotation = 45f;
-
+        
         private float _axeZRotation;
         private Vector3 _lastPos;
         
         private Quaternion _baseRotation;
-        private bool _baseRotationSet;
+        private bool _isBaseRotationSet;
 
         private void Update()
         {
@@ -27,13 +28,13 @@ namespace chopping_logs
         public void SetBaseRotation()
         {
             _baseRotation = axeModel.localRotation;
-            _baseRotationSet = true;
+            _isBaseRotationSet = true;
         }
         
         public void OnSwing(InputValue value)
         {
             if (!stump.MinigameActive) return;
-            if (!_baseRotationSet) return;
+            if (!_isBaseRotationSet) return;
 
             var delta = value.Get<Vector2>();
             
