@@ -1,4 +1,5 @@
 ﻿using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace radio_interaction
@@ -14,6 +15,7 @@ namespace radio_interaction
         public void Enter()
         {
             _radioController.EnterTuningMode();
+            _radioController.SlideCanvasStatus(true);
             timer = 0;
         }
 
@@ -24,7 +26,6 @@ namespace radio_interaction
 
         public void Update()
         {
-            _radioController.SlideCanvasStatus(true);
             sliderTimer += Time.deltaTime;
             _radioController.PositionTuningCamera();
             _radioController.HandleMouseMovement();
@@ -35,9 +36,14 @@ namespace radio_interaction
                 _radioController.SlideCanvasStatus(false);
             }
 
-            if (!_radioController.OnCorrectChannel()) return;
+            if (!_radioController.OnCorrectChannel())
+            {
+                Debug.Log("not correct channel");
+                return;
+            }
             if (_radioController.OnCorrectChannel())
             {
+                Debug.Log("correct channel");
                 timer += Time.deltaTime;
             }
             else timer = 0;

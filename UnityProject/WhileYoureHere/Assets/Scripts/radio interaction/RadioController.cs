@@ -1,4 +1,6 @@
+using dialogue;
 using player_controls;
+using ScriptableObjects.Dialogue;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,6 +29,9 @@ namespace radio_interaction
         private CameraController _cameraController;
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
+        private DialogueNode _currentRadioNode;
+
+        [SerializeField] private DialogueManager dialogueManager;
 
         private void Start()
         {
@@ -168,9 +173,11 @@ namespace radio_interaction
         {
             if (_currentRadioIndex == 0)
             {
-                PlayStatic();
+                // PlayStatic();
+                dialogueManager.StartRadioDialogue(radioTracks[0].dialogueNode); // Start new channel
+
             }
-            else PlayClip(radioTracks[_currentRadioIndex].audioClip);
+            // else PlayClip(radioTracks[_currentRadioIndex].audioClip);
         }
 
 
@@ -184,12 +191,26 @@ namespace radio_interaction
             var stationSpacing = 1f / radioTracks.Length;
             var newIndex = Mathf.FloorToInt(_tuneValue / stationSpacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
-            if (_currentRadioIndex == newIndex && _audioSource.clip == radioTracks[newIndex].audioClip) return;
+
             _currentRadioIndex = newIndex;
-            PlayClip(radioTracks[newIndex].audioClip);
+
+            if (_currentRadioIndex == newIndex)
+                return; // no station change
+
+            _currentRadioIndex = newIndex;
+            DialogueNode node = radioTracks[newIndex].dialogueNode;
+
+            if (_currentRadioNode == node) return;
+            
+            _currentRadioNode = node;
+            dialogueManager.EndDialogue(); // Kill old radio speech
+            dialogueManager.StartRadioDialogue(node); // Start new channel
+            // PlayClip(radioTracks[newIndex].audioClip);
         }
 
-        public bool OnCorrectChannel() => radioTracks[_currentRadioIndex].audioClip == radioTracks[2].audioClip;
+        public bool OnCorrectChannel() => _currentRadioIndex == 2;
+
+        // radioTracks[_currentRadioIndex].audioClip == radioTracks[2].audioClip;
 
         #endregion
 
