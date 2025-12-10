@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ScriptableObjects.chores;
+using ScriptableObjects.Gamestate;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Video;
@@ -16,7 +17,7 @@ namespace gamestate
         
         public bool _expanded = false;
         
-        public string booleanToChange;
+        public SoGamestateFlag booleanToChange;
         public bool newValue;
         public int hourOfDay;
         public AudioClip audioToPlay;
@@ -25,7 +26,7 @@ namespace gamestate
         
         public int triggerAfterSeconds;
         public List<SoChore> choresToComplete;
-        public List<string> booleansToBeTrue;
+        public List<SoGamestateFlag> booleansToBeTrue;
     }
 
     public enum GameplayEventType

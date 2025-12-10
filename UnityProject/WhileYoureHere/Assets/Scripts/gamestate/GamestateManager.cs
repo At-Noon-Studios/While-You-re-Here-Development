@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using chore;
+using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,7 +11,7 @@ namespace gamestate
 {
     public class GamestateManager : MonoBehaviour
     {
-        public GamestateFlagList listOfFlags = new GamestateFlagList();
+        public List<SoGamestateFlag> listOfFlags = new List<SoGamestateFlag>();
         
         [Header("List with activities of this day")]
         [SerializeField] private List<Activity>  activities = new List<Activity>();
@@ -57,12 +58,11 @@ namespace gamestate
 
         private void CheckBooleansTrue(GameplayEvent gameplayEvent)
         {
-            foreach (var boolean in gameplayEvent.booleansToBeTrue)
+            foreach (var flag in gameplayEvent.booleansToBeTrue)
             {
-                var flag = listOfFlags.GetFlagWithName(boolean);
-                if (flag == null || flag.value) return;
-                HandleTrigger(gameplayEvent);
+                if (flag == null || flag.currentValue!) return;
             }
+            HandleTrigger(gameplayEvent);
         }
 
         public static GamestateManager GetInstance()
@@ -106,9 +106,9 @@ namespace gamestate
             }
         }
 
-        private void BooleanChange(string boolName, bool value)
+        private void BooleanChange(SoGamestateFlag flag, bool value)
         {
-            listOfFlags.GetFlagWithName(boolName).value = value;
+            flag.currentValue = value;
         }
 
         private void SkyboxChange(int hourOfDay)
