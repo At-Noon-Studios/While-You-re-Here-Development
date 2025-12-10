@@ -29,8 +29,22 @@ namespace gamestate
         private void Awake()
         {
             _instance = this;
+            SetFlagsToDefault();
         }
 
+        private void OnApplicationQuit()
+        {
+            SetFlagsToDefault();
+        }
+
+        private void SetFlagsToDefault()
+        {
+            foreach (var flag in listOfFlags)
+            {
+                flag.currentValue = flag.defaultValue;
+            }
+        }
+        
         private void Start()
         {
             GetComponent<TimeManager>();
