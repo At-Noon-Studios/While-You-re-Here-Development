@@ -29,6 +29,7 @@ namespace gamestate
         private void Awake()
         {
             _instance = this;
+            
             SetFlagsToDefault();
         }
 
@@ -47,8 +48,6 @@ namespace gamestate
         
         private void Start()
         {
-            GetComponent<TimeManager>();
-            GetComponent<ChoreManager>();
             _player = GameObject.FindWithTag("Player");
             _playerAudioSource = _player.GetComponent<AudioSource>();
             _currentActivity = activities[0];
