@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using chore;
 using ScriptableObjects.Gamestate;
 using time;
@@ -29,7 +30,8 @@ namespace gamestate
         private void Awake()
         {
             _instance = this;
-            
+            _timeManager = GetComponent<TimeManager>();
+            _choreManager = GetComponent<ChoreManager>();
             SetFlagsToDefault();
         }
 
@@ -73,7 +75,7 @@ namespace gamestate
         {
             foreach (var flag in gameplayEvent.booleansToBeTrue)
             {
-                if (flag == null || flag.currentValue!) return;
+                if (!flag.currentValue) return;
             }
             HandleTrigger(gameplayEvent);
         }

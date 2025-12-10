@@ -9,7 +9,6 @@ namespace Editor
 	public class GameplayEventDrawer : PropertyDrawer
 	{
 		private float _x, _y, _width, _height;
-		private int _skipRowsForEvent;
 		private ISpecialField _eventField; 
 		private ISpecialField _triggerField;
 		
@@ -30,7 +29,7 @@ namespace Editor
 		{
 			SetEvent((GameplayEventType)property.FindPropertyRelative("type").enumValueIndex);
 			SetTrigger((TriggeredBy)property.FindPropertyRelative("triggeredBy").enumValueIndex);
-			
+
 			var pExpanded = property.FindPropertyRelative("_expanded");
 			_height = base.GetPropertyHeight(property, label);
 			position.height = _height;
@@ -39,7 +38,7 @@ namespace Editor
 			position.y += _height;
 			position.height = GetPropertyHeight(property, label) - _height;
 			EditorGUI.BeginProperty(position, label, property);
-			
+
 			_x = position.x;
 			_y = position.y;
 			_width = position.width;
@@ -47,18 +46,17 @@ namespace Editor
 			AddField("type", property);
 			AddField("triggeredBy", property);
 			_y += _height;
-
-			var fieldsToAdd = _eventField.GetFields();
-			foreach (var field in fieldsToAdd)
-			{
-				AddField(field, property);
-			}
-			fieldsToAdd =  _triggerField.GetFields();
-			foreach (var field in fieldsToAdd)
-			{
-				AddField(field, property);
-			}
 			
+			foreach (var field in _eventField.GetFields())
+			{
+				AddField(field, property);
+			}
+			if (_eventField.GetType() ==  typeof(EventToInvokeSpecialField)) _y += _height * 5;
+			foreach (var field in _triggerField.GetFields())
+			{
+				AddField(field, property);
+			}
+
 			EditorGUI.EndProperty();
 		}
 
