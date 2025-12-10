@@ -175,11 +175,7 @@ namespace chopping_logs
 
         public override string InteractionText(IInteractor interactor)
         {
-            if (placeLogSprite != null)
-                placeLogSprite.enabled = false;
-
-            if (cutLogSprite != null)
-                cutLogSprite.enabled = false;
+            HideInteractionSprites();
 
             if (IsMinigameActive)
                 return string.Empty;
@@ -208,8 +204,20 @@ namespace chopping_logs
             return string.Empty;
         }
 
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            HideInteractionSprites();
+        }
 
+        private void HideInteractionSprites()
+        {
+            if (placeLogSprite != null)
+                placeLogSprite.enabled = false;
 
+            if (cutLogSprite != null)
+                cutLogSprite.enabled = false;
+        }
+        
         public bool IsReadyForChop()
         {
             return IsMinigameActive && _hasLog;
