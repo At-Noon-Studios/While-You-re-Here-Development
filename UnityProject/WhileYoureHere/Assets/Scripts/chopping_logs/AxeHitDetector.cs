@@ -33,7 +33,7 @@ namespace chopping_logs
         
         public void OnSwing(InputValue value)
         {
-            if (!stump.MinigameActive) return;
+            if (!stump.IsMinigameActive) return;
             if (!_isBaseRotationSet) return;
 
             var delta = value.Get<Vector2>();

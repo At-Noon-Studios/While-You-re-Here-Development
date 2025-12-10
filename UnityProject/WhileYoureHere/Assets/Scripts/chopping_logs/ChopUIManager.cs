@@ -8,17 +8,18 @@ namespace chopping_logs
     {
         public static ChopUIManager Instance { get; private set; }
 
-        [Header("Sound Settings")] [SerializeField]
-        private AudioClip axeImpactSound;
+        [Header("Sound Settings")] 
+        [SerializeField] private AudioClip axeImpactSound;
 
-        [Header("UI References")] [SerializeField]
-        private Image mouseUpImage;
-
+        [Header("UI References")] 
+        [SerializeField] private Image mouseUpImage;
         [SerializeField] private Image mouseDownImage;
         [SerializeField] private Image guideLineImage;
 
         private AudioSource _audioSource;
         private bool _isAxeDown;
+        private const float DeltaThresholdUp = 5.0f;
+        private const float DeltaThresholdDown = -5.0f;
 
         private void Awake()
         {
@@ -44,7 +45,7 @@ namespace chopping_logs
 
         public void OnLook(InputValue value)
         {
-            if (!Stump.CurrentMinigameActive) return;
+            if (!Stump.IsCurrentMinigameActive) return;
 
             var delta = value.Get<Vector2>();
             var yDelta = delta.y;
@@ -56,13 +57,13 @@ namespace chopping_logs
 
             var previousAxeDown = _isAxeDown;
 
-            if (yDelta > 5.0f)
+            if (yDelta > DeltaThresholdUp)
             {
                 _isAxeDown = false;
                 if (mouseUpImage != null) mouseUpImage.enabled = false;
                 if (mouseDownImage != null) mouseDownImage.enabled = true;
             }
-            else if (yDelta < -5.0f)
+            else if (yDelta < DeltaThresholdDown)
             {
                 _isAxeDown = true;
                 if (mouseUpImage != null) mouseUpImage.enabled = true;

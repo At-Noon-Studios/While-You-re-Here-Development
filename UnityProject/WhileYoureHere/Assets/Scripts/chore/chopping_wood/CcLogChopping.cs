@@ -23,7 +23,6 @@ namespace chore.chopping_wood
             base.EnableComponent();
             _logCount = 0;
 
-            // ✅ Subscribe
             ChoreEvents.OnLogChopped += LogChopped;
         }
 
@@ -31,7 +30,6 @@ namespace chore.chopping_wood
         {
             base.MarkCompleted();
 
-            // ✅ Unsubscribe
             ChoreEvents.OnLogChopped -= LogChopped;
 
             TriggerComponentCompleted(this);

@@ -10,26 +10,24 @@ namespace chopping_logs
 {
     public class Stump : InteractableBehaviour
     {
-        [Header("Minigame Settings")] [SerializeField]
-        private Transform logPlaceholder;
+        [Header("Minigame Settings")] 
+        [SerializeField] private Transform logPlaceholder;
 
         [SerializeField] private Transform minigameStartPoint;
 
-        [Header("UI References")] [SerializeField]
-        private ChopUIManager uiManager;
+        [Header("UI References")]
+        [SerializeField] private ChopUIManager uiManager;
 
-        [Header("Sound Settings")] [SerializeField]
-        private AudioClip logPlaceSound;
-
+        [Header("Sound Settings")] 
+        [SerializeField] private AudioClip logPlaceSound;
         [SerializeField] private AudioClip logCrackSound;
         
         [Header("Sprite settings")]
         [SerializeField] private Image cutLogSprite;
-
         [SerializeField] private Image placeLogSprite;
 
-        public static bool CurrentMinigameActive { get; private set; }
-        public bool MinigameActive { get; private set; }
+        public static bool IsCurrentMinigameActive { get; private set; }
+        public bool IsMinigameActive { get; private set; }
 
         private GameObject _logObject;
         private bool _hasLog;
@@ -113,8 +111,8 @@ namespace chopping_logs
         {
             if (!_hasLog) return;
 
-            MinigameActive = true;
-            CurrentMinigameActive = true;
+            IsMinigameActive = true;
+            IsCurrentMinigameActive = true;
 
             var camera = GameObject.FindWithTag("MainCamera");
             var player = GameObject.FindWithTag("Player");
@@ -143,8 +141,8 @@ namespace chopping_logs
 
         public void EndMinigame()
         {
-            MinigameActive = false;
-            CurrentMinigameActive = false;
+            IsMinigameActive = false;
+            IsCurrentMinigameActive = false;
 
             var player = GameObject.FindWithTag("Player");
             player.transform.SetParent(null);
@@ -177,21 +175,19 @@ namespace chopping_logs
 
         public override string InteractionText(IInteractor interactor)
         {
-            // Always reset the sprites first
             if (placeLogSprite != null)
                 placeLogSprite.enabled = false;
 
             if (cutLogSprite != null)
                 cutLogSprite.enabled = false;
 
-            if (MinigameActive)
+            if (IsMinigameActive)
                 return string.Empty;
 
             var held = GameObject.FindWithTag("Player")
                 ?.GetComponent<PlayerInteractionController>()
                 ?.HeldObject;
 
-            // No log on stump
             if (!_hasLog)
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
@@ -200,20 +196,15 @@ namespace chopping_logs
                         placeLogSprite.enabled = true;
                 }
 
-                // No text, only sprite
                 return string.Empty;
             }
 
-            // Log is on stump, check for axe
             if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 if (cutLogSprite != null)
                     cutLogSprite.enabled = true;
-
-                return string.Empty;
             }
 
-            // Default: no prompt
             return string.Empty;
         }
 
@@ -221,7 +212,7 @@ namespace chopping_logs
 
         public bool IsReadyForChop()
         {
-            return MinigameActive && _hasLog;
+            return IsMinigameActive && _hasLog;
         }
 
         private static IEnumerator ResumeCameraAfterDelay(float delay)

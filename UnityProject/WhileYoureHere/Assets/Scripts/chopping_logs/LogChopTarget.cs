@@ -9,9 +9,11 @@ namespace chopping_logs
         private int _hits;
         private Stump _stump;
 
-        public GameObject choppedLogQuarterPrefab;
-        public Transform[] spawnPoints = new Transform[2];
+        [Header("Chopped Log Settings")]
+        [SerializeField] private GameObject choppedLogQuarterPrefab;
+        [SerializeField] private Transform[] spawnPoints = new Transform[2];
         
+        [Header("Chore ID reference")]
         [SerializeField] private int logID;
         
         
