@@ -2,40 +2,41 @@
 
 namespace radio_interaction
 {
-    public class TuningLockState: IRadioState
+    //need this state for later
+    public class TuningLockState : IRadioState
     {
         private readonly RadioController _radioController;
         public TuningLockState(RadioController radioController) => _radioController = radioController;
 
         private float timer;
+
         public void Enter()
         {
             timer = 0;
         }
-        
+
         public void Update()
         {
-            _radioController. PositionTuningCamera();
+            _radioController.PositionTuningCamera();
             _radioController.HandleMouseMovement();
             _radioController.TuneRadio();
             if (!_radioController.OnCorrectChannel())
             {
-                _radioController.radioStateMachine
+                _radioController.RadioStateMachine
                     .ChangeState(new TuningState(_radioController));
                 return;
             }
 
-            timer +=Time.deltaTime;
-           
-            if (timer >= _radioController.getTuningTimer())
+            timer += Time.deltaTime;
+
+            if (timer >= _radioController.GetTuningTimer())
             {
-                _radioController.radioStateMachine.ChangeState(new RadioOnState(_radioController));                
+                _radioController.RadioStateMachine.ChangeState(new RadioOnState(_radioController));
             }
         }
 
         public void Exit()
         {
-            
         }
     }
 }

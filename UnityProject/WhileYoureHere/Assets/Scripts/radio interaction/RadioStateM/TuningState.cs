@@ -3,15 +3,14 @@ using UnityEngine;
 
 namespace radio_interaction
 {
-    public class TuningState:IRadioState
-        
+    public class TuningState : IRadioState
     {
         private readonly RadioController _radioController;
         public TuningState(RadioController radioController) => _radioController = radioController;
         private float timer;
         private float sliderTimer;
         private const float sliderLifeTime = 5f;
-        
+
         public void Enter()
         {
             _radioController.EnterTuningMode();
@@ -26,8 +25,8 @@ namespace radio_interaction
         public void Update()
         {
             _radioController.SlideCanvasStatus(true);
-            sliderTimer+= Time.deltaTime;
-            _radioController. PositionTuningCamera();
+            sliderTimer += Time.deltaTime;
+            _radioController.PositionTuningCamera();
             _radioController.HandleMouseMovement();
             _radioController.TuneRadio();
 
@@ -39,13 +38,13 @@ namespace radio_interaction
             if (!_radioController.OnCorrectChannel()) return;
             if (_radioController.OnCorrectChannel())
             {
-                timer +=Time.deltaTime;
+                timer += Time.deltaTime;
             }
             else timer = 0;
-            
-            if (timer >= _radioController.getTuningTimer() )
+
+            if (timer >= _radioController.GetTuningTimer())
             {
-                _radioController.radioStateMachine.ChangeState(new ResetCameraState(_radioController));                
+                _radioController.RadioStateMachine.ChangeState(new ResetCameraState(_radioController));
             }
         }
     }

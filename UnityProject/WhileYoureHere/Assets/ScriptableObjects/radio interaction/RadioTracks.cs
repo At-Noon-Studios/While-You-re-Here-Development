@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace radio_interaction
 {
-    [CreateAssetMenu(fileName = "RadioTracks", menuName = "Scriptable Objects/RadioTracks")]
+    [CreateAssetMenu(fileName = "RadioTracks", menuName = "ScriptableObjects/RadioTracks")]
     public class RadioTracks : ScriptableObject
     {
         [Header("Radio clip")]
