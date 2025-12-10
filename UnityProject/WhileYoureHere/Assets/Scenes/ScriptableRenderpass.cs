@@ -11,10 +11,12 @@ namespace CustomEffects
     {
         private EdgeDetectionPass _renderPass;
         public Shader edgeDetectionShader;
-        public Color edgeColor = Color.black;
-        [Range(0.0f, 1.0f)]
-        public float threshold = 0.1f;
-
+        // public Color outlineColor = Color.black;
+        // [Range(0.0f, 1.0f)]
+        // public float alpha = 1f;
+        // [Range(0.0f, 5.0f)]
+        // public float blurStrength = 1f;
+        
         public override void Create()
         {
             if (edgeDetectionShader == null) return;
@@ -31,7 +33,7 @@ namespace CustomEffects
             if (_renderPass == null) return;
             
             // Pass the current settings from the feature GUI to the pass material
-            _renderPass.Setup(edgeColor, threshold);
+            // _renderPass.Setup(outlineColor, alpha, blurStrength);
             renderer.EnqueuePass(_renderPass);
         }
     }
@@ -45,12 +47,13 @@ namespace CustomEffects
             _material = CoreUtils.CreateEngineMaterial(shader);
         }
 
-        public void Setup(Color color, float threshold)
+        public void Setup(Color outlineColor, float alpha, float blurStrength)
         {
             if (_material != null)
             {
-                _material.SetColor("_EdgeColor", color);
-                _material.SetFloat("_Threshold", threshold);
+                _material.SetColor("_OutlineColor", outlineColor);
+                _material.SetFloat("_Alpha", alpha);
+                _material.SetFloat("_BlurStrength", blurStrength);
             }
         }
         
