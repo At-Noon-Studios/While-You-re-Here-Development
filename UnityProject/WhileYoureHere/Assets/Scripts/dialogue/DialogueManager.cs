@@ -12,10 +12,12 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI")] [SerializeField] private Transform choicesContainer;
+        [Header("UI")]
+        [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
+        [Header("Timing")]
+        [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         private AudioSource _audioSource;
@@ -76,12 +78,6 @@ namespace dialogue
             DisplayNode(startId);
         }
 
-        public void StartRadioDialogue(DialogueNode node)
-        {
-            List<DialogueNode> nodes = new List<DialogueNode> { node };
-            StartDialogue(nodes, node.nodeID);
-        }
-
         private void DisplayNode(string id)
         {
             if (!_nodes.TryGetValue(id, out _currentNode))
@@ -134,9 +130,7 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                Debug.Log(sentence.tagOfAudioSource);
-                if (_audioSource == null)
-                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
                 _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.volume = volume;
@@ -184,7 +178,7 @@ namespace dialogue
                 EndDialogue();
         }
 
-        public void EndDialogue()
+        private void EndDialogue()
         {
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
