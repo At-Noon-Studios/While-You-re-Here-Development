@@ -1,98 +1,121 @@
-﻿using System;
-using gamestate;
+﻿using gamestate;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(GameplayEvent))]
-	public class GameplayEventDrawer : PropertyDrawer
-	{
-		private float _x, _y, _width, _height;
-		private ISpecialField _eventField; 
-		private ISpecialField _triggerField;
-		
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-		{
-			_height = base.GetPropertyHeight(property, label);
-			var rows = 1;
-			if (!property.FindPropertyRelative("_expanded").boolValue) return _height * rows;
-			rows += 4;
-			if (_eventField == null || _triggerField == null) return _height * rows;
-			rows += _eventField.GetHeight(property);
-			rows += _triggerField.GetHeight(property);
+    [CustomPropertyDrawer(typeof(GameplayEvent))]
+    public class GameplayEventDrawer : PropertyDrawer
+    {
+        private ISpecialField _eventField;
+        private ISpecialField _triggerField;
 
-			return _height * rows;
-		}
+        private GameplayEventType _cachedEventType;
+        private TriggeredBy _cachedTriggerType;
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			SetEvent((GameplayEventType)property.FindPropertyRelative("type").enumValueIndex);
-			SetTrigger((TriggeredBy)property.FindPropertyRelative("triggeredBy").enumValueIndex);
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            EnsureFields(property);
 
-			var pExpanded = property.FindPropertyRelative("_expanded");
-			_height = base.GetPropertyHeight(property, label);
-			position.height = _height;
-			pExpanded.boolValue = EditorGUI.Foldout(position, pExpanded.boolValue, label);
-			if (!pExpanded.boolValue) return;
-			position.y += _height;
-			position.height = GetPropertyHeight(property, label) - _height;
-			EditorGUI.BeginProperty(position, label, property);
+            var line = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            var height = line;
 
-			_x = position.x;
-			_y = position.y;
-			_width = position.width;
+            var expanded = property.FindPropertyRelative("_expanded");
+            if (!expanded.boolValue)
+                return height;
 
-			AddField("type", property);
-			AddField("triggeredBy", property);
-			_y += _height;
-			
-			foreach (var field in _eventField.GetFields())
-			{
-				AddField(field, property);
-			}
-			if (_eventField.GetType() ==  typeof(EventToInvokeSpecialField)) _y += _height * 5;
-			foreach (var field in _triggerField.GetFields())
-			{
-				AddField(field, property);
-			}
+            height += line * 2;
+            height += _eventField.GetHeight(property) * line;
+            height += _triggerField.GetHeight(property) * line;
 
-			EditorGUI.EndProperty();
-		}
+            return height;
+        }
 
-		private void SetEvent(GameplayEventType gameplayEventType)
-		{
-			_eventField = gameplayEventType switch
-			{
-				GameplayEventType.BooleanChange => new BooleanChangeSpecialField(),
-				GameplayEventType.SkyboxChange => new SkyboxChangeSpecialField(),
-				GameplayEventType.Cutscene => new CutsceneSpecialField(),
-				GameplayEventType.Dialogue => new AudioFragmentSpecialField(),
-				GameplayEventType.ProgressToNextActivity => new EmptyField(),
-				GameplayEventType.InvokeCustomEvent => new EventToInvokeSpecialField(),
-				_ => throw new ArgumentOutOfRangeException(nameof(gameplayEventType), gameplayEventType, null)
-			};
-		}
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EnsureFields(property);
 
-		private void SetTrigger(TriggeredBy triggeredBy)
-		{
-			_triggerField = triggeredBy switch
-			{
-				TriggeredBy.StartOfActivity => new EmptyField(),
-				TriggeredBy.AfterSetTime => new AfterSetTimeSpecialField(),
-				TriggeredBy.AfterFinishActivity => new EmptyField(),
-				TriggeredBy.OnChoresCompleted => new OnChoresCompletedSpecialField(),
-				TriggeredBy.BooleansToTrue => new BooleansToTrueSpecialField(),
-				_ => throw new ArgumentOutOfRangeException(nameof(triggeredBy), triggeredBy, null)
-			};
-		}
+            var line = EditorGUIUtility.singleLineHeight;
+            var spacing = EditorGUIUtility.standardVerticalSpacing;
 
-		private void AddField(string propertyName, SerializedProperty property)
-		{
-			_y += _height;
-			var rect = new Rect(_x, _y, _width, _height);
-			var serializedProperty = property.FindPropertyRelative(propertyName);
-			EditorGUI.PropertyField(rect, serializedProperty, new GUIContent(serializedProperty.displayName));
-		}
-	}
+            var expanded = property.FindPropertyRelative("_expanded");
+
+            var foldRect = new Rect(position.x, position.y, position.width, line);
+            expanded.boolValue = EditorGUI.Foldout(foldRect, expanded.boolValue, label, true);
+
+            if (!expanded.boolValue)
+                return;
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            var y = foldRect.y + line + spacing;
+
+            DrawProperty(ref y, position, property, "type");
+            DrawProperty(ref y, position, property, "triggeredBy");
+            foreach (var f in _eventField.GetFields())
+                DrawProperty(ref y, position, property, f);
+
+            foreach (var f in _triggerField.GetFields())
+                DrawProperty(ref y, position, property, f);
+
+            EditorGUI.EndProperty();
+        }
+
+        private void DrawProperty(ref float y, Rect totalRect, SerializedProperty parent, string propName)
+        {
+            var sub = parent.FindPropertyRelative(propName);
+            var h = EditorGUI.GetPropertyHeight(sub, true);
+            var r = new Rect(totalRect.x, y, totalRect.width, h);
+            EditorGUI.PropertyField(r, sub, true);
+            y += h + EditorGUIUtility.standardVerticalSpacing;
+        }
+
+        private void EnsureFields(SerializedProperty property)
+        {
+            var typeProp = property.FindPropertyRelative("type");
+            var trigProp = property.FindPropertyRelative("triggeredBy");
+
+            var currentEventType = (GameplayEventType)typeProp.enumValueIndex;
+            var currentTriggerType = (TriggeredBy)trigProp.enumValueIndex;
+
+            if (_eventField == null || _cachedEventType != currentEventType)
+            {
+                _cachedEventType = currentEventType;
+                _eventField = CreateEventField(currentEventType);
+            }
+
+            if (_triggerField == null || _cachedTriggerType != currentTriggerType)
+            {
+                _cachedTriggerType = currentTriggerType;
+                _triggerField = CreateTriggerField(currentTriggerType);
+            }
+        }
+
+        private static ISpecialField CreateEventField(GameplayEventType type)
+        {
+            return type switch
+            {
+                GameplayEventType.BooleanChange => new BooleanChangeSpecialField(),
+                GameplayEventType.SkyboxChange => new SkyboxChangeSpecialField(),
+                GameplayEventType.Cutscene => new CutsceneSpecialField(),
+                GameplayEventType.Dialogue => new AudioFragmentSpecialField(),
+                GameplayEventType.ProgressToNextActivity => new EmptyField(),
+                GameplayEventType.InvokeCustomEvent => new EventToInvokeSpecialField(),
+                _ => new EmptyField()
+            };
+        }
+
+        private static ISpecialField CreateTriggerField(TriggeredBy type)
+        {
+            return type switch
+            {
+                TriggeredBy.StartOfActivity => new EmptyField(),
+                TriggeredBy.AfterSetTime => new AfterSetTimeSpecialField(),
+                TriggeredBy.AfterFinishActivity => new EmptyField(),
+                TriggeredBy.OnChoresCompleted => new OnChoresCompletedSpecialField(),
+                TriggeredBy.BooleansToTrue => new BooleansToTrueSpecialField(),
+                _ => new EmptyField()
+            };
+        }
+    }
 }
