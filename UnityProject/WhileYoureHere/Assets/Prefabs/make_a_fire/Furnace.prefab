@@ -345,6 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dfa076c79c87c4bb3ff2a53a42736d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
+  interactionCanvases: []
   config: {fileID: 11400000, guid: e9761dc17e12f4c65ac1b7c434d1608f, type: 2}
   doorPivot: {fileID: 4265898861899204999}
   audioSource: {fileID: 0}
@@ -446,8 +447,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1196154885699362106}
-  - component: {fileID: 5440623825110598179}
   - component: {fileID: 5242046495300744483}
+  - component: {fileID: 5440623825110598179}
   m_Layer: 0
   m_Name: Furnace
   m_TagString: Untagged
@@ -478,19 +479,6 @@ Transform:
   - {fileID: 4265898861899204999}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &5440623825110598179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4098316939324539096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a48118b82d9804a8084cc76836e59518, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
-  fireParticle: {fileID: 359842403193323602}
 --- !u!65 &5242046495300744483
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -512,6 +500,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5440623825110598179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4098316939324539096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48118b82d9804a8084cc76836e59518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
+  fireParticle: {fileID: 359842403193323602}
+  newspaper: {fileID: 0}
+  logs: []
+  blowAllowedEvent: {fileID: 0}
+  chargedFire: {fileID: 0}
 --- !u!1 &6076223879541773352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,7 +1009,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
   placePoint: {fileID: 5724960534126554825}
-  placedObjectRotation: {x: 0, y: 2, z: 0}
+  placedObjects: []
 --- !u!1 &8801174830187914915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,6 +1136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dfa076c79c87c4bb3ff2a53a42736d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
+  interactionCanvases: []
   config: {fileID: 11400000, guid: 76db3f9c6bf4d4c4fba935a29097d0ee, type: 2}
   doorPivot: {fileID: 2125726146316253319}
   audioSource: {fileID: 0}

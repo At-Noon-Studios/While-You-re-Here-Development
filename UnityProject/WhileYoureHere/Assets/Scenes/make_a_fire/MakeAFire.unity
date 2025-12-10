@@ -808,6 +808,127 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f54d4bc8f114b4352be11b4dd221a8c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnacePlaceable
+--- !u!81 &989201023
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989201016}
+  m_Enabled: 1
+--- !u!1 &1171955097 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4098316939324539096, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+  m_PrefabInstance: {fileID: 1903285362}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1171955099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5440623825110598179, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+  m_PrefabInstance: {fileID: 1903285362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171955097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48118b82d9804a8084cc76836e59518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
+--- !u!82 &1171955101
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171955097}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1411962752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,6 +1162,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 354152437389342594, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: furnace
+      value: 
+      objectReference: {fileID: 1171955099}
+    - target: {fileID: 354152437389342594, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: blowAudio
       value: 
       objectReference: {fileID: 8300000, guid: 8d21accffe549401cac55a21d660dab6, type: 3}
@@ -1053,9 +1178,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1436746137}
     - target: {fileID: 354152437389342594, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: _blowDistance
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 354152437389342594, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: blowAllowedEvent
       value: 
       objectReference: {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
+    - target: {fileID: 2369149261742653563, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 2381930950454907389, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: m_LocalPosition.x
       value: 428.19
@@ -1117,7 +1250,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2369149261742653563, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
-      insertIndex: -1
+      insertIndex: 3
       addedObject: {fileID: 2053917603}
   m_SourcePrefab: {fileID: 100100000, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
 --- !u!1001 &1656691800
@@ -1175,7 +1308,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2873140798672271364, guid: c01d457f1d96b489891bbb1abf5e92fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 989201023}
   m_SourcePrefab: {fileID: 100100000, guid: c01d457f1d96b489891bbb1abf5e92fd, type: 3}
 --- !u!1001 &1711485873
 PrefabInstance:
@@ -1476,12 +1612,24 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: -0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 1832057303654208169, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4098316939324539096, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: m_Name
       value: Furnace
       objectReference: {fileID: 0}
+    - target: {fileID: 4098316939324539096, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: m_TagString
+      value: Furnace
+      objectReference: {fileID: 0}
     - target: {fileID: 5242046495300744483, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5242046495300744483, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5440623825110598179, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
@@ -1496,6 +1644,14 @@ PrefabInstance:
       propertyPath: newspaper
       value: 
       objectReference: {fileID: 989201017}
+    - target: {fileID: 5440623825110598179, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: burningFire
+      value: 
+      objectReference: {fileID: 8300000, guid: 77436473c5eaf407ea848d13ff9dab4e, type: 3}
+    - target: {fileID: 5440623825110598179, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: chargedFire
+      value: 
+      objectReference: {fileID: 8300000, guid: ad24756061a00404fa732ccf2af1b2d3, type: 3}
     - target: {fileID: 5440623825110598179, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: logs.Array.size
       value: 4
@@ -1588,10 +1744,17 @@ PrefabInstance:
       propertyPath: placedObjects.Array.data[3].placedObjectRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8772360579351681551, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4098316939324539096, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1171955101}
   m_SourcePrefab: {fileID: 100100000, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
 --- !u!1001 &2034833912
 PrefabInstance:

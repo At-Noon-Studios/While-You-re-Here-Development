@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Interactable.Concrete
 {
     [RequireComponent(typeof(AudioSource))]
-    public class Newspaper : HoldableObjectBehaviour
+    public class Newspaper : FurnacePlaceable
     {
         private AudioSource _audioSource;
         

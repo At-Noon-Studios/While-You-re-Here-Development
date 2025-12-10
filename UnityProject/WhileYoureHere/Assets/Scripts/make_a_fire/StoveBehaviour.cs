@@ -11,56 +11,53 @@ namespace make_a_fire
 {
     public class StoveBehaviour : MonoBehaviour
     {
-        [Header("Fire Effect")] 
-        [SerializeField] private VisualEffect fireParticle;
-        
         [Header("Burning Objects")] 
         [SerializeField] private HoldableObjectBehaviour newspaper;
         [SerializeField] private List<HoldableObjectBehaviour> logs;
-
+        
+        [Header("Fire Behaviour")] 
+        [SerializeField] private VisualEffect fireParticle;
+        [SerializeField] private AudioClip matchStrike;
+        [SerializeField] private AudioClip burningFire;
+        [SerializeField] private AudioClip chargedFire;
+        
+        
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
         
         private int _placedLogsCount;
         private bool _fireStarted;
-      
-       
-        
+        private AudioSource _audioSource;
+
         private void Awake()
         {
             PlayFireEffect(false);
+            _audioSource = GetComponent<AudioSource>();
         }
 
         private void Update()
         {
-            if (!newspaper.IsPlaced) 
+            if (!newspaper.IsPlaced)
                 return;
-            
-            int currentPlacedLogs = CountPlacedLogs();
+
+            var currentPlacedLogs = CountPlacedLogs();
 
             if (currentPlacedLogs > _placedLogsCount)
             {
                 _placedLogsCount = currentPlacedLogs;
 
-                if (!_fireStarted && _placedLogsCount == 1)
+                switch (_fireStarted)
                 {
-                    StartSmallFire();
-                }
-                else if (_fireStarted && _placedLogsCount == 3)
-                {
-                    // enable space press
-                  
-                    // if pressing space is enabled execute 
-                    StartBigFire();
-                    
-                    blowAllowedEvent?.Raise();
-                    
-                    
+                    case false when _placedLogsCount == 1:
+                        StartSmallFire();
+                        break;
+                    case true when _placedLogsCount == 3:
+                        blowAllowedEvent?.Raise();
+                        break;
                 }
             }
         }
-        
-        
+
 
         private int CountPlacedLogs()
         {
@@ -71,21 +68,30 @@ namespace make_a_fire
         {
             _fireStarted = true;
             fireParticle.gameObject.SetActive(true);
+            
+            _audioSource.PlayOneShot(matchStrike);
+            MakeFireSound();
             fireParticle.SetVector3("FireVelocity", new Vector3(0, 0.1f, 0));
             fireParticle.Play();
         }
 
-        private void StartBigFire()
+        public void StartBigFire()
         {
-            var velocity = new Vector3(0, 2f, 0);
-            fireParticle.SetVector3("FireVelocity", velocity);
+            _audioSource.PlayOneShot(chargedFire);
+            fireParticle.SetVector3("FireVelocity", new Vector3(0, 2f, 0));
+        }
+
+        private void MakeFireSound()
+        {
+            _audioSource.clip = burningFire;
+            _audioSource.loop = true;
+            _audioSource.Play();
         }
 
         private void PlayFireEffect(bool status)
         {
             fireParticle.gameObject.SetActive(status);
-            if (status)
-                fireParticle.Play();
+            if (status) fireParticle.Play();
         }
     }
 }
