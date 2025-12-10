@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace starting_screen
@@ -13,5 +15,21 @@ namespace starting_screen
         {
             Application.Quit();
         }
+        
+        public void BackToMenu()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("StartScreen");
+        }
+
+        public void OnSettingsButton()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("OptionsScreen");
+        }
+        
+        public void OnLoadButton()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LoadScreen");
+        }
+        
     }
 }
