@@ -1,28 +1,24 @@
-
 Shader "Custom/SobelColor_URP"
 {
     Properties
     {
-        _BlitTexture("Source", 2D) = "white" {}
+//        _BlitTexture("Source", 2D) = "white" {}
     }
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderPipeline"="UniversalPipeline" }
 
         Pass
         {
             Name "SobelPass"
+            Tags { "LightMode"="UniversalForward" }
 
-            
             HLSLPROGRAM
-            #include "UnityCG.cginc"
-            
             #pragma vertex Vert
             #pragma fragment Frag
 
-            sampler2D _BlitTexture;
-            float4 _BlitTexture_TexelSize;
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             struct Attributes
             {
@@ -36,36 +32,29 @@ Shader "Custom/SobelColor_URP"
                 float2 uv : TEXCOORD0;
             };
 
+            TEXTURE2D(_BlitTexture);
+            SAMPLER(sampler_BlitTexture);
+
+            float4 _BlitTexture_TexelSize;
+
             Varyings Vert(Attributes v)
             {
-                Varyings o = (Varyings)0;
-                o.positionHCS = UnityObjectToClipPos(v.positionOS);
+                Varyings o;
+                o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
                 o.uv = v.uv;
                 return o;
             }
 
+            float4 Sample(in float2 uv)
+            {
+                return SAMPLE_TEXTURE2D(_BlitTexture, sampler_BlitTexture, uv);
+            }
+
             float4 Frag(Varyings i) : SV_Target
             {
-                float2 texel = _BlitTexture_TexelSize.xy;
-
-                float3 tl = tex2D(_BlitTexture, i.uv + texel * float2(-1,  1)).rgb;
-                float3  l = tex2D(_BlitTexture, i.uv + texel * float2(-1,  0)).rgb;
-                float3 bl = tex2D(_BlitTexture, i.uv + texel * float2(-1, -1)).rgb;
-
-                float3 tr = tex2D(_BlitTexture, i.uv + texel * float2( 1,  1)).rgb;
-                float3  r = tex2D(_BlitTexture, i.uv + texel * float2( 1,  0)).rgb;
-                float3 br = tex2D(_BlitTexture, i.uv + texel * float2( 1, -1)).rgb;
-
-                float3 t = tex2D(_BlitTexture, i.uv + texel * float2(0,  1)).rgb;
-                float3 b = tex2D(_BlitTexture, i.uv + texel * float2(0, -1)).rgb;
-
-                float3 gx = -tl - 2*l - bl + tr + 2*r + br;
-                float3 gy =  tl + 2*t + tr - bl - 2*b - br;
-
-                float3 edge = sqrt(gx * gx + gy * gy);
-
-                return float4(edge, 1);
+                return float4(1, 1, 1, 1);
             }
+
             ENDHLSL
         }
     }

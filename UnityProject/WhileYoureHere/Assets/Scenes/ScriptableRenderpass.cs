@@ -4,69 +4,78 @@ using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.RenderGraphModule.Util;
 using UnityEngine.Rendering.Universal;
 
-namespace Scenes
+// Ensure this namespace matches your file structure
+namespace CustomEffects
 {
-    public class OutlineRendererFeature : ScriptableRendererFeature
+    public class EdgeDetectionRendererFeature : ScriptableRendererFeature
     {
-        private OutlineRenderPass _renderPass;
-        public Shader shader;
-        
+        private EdgeDetectionPass _renderPass;
+        public Shader edgeDetectionShader;
+        public Color edgeColor = Color.black;
+        [Range(0.0f, 1.0f)]
+        public float threshold = 0.1f;
+
         public override void Create()
         {
-            _renderPass = new OutlineRenderPass(shader)
+            if (edgeDetectionShader == null) return;
+
+            _renderPass = new EdgeDetectionPass(edgeDetectionShader)
             {
-                renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing
+                // This event injects the pass after the opaque objects are drawn
+                renderPassEvent = RenderPassEvent.AfterRenderingOpaques
             };
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
+            if (_renderPass == null) return;
+            
+            // Pass the current settings from the feature GUI to the pass material
+            _renderPass.Setup(edgeColor, threshold);
             renderer.EnqueuePass(_renderPass);
         }
     }
 
-    public class OutlineRenderPass : ScriptableRenderPass
+    public class EdgeDetectionPass : ScriptableRenderPass
     {
-  private readonly Material _material;
-    
-    public OutlineRenderPass(Shader shader)
-    {
-        _material = new Material(shader);
-        requiresIntermediateTexture = true;
-    }
-    
-    public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
-    {
-        var stack = VolumeManager.instance.stack;
-        // var customPostProcessingEffectComponent = stack.GetComponent<CustomPostProcessingEffect>();
-        // if (!customPostProcessingEffectComponent || !customPostProcessingEffectComponent.IsActive()) return;
-        // _material.SetFloat("_Strength", customPostProcessingEffectComponent.strength.value);
-        // _material.SetFloat("_FogAmount", customPostProcessingEffectComponent.fogAmount.value);
-        // _material.SetColor("_Color", customPostProcessingEffectComponent.color.value);
-        // _material.SetFloat("_FogDensity", customPostProcessingEffectComponent.fogDensity.value);
-        // _material.SetFloat("_FogStart", customPostProcessingEffectComponent.fogStart.value);
-        // _material.SetFloat("_FogEnd", customPostProcessingEffectComponent.fogEnd.value);
-        // _material.SetFloat("_FogSpeed", customPostProcessingEffectComponent.fogSpeed.value);
-        // _material.SetFloat("_FogCloudDensity", customPostProcessingEffectComponent.fogCloudDensity.value);
-        
-        const string renderPassName = "nameof(CustomPostProcessingEffectPass)";
-        var resourceData = frameData.Get<UniversalResourceData>();
-        if (resourceData.isActiveTargetBackBuffer)
+        private readonly Material _material;
+
+        public EdgeDetectionPass(Shader shader)
         {
-            Debug.LogError("Skipping render pass. CustomPostProcessingEffectPass requires an intermediate render texture.");
-            return;
+            _material = CoreUtils.CreateEngineMaterial(shader);
         }
-        var intermediateTexture = resourceData.activeColorTexture;
+
+        public void Setup(Color color, float threshold)
+        {
+            if (_material != null)
+            {
+                _material.SetColor("_EdgeColor", color);
+                _material.SetFloat("_Threshold", threshold);
+            }
+        }
         
-        var destinationDescriptor = renderGraph.GetTextureDesc(intermediateTexture); //Create copy of source descriptor to turn into destination texture
-        destinationDescriptor.name = $"CameraColor-{renderPassName}";
-        destinationDescriptor.clearBuffer = false;
-        var destination = renderGraph.CreateTexture(destinationDescriptor);
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            if (_material == null) return;
 
-        RenderGraphUtils.BlitMaterialParameters parameters = new(intermediateTexture, destination, _material, 0);
-        renderGraph.AddBlitPass(parameters, renderPassName);
-
-        resourceData.cameraColor = destination;
-    }
+            const string renderPassName = "EdgeDetectionPass";
+            
+            var resourceData = frameData.Get<UniversalResourceData>();
+            // This is the source texture we are reading from
+            var sourceTexture = resourceData.activeColorTexture;
+            
+            // Define a new temporary texture for our output (the destination)
+            var destinationDescriptor = renderGraph.GetTextureDesc(sourceTexture); 
+            destinationDescriptor.name = $"CameraColor-{renderPassName}-Destination";
+            destinationDescriptor.clearBuffer = false;
+            var destinationTexture = renderGraph.CreateTexture(destinationDescriptor);
+            
+            // Blit from source to destination using our material
+            RenderGraphUtils.BlitMaterialParameters parameters = new(sourceTexture, destinationTexture, _material, 0);
+            renderGraph.AddBlitPass(parameters, renderPassName);
+            
+            // CRITICAL STEP: Reassign the result as the main color buffer
+            resourceData.cameraColor = destinationTexture;
+        }
     }
 }
