@@ -21,7 +21,7 @@ namespace making_tea
 
         [Header("Camera FOV Settings")]
         [SerializeField] private float sitFOV = 60f;
-        [SerializeField] private bool changeFOV = false;
+        [SerializeField] private bool changeFOV = true;
 
         private float _originalFOV;
 
