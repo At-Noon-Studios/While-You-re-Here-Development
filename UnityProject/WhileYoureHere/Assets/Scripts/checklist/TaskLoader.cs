@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ScriptableObjects.CheckList;
+using ScriptableObjects.TodoList;
 using UnityEngine;
 
 namespace checklist
