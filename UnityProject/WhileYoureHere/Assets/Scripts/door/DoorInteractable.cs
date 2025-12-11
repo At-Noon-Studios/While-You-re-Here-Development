@@ -5,7 +5,7 @@ using ScriptableObjects.door;
 
 namespace door
 {
-    public class DoorInteractable : InteractableBehaviour
+    public class DoorInteractable : InteractableBehaviour, IEInteractable
     {
         [Header("Interaction Canvases (0=open front, 1=open back, 2=close front, 3=close back)")]
         [SerializeField] private List<Canvas> interactionCanvases;
@@ -81,6 +81,7 @@ namespace door
                 else if (!_isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
+        
 
         public override void OnHoverEnter(IInteractor interactor)
         {

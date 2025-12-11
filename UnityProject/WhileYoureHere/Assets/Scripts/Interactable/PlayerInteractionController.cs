@@ -15,10 +15,10 @@ namespace Interactable
     {
         [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")]
-        [SerializeField] private EventChannel interact;
+        [Header("Listen to")] [SerializeField] private EventChannel interact;
+        [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private Transform holdPoint;
-        
+
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
@@ -30,13 +30,13 @@ namespace Interactable
         
         private const int InteractableRaycastAllocation = 16;
 
-        #region Unity event functions
+        #region Unity event functions {
 
         private void Awake()
         {
             _movementController = GetComponent<MovementController>();
         }
-        
+
         private void Start()
         {
             _uiManager = UIManager.Instance;
@@ -50,27 +50,29 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
+            clickInteractEvent.OnRaise += clickInteract;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
+            clickInteractEvent.OnRaise -= clickInteract;
         }
-        
+
         #endregion
-        
+
         #region Interface implementation
-        
+
         public Transform HoldPoint => holdPoint;
-        
+
         [CanBeNull] public IHoldableObject HeldObject { get; private set; }
-        
+
         public void SetHeldObject([CanBeNull] IHoldableObject holdableObject)
         {
             HeldObject = holdableObject;
             UpdateMovementSpeed(holdableObject);
         }
-        
+
         #endregion
         
         #region Public chair helpers (used by ChairInteractable)
@@ -88,7 +90,7 @@ namespace Interactable
         #endregion
 
         #region Private methods
-        
+
         private void Interact()
         {
             if (IsTableMode)
@@ -115,6 +117,25 @@ namespace Interactable
             if (IsNoTarget) HeldObject?.Drop();
             else if (IsTargetInteractable) InteractWithTarget();
             else _uiManager.PulseInteractPrompt();
+        }
+
+            if (NoTarget) HeldObject?.Drop();
+            else if (TargetInteractable)
+            {
+                if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
+                InteractWithTarget();
+            }
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+        }
+
+        private void clickInteract()
+        {
+            if (NoTarget) HeldObject?.Drop();
+            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
+            {
+                ClickInteractWithTarget();
+            }
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
         private void RefreshCurrentTarget()
@@ -202,26 +223,41 @@ namespace Interactable
 
             _uiManager.ShowInteractPrompt(target.InteractionText(this),
                                           target.InteractableBy(this));
+            if (target == null)
+                return;
+
+            if (_uiManager != null)
+                _uiManager.ShowInteractPrompt(
+                    target.InteractionText(this),
+                    target.InteractableBy(this)
+                );
 
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            _uiManager.HideInteractPrompt();
+            if (_uiManager != null)
+                _uiManager.HideInteractPrompt();
+
             target?.OnHoverExit(this);
         }
 
-        private bool IsNoTarget => _currentTarget == null;
 
-        private bool IsTargetInteractable =>
-            _currentTarget != null &&
-            _currentTarget.InteractableBy(this);
+        private bool NoTarget => _currentTarget == null;
+
+        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
 
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
             OnHoverEnter(_currentTarget);
+        }
+
+        private void ClickInteractWithTarget()
+        {
+            _currentTarget?.ClickInteract(this);
+            OnHoverExit(_currentTarget);
         }
 
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
@@ -269,6 +305,11 @@ namespace Interactable
             return false;
         }
         
+            var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
+            var modifier = Mathf.Max(1f - weight, 0.4f);
+            _movementController.SetMovementModifier(modifier);
+        }
+
         #endregion
     }
 }

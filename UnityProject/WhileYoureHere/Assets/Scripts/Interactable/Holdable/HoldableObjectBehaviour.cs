@@ -6,7 +6,7 @@ using Interactable.Concrete.ObjectHolder;
 namespace Interactable.Holdable
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
+    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject, IEInteractable
     {
         [Header("Interaction UI")]
         [SerializeField] private Canvas interactionCanvas;
@@ -66,7 +66,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-
+        
         private void PickUp(IInteractor interactor)
         {
             GetComponent<PickUpSound>().PlayPickUpSound();

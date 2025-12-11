@@ -2,7 +2,7 @@ using gamestate;
 using Interactable;
 using Interactable.Holdable;
 
-public class NotebookHoldableBehaviour : HoldableObjectBehaviour
+public class NotebookHoldableBehaviour : HoldableObjectBehaviour, IEInteractable
 {
     private bool flagSet = false;
 
