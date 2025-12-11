@@ -173,9 +173,7 @@ namespace radio_interaction
         {
             if (_currentRadioIndex == 0)
             {
-                // PlayStatic();
-                dialogueManager.StartRadioDialogue(radioTracks[0].dialogueNode); // Start new channel
-
+                PlayStatic();
             }
             // else PlayClip(radioTracks[_currentRadioIndex].audioClip);
         }
@@ -184,6 +182,7 @@ namespace radio_interaction
         public void TurnRadioOff()
         {
             _audioSource.Stop();
+            dialogueManager.EndDialogue();
         }
 
         public void TuneRadio()
@@ -191,23 +190,24 @@ namespace radio_interaction
             var stationSpacing = 1f / radioTracks.Length;
             var newIndex = Mathf.FloorToInt(_tuneValue / stationSpacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
-
-            _currentRadioIndex = newIndex;
-
+            
             if (_currentRadioIndex == newIndex)
                 return; // no station change
-
             _currentRadioIndex = newIndex;
-            DialogueNode node = radioTracks[newIndex].dialogueNode;
+            print("current index" + _currentRadioIndex);
+            var newNode = radioTracks[newIndex].dialogueNode;
+            ChangeNode(newNode);     // <-- important: call BEFORE assigning _currentRadioNode
 
-            if (_currentRadioNode == node) return;
-            
-            _currentRadioNode = node;
-            dialogueManager.EndDialogue(); // Kill old radio speech
-            dialogueManager.StartRadioDialogue(node); // Start new channel
-            // PlayClip(radioTracks[newIndex].audioClip);
+            _currentRadioNode = newNode;
         }
-
+        public void ChangeNode(DialogueNode node)
+        {
+            
+            if (_currentRadioNode == node) return;
+            Debug.Log("CurrentNode = "+ node);
+            dialogueManager.StartRadioDialogue(node);
+            // dialogueManager.EndDialogue(); // Kill old radio speech
+        }
         public bool OnCorrectChannel() => _currentRadioIndex == 2;
 
         // radioTracks[_currentRadioIndex].audioClip == radioTracks[2].audioClip;

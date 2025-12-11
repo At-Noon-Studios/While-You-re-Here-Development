@@ -38,12 +38,11 @@ namespace radio_interaction
 
             if (!_radioController.OnCorrectChannel())
             {
-                Debug.Log("not correct channel");
                 return;
             }
+
             if (_radioController.OnCorrectChannel())
             {
-                Debug.Log("correct channel");
                 timer += Time.deltaTime;
             }
             else timer = 0;

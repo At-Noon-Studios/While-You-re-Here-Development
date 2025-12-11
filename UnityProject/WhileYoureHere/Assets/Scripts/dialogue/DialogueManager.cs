@@ -36,10 +36,12 @@ namespace dialogue
 
         [SerializeField] private float volume = 1;
 
-        private void Start()
+        private void Awake()
         {
             _ui = UIManager.Instance;
-
+        }
+        private void Start()
+        {
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -76,6 +78,11 @@ namespace dialogue
 
             gameObject.SetActive(true);
             DisplayNode(startId);
+        }
+        public void StartRadioDialogue(DialogueNode node)
+        {
+            List<DialogueNode> nodes = new List<DialogueNode> { node };
+            StartDialogue(nodes, node.nodeID);
         }
 
         private void DisplayNode(string id)
@@ -148,7 +155,7 @@ namespace dialogue
                 }
 
                 output += c;
-                _ui.ShowDialogue(_currentNode.speakerName, output);
+                 _ui.ShowDialogue(_currentNode.speakerName, output);
                 yield return new WaitForSeconds(letterDelay);
             }
 
@@ -178,18 +185,17 @@ namespace dialogue
                 EndDialogue();
         }
 
-        private void EndDialogue()
+        public void EndDialogue()
         {
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
-
             _ui.HideDialogue();
-            gameObject.SetActive(false);
+             // gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _audioSource.Stop();
-            _movement?.ResumeMovement();
-            _cameraController?.ResumeCameraMovement();
+            // _movement?.ResumeMovement();
+            // _cameraController?.ResumeCameraMovement();
         }
     }
 }
