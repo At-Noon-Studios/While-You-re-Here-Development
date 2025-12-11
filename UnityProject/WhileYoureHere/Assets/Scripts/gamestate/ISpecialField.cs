@@ -8,7 +8,11 @@ namespace gamestate
     public interface ISpecialField
     {
         public string[] GetFields();
-        public int GetHeight(SerializedProperty property);
+
+        public int GetHeight(SerializedProperty property)
+        {
+            return 2;
+        }
     }
 
     public class BooleanChangeSpecialField : ISpecialField
@@ -36,11 +40,6 @@ namespace gamestate
             returnFields[0] = "hourOfDay";
             return returnFields;
         }
-
-        public int GetHeight(SerializedProperty property)
-        {
-            return 2;
-        }
     }
 
     public class CutsceneSpecialField : ISpecialField
@@ -51,11 +50,6 @@ namespace gamestate
             returnFields[0] = "cutsceneToPlay";
             return returnFields;
         }
-
-        public int GetHeight(SerializedProperty property)
-        {
-            return 2;
-        }
     }
 
     public class AudioFragmentSpecialField : ISpecialField
@@ -65,11 +59,6 @@ namespace gamestate
             var returnFields = new string[1];
             returnFields[0] = "audioToPlay";
             return returnFields;        
-        }
-
-        public int GetHeight(SerializedProperty property)
-        {
-            return 2;
         }
     }
 

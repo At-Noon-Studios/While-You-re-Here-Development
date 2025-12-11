@@ -10,6 +10,8 @@ using UnityEngine.Events;
 
 namespace gamestate
 {
+    [RequireComponent(typeof(ChoreManager))]
+    [RequireComponent(typeof(TimeManager))]
     public class GamestateManager : MonoBehaviour
     {
         public List<SoGamestateFlag> listOfFlags = new List<SoGamestateFlag>();
