@@ -11,6 +11,9 @@ namespace gardening
         [SerializeField] private int plantID;
         [SerializeField] private ParticleSystem wateringParticles;
         
+        public SoPlant PlantData => plant;
+        public int CurrentStage => _currentStage;
+        
         private GameObject _currentPlant;
         private int _currentStage;
         private float _currentWaterTime = 0f;
@@ -28,8 +31,9 @@ namespace gardening
 
             SpawnCurrentStage();
             
-            Debug.Log(plant.MaxStage);
-            Debug.Log(_currentPlant);
+            Debug.Log($"max stages: {plant.MaxStage}");
+            Debug.Log($"plant: {_currentPlant}");
+            Debug.Log($"stage: {_currentStage}");
         }
 
         void Update()

@@ -1,4 +1,5 @@
 using System;
+using gardening;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Interactable.Holdable
         [CanBeNull] private IInteractor _holder;
 
         private Transform _playerCamera;
+        private WateringCanHolder _currentHolder;
 
         public float Weight => data.Weight;
         public bool IsCurrentlyHeld => _holder != null;
@@ -67,6 +69,13 @@ namespace Interactable.Holdable
         private void PickUp(IInteractor interactor)
         {
             GetComponent<PickUpSound>().PlayPickUpSound();
+
+            if (_currentHolder != null)
+            {
+                _currentHolder.ClearHeldObject(this);
+                _currentHolder = null;
+            }
+            
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -79,6 +88,9 @@ namespace Interactable.Holdable
             if (_holder == null)
                 throw new Exception("Tried to drop an item that wasn't being held");
 
+            _currentHolder?.ClearHeldObject(this);
+            _currentHolder = null;
+            
             _holder.SetHeldObject(null);
             _holder = null;
 
@@ -86,8 +98,10 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, WateringCanHolder holder = null)
         {
+            _currentHolder = holder;
+            
             _holder?.SetHeldObject(null);
             _holder = null;
 

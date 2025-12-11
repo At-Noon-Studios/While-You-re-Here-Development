@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6891279372609575332}
   - component: {fileID: 7280612494609800052}
   - component: {fileID: 7535977633571937585}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.113
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 78828513797040575}
   - component: {fileID: 2724256968934821129}
   - component: {fileID: 436384111303978053}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.102
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 8993918155599301674}
   - component: {fileID: 4902848353979253532}
   - component: {fileID: 3547672020312051214}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeafesCurve.039
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 8812372729006467757}
   - component: {fileID: 4578216870741202035}
   - component: {fileID: 3201361285871027679}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.117
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,9 +365,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3657619339997565212}
-  m_Layer: 0
+  - component: {fileID: -6728566323665643606}
+  - component: {fileID: 1159676414726896919}
+  m_Layer: 7
   m_Name: HappyFewFlowers
-  m_TagString: Untagged
+  m_TagString: Plant
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -388,6 +390,75 @@ Transform:
   - {fileID: 4859912134320518805}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &-6728566323665643606
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057920278439520985}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1159676414726896919
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057920278439520985}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0170434, y: 0.15776457, z: 0.87449336}
+  m_Center: {x: -0.41469562, y: 0.110449426, z: -0.10883653}
 --- !u!1 &2539549883329665415
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +470,7 @@ GameObject:
   - component: {fileID: 1063014688864955490}
   - component: {fileID: 6995829813241746395}
   - component: {fileID: 5526190368946292327}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stem.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -488,7 +559,7 @@ GameObject:
   - component: {fileID: 4136986045505083596}
   - component: {fileID: 4177831101158956873}
   - component: {fileID: 8405325115170274939}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.115
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -575,7 +646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4859912134320518805}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6480165816227792684}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HappyHighPolyFewFlowers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -653,7 +724,7 @@ GameObject:
   - component: {fileID: 8948993862665606256}
   - component: {fileID: 7744904091414279444}
   - component: {fileID: 6652535960575800984}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeafesCurve.040
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -742,7 +813,7 @@ GameObject:
   - component: {fileID: 1127209893991132250}
   - component: {fileID: 3219279493213816617}
   - component: {fileID: 8042491098230822323}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.110
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -831,7 +902,7 @@ GameObject:
   - component: {fileID: 5507973644132143021}
   - component: {fileID: 5758149564284535824}
   - component: {fileID: 2504156044655792056}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.119
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -920,7 +991,7 @@ GameObject:
   - component: {fileID: 2023433359372158235}
   - component: {fileID: 4551801605995252416}
   - component: {fileID: 8866562523886080323}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.116
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1009,7 +1080,7 @@ GameObject:
   - component: {fileID: 5369835147908657500}
   - component: {fileID: 6895958276469743492}
   - component: {fileID: 6724605338821383276}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeafesCurve.041
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1098,7 +1169,7 @@ GameObject:
   - component: {fileID: 4001636478815272457}
   - component: {fileID: 4419448584455146662}
   - component: {fileID: 8337242683874175553}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.114
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1187,7 +1258,7 @@ GameObject:
   - component: {fileID: 6744635977703744419}
   - component: {fileID: 1690202020920212897}
   - component: {fileID: 6962077485225062239}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Curve.118
   m_TagString: Untagged
   m_Icon: {fileID: 0}

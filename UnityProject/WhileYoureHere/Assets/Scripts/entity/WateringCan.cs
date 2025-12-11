@@ -1,5 +1,4 @@
 using chore;
-using Interactable;
 using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
