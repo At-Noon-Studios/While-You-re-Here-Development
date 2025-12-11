@@ -1,7 +1,7 @@
 using System;
-using ScriptableObjects.Interactable.Holdable;
+using JetBrains.Annotations;
+using ScriptableObjects.Interactable;
 using UnityEngine;
-using Interactable.Concrete.ObjectHolder;
 
 namespace Interactable.Holdable
 {
@@ -16,13 +16,10 @@ namespace Interactable.Holdable
 
         private Rigidbody _rigidbody;
         private int _originalLayer;
-        private IInteractor _holder;
+        [CanBeNull] private IInteractor _holder;
 
         private Transform _playerCamera;
 
-        private ObjectHolder _currentHolder;
-
-        public bool IsCurrentlyHeld => _holder != null;
         public float Weight => data.Weight;
 
         protected override void Awake()
@@ -34,11 +31,12 @@ namespace Interactable.Holdable
                 interactionCanvas.gameObject.SetActive(false);
 
             var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
-            
-            var cam = player.GetComponentInChildren<Camera>();
-            if (cam != null)
-                _playerCamera = cam.transform;
+            if (player != null)
+            {
+                var cam = player.GetComponentInChildren<Camera>();
+                if (cam != null)
+                    _playerCamera = cam.transform;
+            }
         }
 
         protected void Start()
@@ -48,19 +46,17 @@ namespace Interactable.Holdable
 
         private void Update()
         {
-            if (interactionCanvas == null ||
-                !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-            
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
+            if (interactionCanvas != null &&
+                interactionCanvas.gameObject.activeSelf &&
+                _playerCamera != null)
+            {
+                interactionCanvas.transform.LookAt(_playerCamera);
+                interactionCanvas.transform.Rotate(0f, 180f, 0f);
+            }
         }
 
         public override void Interact(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController { IsTableMode: true })
-                return;
-
             PickUp(interactor);
 
             if (interactionCanvas != null)
@@ -70,13 +66,6 @@ namespace Interactable.Holdable
         private void PickUp(IInteractor interactor)
         {
             GetComponent<PickUpSound>().PlayPickUpSound();
-
-            if (_currentHolder != null)
-            {
-                _currentHolder.ClearHeldObject(this);
-                _currentHolder = null;
-            }
-
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -96,10 +85,8 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
+        public void Place(Vector3 position, Quaternion? rotation = null)
         {
-            _currentHolder = holder;
-
             _holder?.SetHeldObject(null);
             _holder = null;
 
@@ -133,7 +120,7 @@ namespace Interactable.Holdable
         {
             base.OnHoverEnter(interactor);
 
-            var canInteract = _holder == null;
+            bool canInteract = _holder == null;
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(canInteract);

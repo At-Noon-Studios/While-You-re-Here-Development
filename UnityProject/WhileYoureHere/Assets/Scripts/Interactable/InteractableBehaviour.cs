@@ -53,7 +53,7 @@ namespace Interactable
         
         public virtual string InteractionText(IInteractor interactor) => gameObject.name;
         
-        public virtual void EnableCollider(bool state)
+        public void EnableCollider(bool state)
         {
             _collider.enabled = state;
         }
