@@ -1,16 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
+namespace starting_screen
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class OptionsMenu : MonoBehaviour
     {
+        [Range(0, 100)]
+        private int _brightnessRange;
+        private int _brightnessPercentage;
+        private int _brightnessDefault;
         
-    }
+        [Header("Brightness Slider")]
+        [SerializeField] private Slider brightnessSlider;
+        
+        
+        private void Start()
+        {
+            _brightnessDefault = 50;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void OnChangeBrightness(float brightness)
+        {
+            RenderSettings.ambientLight = Color.white * (brightness / 100f);
+            Debug.Log($"Brightness changed to: {brightness}");
+        }
     }
 }
