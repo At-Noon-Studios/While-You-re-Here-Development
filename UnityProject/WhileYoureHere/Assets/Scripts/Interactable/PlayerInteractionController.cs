@@ -131,16 +131,26 @@ namespace Interactable
 
         private void OnHoverEnter(IInteractable target)
         {
-            if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+            if (target == null)
+                return;
+
+            if (_uiManager != null)
+                _uiManager.ShowInteractPrompt(
+                    target.InteractionText(this),
+                    target.InteractableBy(this)
+                );
+
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            _uiManager.HideInteractPrompt();
+            if (_uiManager != null)
+                _uiManager.HideInteractPrompt();
+
             target?.OnHoverExit(this);
         }
+
 
         private bool NoTarget => _currentTarget == null;
 
