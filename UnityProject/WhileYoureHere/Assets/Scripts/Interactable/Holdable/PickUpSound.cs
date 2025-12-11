@@ -8,7 +8,7 @@ namespace Interactable.Holdable
         [SerializeField] private AudioClip pickupSound;
         private AudioSource _audioSource;
 
-        void Awake()
+        private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
         }
