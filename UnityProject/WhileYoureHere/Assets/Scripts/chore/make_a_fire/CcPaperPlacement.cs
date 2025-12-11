@@ -1,5 +1,6 @@
 using chore.scavenging;
 using ScriptableObjects.chores;
+using ScriptableObjects.chores.make_a_fire;
 using ScriptableObjects.Chores.scavenging;
 using UnityEngine;
 
@@ -7,22 +8,22 @@ namespace chore.make_a_fire
 {
     public class CcPaperPlacement : ChoreComponent
     {
-        private readonly int _paperID;
-        private int _paperCount;
-        private int _paperAmountNeeded;
+        // private readonly int _paperID;
+        // private int _paperCount;
+        // private int _paperAmountNeeded;
 
-        public CcPaperPlacement(string name, string description, int paperID, int paperAmountNeeded) :
+        public CcPaperPlacement(string name, string description) :
             base(name, description)
         {
-            _paperID = paperID;
-            _paperAmountNeeded = paperAmountNeeded;
+           // _paperID = paperID;
+           // _paperAmountNeeded = paperAmountNeeded;
             ComponentType = ChoreComponentType.PaperPlacement;
         }
 
         public override void EnableComponent()
         {
             base.EnableComponent();
-            _paperCount = 0;
+            //_paperCount = 0;
 
             ChoreEvents.OnPaperPlacement += PaperPaced;
         }
@@ -55,9 +56,10 @@ namespace chore.make_a_fire
 
             return new CcPaperPlacement(
                 localChoreComponent.componentName,
-                localChoreComponent.description,
-                localChoreComponent.paperID,
-                localChoreComponent.paperAmountNeeded);
+                localChoreComponent.description
+                //localChoreComponent.paperID,
+                //localChoreComponent.paperAmountNeeded
+                );
         }
     }
 }

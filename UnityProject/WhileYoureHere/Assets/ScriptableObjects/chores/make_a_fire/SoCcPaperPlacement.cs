@@ -1,11 +1,10 @@
-using ScriptableObjects.chores;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SoCcPaperPlacement", menuName = "Scriptable Objects/SoCcPaperPlacement")]
-public class SoCcPaperPlacement : SoChoreComponent
+namespace ScriptableObjects.chores.make_a_fire
 {
-    [Header("Paper Placement Configuration")]
-    public int paperID;
-    public int paperAmountNeeded;
+    [CreateAssetMenu(fileName = "SoCcPaperPlacement", menuName = "Scriptable Objects/SoCcPaperPlacement")]
+    public class SoCcPaperPlacement : SoChoreComponent
+    {
     
+    }
 }
