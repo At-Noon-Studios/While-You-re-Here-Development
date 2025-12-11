@@ -1,4 +1,5 @@
 using System.Collections;
+using entity;
 using Interactable;
 using UnityEngine;
 using UnityEngine.UI;

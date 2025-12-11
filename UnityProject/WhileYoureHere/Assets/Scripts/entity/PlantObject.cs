@@ -2,7 +2,7 @@ using chore;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace gardening
+namespace entity
 {
     public class PlantObject : MonoBehaviour
     {
