@@ -82,7 +82,6 @@ namespace door
                 else if (!_isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
-        
 
         public override void OnHoverEnter(IInteractor interactor)
         {

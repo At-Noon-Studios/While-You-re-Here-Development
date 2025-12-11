@@ -130,6 +130,7 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
+                Debug.Log(sentence.tagOfAudioSource);
                 if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
                 _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
