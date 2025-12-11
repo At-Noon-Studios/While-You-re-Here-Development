@@ -80,8 +80,7 @@ namespace making_tea
 
         private void Sit(IInteractor interactor)
         {
-            var p = interactor as PlayerInteractionController;
-            if (p == null)
+            if (interactor is not PlayerInteractionController p)
             {
                 Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
                 return;

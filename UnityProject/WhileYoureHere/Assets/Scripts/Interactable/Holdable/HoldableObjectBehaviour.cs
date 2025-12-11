@@ -58,7 +58,7 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController { TableMode: true })
+            if (interactor is PlayerInteractionController { IsTableMode: true })
                 return;
 
             PickUp(interactor);

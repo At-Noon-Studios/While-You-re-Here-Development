@@ -8,6 +8,7 @@ namespace making_tea
 {
     public class Stove : MonoBehaviour
     {
+        [Header("Heating Settings")]
         public float requiredFill = 0.2f;
         public float heatTime = 3f;
 

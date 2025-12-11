@@ -215,9 +215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterLevelVisualizer
   kettle: {fileID: 1596105950508812948}
-  emptyY: -0.0448
-  fullY: 0.03
   waterSurfaceCollider: {fileID: 5827669230978281591}
+  emptyYPos: 0
+  fullYPos: 0.035
 --- !u!1 &3327154459643512078
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.CupFilledTrigger
   cup: {fileID: 1596105950508812948}
-  threshold: 0.6
+  minFill: 0.2
 --- !u!1 &8561345402946454534
 GameObject:
   m_ObjectHideFlags: 0

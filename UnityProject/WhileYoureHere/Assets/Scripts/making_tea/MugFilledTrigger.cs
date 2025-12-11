@@ -5,12 +5,13 @@ namespace making_tea
 {
     public class MugFilledTrigger : MonoBehaviour
     {
+        [Header("Fill Trigger Settings")]
         public KettleFill cup;
-        public float threshold = 0.2f;
+        public float minFill = 0.2f;
 
         private void Update()
         {
-            if (!(cup.fillAmount >= threshold)) return;
+            if (!(cup.fillAmount >= minFill)) return;
 
             ChoreEvents.TriggerCupFilled();
             enabled = false;

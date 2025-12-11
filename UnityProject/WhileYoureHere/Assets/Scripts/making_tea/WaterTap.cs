@@ -4,6 +4,7 @@ namespace making_tea
 {
     public class WaterTap : MonoBehaviour
     {
+        [Header("Water Stream Reference")]
         public ParticleSystem waterStream;
 
         [Header("Audio")]
@@ -26,12 +27,9 @@ namespace making_tea
 
         private void Awake()
         {
-            if (_audio == null)
-                _audio = GetComponent<AudioSource>();
-
-            if (_audio == null)
-                _audio = gameObject.AddComponent<AudioSource>();
-
+            _audio ??= GetComponent<AudioSource>();
+            _audio ??= gameObject.AddComponent<AudioSource>();
+            
             _audio.loop = true;
             _audio.playOnAwake = false;
         }

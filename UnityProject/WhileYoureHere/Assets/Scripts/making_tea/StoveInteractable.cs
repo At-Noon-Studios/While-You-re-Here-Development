@@ -5,6 +5,7 @@ namespace making_tea
 {
     public class StoveInteractable : InteractableBehaviour
     {
+        [Header("Stove Reference")]
         public Stove stove;
 
         [Header("Interaction UI")]
@@ -49,10 +50,7 @@ namespace making_tea
                 interactionCanvas.gameObject.SetActive(false);
         }
 
-        public override string InteractionText(IInteractor interactor)
-        {
-            return string.Empty;
-        }
+        public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
         {

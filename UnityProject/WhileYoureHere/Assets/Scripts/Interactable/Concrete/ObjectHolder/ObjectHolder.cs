@@ -51,7 +51,7 @@ namespace Interactable.Concrete.ObjectHolder
         {
             var pic = interactor as PlayerInteractionController;
 
-            if (pic != null && pic.TableMode)
+            if (pic != null && pic.IsTableMode)
             {
                 HandleTableModePlacement();
                 return;
@@ -107,7 +107,7 @@ namespace Interactable.Concrete.ObjectHolder
 
         public override bool InteractableBy(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController { TableMode: true })
+            if (interactor is PlayerInteractionController { IsTableMode: true })
                 return true;
 
             return _heldObject == null &&

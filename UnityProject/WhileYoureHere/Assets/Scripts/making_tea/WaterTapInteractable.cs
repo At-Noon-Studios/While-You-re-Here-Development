@@ -1,10 +1,13 @@
+using System;
 using Interactable;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace making_tea
 {
     public class WaterTapInteractable : InteractableBehaviour
     {
+        [Header("Water Tap Reference")]
         public WaterTap tap;
 
         [Header("Interaction UI")]
@@ -50,10 +53,7 @@ namespace making_tea
                 interactionCanvas.gameObject.SetActive(false);
         }
 
-        public override string InteractionText(IInteractor interactor)
-        {
-            return string.Empty;
-        }
+        public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
         {

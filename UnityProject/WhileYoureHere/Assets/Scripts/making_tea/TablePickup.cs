@@ -9,7 +9,7 @@ namespace making_tea
         [SerializeField] private Canvas interactionCanvasPrimary;
         [SerializeField] private Canvas interactionCanvasSecondary;
 
-        protected bool Lifted;
+        protected bool IsLifted;
         protected PlayerInteractionController Pic;
 
         private Rigidbody _rb;
@@ -38,7 +38,7 @@ namespace making_tea
         {
             RotateUI();
 
-            if (!Lifted || Pic == null || !Pic.TableMode)
+            if (!IsLifted || Pic == null || !Pic.IsTableMode)
                 return;
 
             FollowMouse();
@@ -73,11 +73,11 @@ namespace making_tea
             transform.position = pos;
         }
 
-        public bool IsTableHeld => Lifted;
+        public bool IsTableHeld => IsLifted;
 
         public virtual void Pickup(PlayerInteractionController p)
         {
-            Lifted = true;
+            IsLifted = true;
             Pic = p;
 
             if (_rb != null)
@@ -89,7 +89,7 @@ namespace making_tea
 
         public virtual void Drop()
         {
-            Lifted = false;
+            IsLifted = false;
             Pic = null;
 
             if (_rb != null)
@@ -101,19 +101,19 @@ namespace making_tea
 
         public virtual void ForceDropFromTableMode() => Drop();
 
-        public override string InteractionText(IInteractor i) => string.Empty;
+        public override string InteractionText(IInteractor interactor) => string.Empty;
 
-        public override bool InteractableBy(IInteractor i)
+        public override bool InteractableBy(IInteractor interactor)
         {
-            return (i as PlayerInteractionController)?.TableMode ?? false;
+            return (interactor as PlayerInteractionController)?.IsTableMode ?? false;
         }
 
-        public override void Interact(IInteractor i)
+        public override void Interact(IInteractor interactor)
         {
-            var p = i as PlayerInteractionController;
+            var p = interactor as PlayerInteractionController;
             if (p == null) return;
 
-            if (!Lifted) Pickup(p);
+            if (!IsLifted) Pickup(p);
             else Drop();
         }
 
@@ -122,9 +122,9 @@ namespace making_tea
             base.OnHoverEnter(interactor);
 
             var p = interactor as PlayerInteractionController;
-            if (p == null || !p.TableMode) return;
+            if (p == null || !p.IsTableMode) return;
 
-            if (!Lifted) ShowPrimaryUI();
+            if (!IsLifted) ShowPrimaryUI();
             else ShowSecondaryUI();
         }
 
@@ -132,7 +132,7 @@ namespace making_tea
         {
             base.OnHoverExit(interactor);
 
-            if (!Lifted)
+            if (!IsLifted)
                 HideAllUI();
         }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 913296303155999163}
   m_Layer: 0
-  m_Name: LitPlace
+  m_Name: LitPlacePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5501,7 +5501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KettleChoreTrigger
   kettle: {fileID: 826776350751955637}
-  threshold: 0.2
+  minFill: 0.2
 --- !u!114 &8215212094655339604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10934,7 +10934,7 @@ GameObject:
   - component: {fileID: 3497244920866946136}
   - component: {fileID: 2787163569191242561}
   m_Layer: 0
-  m_Name: Cylinder (1)
+  m_Name: LitPlace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10949,8 +10949,8 @@ Transform:
   m_GameObject: {fileID: 6192158421985202171}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.21, y: 0.00001, z: 0.21}
+  m_LocalPosition: {x: 0, y: 0.1414, z: 0}
+  m_LocalScale: {x: 0.21, y: 0.001069, z: 0.21}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6396082300368766626}
@@ -11029,7 +11029,7 @@ Transform:
   m_GameObject: {fileID: 6901517965805022584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00069999695, y: -0.09609997, z: 0.0019999966}
+  m_LocalPosition: {x: 0.001, y: -0.0934, z: 0.0007}
   m_LocalScale: {x: 0.21, y: 0.0009999999, z: 0.21}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11126,9 +11126,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterLevelVisualizer
   kettle: {fileID: 826776350751955637}
-  emptyY: -0.0961
-  fullY: 0.13
   waterSurfaceCollider: {fileID: 7780727831463082952}
+  emptyYPos: 0
+  fullYPos: 0.12
 --- !u!1 &7884441254272464652
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ namespace Interactable
 
         private ChairInteractable _sittingChair;
         
-        public bool TableMode { get; private set; }
+        public bool IsTableMode { get; private set; }
         public Camera PlayerCamera => GetComponentInChildren<Camera>();
         
         private const int InteractableRaycastAllocation = 16;
@@ -73,7 +73,7 @@ namespace Interactable
         
         #endregion
         
-        #region Public chair helpers (vom Chair benutzt)
+        #region Public chair helpers (used by ChairInteractable)
 
         public void SetSittingChair(ChairInteractable chair)
         {
@@ -91,11 +91,11 @@ namespace Interactable
         
         private void Interact()
         {
-            if (TableMode)
+            if (IsTableMode)
             {
                 if (HeldObject == null 
-                    && !(_currentTarget is ObjectHolder) 
-                    && TryDropTablePickup())
+                    && _currentTarget is not ObjectHolder 
+                    && DropHeldTableObject())
                 {
                     return;
                 }
@@ -112,8 +112,8 @@ namespace Interactable
                 _sittingChair.ForceStandUp();
             }
 
-            if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable) InteractWithTarget();
+            if (IsNoTarget) HeldObject?.Drop();
+            else if (IsTargetInteractable) InteractWithTarget();
             else _uiManager.PulseInteractPrompt();
         }
 
@@ -131,7 +131,7 @@ namespace Interactable
                     HeldObject != null)
                     break;
 
-                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, TableMode);
+                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;
@@ -149,13 +149,13 @@ namespace Interactable
             RaycastHit candidate,
             ref float closestDistance,
             ref IInteractable bestTarget,
-            bool tableMode)
+            bool isTableMode)
         {
             if (candidate.distance >= closestDistance) return;
 
             var col = candidate.collider;
             
-            if (tableMode)
+            if (isTableMode)
             {
                 if (col.TryGetComponent<ITablePickup>(out var tablePickup))
                 {
@@ -212,9 +212,9 @@ namespace Interactable
             target?.OnHoverExit(this);
         }
 
-        private bool NoTarget => _currentTarget == null;
+        private bool IsNoTarget => _currentTarget == null;
 
-        private bool TargetInteractable =>
+        private bool IsTargetInteractable =>
             _currentTarget != null &&
             _currentTarget.InteractableBy(this);
 
@@ -240,11 +240,11 @@ namespace Interactable
             _movementController.SetMovementModifier(modifier);
         }
 
-        public void EnableTableMode(bool enable)
+        public void EnableTableMode(bool isEnable)
         {
-            TableMode = enable;
+            IsTableMode = isEnable;
 
-            if (enable)
+            if (isEnable)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -256,7 +256,7 @@ namespace Interactable
             }
         }
 
-        private static bool TryDropTablePickup()
+        private static bool DropHeldTableObject()
         {
             var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
 

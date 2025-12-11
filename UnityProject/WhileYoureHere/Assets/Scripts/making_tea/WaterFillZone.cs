@@ -4,6 +4,7 @@ namespace making_tea
 {
     public class WaterFillZone : MonoBehaviour
     {
+        [Header("Water Tap Reference")]
         public WaterTap tap;
 
         private void OnTriggerStay(Collider other)

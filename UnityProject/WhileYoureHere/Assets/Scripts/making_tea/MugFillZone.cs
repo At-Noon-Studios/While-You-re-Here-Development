@@ -4,6 +4,7 @@ namespace making_tea
 {
     public class MugFillZone : MonoBehaviour
     {
+        [Header("Fill Settings")]
         public KettleFill cupFill;
         public float stopFillDelay = 0.1f;
 
