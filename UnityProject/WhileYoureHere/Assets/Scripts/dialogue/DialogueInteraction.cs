@@ -44,7 +44,6 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
-            print ("dialog interact");
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)
