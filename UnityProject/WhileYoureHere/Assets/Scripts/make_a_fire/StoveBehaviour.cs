@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using chore;
 using Interactable.Holdable;
 using Mono.Cecil.Cil;
 using ScriptableObjects.Events;
@@ -20,6 +21,7 @@ namespace make_a_fire
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
+
         
         
         [Header("Blow Event")] 
@@ -48,10 +50,10 @@ namespace make_a_fire
 
                 switch (_fireStarted)
                 {
-                    case false when _placedLogsCount == 1:
+                    case false when _placedLogsCount == 1: // 1 log is placed
                         StartSmallFire();
                         break;
-                    case true when _placedLogsCount == 3:
+                    case true when _placedLogsCount == 3: // when 3 logs are placed
                         blowAllowedEvent?.Raise();
                         break;
                 }
@@ -79,6 +81,7 @@ namespace make_a_fire
         {
             _audioSource.PlayOneShot(chargedFire);
             fireParticle.SetVector3("FireVelocity", new Vector3(0, 2f, 0));
+            ChoreEvents.TriggerPaperPlacement();
         }
 
         private void MakeFireSound()

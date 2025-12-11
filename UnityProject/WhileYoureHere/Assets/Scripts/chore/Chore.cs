@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using chore.make_a_fire;
 using chore.scavenging;
 using ScriptableObjects.chores;
 using UnityEngine;
@@ -28,8 +29,8 @@ namespace chore
             _componentFactory
                 = new Dictionary<ChoreComponent.ChoreComponentType, Func<SoChoreComponent, ChoreComponent>>()
                 {
-                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory }
-
+                    { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcPaperPlacement.CreateFactory }
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

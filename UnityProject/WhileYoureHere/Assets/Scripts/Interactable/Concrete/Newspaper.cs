@@ -8,6 +8,7 @@ namespace Interactable.Concrete
     public class Newspaper : FurnacePlaceable
     {
         private AudioSource _audioSource;
+        [SerializeField] private int paperID;
         
         protected override void Awake()
         {

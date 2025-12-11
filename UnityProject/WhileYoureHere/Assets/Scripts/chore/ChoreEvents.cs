@@ -24,5 +24,12 @@ namespace chore
         {
             OnChoreCompleted?.Invoke(chore);
         }
+        
+        public static event Action OnPaperPlacement;
+
+        public static void TriggerPaperPlacement()
+        {
+            OnPaperPlacement?.Invoke();
+        }
     }
 }
