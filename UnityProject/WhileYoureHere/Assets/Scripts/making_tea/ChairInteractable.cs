@@ -19,6 +19,12 @@ namespace making_tea
         [Header("Camera Sitting Rotation Offset")]
         [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
 
+        [Header("Camera FOV Settings")]
+        [SerializeField] private float sitFOV = 60f;
+        [SerializeField] private bool changeFOV = false;
+
+        private float _originalFOV;
+
         private bool _isSitting;
 
         private PlayerInteractionController _pic;
@@ -101,6 +107,8 @@ namespace making_tea
             {
                 _originalCameraLocalPos = _playerCam.transform.localPosition;
                 _originalCameraLocalRot = _playerCam.transform.localRotation;
+
+                _originalFOV = _playerCam.fieldOfView;
             }
 
             if (lookTarget != null && _playerCam != null)
@@ -114,6 +122,9 @@ namespace making_tea
 
             if (_playerCam != null)
                 _playerCam.transform.localRotation *= Quaternion.Euler(cameraSitRotationOffset);
+
+            if (changeFOV && _playerCam != null)
+                _playerCam.fieldOfView = sitFOV;
 
             _isSitting = true;
 
@@ -134,6 +145,9 @@ namespace making_tea
             {
                 _playerCam.transform.localPosition = _originalCameraLocalPos;
                 _playerCam.transform.localRotation = _originalCameraLocalRot;
+
+                if (changeFOV)
+                    _playerCam.fieldOfView = _originalFOV;
             }
 
             _isSitting = false;
