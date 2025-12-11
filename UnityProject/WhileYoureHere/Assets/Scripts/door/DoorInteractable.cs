@@ -5,7 +5,7 @@ using ScriptableObjects.door;
 
 namespace door
 {
-    public class DoorInteractable : InteractableBehaviour, IEInteractable
+    public class DoorInteractable : InteractableBehaviour
     {
         [Header("Interaction Canvases (0=open front, 1=open back, 2=close front, 3=close back)")]
         [SerializeField] private List<Canvas> interactionCanvases;

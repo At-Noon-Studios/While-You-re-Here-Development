@@ -75,7 +75,7 @@ namespace Interactable
             if (NoTarget) HeldObject?.Drop();
             else if (TargetInteractable)
             {
-                if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
+                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
                 InteractWithTarget();
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
@@ -131,26 +131,16 @@ namespace Interactable
 
         private void OnHoverEnter(IInteractable target)
         {
-            if (target == null)
-                return;
-
-            if (_uiManager != null)
-                _uiManager.ShowInteractPrompt(
-                    target.InteractionText(this),
-                    target.InteractableBy(this)
-                );
-
+            if (target == null) return;
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            if (_uiManager != null)
-                _uiManager.HideInteractPrompt();
-
+            _uiManager.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
-
 
         private bool NoTarget => _currentTarget == null;
 
