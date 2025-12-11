@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Interactable.Holdable
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
+    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject, IEInteractable
     {
         [Header("Interaction UI")]
         [SerializeField] private Canvas interactionCanvas;
