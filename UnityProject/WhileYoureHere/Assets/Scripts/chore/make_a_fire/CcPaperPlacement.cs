@@ -8,23 +8,16 @@ namespace chore.make_a_fire
 {
     public class CcPaperPlacement : ChoreComponent
     {
-        // private readonly int _paperID;
-        // private int _paperCount;
-        // private int _paperAmountNeeded;
-
         public CcPaperPlacement(string name, string description) :
             base(name, description)
         {
-           // _paperID = paperID;
-           // _paperAmountNeeded = paperAmountNeeded;
             ComponentType = ChoreComponentType.PaperPlacement;
         }
 
         public override void EnableComponent()
         {
             base.EnableComponent();
-            //_paperCount = 0;
-
+            
             ChoreEvents.OnPaperPlacement += PaperPaced;
         }
 
@@ -38,9 +31,6 @@ namespace chore.make_a_fire
 
         private void PaperPaced()
         {
-            //if (_paperID != paperID) return;
-            //_paperCount++;
-            // if (_paperCount >= _paperAmountNeeded) 
             MarkCompleted();
         }
 
@@ -57,8 +47,6 @@ namespace chore.make_a_fire
             return new CcPaperPlacement(
                 localChoreComponent.componentName,
                 localChoreComponent.description
-                //localChoreComponent.paperID,
-                //localChoreComponent.paperAmountNeeded
                 );
         }
     }

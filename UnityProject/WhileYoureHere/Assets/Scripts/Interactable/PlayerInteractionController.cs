@@ -13,7 +13,7 @@ namespace Interactable
     {
         [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")] [SerializeField] private EventChannel interact;
+        [Header("Listen to")][SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private Transform holdPoint;
 
@@ -75,7 +75,7 @@ namespace Interactable
             if (NoTarget) HeldObject?.Drop();
             else if (TargetInteractable)
             {
-                if (_currentTarget != null || interact.OnRaise == null) return;
+                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
                 InteractWithTarget();
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
@@ -84,7 +84,7 @@ namespace Interactable
         private void clickInteract()
         {
             if (NoTarget) HeldObject?.Drop();
-            else if (_currentTarget != null && clickInteractEvent.OnRaise != null)
+            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
             {
                 ClickInteractWithTarget();
             }
@@ -154,7 +154,7 @@ namespace Interactable
 
         private void ClickInteractWithTarget()
         {
-          
+            _currentTarget?.ClickInteract(this);
             OnHoverExit(_currentTarget);
         }
 
