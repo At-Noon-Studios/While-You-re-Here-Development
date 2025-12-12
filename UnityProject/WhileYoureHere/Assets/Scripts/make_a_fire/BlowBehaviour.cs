@@ -46,7 +46,7 @@ namespace make_a_fire
             if (!_canBlow) return;
             StartCoroutine(WindTimer());
 
-            Vector3 blowDirection = transform.TransformDirection(Vector3.up);
+            var blowDirection = transform.TransformDirection(Vector3.up);
             Debug.DrawLine(transform.position, transform.position + blowDirection * blowDistance, Color.cyan, 1f);
             RaycastHit[] hits = Physics.RaycastAll(transform.position, blowDirection, blowDistance);
             foreach (var hit in hits)

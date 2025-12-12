@@ -37,8 +37,7 @@ namespace make_a_fire
 
         private void Update()
         {
-            if (!newspaper.IsPlaced)
-                return;
+            if (!newspaper.IsPlaced) return;
 
             var currentPlacedLogs = CountPlacedLogs();
             if (currentPlacedLogs > _placedLogsCount)
@@ -47,10 +46,10 @@ namespace make_a_fire
 
                 switch (_fireStarted)
                 {
-                    case false when _placedLogsCount == 1: // 1 log is placed
+                    case false when _placedLogsCount == 1:
                         StartSmallFire();
                         break;
-                    case true when _placedLogsCount == 3: // when 3 logs are placed
+                    case true when _placedLogsCount == 3:
                         blowAllowedEvent?.Raise();
                         break;
                 }
