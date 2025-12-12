@@ -65,11 +65,10 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-        
+
         private void PickUp(IInteractor interactor)
         {
             IsHeld = true;
-            Debug.Log("I am the pick up method inside holdableobjectbehaviour.cs script");
             GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             interactor.HeldObject?.Drop();
@@ -115,10 +114,7 @@ namespace Interactable.Holdable
 
         private void Detach()
         {
-            Debug.Log("I am the detach method inside holdableobjectbehaviour.cs script");
             IsHeld = false;
-            Debug.Log("The isheld variable is set to: " + IsHeld);
-
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce((transform.parent?.forward ?? Vector3.zero) * data.DroppingForce);
             transform.SetParent(null);

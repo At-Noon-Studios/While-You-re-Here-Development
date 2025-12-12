@@ -1,5 +1,6 @@
 using Interactable;
 using Interactable.Holdable;
+using ScriptableObjects.Interactable;
 using UnityEngine;
 
 public class BroomScript : HoldableObjectBehaviour

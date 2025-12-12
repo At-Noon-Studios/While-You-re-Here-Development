@@ -4,6 +4,8 @@ using player_controls;
 // using Interactable;
 using Interactable.Holdable;
 using System.Collections;
+using time;
+using ScriptableObjects.Events;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(AudioSource))]
@@ -21,6 +23,11 @@ public class DirtInteractable : InteractableBehaviour
     public MovementController movementController;
     public CameraController cameraController;
 
+    private bool isMiniGameActive = false;
+
+    [SerializeField] Transform minigameStartingPos;
+    public float transitionSpeed = 5f;
+
     // [SerializeField] AudioClip sweepingClip;
     // public AudioClip sweepingData.sweepingClip;
 
@@ -31,7 +38,7 @@ public class DirtInteractable : InteractableBehaviour
         base.Awake();
         materialColor = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
-        stopMovement = StopMovement(2);
+        // stopMovement = StopMovement(2);
     }
 
     public override void Interact(IInteractor interactor)
@@ -52,31 +59,40 @@ public class DirtInteractable : InteractableBehaviour
         Debug.Log("You just interacted with a pile of shit... gross...");
     }
 
-    // public void ColorTransition()
-    // {
-    //     for (int i = 0; i < colorTransition.Length; i++)
-    //     {
-    //         materialColor.material.color = colorTransition[i];
-    //     }
-    // }
+
+    void Update()
+    {
+        if (!broom.IsBroomBeingHeld || !isMiniGameActive) return;
+        else
+        {
+            StartSweepingMinigame();
+        }
+    }
 
     public void StartSweepingMinigame()
     {
-        materialColor.material.color = secondColor;
-        // ColorTransition();
+        isMiniGameActive = true;
+        // materialColor.material.color = secondColor;
         cameraController.canLook = false;
         movementController.canMove = false;
-        Debug.Log("Sweeping has started, everythings paused!");
+        var camPos = GameObject.FindWithTag("MainCamera");
+        var playerPos = GameObject.FindWithTag("Player");
 
-        StartCoroutine(stopMovement);
+        playerPos.transform.position = Vector3.Lerp(playerPos.transform.position, minigameStartingPos.transform.position, transitionSpeed * Time.deltaTime);
+        camPos.transform.rotation = Quaternion.Lerp(camPos.transform.rotation, minigameStartingPos.transform.rotation, transitionSpeed * Time.deltaTime);
+
+        // playerPos.transform.position = minigameStartingPos.position;
+        // camPos.transform.rotation = minigameStartingPos.rotation;
+
+        // StartCoroutine(stopMovement);
     }
 
-    private IEnumerator StopMovement(float delay)
-    {
-        yield return new WaitForSeconds(delay);
+    // private IEnumerator StopMovement(float delay)
+    // {
+    //     yield return new WaitForSeconds(delay);
 
-        // Debug.Log("You should be able to move after 2 seconds!");
-        cameraController.canLook = true;
-        movementController.canMove = true;
-    }
+    //     // Debug.Log("You should be able to move after 2 seconds!");
+    //     cameraController.canLook = true;
+    //     movementController.canMove = true;
+    // }
 }
