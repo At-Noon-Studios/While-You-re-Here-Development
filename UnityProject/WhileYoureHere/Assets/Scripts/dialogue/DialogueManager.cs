@@ -12,12 +12,10 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] private Transform choicesContainer;
+        [Header("UI")] [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")]
-        [SerializeField] private float letterDelay = 0.05f;
+        [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         private AudioSource _audioSource;
@@ -40,6 +38,7 @@ namespace dialogue
         {
             _ui = UIManager.Instance;
         }
+
         private void Start()
         {
             var player = GameObject.FindWithTag("Player");
@@ -79,10 +78,29 @@ namespace dialogue
             gameObject.SetActive(true);
             DisplayNode(startId);
         }
-        public void StartRadioDialogue(DialogueNode node)
+
+        public void StartRadioDialogue(DialogueNode node, float resumeTime, int startSentenceIndex=0)
         {
-            List<DialogueNode> nodes = new List<DialogueNode> { node };
-            StartDialogue(nodes, node.nodeID);
+            _nodes.Clear();
+            _nodes[node.nodeID] = node;
+            _currentNode = node;
+            _activeSentences = node.sentences.ToArray();
+            _sentenceIndex = startSentenceIndex;
+            gameObject.SetActive(true);
+
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
+            if (!_nodes.TryGetValue(node.nodeID, out _currentNode))
+            {
+                EndDialogue();
+                return;
+            }
+
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
+
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
+            // PlayNextSentence();
         }
 
         private void DisplayNode(string id)
@@ -127,7 +145,51 @@ namespace dialogue
             }
 
             DialogueSentence sentence = _activeSentences[_sentenceIndex++];
+            print(" index changed to " + _sentenceIndex);
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
+        }
+
+        private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
+        {
+            print("sentence routine started");
+            _isTyping = true; // We skip typing animation when resuming
+
+            _currentFullSentence = sentence.text;
+            _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+
+            if (sentence.audio != null)
+            {
+                if (_audioSource == null)
+                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+
+                _audioSource.clip = sentence.audio;
+                _audioSource.volume = volume;
+                _audioSource.time = resumeTime; // <====== RESUME AUDIO HERE
+                _audioSource.Play();
+            }
+
+            string output = "";
+            foreach (char c in sentence.text)
+            {
+                if (!_isTyping)
+                {
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                    yield break;
+                }
+
+                output += c;
+                _ui.ShowDialogue(_currentNode.speakerName, output);
+                yield return new WaitForSeconds(letterDelay);
+            }
+
+            _isTyping = false;
+            // Wait until audio is done
+            yield return new WaitForSeconds(sentence.audio.length - resumeTime);
+            _sentenceIndex += 1;
+            if (_sentenceIndex < _activeSentences.Length)
+            {
+                _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+            }        
         }
 
         private IEnumerator TypeSentence(DialogueSentence sentence)
@@ -137,7 +199,8 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                if (_audioSource == null)
+                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
                 _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.volume = volume;
@@ -155,7 +218,7 @@ namespace dialogue
                 }
 
                 output += c;
-                 _ui.ShowDialogue(_currentNode.speakerName, output);
+                _ui.ShowDialogue(_currentNode.speakerName, output);
                 yield return new WaitForSeconds(letterDelay);
             }
 
@@ -190,12 +253,20 @@ namespace dialogue
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
             _ui.HideDialogue();
-             // gameObject.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            // gameObject.SetActive(false);
+            // Cursor.lockState = CursorLockMode.Locked;
+            // Cursor.visible = false;
             _audioSource.Stop();
             // _movement?.ResumeMovement();
             // _cameraController?.ResumeCameraMovement();
+        }
+
+        public int GetCurrentSentenceIndex() => _sentenceIndex;
+        public DialogueNode CurrentNode { get; set; }
+
+        public float GetCurrentAudioTime()
+        {
+            return _audioSource.time != null ? _audioSource.time : 0;
         }
     }
 }

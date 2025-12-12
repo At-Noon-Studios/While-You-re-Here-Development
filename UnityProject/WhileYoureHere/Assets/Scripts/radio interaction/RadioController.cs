@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using dialogue;
 using player_controls;
 using ScriptableObjects.Dialogue;
@@ -29,7 +30,14 @@ namespace radio_interaction
         private CameraController _cameraController;
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
-        private DialogueNode _currentRadioNode;
+        // private DialogueNode _currentRadioNode;
+        private class RadioChannelProgress
+        {
+            public int sentenceIndex;
+            public float audioTime;
+        }
+
+        private Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
 
         [SerializeField] private DialogueManager dialogueManager;
 
@@ -196,18 +204,60 @@ namespace radio_interaction
             _currentRadioIndex = newIndex;
             print("current index" + _currentRadioIndex);
             var newNode = radioTracks[newIndex].dialogueNode;
-            ChangeNode(newNode);     // <-- important: call BEFORE assigning _currentRadioNode
 
-            _currentRadioNode = newNode;
+            ChangeNode(newNode);
+            dialogueManager.CurrentNode = newNode;
+
+
         }
-        public void ChangeNode(DialogueNode node)
+        public void ChangeNode(DialogueNode newNode)
         {
             
-            if (_currentRadioNode == node) return;
-            Debug.Log("CurrentNode = "+ node);
-            dialogueManager.StartRadioDialogue(node);
-            // dialogueManager.EndDialogue(); // Kill old radio speech
+            DialogueNode oldNode = dialogueManager.CurrentNode;
+
+            // 1. Same node? Do nothing.
+            if (oldNode == newNode)
+                return;
+
+            // 2. Save progress of OLD node
+            if (oldNode != null)
+                SaveCurrentDialogueProgress(oldNode);
+
+            // 3. Determine resume info for NEW node
+            int resumeIndex = 0;
+            float resumeTime = 0f;
+
+            if (_nodeSentenceProgress.TryGetValue(newNode, out RadioChannelProgress saved))
+            {
+                resumeIndex = saved.sentenceIndex;
+                resumeTime = saved.audioTime;
+            }
+
+            Debug.Log($"Switching to {newNode.nodeID}, resumeIndex={resumeIndex}, resumeTime={resumeTime}");
+
+            // 4. Start dialogue for NEW node.
+            // Correct argument order: (node, startIndex, resumeTime)
+            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
+
+            // 5. Update current node
+            dialogueManager.CurrentNode = newNode;
         }
+        
+        public void SaveCurrentDialogueProgress(DialogueNode node)
+        { 
+            if (node == null) return;
+
+            var progress = new RadioChannelProgress
+            {
+                sentenceIndex = dialogueManager.GetCurrentSentenceIndex(),
+                audioTime = dialogueManager.GetCurrentAudioTime()
+            };
+
+            _nodeSentenceProgress[node] = progress;
+        }
+
+        
+        
         public bool OnCorrectChannel() => _currentRadioIndex == 2;
 
         // radioTracks[_currentRadioIndex].audioClip == radioTracks[2].audioClip;
