@@ -66,7 +66,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-
+        
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
