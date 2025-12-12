@@ -24,8 +24,6 @@ namespace gardening
         {
             if (!wateringCan) return;
             
-            //Debug.Log($"fillAmount: {wateringCan.fillAmount}, maxFill: {wateringCan.maxFill}");
-            
             var t = Mathf.Clamp01(wateringCan.fillAmount / wateringCan.maxFill);
             var pos = transform.localPosition;
             pos.y = Mathf.Lerp(emptyY, fullY, t);

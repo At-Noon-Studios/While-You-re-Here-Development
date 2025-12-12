@@ -1,7 +1,4 @@
-using System.Collections;
-using chore;
 using making_tea;
-using TMPro;
 using UnityEngine;
 
 namespace gardening

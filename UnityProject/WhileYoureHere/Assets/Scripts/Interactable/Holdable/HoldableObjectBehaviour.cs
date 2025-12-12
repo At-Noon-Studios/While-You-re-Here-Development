@@ -1,8 +1,10 @@
 using System;
 using gardening;
+using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
+using Object = System.Object;
 
 namespace Interactable.Holdable
 {
@@ -20,7 +22,7 @@ namespace Interactable.Holdable
         [CanBeNull] private IInteractor _holder;
 
         private Transform _playerCamera;
-        private WateringCanHolder _currentHolder;
+        private ObjectHolder _currentHolder;
 
         public float Weight => data.Weight;
         public bool IsCurrentlyHeld => _holder != null;
@@ -98,7 +100,7 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null, WateringCanHolder holder = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
         {
             _currentHolder = holder;
             
