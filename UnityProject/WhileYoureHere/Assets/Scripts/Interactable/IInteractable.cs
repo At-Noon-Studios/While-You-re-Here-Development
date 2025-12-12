@@ -1,6 +1,6 @@
 ﻿namespace Interactable
 {
-    public interface IInteractable
+    public interface  IInteractable
     {
         /// <summary>
         /// Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.
@@ -38,6 +38,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public void Interact(IInteractor interactor);
+        public void ClickInteract(IInteractor interactor);
         
         /// <summary>
         /// OnHoverEnter is called when a <see cref="PlayerInteractionController"/> 
