@@ -11,11 +11,6 @@ namespace entity
         [SerializeField] private int wateringCanID;
         [SerializeField] private Transform rotationRoot;
 
-        [Header("Sound")]
-        [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioClip pickUpSound;
-        [SerializeField] private AudioClip dropSound;
-
         private Transform _playerCamera;
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
@@ -43,9 +38,6 @@ namespace entity
 
             if (isHeld && !_hasTriggered)
             {
-                if (audioSource && pickUpSound)
-                    audioSource.PlayOneShot(pickUpSound);
-
                 ChoreEvents.TriggerWateringCanPickedUp(wateringCanID);
                 _hasTriggered = true;
             }

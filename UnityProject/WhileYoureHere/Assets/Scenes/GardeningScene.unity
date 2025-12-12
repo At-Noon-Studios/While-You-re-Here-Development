@@ -1010,6 +1010,11 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7084677713765735869, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
   m_PrefabInstance: {fileID: 5486325357266368759}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1007796200 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 3703694668468586121, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+  m_PrefabInstance: {fileID: 5486325357266368759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1044093136 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6103487082249334298, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
@@ -2151,6 +2156,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!82 &2023990374 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2363689618893697860, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+  m_PrefabInstance: {fileID: 5486325357266368759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2693211097570937498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2329,6 +2339,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 752961124835622932, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: pickupSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 15ce2e7dff563ee4fbd602316aad1055, type: 3}
     - target: {fileID: 2256635798786621072, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.082
@@ -2369,10 +2383,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2363689618893697860, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2363689618893697860, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2989787421067547158, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 3fbbeae32867b374aac55a19fff61973, type: 2}
+    - target: {fileID: 2989787421067547158, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: dropSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1491c7d2717e8de498542d5426844e1c, type: 3}
+    - target: {fileID: 2989787421067547158, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 2023990374}
+    - target: {fileID: 2989787421067547158, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: pickUpSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 15ce2e7dff563ee4fbd602316aad1055, type: 3}
     - target: {fileID: 2989787421067547158, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
       propertyPath: interactionCanvas
       value: 
@@ -2381,6 +2415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WateringCan
       objectReference: {fileID: 0}
+    - target: {fileID: 3703694668468586121, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: a15ae0a33438bf2439c60f37a3465da7, type: 3}
     - target: {fileID: 4591239631151192390, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
       propertyPath: m_Name
       value: Particle System
@@ -2401,6 +2439,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5375705338186171754, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      propertyPath: pouringSound
+      value: 
+      objectReference: {fileID: 1007796200}
     - target: {fileID: 7084677713765735869, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
       propertyPath: CollisionModule.type
       value: 1
