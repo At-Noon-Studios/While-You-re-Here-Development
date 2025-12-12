@@ -2,6 +2,8 @@ Shader "Custom/FullscreenEdgeDetection_Fixed"
 {
     Properties
     {
+        _OutlineColor ("outline color", Color) = (0, 0, 0, 1)
+        _Threshold ("threshold", Range(0.0, 1.0)) = 0.5
     }
     SubShader
     {
@@ -23,8 +25,8 @@ Shader "Custom/FullscreenEdgeDetection_Fixed"
 
             #pragma vertex vert
             #pragma fragment frag
-
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             TEXTURE2D_X(_BlitTexture);
 
@@ -40,7 +42,8 @@ Shader "Custom/FullscreenEdgeDetection_Fixed"
             };
 
             CBUFFER_START(UnityPerMaterial)
-                float _Alpha;
+                float4 _OutlineColor;
+                float _Threshold;
             CBUFFER_END
 
             Varyings vert(uint vertexID : SV_VertexID)
@@ -66,36 +69,36 @@ Shader "Custom/FullscreenEdgeDetection_Fixed"
                 float2 texel = 1 / _ScreenParams.xy;
 
                 // sample neighboring pixels
-                float3 c00 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1,-1)).rgb;
-                float3 c10 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0,-1)).rgb;
-                float3 c20 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1,-1)).rgb;
+                float3 bl = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1,-1)).rgb;
+                float3 bm = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0,-1)).rgb;
+                float3 br = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1,-1)).rgb;
 
-                float3 c01 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1, 0)).rgb;
-                float3 c11 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0, 0)).rgb;
-                float3 c21 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1, 0)).rgb;
+                float3 ml = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1, 0)).rgb;
+                float3 mm = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0, 0)).rgb;
+                float3 mr = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1, 0)).rgb;
 
-                float3 c02 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1, 1)).rgb;
-                float3 c12 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0, 1)).rgb;
-                float3 c22 = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1, 1)).rgb;
+                float3 tl = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2(-1, 1)).rgb;
+                float3 tm = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 0, 1)).rgb;
+                float3 tr = Unity_Universal_SampleBuffer_BlitSource(screenUV + texel * float2( 1, 1)).rgb;
 
                 // convert to luminance
-                float l00 = dot(c00, float3(0.299, 0.587, 0.114));
-                float l10 = dot(c10, float3(0.299, 0.587, 0.114));
-                float l20 = dot(c20, float3(0.299, 0.587, 0.114));
-                float l01 = dot(c01, float3(0.299, 0.587, 0.114));
-                float l11 = dot(c11, float3(0.299, 0.587, 0.114));
-                float l21 = dot(c21, float3(0.299, 0.587, 0.114));
-                float l02 = dot(c02, float3(0.299, 0.587, 0.114));
-                float l12 = dot(c12, float3(0.299, 0.587, 0.114));
-                float l22 = dot(c22, float3(0.299, 0.587, 0.114));
+                float l_bl = Luminance(bl);
+                float l_bm = Luminance(bm);
+                float l_br = Luminance(br);
+                float l_ml = Luminance(ml);
+                float l_mr = Luminance(mr);
+                float l_tl = Luminance(tl);
+                float l_tm = Luminance(tm);
+                float l_tr = Luminance(tr);
 
                 // Sobel kernels
-                float gx = -l00 - 2*l01 - l02 + l20 + 2*l21 + l22;
-                float gy = -l00 - 2*l10 - l20 + l02 + 2*l12 + l22;
+                float gx = -l_bl - 2*l_ml - l_tl + l_br + 2*l_mr + l_tr;
+                float gy = -l_bl - 2*l_bm - l_br + l_tl + 2*l_tm + l_tr;
 
                 float edge = sqrt(gx*gx + gy*gy);
-
-                return float4(edge.xxx, 1);
+                
+                if (edge > _Threshold) return _OutlineColor;
+                return float4(mm, 1);
             }
 
             ENDHLSL

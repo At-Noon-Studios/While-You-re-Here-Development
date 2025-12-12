@@ -4,18 +4,15 @@ using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.RenderGraphModule.Util;
 using UnityEngine.Rendering.Universal;
 
-// Ensure this namespace matches your file structure
-namespace CustomEffects
+namespace Scenes
 {
     public class EdgeDetectionRendererFeature : ScriptableRendererFeature
     {
         private EdgeDetectionPass _renderPass;
         public Shader edgeDetectionShader;
-        // public Color outlineColor = Color.black;
-        // [Range(0.0f, 1.0f)]
-        // public float alpha = 1f;
-        // [Range(0.0f, 5.0f)]
-        // public float blurStrength = 1f;
+        public Color outlineColor = Color.black;
+        [Range(0.0f, 1.0f)]
+        public float threshold = 0.5f;
         
         public override void Create()
         {
@@ -23,7 +20,6 @@ namespace CustomEffects
 
             _renderPass = new EdgeDetectionPass(edgeDetectionShader)
             {
-                // This event injects the pass after the opaque objects are drawn
                 renderPassEvent = RenderPassEvent.AfterRenderingOpaques
             };
         }
@@ -32,8 +28,7 @@ namespace CustomEffects
         {
             if (_renderPass == null) return;
             
-            // Pass the current settings from the feature GUI to the pass material
-            // _renderPass.Setup(outlineColor, alpha, blurStrength);
+            _renderPass.Setup(outlineColor, threshold);
             renderer.EnqueuePass(_renderPass);
         }
     }
@@ -47,13 +42,12 @@ namespace CustomEffects
             _material = CoreUtils.CreateEngineMaterial(shader);
         }
 
-        public void Setup(Color outlineColor, float alpha, float blurStrength)
+        public void Setup(Color outlineColor, float threshold)
         {
             if (_material != null)
             {
                 _material.SetColor("_OutlineColor", outlineColor);
-                _material.SetFloat("_Alpha", alpha);
-                _material.SetFloat("_BlurStrength", blurStrength);
+                _material.SetFloat("_Threshold", threshold);
             }
         }
         
