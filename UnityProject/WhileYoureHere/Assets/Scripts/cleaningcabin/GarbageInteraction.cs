@@ -8,16 +8,12 @@ public class GarbageInteraction : InteractableBehaviour
 
     public override void Interact(IInteractor interactor)
     {
-        // Debug.Log("Is held status is: " + broom.IsBroomBeingHeld);
         if (broom.IsBroomBeingHeld)
         {
-            // Debug.Log("Holding da garbage!");
             Destroy(gameObject);
         }
         else if (!broom.IsBroomBeingHeld)
         {
-            Debug.LogWarning("You need to hold the broom to pick up the garbage!");
-            Debug.LogWarning("Status of broom is holding variable is: " + broom.IsBroomBeingHeld);
             return;
         }
     }

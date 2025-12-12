@@ -70,7 +70,7 @@ namespace Interactable.Holdable
         {
             IsHeld = true;
             Debug.Log("I am the pick up method inside holdableobjectbehaviour.cs script");
-            // GetComponent<PickUpSound>().PlayPickUpSound();
+            GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -105,7 +105,7 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        private void AttachTo(IInteractor interactor)
+        public virtual void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
