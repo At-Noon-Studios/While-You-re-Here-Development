@@ -12,8 +12,7 @@ namespace chore
             KettleFilled,
             WaterBoiled,
             TeabagAdded,
-            CupFilled
-            ItemCollected,
+            CupFilled,
             LogPlacement,
             LogChop
         }

@@ -35,10 +35,9 @@ namespace chore
                     { ChoreComponent.ChoreComponentType.KettleFilled, CcKettleFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.WaterBoiled, CcWaterBoiled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.TeabagAdded, CcTeabagAdded.CreateFactory },
-                    { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory }
+                    { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.LogPlacement, CcLogPlacement.CreateFactory},
                     { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory}
-
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

@@ -37,11 +37,16 @@ namespace Interactable
         private void Awake()
         {
             _movementController = GetComponent<MovementController>();
+
+            // Probeer UIManager.Instance; als die niet gezet is, fallback op FindObjectOfType zodat _uiManager niet null is.
+            _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
         }
 
         private void Start()
         {
-            _uiManager = UIManager.Instance;
+            // Als Awake geen manager vond, probeer nogmaals (in geval van init volgorde)
+            if (_uiManager == null)
+                _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
         }
 
         private void Update()
@@ -51,14 +56,14 @@ namespace Interactable
 
         private void OnEnable()
         {
-            interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += ClickInteract;
+            if (interact != null) interact.OnRaise += Interact;
+            if (clickInteractEvent != null) clickInteractEvent.OnRaise += ClickInteract;
         }
 
         private void OnDisable()
         {
-            interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= ClickInteract;
+            if (interact != null) interact.OnRaise -= Interact;
+            if (clickInteractEvent != null) clickInteractEvent.OnRaise -= ClickInteract;
         }
 
         #endregion
@@ -101,7 +106,10 @@ namespace Interactable
                 // Interact with target
                 if (_currentTarget != null)
                 {
-                    _currentTarget.Interact(this);
+                    if (_currentTarget.InteractableBy(this))
+                        _currentTarget.Interact(this);
+                    else
+                        _uiManager?.PulseInteractPrompt();
                     return;
                 }
 
@@ -110,8 +118,6 @@ namespace Interactable
                     _sittingChair.ForceStandUp();
 
                 return;
-                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
-                InteractWithTarget();
             }
 
             // NORMAL MODE
@@ -127,7 +133,7 @@ namespace Interactable
                 return;
             }
 
-            _uiManager.PulseInteractPrompt();
+            _uiManager?.PulseInteractPrompt();
         }
 
         private void ClickInteract()
@@ -145,7 +151,7 @@ namespace Interactable
                 return;
             }
 
-            _uiManager.PulseInteractPrompt();
+            _uiManager?.PulseInteractPrompt();
         }
 
         #endregion
@@ -177,6 +183,9 @@ namespace Interactable
 
         private int LookForHits(RaycastHit[] result)
         {
+            if (playerCamera == null || data == null)
+                return 0;
+
             Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             return Physics.SphereCastNonAlloc(ray,
                 data.InteractionAssistRadius,
@@ -238,20 +247,22 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+
+            // alleen aanroepen als _uiManager beschikbaar is
+            _uiManager?.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            _uiManager.HideInteractPrompt();
+            // veilig: _uiManager kan null zijn tijdens init volgorde
+            _uiManager?.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
 
         #endregion
 
         #region Utility
-        private bool NoTarget => _currentTarget == null;
 
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject obj)
         {
