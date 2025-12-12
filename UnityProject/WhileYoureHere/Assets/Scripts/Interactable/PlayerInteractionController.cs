@@ -15,22 +15,24 @@ namespace Interactable
     {
         [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")] [SerializeField] private EventChannel interact;
+
+        [Header("Listen to")]
+        [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
+
         [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
-
         private ChairInteractable _sittingChair;
-        
+
         public bool IsTableMode { get; private set; }
-        public Camera PlayerCamera => GetComponentInChildren<Camera>();
-        
+        public Camera PlayerCamera => playerCamera;
+
         private const int InteractableRaycastAllocation = 16;
 
-        #region Unity event functions {
+        #region Unity
 
         private void Awake()
         {
@@ -50,18 +52,18 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += clickInteract;
+            clickInteractEvent.OnRaise += ClickInteract;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= clickInteract;
+            clickInteractEvent.OnRaise -= ClickInteract;
         }
 
         #endregion
 
-        #region Interface implementation
+        #region Interface - Holding
 
         public Transform HoldPoint => holdPoint;
 
@@ -74,85 +76,96 @@ namespace Interactable
         }
 
         #endregion
-        
-        #region Public chair helpers (used by ChairInteractable)
 
-        public void SetSittingChair(ChairInteractable chair)
-        {
-            _sittingChair = chair;
-        }
+        #region Chair helpers
 
-        public void ClearSittingChair()
-        {
-            _sittingChair = null;
-        }
+        public void SetSittingChair(ChairInteractable chair) => _sittingChair = chair;
+
+        public void ClearSittingChair() => _sittingChair = null;
 
         #endregion
 
-        #region Private methods
+        #region Interaction Core
 
         private void Interact()
         {
+            // TABLE MODE
             if (IsTableMode)
             {
-                if (HeldObject == null 
-                    && _currentTarget is not ObjectHolder 
-                    && DropHeldTableObject())
-                {
+                // Drop table object if no valid target
+                if (HeldObject == null &&
+                    _currentTarget is not ObjectHolder &&
+                    DropHeldTableObject())
                     return;
-                }
 
-
+                // Interact with target
                 if (_currentTarget != null)
                 {
                     _currentTarget.Interact(this);
                     return;
                 }
 
-                if (_sittingChair == null) return;
+                // Stand up from chair
+                if (_sittingChair != null)
+                    _sittingChair.ForceStandUp();
 
-                _sittingChair.ForceStandUp();
+                return;
             }
 
-            if (IsNoTarget) HeldObject?.Drop();
-            else if (IsTargetInteractable) InteractWithTarget();
-            else _uiManager.PulseInteractPrompt();
-        }
-
-            if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable)
+            // NORMAL MODE
+            if (_currentTarget == null)
             {
-                if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
-                InteractWithTarget();
+                HeldObject?.Drop();
+                return;
             }
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+
+            if (_currentTarget.InteractableBy(this))
+            {
+                _currentTarget.Interact(this);
+                return;
+            }
+
+            _uiManager.PulseInteractPrompt();
         }
 
-        private void clickInteract()
+        private void ClickInteract()
         {
-            if (NoTarget) HeldObject?.Drop();
-            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
+            if (_currentTarget == null)
             {
-                ClickInteractWithTarget();
+                HeldObject?.Drop();
+                return;
             }
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+
+            if (_currentTarget is IClickInteractable)
+            {
+                _currentTarget.ClickInteract(this);
+                OnHoverExit(_currentTarget);
+                return;
+            }
+
+            _uiManager.PulseInteractPrompt();
         }
+
+        #endregion
+
+        #region Target detection
 
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
-            var hitCount = LookForHits(hits);
+            int hitCount = LookForHits(hits);
 
             IInteractable bestTarget = null;
-            float closestDistance = float.MaxValue;
+            float closest = float.MaxValue;
 
             for (int i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) &&
+                // Don't allow picking another item while holding something
+                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
                     HeldObject != null)
-                    break;
+                    continue;
 
-                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
+                UpdateBestTarget(hits[i], ref closest, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;
@@ -162,51 +175,54 @@ namespace Interactable
 
         private int LookForHits(RaycastHit[] result)
         {
-            var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            return Physics.SphereCastNonAlloc(ray, data.InteractionAssistRadius, result, data.InteractionReach);
+            Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            return Physics.SphereCastNonAlloc(ray,
+                data.InteractionAssistRadius,
+                result,
+                data.InteractionReach);
         }
 
         private static void UpdateBestTarget(
-            RaycastHit candidate,
-            ref float closestDistance,
-            ref IInteractable bestTarget,
-            bool isTableMode)
+            RaycastHit hit,
+            ref float closest,
+            ref IInteractable best,
+            bool tableMode)
         {
-            if (candidate.distance >= closestDistance) return;
+            if (hit.distance >= closest)
+                return;
 
-            var col = candidate.collider;
-            
-            if (isTableMode)
+            var col = hit.collider;
+
+            if (tableMode)
             {
-                if (col.TryGetComponent<ITablePickup>(out var tablePickup))
+                if (col.TryGetComponent<ITablePickup>(out var tp))
                 {
-                    bestTarget = tablePickup;
-                    closestDistance = candidate.distance;
+                    best = tp;
+                    closest = hit.distance;
                     return;
                 }
 
-                if (col.TryGetComponent<ObjectHolder>(out var holder))
+                if (col.TryGetComponent<ObjectHolder>(out var oh))
                 {
-                    bestTarget = holder;
-                    closestDistance = candidate.distance;
+                    best = oh;
+                    closest = hit.distance;
                     return;
                 }
             }
-
             else
             {
                 if (col.TryGetComponent<Placeable>(out var placeable))
                 {
-                    bestTarget = placeable;
-                    closestDistance = candidate.distance;
+                    best = placeable;
+                    closest = hit.distance;
                     return;
                 }
             }
 
             if (col.TryGetComponent<IInteractable>(out var interactable))
             {
-                bestTarget = interactable;
-                closestDistance = candidate.distance;
+                best = interactable;
+                closest = hit.distance;
             }
         }
 
@@ -214,82 +230,52 @@ namespace Interactable
         {
             OnHoverExit(_currentTarget);
             _currentTarget = newTarget;
-            OnHoverEnter(newTarget);
+            OnHoverEnter(_currentTarget);
         }
 
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
 
-            _uiManager.ShowInteractPrompt(target.InteractionText(this),
-                                          target.InteractableBy(this));
-            if (target == null)
-                return;
-
-            if (_uiManager != null)
-                _uiManager.ShowInteractPrompt(
-                    target.InteractionText(this),
-                    target.InteractableBy(this)
-                );
+            _uiManager.ShowInteractPrompt(
+                target.InteractionText(this),
+                target.InteractableBy(this));
 
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            if (_uiManager != null)
-                _uiManager.HideInteractPrompt();
-
+            _uiManager.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
 
+        #endregion
 
-        private bool NoTarget => _currentTarget == null;
+        #region Utility
 
-        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
-
-        private void InteractWithTarget()
-        {
-            _currentTarget?.Interact(this);
-            OnHoverEnter(_currentTarget);
-        }
-
-        private void ClickInteractWithTarget()
-        {
-            _currentTarget?.ClickInteract(this);
-            OnHoverExit(_currentTarget);
-        }
-
-        private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
+        private void UpdateMovementSpeed([CanBeNull] IHoldableObject obj)
         {
             if (_movementController == null) return;
 
-            if (holdableObject == null)
+            if (obj == null)
             {
                 _movementController.SetMovementModifier(1f);
                 return;
             }
 
-            float weight = Mathf.Clamp01(holdableObject.Weight / 100f);
+            float weight = Mathf.Clamp01(obj.Weight / 100f);
             float modifier = Mathf.Max(1f - weight, 0.4f);
 
             _movementController.SetMovementModifier(modifier);
         }
 
-        public void EnableTableMode(bool isEnable)
+        public void EnableTableMode(bool enable)
         {
-            IsTableMode = isEnable;
+            IsTableMode = enable;
 
-            if (isEnable)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+            Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = enable;
         }
 
         private static bool DropHeldTableObject()
@@ -299,15 +285,12 @@ namespace Interactable
             foreach (var p in pickups)
             {
                 if (!p.IsTableHeld) continue;
+
                 p.Drop();
                 return true;
             }
+
             return false;
-        }
-        
-            var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
-            var modifier = Mathf.Max(1f - weight, 0.4f);
-            _movementController.SetMovementModifier(modifier);
         }
 
         #endregion
