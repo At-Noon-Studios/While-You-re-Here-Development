@@ -10,7 +10,7 @@ namespace Interactable
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
         private Collider _collider;
-        protected Renderer[] Renderers;
+        private Renderer[] _renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
 
@@ -23,8 +23,8 @@ namespace Interactable
         {
             _collider = GetComponent<Collider>();
             if (_collider == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
-            Renderers = GetComponentsInChildren<Renderer>();
-            if (Renderers == null || Renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
+            _renderers = GetComponentsInChildren<Renderer>();
+            if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
         }
         
@@ -35,7 +35,12 @@ namespace Interactable
         public virtual bool InteractableBy(IInteractor interactor) => true;
 
         public abstract void Interact(IInteractor interactor);
-        
+
+        public virtual void ClickInteract(IInteractor interactor)
+        {
+            
+        }
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             AddOutlineMaterialToRenderers();
@@ -59,7 +64,7 @@ namespace Interactable
         
         private void AddOutlineMaterialToRenderers()
         {
-            foreach (var rendererComponent in Renderers)
+            foreach (var rendererComponent in _renderers)
             {
                 AddOutlineMaterialToRenderer(rendererComponent);
             }
@@ -76,7 +81,7 @@ namespace Interactable
 
         private void RemoveOutlineMaterialFromRenderers()
         {
-            foreach (var rendererComponent in Renderers)
+            foreach (var rendererComponent in _renderers)
             {
                 RemoveOutlineMaterialFromRenderer(rendererComponent);
             }

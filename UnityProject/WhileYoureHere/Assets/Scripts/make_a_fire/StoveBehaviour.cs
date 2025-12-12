@@ -21,8 +21,6 @@ namespace make_a_fire
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
-
-        
         
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
@@ -43,7 +41,6 @@ namespace make_a_fire
                 return;
 
             var currentPlacedLogs = CountPlacedLogs();
-
             if (currentPlacedLogs > _placedLogsCount)
             {
                 _placedLogsCount = currentPlacedLogs;
@@ -59,8 +56,6 @@ namespace make_a_fire
                 }
             }
         }
-
-
         private int CountPlacedLogs()
         {
             return logs.Count(log => log.IsPlaced);
