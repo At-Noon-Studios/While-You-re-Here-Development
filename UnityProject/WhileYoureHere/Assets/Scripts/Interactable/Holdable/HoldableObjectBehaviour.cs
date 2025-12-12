@@ -21,6 +21,8 @@ namespace Interactable.Holdable
         private Transform _playerCamera;
 
         public float Weight => data.Weight;
+        
+        public bool IsPlaced { get; private set; }
 
         protected override void Awake()
         {
@@ -62,15 +64,16 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-        
+
         private void PickUp(IInteractor interactor)
         {
-            GetComponent<PickUpSound>().PlayPickUpSound();
+           // GetComponent<PickUpSound>().PlayPickUpSound();
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
+            IsPlaced = false;
         }
 
         public void Drop()
@@ -80,9 +83,9 @@ namespace Interactable.Holdable
 
             _holder.SetHeldObject(null);
             _holder = null;
-
             Detach();
             EnableCollider(true);
+            IsPlaced = false;
         }
 
         public void Place(Vector3 position, Quaternion? rotation = null)
@@ -98,14 +101,15 @@ namespace Interactable.Holdable
             transform.rotation = rotation ?? Quaternion.identity;
 
             EnableCollider(true);
+            IsPlaced = true;
         }
-
+        
         private void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
-            transform.localRotation = Quaternion.Euler(data.Rotation);
-            transform.localPosition = data.Offset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+            transform.localPosition = data.HoldingOffset;
         }
 
         private void Detach()

@@ -1,0 +1,25 @@
+﻿using Interactable.Holdable;
+using UnityEngine;
+
+
+namespace Interactable.Concrete
+{
+    [RequireComponent(typeof(AudioSource))]
+    public class Newspaper : FurnacePlaceable
+    {
+        private AudioSource _audioSource;
+        [SerializeField] private int paperID;
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            _audioSource = GetComponent<AudioSource>();
+        }
+        
+        public override void Interact(IInteractor interactor)
+        {
+            base.Interact(interactor);
+            _audioSource.Play();
+        }
+    }
+}

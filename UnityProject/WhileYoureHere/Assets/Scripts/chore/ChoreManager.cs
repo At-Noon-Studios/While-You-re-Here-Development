@@ -51,7 +51,7 @@ namespace chore
             if (choresToLoad.Count <= 0) return;
 
             _chores = new Dictionary<int, Chore>();
-
+            
             for (var i = 0; i < choresToLoad.Count; i++)
             {
                 SoChore choreToLoad = choresToLoad[i];

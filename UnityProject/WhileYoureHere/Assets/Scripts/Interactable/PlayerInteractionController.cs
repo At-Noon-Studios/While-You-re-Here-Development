@@ -13,7 +13,7 @@ namespace Interactable
     {
         [SerializeField] private PlayerInteractionData data;
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")] [SerializeField] private EventChannel interact;
+        [Header("Listen to")][SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private Transform holdPoint;
 
