@@ -6,7 +6,7 @@ using Interactable.Concrete.ObjectHolder;
 namespace Interactable.Holdable
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject, IEInteractable
+    public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
     {
         [Header("Interaction UI")]
         [SerializeField] private Canvas interactionCanvas;

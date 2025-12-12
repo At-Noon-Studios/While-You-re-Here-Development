@@ -110,6 +110,8 @@ namespace Interactable
                     _sittingChair.ForceStandUp();
 
                 return;
+                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
+                InteractWithTarget();
             }
 
             // NORMAL MODE
@@ -236,11 +238,7 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-
-            _uiManager.ShowInteractPrompt(
-                target.InteractionText(this),
-                target.InteractableBy(this));
-
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
             target.OnHoverEnter(this);
         }
 
@@ -253,6 +251,7 @@ namespace Interactable
         #endregion
 
         #region Utility
+        private bool NoTarget => _currentTarget == null;
 
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject obj)
         {

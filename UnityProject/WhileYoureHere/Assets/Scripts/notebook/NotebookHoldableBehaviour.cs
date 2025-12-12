@@ -2,7 +2,7 @@ using gamestate;
 using Interactable;
 using Interactable.Holdable;
 
-public class NotebookHoldableBehaviour : HoldableObjectBehaviour, IEInteractable
+public class NotebookHoldableBehaviour : HoldableObjectBehaviour
 {
     private bool flagSet = false;
 
@@ -14,7 +14,7 @@ public class NotebookHoldableBehaviour : HoldableObjectBehaviour, IEInteractable
 
     private void SetNotebookFlag()
     {
-        GamestateManager.GetInstance().notebookPickedUp = true;
+        GamestateManager.GetInstance().listOfFlags.Find(flag => flag.name == "NotebookPickedUpFlag").currentValue = true;
         flagSet = true;
     }
 }

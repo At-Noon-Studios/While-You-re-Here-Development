@@ -37,5 +37,17 @@ namespace chore
         public static event Action OnCupFilled;
         public static void TriggerCupFilled() => OnCupFilled?.Invoke();
 
+        public static event Action<int> OnLogPlaced;
+
+        public static void TriggerLogPlaced(int logID)
+        {
+            OnLogPlaced?.Invoke(logID);
+        }
+        
+        public static event Action<int> OnLogChopped;
+        public static void TriggerLogChopped(int logID)
+        {
+            OnLogChopped?.Invoke(logID);
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace chore
             WaterBoiled,
             TeabagAdded,
             CupFilled
+            ItemCollected,
+            LogPlacement,
+            LogChop
         }
         
         public bool IsActive { get; private set; }
