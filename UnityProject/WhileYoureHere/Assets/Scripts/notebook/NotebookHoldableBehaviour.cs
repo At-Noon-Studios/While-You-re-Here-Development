@@ -14,7 +14,7 @@ public class NotebookHoldableBehaviour : HoldableObjectBehaviour
 
     private void SetNotebookFlag()
     {
-        GamestateManager.GetInstance().notebookPickedUp = true;
+        GamestateManager.GetInstance().listOfFlags.Find(flag => flag.name == "NotebookPickedUpFlag").currentValue = true;
         flagSet = true;
     }
 }
