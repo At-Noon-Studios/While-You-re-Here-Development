@@ -8,7 +8,6 @@ namespace Interactable.Concrete
     [RequireComponent(typeof(AudioSource))]
     public class Newspaper : HoldableObjectBehaviour
     {
-        private const int ItemID = 5;
         private AudioSource _audioSource;
         
         protected override void Awake()
@@ -19,7 +18,6 @@ namespace Interactable.Concrete
         
         public override void Interact(IInteractor interactor)
         {
-            ChoreEvents.TriggerItemCollected(ItemID);
             base.Interact(interactor);
             _audioSource.Play();
         }
