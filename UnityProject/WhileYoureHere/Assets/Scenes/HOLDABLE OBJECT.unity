@@ -240,14 +240,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3576340262886703972, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: drop
+      value: 
+      objectReference: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
+    - target: {fileID: 3576340262886703972, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: move
+      value: 
+      objectReference: {fileID: 11400000, guid: 52088c14bfcf9364997082f5ddf5bb9b, type: 2}
+    - target: {fileID: 3576340262886703972, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: clickTune
+      value: 
+      objectReference: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
+    - target: {fileID: 5260706440123540601, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: move
+      value: 
+      objectReference: {fileID: 11400000, guid: 52088c14bfcf9364997082f5ddf5bb9b, type: 2}
     - target: {fileID: 5352190178679778564, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 119
       objectReference: {fileID: 0}
+    - target: {fileID: 6360352433680735866, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: mouseUpImage
+      value: 
+      objectReference: {fileID: 443202391}
+    - target: {fileID: 6360352433680735866, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: axeImpactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+    - target: {fileID: 6360352433680735866, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: guideLineImage
+      value: 
+      objectReference: {fileID: 443202391}
+    - target: {fileID: 6360352433680735866, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: mouseDownImage
+      value: 
+      objectReference: {fileID: 443202391}
     - target: {fileID: 6642764398237555488, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: drop
       value: 
       objectReference: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
+    - target: {fileID: 6980882753263512458, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: clickInteractEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
     - target: {fileID: 7925312433936835102, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.092
@@ -271,6 +307,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 265417519308914221, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
   m_PrefabInstance: {fileID: 355537134}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &443202391 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2247128301058109158, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+  m_PrefabInstance: {fileID: 2095133118}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &534764796
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1262322677674275092, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: choresToLoad.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1262322677674275092, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: 'choresToLoad.Array.data[1]'
