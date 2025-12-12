@@ -36,6 +36,10 @@ namespace Interactable
 
         public abstract void Interact(IInteractor interactor);
 
+        public virtual void ClickInteract(IInteractor interactor)
+        {
+
+        }
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             AddOutlineMaterialToRenderers();

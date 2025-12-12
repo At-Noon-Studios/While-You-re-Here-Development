@@ -14,49 +14,58 @@ namespace player_controls
 
         public event Action<Quaternion> OnRotate;
 
-        private const float CircleDegrees = 360;
-
         private float _xRotation;
         private float _yRotation;
 
+        private bool _isLookSubscribed;
         public bool canLook = true;
 
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            SubscribeLook();
         }
 
-        private void OnEnable()
+        private void OnEnable() => SubscribeLook();
+        private void OnDisable() => UnsubscribeLook();
+
+        private void SubscribeLook()
         {
+            if (_isLookSubscribed) return;
             look.OnRaise += OnLookInput;
+            _isLookSubscribed = true;
         }
 
-        private void OnDisable()
+        private void UnsubscribeLook()
         {
+            if (!_isLookSubscribed) return;
             look.OnRaise -= OnLookInput;
+            _isLookSubscribed = false;
         }
 
         private void OnLookInput(Vector2 mouseDelta)
         {
             if (!canLook) return;
 
-            _yRotation += (mouseDelta.x * data.Sensitivity) % CircleDegrees;
-            _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
+            _yRotation += mouseDelta.x * data.Sensitivity;
+            _xRotation += -mouseDelta.y * data.Sensitivity;
             _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
 
-            var rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-            transform.rotation = rotation;
-            OnRotate?.Invoke(rotation);
+            var rot = Quaternion.Euler(_xRotation, _yRotation, 0);
+            transform.rotation = rot;
+            OnRotate?.Invoke(rot);
         }
 
         public void PauseCameraMovement()
         {
             canLook = false;
+            UnsubscribeLook();
         }
 
         public void ResumeCameraMovement()
         {
             canLook = true;
+            SubscribeLook();
         }
     }
 }
