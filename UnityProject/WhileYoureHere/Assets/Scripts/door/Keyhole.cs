@@ -4,6 +4,7 @@ using Interactable;
 using Interactable.Concrete.Key;
 using Interactable.Holdable;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.Events;
 using UI;
 using Unity.VisualScripting;

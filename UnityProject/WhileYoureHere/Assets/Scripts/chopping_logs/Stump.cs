@@ -3,6 +3,7 @@ using chore;
 using Interactable;
 using Interactable.Holdable;
 using player_controls;
+using PlayerControls;
 using UnityEngine;
 using UnityEngine.UI;
 

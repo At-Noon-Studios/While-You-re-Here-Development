@@ -3,13 +3,15 @@ using ScriptableObjects.Controls;
 using ScriptableObjects.Events;
 using UnityEngine;
 
-namespace player_controls
+namespace PlayerControls
 {
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private CameraData data;
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
+        
+        private const float CircleDegrees = 360;
 
         public event Action<Quaternion> OnRotate;
 
@@ -19,7 +21,6 @@ namespace player_controls
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            SubscribeLook();
         }
 
         private void OnEnable() => SubscribeLook();
@@ -27,16 +28,12 @@ namespace player_controls
 
         private void SubscribeLook()
         {
-            if (_isLookSubscribed) return;
             look.OnRaise += OnLookInput;
-            _isLookSubscribed = true;
         }
 
         private void UnsubscribeLook()
         {
-            if (!_isLookSubscribed) return;
             look.OnRaise -= OnLookInput;
-            _isLookSubscribed = false;
         }
 
         private void OnLookInput(Vector2 mouseDelta)
