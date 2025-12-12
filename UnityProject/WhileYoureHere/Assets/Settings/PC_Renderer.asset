@@ -1,5 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9176858239462800707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de7a7d548a40ca4aafaeaf59bcf4658, type: 3}
+  m_Name: EdgeDetectionRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::CustomEffects.EdgeDetectionRendererFeature
+  m_Active: 0
+  edgeDetectionShader: {fileID: 4800000, guid: 1e371c1d30edc594cb4e6b847276f96b, type: 3}
+  outlineColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 1
+  threshold: 0.5
 --- !u!114 &-5819930084681308894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,6 +34,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Scenes.OutlineRendererFeature
   m_Active: 1
   shader: {fileID: 4800000, guid: 787e7710b09364c4a932eb75ca86d1df, type: 3}
+--- !u!114 &-3225977174966304955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de7a7d548a40ca4aafaeaf59bcf4658, type: 3}
+  m_Name: EdgeDetectionRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::CustomEffects.EdgeDetectionRendererFeature
+  m_Active: 1
+  edgeDetectionShader: {fileID: 4800000, guid: 1e371c1d30edc594cb4e6b847276f96b, type: 3}
+  outlineColor:
+    r: 0.836478
+    g: 0.4340215
+    b: 0.4340215
+    a: 1
+  threshold: 0.288
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
