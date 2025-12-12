@@ -3,6 +3,7 @@ using Interactable;
 using player_controls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Interactable;
+using UnityEditor.UI;
 
 namespace dialogue
 {
@@ -44,7 +45,7 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
-            print ("dialog interact");
+            if (blockInteraction) return;
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)
@@ -87,6 +88,7 @@ namespace dialogue
         
         public override void OnHoverEnter(IInteractor interactor)
         {
+            if (blockInteraction) return;
             base.OnHoverEnter(interactor);
 
             bool canInteract = dialogueLoader != null &&

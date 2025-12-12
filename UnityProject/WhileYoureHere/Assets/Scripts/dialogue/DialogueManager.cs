@@ -110,6 +110,10 @@ namespace dialogue
 
         private void PlayNextSentence()
         {
+            if (_currentNode.flag != null)
+            {
+                _currentNode.flag.currentValue = true;
+            }
             if (_sentenceIndex >= _activeSentences.Length)
             {
                 if (_currentNode.choices?.Count > 0)
@@ -154,7 +158,7 @@ namespace dialogue
 
             _isTyping = false;
             yield return new WaitForSeconds(sentenceDelay);
-
+            
             PlayNextSentence();
         }
 
