@@ -52,19 +52,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouthBlow",
-                    "type": "Button",
-                    "id": "5cc16d7e-c9bf-4161-bcd8-7ad21cb5048b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "SkipDialogue",
                     "type": "Button",
                     "id": "14e4c641-a6c2-4103-8459-7697deecdc8a",
                     "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Swing",
+                    "type": "PassThrough",
+                    "id": "ce207059-9398-4d7f-b5df-c5651b882a64",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -183,12 +183,12 @@
                 },
                 {
                     "name": "",
-                    "id": "48bc49bc-3d59-47df-bf77-f2694b7d6d48",
-                    "path": "<Keyboard>/space",
+                    "id": "3d4909e1-b220-467c-8d57-eff9e75ea82f",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "MouthBlow",
+                    "groups": ";Keyboard&Mouse;Touch",
+                    "action": "Swing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
