@@ -6,8 +6,11 @@ namespace notebook
 {
     public class NotebookManager : MonoBehaviour
     {
+        [Header("Notebook Settings")]
+        [SerializeField] private GameObject notebook;
+        
         [Header("Listen to")]
-        [SerializeField] private EventChannel notebook;
+        [SerializeField] private EventChannel notebookEvent;
 
         private bool hasNotebook;
         public bool HasNotebook => hasNotebook;
@@ -15,12 +18,12 @@ namespace notebook
 
         private void OnEnable()
         {
-            notebook.OnRaise += OnNotebookInput;
+            notebookEvent.OnRaise += OnNotebookInput;
         }
 
         private void OnDisable()
         {
-            notebook.OnRaise -= OnNotebookInput;
+            notebookEvent.OnRaise -= OnNotebookInput;
         }
 
         private void OnNotebookInput()
@@ -57,12 +60,16 @@ namespace notebook
         {
             Debug.Log(isNotebookGrabbed + ", Notebook grabbed");
             // Add Grab Notebook Animation here.
+            notebook.SetActive(true);
+            Debug.Log(notebook.activeSelf);
         }
 
         private void PutAwayNotebook()
         {
             Debug.Log(isNotebookGrabbed + ", Notebook put away");
             // Add Put Away Notebook Animation here.
+            notebook.SetActive(false);
+            Debug.Log(notebook.activeSelf);
         }
     }
 }
