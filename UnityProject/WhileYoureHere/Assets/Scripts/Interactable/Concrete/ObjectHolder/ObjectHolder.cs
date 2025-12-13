@@ -23,7 +23,7 @@ namespace Interactable.Concrete.ObjectHolder
             _heldObject = null;
         }
 
-        public override bool InteractableBy(IInteractor interactor)
+        public override bool IsInteractableBy(IInteractor interactor)
         {
             if (_heldObject == null) return interactor.HeldObject is IPlaceable;
             return true;
