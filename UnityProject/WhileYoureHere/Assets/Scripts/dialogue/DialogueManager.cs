@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.Dialogue;
 using UI;
 
