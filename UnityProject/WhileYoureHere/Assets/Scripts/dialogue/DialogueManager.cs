@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.Dialogue;
 using UI;
 
@@ -130,7 +131,6 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                Debug.Log(sentence.tagOfAudioSource);
                 if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
                 _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();

@@ -1,12 +1,13 @@
 using UnityEngine;
 using Interactable;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Interactable;
 
 namespace dialogue
 {
-    public class DialogueInteraction : InteractableBehaviour
+    public class DialogueInteraction : InteractableBehaviour,IEInteractable
     {
         [Header("Interaction")]
         [SerializeField] private Canvas interactionCanvas;
@@ -44,6 +45,7 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
+            print ("dialog interact");
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)
@@ -83,7 +85,7 @@ namespace dialogue
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-
+        
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
