@@ -13,13 +13,17 @@ namespace Interactable
 {
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
+        [Header("Interaction Settings")]
         [SerializeField] private PlayerInteractionData data;
+
+        [Header("Camera")]
         [SerializeField] private Camera playerCamera;
 
-        [Header("Listen to")]
+        [Header("Input Events")]
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
 
+        [Header("Holding")]
         [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
@@ -38,13 +42,11 @@ namespace Interactable
         {
             _movementController = GetComponent<MovementController>();
 
-            // Probeer UIManager.Instance; als die niet gezet is, fallback op FindObjectOfType zodat _uiManager niet null is.
             _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
         }
 
         private void Start()
         {
-            // Als Awake geen manager vond, probeer nogmaals (in geval van init volgorde)
             if (_uiManager == null)
                 _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
         }
@@ -94,16 +96,13 @@ namespace Interactable
 
         private void Interact()
         {
-            // TABLE MODE
             if (IsTableMode)
             {
-                // Drop table object if no valid target
                 if (HeldObject == null &&
                     _currentTarget is not ObjectHolder &&
-                    DropHeldTableObject())
+                    CanDropTablePickup())
                     return;
 
-                // Interact with target
                 if (_currentTarget != null)
                 {
                     if (_currentTarget.InteractableBy(this))
@@ -113,14 +112,12 @@ namespace Interactable
                     return;
                 }
 
-                // Stand up from chair
                 if (_sittingChair != null)
                     _sittingChair.ForceStandUp();
 
                 return;
             }
 
-            // NORMAL MODE
             if (_currentTarget == null)
             {
                 HeldObject?.Drop();
@@ -168,7 +165,6 @@ namespace Interactable
 
             for (int i = 0; i < hitCount; i++)
             {
-                // Don't allow picking another item while holding something
                 if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
                     HeldObject != null)
                     continue;
@@ -248,14 +244,12 @@ namespace Interactable
         {
             if (target == null) return;
 
-            // alleen aanroepen als _uiManager beschikbaar is
             _uiManager?.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
             target.OnHoverEnter(this);
         }
 
         private void OnHoverExit(IInteractable target)
         {
-            // veilig: _uiManager kan null zijn tijdens init volgorde
             _uiManager?.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
@@ -288,7 +282,7 @@ namespace Interactable
             Cursor.visible = enable;
         }
 
-        private static bool DropHeldTableObject()
+        private static bool CanDropTablePickup()
         {
             var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
 
