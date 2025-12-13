@@ -4,6 +4,7 @@ using player_controls;
 // using Interactable;
 using Interactable.Holdable;
 using System.Collections;
+using cleaningcabin;
 using time;
 using ScriptableObjects.Events;
 
@@ -28,6 +29,7 @@ public class DirtInteractable : InteractableBehaviour
     [SerializeField] Transform minigameStartingPos;
     public float transitionSpeed = 5f;
 
+    [SerializeField] private BroomMovementDetection broomMD;
     // [SerializeField] AudioClip sweepingClip;
     // public AudioClip sweepingData.sweepingClip;
 
@@ -81,6 +83,7 @@ public class DirtInteractable : InteractableBehaviour
         playerPos.transform.position = Vector3.Lerp(playerPos.transform.position, minigameStartingPos.transform.position, transitionSpeed * Time.deltaTime);
         camPos.transform.rotation = Quaternion.Lerp(camPos.transform.rotation, minigameStartingPos.transform.rotation, transitionSpeed * Time.deltaTime);
 
+        broomMD.SetBroomRotation();
         // playerPos.transform.position = minigameStartingPos.position;
         // camPos.transform.rotation = minigameStartingPos.rotation;
 
