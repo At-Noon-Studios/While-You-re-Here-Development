@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using player_controls;
 using PlayerControls;
+using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
 using UI;
 
@@ -34,6 +35,9 @@ namespace dialogue
         private string _currentFullSentence;
         private Coroutine _sentenceRoutine;
         private bool _isTyping;
+
+        private bool _cameraStopped;
+        private bool _movementStopped;
 
         [SerializeField] private float volume = 1;
 
@@ -68,15 +72,17 @@ namespace dialogue
             }
         }
 
-        public void StartDialogue(List<DialogueNode> dialogueNodes, string startId)
+        public void StartDialogue(DialogueInteractionConfig interactionConfig)
         {
             EventSystem.current?.SetSelectedGameObject(null);
 
             _nodes.Clear();
-            foreach (var n in dialogueNodes) _nodes[n.nodeID] = n;
+            foreach (var n in interactionConfig.dialogueNodes) _nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
-            DisplayNode(startId);
+            _movementStopped = interactionConfig.pausePlayerMovement;
+            _cameraStopped = interactionConfig.pauseCameraMovement;
+            DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
 
         private void DisplayNode(string id)
@@ -193,8 +199,8 @@ namespace dialogue
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _audioSource.Stop();
-            _movement?.ResumeMovement();
-            _cameraController?.ResumeCameraMovement();
+            if (_movementStopped) _movement?.ResumeMovement();
+            if (_cameraStopped) _cameraController?.ResumeCameraMovement();
         }
     }
 }

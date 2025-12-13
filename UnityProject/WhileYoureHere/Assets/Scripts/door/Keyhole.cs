@@ -74,7 +74,7 @@ namespace door
         
         public override bool IsDetectableBy(IInteractor interactor)
         {
-            return CanStartOperating(interactor) && !_door.isOpen && _door.IsFinishedMoving();
+            return base.IsDetectableBy(interactor) && CanStartOperating(interactor) && !_door.isOpen && _door.IsFinishedMoving();
         }
         
         public override string InteractionText(IInteractor interactor) => "Operate the lock";

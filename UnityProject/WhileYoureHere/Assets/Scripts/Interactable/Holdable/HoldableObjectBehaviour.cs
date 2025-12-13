@@ -61,7 +61,6 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
-            if (blockInteraction) return;
             PickUp(interactor);
 
             if (interactionCanvas != null)

@@ -33,11 +33,11 @@ namespace Interactable
         
         #region Interface implementation
         
-        public virtual bool IsInteractableBy(IInteractor interactor) => true;
+        public virtual bool IsInteractableBy(IInteractor interactor) => !blockInteraction;
         
-        public virtual bool IsDetectableBy(IInteractor interactor) => true;
+        public virtual bool IsDetectableBy(IInteractor interactor) => !blockInteraction;
 
-        public virtual void Interact(IInteractor interactor) {if (blockInteraction) return;}
+        public abstract void Interact(IInteractor interactor);
 
         public virtual void ClickInteract(IInteractor interactor)
         {

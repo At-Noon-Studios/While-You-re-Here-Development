@@ -3,8 +3,6 @@ using Interactable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
-using ScriptableObjects.Interactable;
-using UnityEditor.UI;
 
 namespace dialogue
 {
@@ -46,7 +44,6 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
-            if (blockInteraction) return;
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)
@@ -78,7 +75,7 @@ namespace dialogue
                 Cursor.visible = false;
             }
 
-            dialogueLoader.StartDialogue(config.dialogueNodes);
+            dialogueLoader.StartDialogue(config);
 
             if (interactionUI != null)
                 interactionUI.SetActive(false);
@@ -89,7 +86,6 @@ namespace dialogue
         
         public override void OnHoverEnter(IInteractor interactor)
         {
-            if (blockInteraction) return;
             base.OnHoverEnter(interactor);
 
             bool canInteract = dialogueLoader != null &&

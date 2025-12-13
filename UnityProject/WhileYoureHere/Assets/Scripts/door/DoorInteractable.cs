@@ -108,7 +108,7 @@ namespace door
 
         public override bool IsInteractableBy(IInteractor interactor) => !isLocked;
         
-        public override bool IsDetectableBy(IInteractor interactor) => !keyhole?.CurrentlyBeingOperated ?? true;
+        public override bool IsDetectableBy(IInteractor interactor) => !keyhole?.CurrentlyBeingOperated ?? base.IsDetectableBy(interactor);
         
         public override string InteractionText(IInteractor interactor)
         {
