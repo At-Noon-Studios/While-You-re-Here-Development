@@ -70,7 +70,7 @@ namespace Interactable.Holdable
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
-            GetComponent<PickUpSound>().PlayPickUpSound();
+            if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
             _holder = interactor;
             var heldObject = this;
             interactor.HeldObject?.Drop();
