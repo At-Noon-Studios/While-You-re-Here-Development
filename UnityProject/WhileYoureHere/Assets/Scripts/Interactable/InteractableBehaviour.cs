@@ -37,7 +37,7 @@ namespace Interactable
         
         public virtual bool IsDetectableBy(IInteractor interactor) => true;
 
-        public abstract void Interact(IInteractor interactor);
+        public virtual void Interact(IInteractor interactor) {if (blockInteraction) return;}
 
         public virtual void ClickInteract(IInteractor interactor)
         {
@@ -51,6 +51,7 @@ namespace Interactable
 
         public virtual void OnHoverEnter(IInteractor interactor)
         {
+            if (blockInteraction) return;
             AddOutlineMaterialToRenderers();
         }
         
