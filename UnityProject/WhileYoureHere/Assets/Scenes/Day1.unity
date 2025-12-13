@@ -404,6 +404,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &782240742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3622156644969669991, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+  m_PrefabInstance: {fileID: 6244422469016205602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &892287392 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2862329056776942831, guid: 263df739b73d67140af48a1e8b8edda4, type: 3}
@@ -1224,6 +1229,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 8534379874927096128}
+    - target: {fileID: 3436861685434282821, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: notebookManager
+      value: 
+      objectReference: {fileID: 6244422469016205612}
     - target: {fileID: 3842484478832325192, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1435,6 +1444,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 52088c14bfcf9364997082f5ddf5bb9b, type: 2}
     - target: {fileID: 3576340262886703972, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      propertyPath: notebook
+      value: 
+      objectReference: {fileID: 11400000, guid: c76b785de9413414aa48600d3007f046, type: 2}
+    - target: {fileID: 3576340262886703972, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
       propertyPath: clickTune
       value: 
       objectReference: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
@@ -1473,19 +1486,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3622156644969669991, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6244422469016205612}
   m_SourcePrefab: {fileID: 100100000, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
 --- !u!114 &6244422469016205603 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6360352433680735866, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
   m_PrefabInstance: {fileID: 6244422469016205602}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 782240742}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
+--- !u!114 &6244422469016205612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782240742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2fb64858eb47ac49a593cedf5735cb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::notebook.NotebookManager
+  notebook: {fileID: 11400000, guid: c76b785de9413414aa48600d3007f046, type: 2}
 --- !u!114 &7097879429437767956 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6920691892933776911, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
@@ -1559,7 +1588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1926464264712402156, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[0].events.Array.data[1]._expanded
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1926464264712402156, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[0].events.Array.data[2]._expanded
