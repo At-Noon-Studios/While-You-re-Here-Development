@@ -25,11 +25,17 @@ namespace chore
             OnChoreCompleted?.Invoke(chore);
         }
         
-        public static event Action OnPaperPlacement;
+        public static event Action<int> OnLogPlaced;
 
-        public static void TriggerPaperPlacement()
+        public static void TriggerLogPlaced(int logID)
         {
-            OnPaperPlacement?.Invoke();
+            OnLogPlaced?.Invoke(logID);
         }
-    }
+        
+        public static event Action<int> OnLogChopped;
+        public static void TriggerLogChopped(int logID)
+        {
+            OnLogChopped?.Invoke(logID);
+        }
+     }
 }
