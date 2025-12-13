@@ -11,7 +11,7 @@ namespace chore
             LogPlacement,
             LogChop
         }
-        
+
         public bool IsActive { get; private set; }
 
         public event Action<ChoreComponent> OnComponentCompleted;
