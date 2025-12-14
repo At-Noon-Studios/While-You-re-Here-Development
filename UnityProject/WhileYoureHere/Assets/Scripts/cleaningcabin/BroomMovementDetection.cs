@@ -50,8 +50,8 @@ namespace cleaningcabin
 
         public void ResetMiniGamePos()
         {
-            broomModel.transform.position = new Vector3(0f, -1.5f, 0f);
-            broomModel.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+            broomModel.localPosition = new Vector3(0f, -1.5f, 0f);
+            broomModel.localRotation = new Quaternion(0f, 0f, 0f, 0f);
         }
         
         public void OnClean(InputValue inputValue)
