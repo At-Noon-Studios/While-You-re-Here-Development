@@ -74,7 +74,7 @@ namespace door
         
         public override bool IsDetectableBy(IInteractor interactor)
         {
-            return CanStartOperating(interactor) && !_door.IsOpen && _door.IsFinishedMoving();
+            return base.IsDetectableBy(interactor) && CanStartOperating(interactor) && !_door.isOpen && _door.IsFinishedMoving();
         }
         
         public override string InteractionText(IInteractor interactor) => "Operate the lock";
@@ -113,8 +113,8 @@ namespace door
         private void FinishOperatingLock(bool isLocked)
         {
             StopOperatingLock();
-            _door.IsLocked = isLocked;
-            if (!isLocked) _door.IsOpen = true;
+            _door.isLocked = isLocked;
+            if (!isLocked) _door.isOpen = true;
         }
 
         private void StopOperatingLock()
@@ -169,7 +169,7 @@ namespace door
 
         private bool CanStopOperating(out bool lockedState)
         {
-            lockedState = _door.IsLocked;
+            lockedState = _door.isLocked;
             if (!CurrentlyBeingOperated) return false;
             switch (_currentOperation.Key.Rotation)
             {
