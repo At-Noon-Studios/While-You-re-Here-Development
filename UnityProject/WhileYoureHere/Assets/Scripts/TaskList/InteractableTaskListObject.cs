@@ -1,3 +1,4 @@
+using gamestate;
 using Interactable;
 using UnityEngine;
 
@@ -50,7 +51,13 @@ namespace TaskList
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
+
+            var flag = GamestateManager.GetInstance()
+                .listOfFlags.Find(f => f.name == "NotebookPickedUpFlag");
+            if (flag != null)
+                flag.currentValue = true;
         }
+
 
         public override void OnHoverEnter(IInteractor interactor)
         {
