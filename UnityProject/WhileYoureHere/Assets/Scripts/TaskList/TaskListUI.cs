@@ -88,13 +88,13 @@ namespace TaskList
 
         private IEnumerator AnimateSpawn(Transform objTransform)
         {
-            Vector3 startPos = spawnOffset;
-            Quaternion startRot = Quaternion.Euler(spawnRotation);
+            var startPos = spawnOffset;
+            var startRot = Quaternion.Euler(spawnRotation);
 
-            Vector3 targetPos = Vector3.zero;
-            Quaternion targetRot = Quaternion.identity;
+            var targetPos = Vector3.zero;
+            var targetRot = Quaternion.identity;
 
-            float elapsed = 0f;
+            var elapsed = 0f;
 
             objTransform.localPosition = startPos;
             objTransform.localRotation = startRot;
@@ -102,7 +102,7 @@ namespace TaskList
             while (elapsed < spawnDuration)
             {
                 elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / spawnDuration);
+                var t = Mathf.Clamp01(elapsed / spawnDuration);
 
                 objTransform.localPosition = Vector3.Lerp(startPos, targetPos, t);
                 objTransform.localRotation = Quaternion.Slerp(startRot, targetRot, t);
@@ -113,5 +113,6 @@ namespace TaskList
             objTransform.localPosition = targetPos;
             objTransform.localRotation = targetRot;
         }
+
     }
 }

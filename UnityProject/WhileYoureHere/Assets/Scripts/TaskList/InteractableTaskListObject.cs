@@ -42,9 +42,9 @@ namespace TaskList
 
         public override void Interact(IInteractor interactor)
         {
-            if (_pickedUp) return;
+            if (blockInteraction) return;
+            BlockInteraction(true);
 
-            _pickedUp = true;
             gameObject.SetActive(false);
 
             taskListUI.RegisterTaskList(transform.gameObject);
@@ -58,12 +58,11 @@ namespace TaskList
                 flag.currentValue = true;
         }
 
-
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
 
-            bool canInteract = !_pickedUp;
+            var canInteract = !blockInteraction;
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(canInteract);
         }

@@ -17,12 +17,7 @@ namespace TaskList
         {
             Build();
         }
-
-        private void OnDisable()
-        {
-            ResetAllToggles();
-        }
-
+        
         public void Build()
         {
             _taskToggles.Clear();
@@ -30,7 +25,7 @@ namespace TaskList
             foreach (Transform child in taskListCanvas.transform)
                 Destroy(child.gameObject);
 
-            for (int i = taskLoader.tasks.Count - 1; i >= 0; i--)
+            for (var i = taskLoader.tasks.Count - 1; i >= 0; i--)
             {
                 var task = taskLoader.tasks[i];
                 var toggle = Instantiate(taskTogglePrefab, taskListCanvas.transform)
@@ -69,6 +64,11 @@ namespace TaskList
                 if (toggle != null)
                     toggle.isOn = false;
             }
+        }
+
+        private void OnApplicationQuit()
+        {
+            ResetAllToggles();
         }
     }
 }
