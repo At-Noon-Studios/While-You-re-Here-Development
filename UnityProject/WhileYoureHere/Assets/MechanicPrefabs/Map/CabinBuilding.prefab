@@ -4438,6 +4438,8 @@ MonoBehaviour:
   doorPivot: {fileID: 7637223400465964527}
   audioSource: {fileID: 1572865138561727862}
   keyhole: {fileID: 0}
+  isLocked: 0
+  isOpen: 0
 --- !u!1 &1770415423006147091
 GameObject:
   m_ObjectHideFlags: 0
@@ -9648,6 +9650,8 @@ GameObject:
   - component: {fileID: 5752516899073781572}
   - component: {fileID: 5003767725792008739}
   - component: {fileID: 3281489020810410330}
+  - component: {fileID: 1342908281790780269}
+  - component: {fileID: 5220842844816217474}
   m_Layer: 0
   m_Name: FrontDoorKeyHoleInside
   m_TagString: Untagged
@@ -9726,6 +9730,45 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1342908281790780269
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304161506571584605}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3165985885265623073, guid: 9435babdd91c88d43a8e2be4a8528feb, type: 3}
+--- !u!114 &5220842844816217474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304161506571584605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
+  blockInteraction: 0
+  keyHolePosition: {fileID: 5752516899073781572}
+  keyRotation: {x: 0, y: 0, z: 0}
+  look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
+  interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
 --- !u!1 &3339137930265428185
 GameObject:
   m_ObjectHideFlags: 0
@@ -20606,6 +20649,8 @@ MonoBehaviour:
   doorPivot: {fileID: 1570417832724397100}
   audioSource: {fileID: 1911081003669381586}
   keyhole: {fileID: 0}
+  isLocked: 0
+  isOpen: 0
 --- !u!1 &7264760575730917441
 GameObject:
   m_ObjectHideFlags: 0
@@ -25432,6 +25477,8 @@ MonoBehaviour:
   doorPivot: {fileID: 4092742791920304558}
   audioSource: {fileID: 4265109102707000026}
   keyhole: {fileID: 0}
+  isLocked: 0
+  isOpen: 0
 --- !u!1 &8737063996620154040
 GameObject:
   m_ObjectHideFlags: 0
