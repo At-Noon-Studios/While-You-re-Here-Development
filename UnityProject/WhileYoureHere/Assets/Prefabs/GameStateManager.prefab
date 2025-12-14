@@ -170,112 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53963be3cebe2fe4a9beac28673bca13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  activities:
-  - description: Inside
-    events:
-    - type: 1
-      triggeredBy: 0
-      _expanded: 0
-      booleanToChange: 
-      newValue: 0
-      hourOfDay: 6
-      dialogueToPlay: {fileID: 0}
-      cutsceneToPlay: {fileID: 0}
-      eventToInvoke:
-        m_PersistentCalls:
-          m_Calls: []
-      triggerAfterSeconds: 0
-      choresToComplete: []
-      booleansToBeTrue: []
-    - type: 4
-      triggeredBy: 4
-      _expanded: 0
-      booleanToChange: 
-      newValue: 0
-      hourOfDay: 6
-      dialogueToPlay: {fileID: 0}
-      cutsceneToPlay: {fileID: 0}
-      eventToInvoke:
-        m_PersistentCalls:
-          m_Calls: []
-      triggerAfterSeconds: 0
-      choresToComplete: []
-      booleansToBeTrue:
-      - notebookPickedUp
-    - type: 5
-      triggeredBy: 4
-      _expanded: 0
-      booleanToChange: 
-      newValue: 0
-      hourOfDay: 6
-      dialogueToPlay: {fileID: 0}
-      cutsceneToPlay: {fileID: 0}
-      eventToInvoke:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: door.DoorInteractable, Assembly-CSharp
-            m_MethodName: LockDoor
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      triggerAfterSeconds: 0
-      choresToComplete: []
-      booleansToBeTrue:
-      - notebookPickedUp
-  - description: Outside
-    events:
-    - type: 1
-      triggeredBy: 3
-      _expanded: 0
-      booleanToChange: 
-      newValue: 0
-      hourOfDay: 16
-      dialogueToPlay: {fileID: 0}
-      cutsceneToPlay: {fileID: 0}
-      eventToInvoke:
-        m_PersistentCalls:
-          m_Calls: []
-      triggerAfterSeconds: 0
-      choresToComplete:
-      - {fileID: 11400000, guid: 2af1fef0a267c1a4da08243f272a0a1c, type: 2}
-      booleansToBeTrue: []
-    - type: 5
-      triggeredBy: 0
-      _expanded: 0
-      booleanToChange: 
-      newValue: 0
-      hourOfDay: 6
-      dialogueToPlay: {fileID: 0}
-      cutsceneToPlay: {fileID: 0}
-      eventToInvoke:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 1262322677674275092}
-            m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
-            m_MethodName: StartChoreWithSo
-            m_Mode: 2
-            m_Arguments:
-              m_ObjectArgument: {fileID: 11400000, guid: 2af1fef0a267c1a4da08243f272a0a1c, type: 2}
-              m_ObjectArgumentAssemblyTypeName: ScriptableObjects.chores.SoChore,
-                Assembly-CSharp
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      triggerAfterSeconds: 0
-      choresToComplete: []
-      booleansToBeTrue:
-      - notebookPickedUp
+  listOfFlags: []
+  activities: []
   currentDay: 1
-  notebookPickedUp: 0
 --- !u!114 &5472020434245009035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,6 +970,7 @@ MonoBehaviour:
   choiceButtonPrefab: {fileID: 985864569380424678, guid: 91ce4b21817c87c41a60cc30da19b21b, type: 3}
   letterDelay: 0.05
   sentenceDelay: 1.5
+  volume: 1
 --- !u!114 &6072052769643597328
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,6 +22,6 @@ namespace Interactable.Concrete.Key
 
         public void ResetRotation() => Rotation = 0;
 
-        public override bool IsDetectableBy(IInteractor interactor) => detectable;
+        public override bool IsDetectableBy(IInteractor interactor) => base.IsDetectableBy(interactor) && detectable;
     }
 }
