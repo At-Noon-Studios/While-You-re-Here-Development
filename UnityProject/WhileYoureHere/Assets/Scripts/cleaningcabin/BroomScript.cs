@@ -7,10 +7,10 @@ public class BroomScript : HoldableObjectBehaviour
 {
     [SerializeField] Transform holdBroomPoint;
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    // protected override void Awake()
+    // {
+    //     base.Awake();
+    // }
 
     void Update()
     {
@@ -28,6 +28,8 @@ public class BroomScript : HoldableObjectBehaviour
     {
         base.AttachTo(interactor);
         transform.SetParent(holdBroomPoint);
-        Debug.Log("I am inside the attach method and my parent is: " + transform.parent);
+        Debug.Log("I am inside the attach-to method and my parent is: " + transform.parent);
     }
+
+   
 }

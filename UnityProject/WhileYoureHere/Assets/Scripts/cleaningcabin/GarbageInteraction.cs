@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Interactable;
 using Interactable.Holdable;
@@ -15,12 +16,9 @@ public class GarbageInteraction : InteractableBehaviour
             AudioManager.instance.PlaySound(garbageClip, transform, 1);
             Destroy(gameObject);
         }
-        else if (!broom.IsBroomBeingHeld)
-        {
-            return;
-        }
+        else if (!broom.IsBroomBeingHeld) return;
     }
 
-    public override string InteractionText(IInteractor interactor) => "";
+    public override string InteractionText(IInteractor interactor) => string.Empty;
 
 }

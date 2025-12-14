@@ -19,12 +19,12 @@ public class DirtInteractable : InteractableBehaviour
     [SerializeField] BroomScript broom;
 
     AudioSource audioSource;
-    [SerializeField] SweepingData sweepingData;
+    // [SerializeField] SweepingData sweepingData;
 
     public MovementController movementController;
     public CameraController cameraController;
 
-    private bool isMiniGameActive = false;
+    public bool isMiniGameActive { get; private set; }
 
     [SerializeField] Transform minigameStartingPos;
     public float transitionSpeed = 5f;
@@ -83,7 +83,8 @@ public class DirtInteractable : InteractableBehaviour
         playerPos.transform.position = Vector3.Lerp(playerPos.transform.position, minigameStartingPos.transform.position, transitionSpeed * Time.deltaTime);
         camPos.transform.rotation = Quaternion.Lerp(camPos.transform.rotation, minigameStartingPos.transform.rotation, transitionSpeed * Time.deltaTime);
 
-        broomMD.SetBroomRotation();
+        // broomMD.SetBroomRotation();
+        broomMD.SetMiniGamePos();
         // playerPos.transform.position = minigameStartingPos.position;
         // camPos.transform.rotation = minigameStartingPos.rotation;
 
@@ -98,4 +99,6 @@ public class DirtInteractable : InteractableBehaviour
     //     cameraController.canLook = true;
     //     movementController.canMove = true;
     // }
+    
+    public override string InteractionText(IInteractor interactor) => string.Empty;
 }

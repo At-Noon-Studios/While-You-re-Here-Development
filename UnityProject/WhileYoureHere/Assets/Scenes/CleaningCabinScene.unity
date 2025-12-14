@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 607479625}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
@@ -658,6 +658,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1133272243887804851, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: f182b5067a3cd47cc9d75c458b171d9f, type: 2}
+    - target: {fileID: 4378578622407298769, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
+      propertyPath: di
+      value: 
+      objectReference: {fileID: 1641492933}
     - target: {fileID: 6983099528777375432, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
       propertyPath: m_Name
       value: Broom
@@ -712,6 +720,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7016993416587506347, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
   m_PrefabInstance: {fileID: 1842044030197459363}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1641492933 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 278517698647995041, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
+  m_PrefabInstance: {fileID: 1842044030197459363}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f97598b119e4ebab98ee3bf27f1e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DirtInteractable
 --- !u!114 &1676898351 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5260706440123540601, guid: 96eec02f7b0664f719237bf49ea16c18, type: 3}
@@ -734,7 +753,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 607479625}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
@@ -913,9 +932,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1318898080}
     - target: {fileID: 694073439424218408, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 694073439424218408, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 3907255414278584951, guid: df18988dc2d634445bc9862239655b8f, type: 3}
+      objectReference: {fileID: 2100000, guid: 9ab107d615b9e4fb8bf1d355f81a18c5, type: 2}
     - target: {fileID: 3229561272721094442, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: broom
       value: 
@@ -934,15 +957,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: a7cd39f272ddf4da289cb3bf6cfd7fb2, type: 2}
     - target: {fileID: 7016993416587506347, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7016993416587506347, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7016993416587506347, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7016993416587506347, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1007,7 +1030,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 607479625}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
