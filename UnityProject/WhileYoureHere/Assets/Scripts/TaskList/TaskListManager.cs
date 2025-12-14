@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace TaskList
 {
     public class TaskListManager : MonoBehaviour
@@ -16,8 +20,19 @@ namespace TaskList
         private void OnEnable()
         {
             Build();
+
+            #if UNITY_EDITOR
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            #endif
         }
-        
+
+        private void OnDisable()
+        {
+            #if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            #endif
+        }
+
         public void Build()
         {
             _taskToggles.Clear();
@@ -70,5 +85,15 @@ namespace TaskList
         {
             ResetAllToggles();
         }
+
+        #if UNITY_EDITOR
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                ResetAllToggles();
+            }
+        }
+        #endif
     }
 }
