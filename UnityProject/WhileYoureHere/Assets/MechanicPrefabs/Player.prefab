@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   playerData: {fileID: 11400000, guid: 2c5a59fe1595d4392814fc10f921f100, type: 2}
-  move: {fileID: 11400000, guid: 7b473b0c5380b4d4f99c071879fc0b02, type: 2}
+  move: {fileID: 11400000, guid: 52088c14bfcf9364997082f5ddf5bb9b, type: 2}
   movementSpeed: 5
   canMove: 1
 --- !u!114 &7481407413239817275
@@ -309,9 +309,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputProcessor
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
-  move: {fileID: 11400000, guid: 7b473b0c5380b4d4f99c071879fc0b02, type: 2}
+  move: {fileID: 11400000, guid: 52088c14bfcf9364997082f5ddf5bb9b, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
-  drop: {fileID: 0}
+  clickTune: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
+  drop: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
 --- !u!114 &2920529238079780617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +439,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 09bfd3ba5260bc542a2615e67084a739, type: 2}
   playerCamera: {fileID: 5161706886281970434}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  clickInteractEvent: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
   holdPoint: {fileID: 6266212546046221642}
 --- !u!114 &6360352433680735866
 MonoBehaviour:
@@ -451,6 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
+  axeImpactSound: {fileID: 0}
   mouseUpImage: {fileID: 0}
   mouseDownImage: {fileID: 0}
   guideLineImage: {fileID: 0}
