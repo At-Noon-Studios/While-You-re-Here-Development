@@ -3,10 +3,11 @@ using Interactable;
 using UnityEngine;
 using player_controls;
 using cleaningcabin;
+using NUnit.Framework;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(AudioSource))]
-public class DirtInteractable : InteractableBehaviour
+public class SweepingArea : InteractableBehaviour
 {
     private Renderer _materialColor;
     [SerializeField] Color[] colorTransition;
@@ -15,19 +16,16 @@ public class DirtInteractable : InteractableBehaviour
     [SerializeField] BroomMovementDetection broom;
 
     AudioSource _audioSource;
-    // [SerializeField] SweepingData sweepingData;
 
     public MovementController movementController;
     public CameraController cameraController;
 
     public bool IsMiniGameActive { get; private set; }
-
+    
     [SerializeField] Transform minigameStartingPos;
     public float transitionSpeed = 5f;
 
     [SerializeField] private BroomMovementDetection broomMD;
-    // [SerializeField] AudioClip sweepingClip;
-    // public AudioClip sweepingData.sweepingClip;
 
     public float time;
     private IEnumerator _coroutine;
@@ -41,18 +39,18 @@ public class DirtInteractable : InteractableBehaviour
         base.Awake();
         _materialColor = GetComponent<Renderer>();
         _audioSource = GetComponent<AudioSource>();
-        // _coroutine = StopMovement(2);
         camPos = GameObject.FindWithTag("MainCamera");
         camPosDefaultPos = camPos.transform.rotation;
         playerPos = GameObject.FindWithTag("Player");
         playerPosDefaultPos = playerPos.transform.position;
+        IsMiniGameActive = false;
     }
 
     public override void Interact(IInteractor interactor)
     {
         if (broom == null) { Debug.LogWarning("Broom can't be found!"); return; }
 
-        if (!broom.IsBroomBeingHeld)
+        if (!broom.IsBroomBeingHeld || IsMiniGameActive)
         {
             Debug.Log("You need to hold the broom for this!");
             return;
@@ -60,15 +58,16 @@ public class DirtInteractable : InteractableBehaviour
         if (broom.IsBroomBeingHeld)
         {
             // _audioSource.PlayOneShot(sweepingData.SweepingClip);
-            Debug.Log("How nice of you to hold the broom before interacting!");
+            // Debug.Log("How nice of you to hold the broom before interacting!");
             StartSweepingMinigame();
         }
-        Debug.Log("You just interacted with a pile of shit... gross...");
     }
 
     void Update()
     {
+        Debug.Log("Status of mini-game is: " + IsMiniGameActive);
         if (!broom.IsBroomBeingHeld || !IsMiniGameActive) return;
+        
         StartSweepingMinigame();
     }
 
@@ -83,11 +82,12 @@ public class DirtInteractable : InteractableBehaviour
         camPos.transform.rotation = Quaternion.Lerp(camPos.transform.rotation, minigameStartingPos.transform.rotation,
             transitionSpeed * Time.deltaTime);
 
-        broomMD.SetMiniGamePos();
+        broomMD.SetMiniGameStartPos();
         time += Time.deltaTime;
         if (time >= 2 && time <= 3)
         {
             EndSweepingMinigame();
+            time = 0;
         }
     }
 
@@ -99,9 +99,10 @@ public class DirtInteractable : InteractableBehaviour
         movementController.canMove = true;
         playerPos.transform.position = playerPosDefaultPos;
         camPos.transform.rotation = camPosDefaultPos;
+        // playerPos.transform.position = Vector3.Lerp(playerPosDefaultPos, playerPos.transform.position, transitionSpeed * Time.deltaTime);
+        // camPos.transform.rotation = Quaternion.Lerp(camPosDefaultPos, camPos.transform.rotation, transitionSpeed * Time.deltaTime);
         Debug.Log("SweepingMinigame has ended!");
     }
     
-
     public override string InteractionText(IInteractor interactor) => string.Empty;
 }

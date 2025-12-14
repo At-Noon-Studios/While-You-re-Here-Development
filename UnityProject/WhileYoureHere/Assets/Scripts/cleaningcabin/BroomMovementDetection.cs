@@ -23,7 +23,7 @@ namespace cleaningcabin
         private bool _isBaseRotation;
             
         [SerializeField] private Transform broomModel;
-        [SerializeField] private DirtInteractable dirtInteractable;
+        [SerializeField] private SweepingArea sweepingArea;
 
 
         public Vector3 _defaultLocalPos;
@@ -42,21 +42,23 @@ namespace cleaningcabin
             // _minBroomXPos = dirtInteractable.transform.localScale.x;
         }
 
-        public void SetMiniGamePos()
+        public void SetMiniGameStartPos()
         {
+            // Kinda hardcoded values here, but they point the broom down from a top-down perspective
             broomModel.localRotation = Quaternion.Euler(-90f, 0f, 0f);
             broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 2.5f);
         }
 
         public void ResetMiniGamePos()
         {
+            // Also hardcoded, but it makes it stick to the player again
             broomModel.localPosition = new Vector3(0f, -1.5f, 0f);
             broomModel.localRotation = new Quaternion(0f, 0f, 0f, 0f);
         }
         
         public void OnClean(InputValue inputValue)
         {
-            if (!dirtInteractable.IsMiniGameActive)
+            if (!sweepingArea.IsMiniGameActive)
             {
                 Debug.Log("Minigame hasn't started!");
                 return;
@@ -65,10 +67,10 @@ namespace cleaningcabin
             var delta = inputValue.Get<Vector2>();
 
             _broomXPos += delta.x * _broomSpeed;
-            _broomXPos = Math.Clamp(_broomXPos, _minBroomXPos * dirtInteractable.transform.localScale.x, _maxBroomXPos * dirtInteractable.transform.localScale.x);
+            _broomXPos = Math.Clamp(_broomXPos, _minBroomXPos * sweepingArea.transform.localScale.x, _maxBroomXPos * sweepingArea.transform.localScale.x);
 
             _broomYPos += delta.y * _broomSpeed;
-            _broomYPos = Math.Clamp(_broomYPos, _minBroomYPos * dirtInteractable.transform.localScale.y, _maxBroomYPos * dirtInteractable.transform.localScale.y);
+            _broomYPos = Math.Clamp(_broomYPos, _minBroomYPos * sweepingArea.transform.localScale.y, _maxBroomYPos * sweepingArea.transform.localScale.y);
             
             var broomPos = new Vector3(_broomXPos, _broomYPos, 
                 broomModel.localPosition.z);

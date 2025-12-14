@@ -2,7 +2,7 @@ using cleaningcabin;
 using UnityEngine;
 using Interactable;
 
-public class GarbageInteraction : InteractableBehaviour
+public class Garbage : InteractableBehaviour
 {
     [SerializeField] BroomMovementDetection broom;
     // private AudioSource _audioSource;
