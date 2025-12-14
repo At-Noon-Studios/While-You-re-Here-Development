@@ -1,6 +1,7 @@
 using UnityEngine;
 using Interactable;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Interactable;
 

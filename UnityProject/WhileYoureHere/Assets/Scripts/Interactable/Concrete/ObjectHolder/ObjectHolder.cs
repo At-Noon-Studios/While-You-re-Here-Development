@@ -32,7 +32,7 @@ namespace Interactable.Concrete.ObjectHolder
             interactor.SetHeldObject(null);
         }
 
-        public override bool InteractableBy(IInteractor interactor)
+        public override bool IsInteractableBy(IInteractor interactor)
         {
             return placedObjects != null && placedObjects.Any(p => p.objectPrefab);
         }
