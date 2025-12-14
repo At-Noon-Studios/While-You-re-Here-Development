@@ -1,11 +1,10 @@
-using System;
+using cleaningcabin;
 using UnityEngine;
 using Interactable;
-using Interactable.Holdable;
 
 public class GarbageInteraction : InteractableBehaviour
 {
-    [SerializeField] BroomScript broom;
+    [SerializeField] BroomMovementDetection broom;
     // private AudioSource _audioSource;
     [SerializeField] AudioClip garbageClip;
 
@@ -20,5 +19,4 @@ public class GarbageInteraction : InteractableBehaviour
     }
 
     public override string InteractionText(IInteractor interactor) => string.Empty;
-
 }

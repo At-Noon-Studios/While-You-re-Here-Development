@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 607479625}
+      objectReference: {fileID: 607479622}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
@@ -417,17 +417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68da7e845d52e4e5d88d0c9efb682e23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
---- !u!114 &607479625 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1133272243887804851, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
-  m_PrefabInstance: {fileID: 1516160376}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4270ecd061994b6aa198db3cbd68d3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1 &752396885
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +655,14 @@ PrefabInstance:
       propertyPath: di
       value: 
       objectReference: {fileID: 1641492933}
+    - target: {fileID: 4378578622407298769, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: f182b5067a3cd47cc9d75c458b171d9f, type: 2}
+    - target: {fileID: 4378578622407298769, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
+      propertyPath: dirtInteractable
+      value: 
+      objectReference: {fileID: 1641492933}
     - target: {fileID: 6983099528777375432, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
       propertyPath: m_Name
       value: Broom
@@ -710,7 +707,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1133272243887804851, guid: df5cfd20db24d413cbc1a8ddb0a6f80f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -753,7 +751,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 607479625}
+      objectReference: {fileID: 607479622}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
@@ -906,7 +904,7 @@ PrefabInstance:
     - target: {fileID: 278517698647995041, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 607479625}
+      objectReference: {fileID: 607479622}
     - target: {fileID: 278517698647995041, guid: a55767da7bf5e4fe5a2b8b59996f3e12, type: 3}
       propertyPath: broomMD
       value: 
@@ -1030,7 +1028,7 @@ PrefabInstance:
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: broom
       value: 
-      objectReference: {fileID: 607479625}
+      objectReference: {fileID: 607479622}
     - target: {fileID: 2206809305996432770, guid: 43b69c7720aff49dc880a851cf2c525d, type: 3}
       propertyPath: garbageClip
       value: 
@@ -1111,10 +1109,10 @@ SceneRoots:
   - {fileID: 36704574920546623}
   - {fileID: 355537134}
   - {fileID: 752396888}
-  - {fileID: 1842044030197459363}
   - {fileID: 432237485}
   - {fileID: 795376982}
   - {fileID: 2508490016547357644}
   - {fileID: 31956749}
   - {fileID: 2018965197}
   - {fileID: 1516160376}
+  - {fileID: 1842044030197459363}

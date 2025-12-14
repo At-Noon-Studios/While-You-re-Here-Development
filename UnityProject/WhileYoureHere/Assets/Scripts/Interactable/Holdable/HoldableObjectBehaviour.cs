@@ -104,7 +104,7 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public virtual void AttachTo(IInteractor interactor)
+        private void AttachTo(IInteractor interactor)
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);

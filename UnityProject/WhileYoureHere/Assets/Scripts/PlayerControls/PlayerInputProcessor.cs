@@ -12,7 +12,8 @@ namespace player_controls
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickTune;
         [SerializeField] private EventChannel drop;
-
+        [SerializeField] private Vector2EventChannel clean;
+        
         private void OnLook(InputValue inputValue)
         {
             look.Raise(inputValue.Get<Vector2>());
