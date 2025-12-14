@@ -23,7 +23,7 @@ namespace Interactable
 
         private const int InteractableRaycastAllocation = 16;
 
-        #region Unity event functions
+        #region Unity event functions {
 
         private void Awake()
         {
@@ -75,7 +75,7 @@ namespace Interactable
             if (NoTarget) HeldObject?.Drop();
             else if (TargetInteractable)
             {
-                if (_currentTarget is not IEInteractable || interact.OnRaise == null) return;
+                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
                 InteractWithTarget();
             }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
@@ -99,7 +99,6 @@ namespace Interactable
             var closestDistance = float.MaxValue;
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) && HeldObject != null) break;
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
             }
 
