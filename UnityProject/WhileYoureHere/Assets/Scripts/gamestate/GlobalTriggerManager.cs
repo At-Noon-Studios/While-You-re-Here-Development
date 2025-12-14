@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class GlobalTriggerManager : MonoBehaviour
 {
+    [Header("Doors to lock before end of day")]
     [SerializeField] private List<DoorInteractable> doorsToLock;
-    private bool startListeningForEndDay = false;
+    private bool _isListeningForEndDay = false;
 
     public bool StartListeningForEndDay
     {
-        set => startListeningForEndDay = value;
+        set => _isListeningForEndDay = value;
     }
 
     private void Update()
     {
-        if (startListeningForEndDay) ListenForEndDay();
+        if (_isListeningForEndDay) ListenForEndDay();
     }
     
     private void ListenForEndDay()

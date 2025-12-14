@@ -7,6 +7,7 @@ namespace EndDay
 {
     public class EndDayInteractable : InteractableBehaviour
     {
+        [Header("End day screen settings")]
         [SerializeField] private float fadeDuration = 1f;
         [SerializeField] private float displayImageDuration = 1f;
         [SerializeField] private CanvasGroup endDayCanvasGroup;
@@ -15,7 +16,6 @@ namespace EndDay
         private bool _isEndDay = false;
         private CameraController _cameraController;
         private MovementController _movementController;
-
 
         protected override void Awake()
         {
