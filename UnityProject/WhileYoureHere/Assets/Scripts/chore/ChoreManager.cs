@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ScriptableObjects.chores;
+using TaskList;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +12,8 @@ namespace chore
         [SerializeField] private List<SoChore> choresToLoad = new List<SoChore>();
 
         private Dictionary<int, Chore> _chores;
+        
+        [SerializeField] private TaskListManager taskListManager;
 
         private void Awake()
         {
@@ -39,6 +42,8 @@ namespace chore
             Debug.Log($"Chore {chore.ChoreName} has been completed");
             chore.OnChoreCompleted -= ChoreCompleted;
 
+            taskListManager.TriggerCheckmark(chore.ChoreID);
+            
             ChoreEvents.TriggerChoreCompleted(chore);
             
             var nextID = chore.ChoreID + 1;

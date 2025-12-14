@@ -1192,6 +1192,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+      propertyPath: taskListManager
+      value: 
+      objectReference: {fileID: 1217453565}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1331,6 +1335,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7757938607070254585, guid: 9f7859786424c4c8c95b9951692610e6, type: 3}
   m_PrefabInstance: {fileID: 1205315809}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1217453565 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
+  m_PrefabInstance: {fileID: 2101217532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e63cc8574fd5c468b383133ad192a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListManager
 --- !u!1 &1283534657 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1595050657745954655, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
@@ -2060,9 +2075,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 1042988319}
     m_Modifications:
     - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
+      propertyPath: mappings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
       propertyPath: choreTaskMappings.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
+      propertyPath: mappings.Array.data[0].taskID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
+      propertyPath: mappings.Array.data[0].choreID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
+      propertyPath: choreTaskMappings.Array.data[0].task
+      value: 
+      objectReference: {fileID: 11400000, guid: 57050597eda6d8449b2f7aa1ab9f8a0e, type: 2}
     - target: {fileID: 747749438789555008, guid: d727a3338e9c9154292ee3367b22c2a4, type: 3}
       propertyPath: choreTaskMappings.Array.data[0].choreName
       value: Chopping_wood
