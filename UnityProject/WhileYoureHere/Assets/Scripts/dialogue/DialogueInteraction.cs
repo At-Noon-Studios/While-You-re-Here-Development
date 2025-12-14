@@ -1,8 +1,8 @@
 using UnityEngine;
 using Interactable;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.dialogue;
-using ScriptableObjects.Interactable;
 
 namespace dialogue
 {
@@ -44,7 +44,6 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
-            print ("dialog interact");
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)
@@ -76,7 +75,7 @@ namespace dialogue
                 Cursor.visible = false;
             }
 
-            dialogueLoader.StartDialogue(config.dialogueNodes);
+            dialogueLoader.StartDialogue(config);
 
             if (interactionUI != null)
                 interactionUI.SetActive(false);
