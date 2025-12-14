@@ -73,11 +73,11 @@ namespace Interactable
         private void Interact()
         {
             if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable)
-            {
-                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
+
+            // if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
+            else if (_currentTarget is IEInteractable && interact.OnRaise != null)
                 InteractWithTarget();
-            }
+
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 

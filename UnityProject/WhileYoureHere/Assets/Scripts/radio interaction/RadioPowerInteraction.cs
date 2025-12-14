@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace radio_interaction
 {
-    public class RadioPowerInteraction : InteractableBehaviour, IEInteractable, IClickInteractable
+    public class RadioPowerInteraction : InteractableBehaviour, IClickInteractable,IEInteractable
     {
         [SerializeField] private Canvas InteractiveCanvas;
         private RadioController radioController;
@@ -17,7 +17,6 @@ namespace radio_interaction
         public override void Interact(IInteractor interactor)
         {
             radioController.OnPowerPressed();
-            
         }
 
         public override void ClickInteract(IInteractor interactor)

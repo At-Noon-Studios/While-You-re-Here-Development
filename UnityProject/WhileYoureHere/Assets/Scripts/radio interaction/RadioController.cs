@@ -7,6 +7,12 @@ using UnityEngine.InputSystem;
 
 namespace radio_interaction
 {
+    /// <summary>
+    /// The RadioController class is responsible for managing the behavior and interaction
+    /// of a radio, including tuning operations, camera positioning, and state transitions.
+    /// This class interacts with the MonoBehaviour framework and is intended to be used
+    /// within Unity's game engine.
+    /// </summary>
     public class RadioController : MonoBehaviour
     {
         [Header("audio tracks")] [SerializeField]
@@ -14,7 +20,6 @@ namespace radio_interaction
 
         [Header("radio data")] [HideInInspector]
         public RadioStateMachine RadioStateMachine;
-
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
@@ -29,8 +34,8 @@ namespace radio_interaction
         private MovementController _movementController;
         private CameraController _cameraController;
         private Vector3 _currentCameraPosition;
+
         private Quaternion _currentCameraRotation;
-        // private DialogueNode _currentRadioNode;
         private class RadioChannelProgress
         {
             public int sentenceIndex;
@@ -198,32 +203,24 @@ namespace radio_interaction
             var stationSpacing = 1f / radioTracks.Length;
             var newIndex = Mathf.FloorToInt(_tuneValue / stationSpacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
-            
+
             if (_currentRadioIndex == newIndex)
                 return; // no station change
             _currentRadioIndex = newIndex;
             print("current index" + _currentRadioIndex);
             var newNode = radioTracks[newIndex].dialogueNode;
-
             ChangeNode(newNode);
-            dialogueManager.CurrentNode = newNode;
-
-
         }
-        public void ChangeNode(DialogueNode newNode)
-        {
-            
-            DialogueNode oldNode = dialogueManager.CurrentNode;
 
-            // 1. Same node? Do nothing.
+        private void ChangeNode(DialogueNode newNode)
+        {
+            var oldNode = dialogueManager.CurrentNode;
             if (oldNode == newNode)
                 return;
 
-            // 2. Save progress of OLD node
             if (oldNode != null)
                 SaveCurrentDialogueProgress(oldNode);
 
-            // 3. Determine resume info for NEW node
             int resumeIndex = 0;
             float resumeTime = 0f;
 
@@ -232,20 +229,14 @@ namespace radio_interaction
                 resumeIndex = saved.sentenceIndex;
                 resumeTime = saved.audioTime;
             }
-
             Debug.Log($"Switching to {newNode.nodeID}, resumeIndex={resumeIndex}, resumeTime={resumeTime}");
-
-            // 4. Start dialogue for NEW node.
-            // Correct argument order: (node, startIndex, resumeTime)
             dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
-
-            // 5. Update current node
             dialogueManager.CurrentNode = newNode;
         }
-        
-        public void SaveCurrentDialogueProgress(DialogueNode node)
-        { 
-            if (node == null) return;
+
+        private void SaveCurrentDialogueProgress(DialogueNode node)
+        {
+            if (node is null) return;
 
             var progress = new RadioChannelProgress
             {
@@ -256,12 +247,9 @@ namespace radio_interaction
             _nodeSentenceProgress[node] = progress;
         }
 
-        
-        
-        public bool OnCorrectChannel() => _currentRadioIndex == 2;
 
-        // radioTracks[_currentRadioIndex].audioClip == radioTracks[2].audioClip;
-
+        public bool OnCorrectChannel() => radioTracks[_currentRadioIndex].nodeName == "radio_clear_node";
+        
         #endregion
 
         #region private methods
