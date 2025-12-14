@@ -3,7 +3,7 @@ using Interactable;
 using UnityEngine;
 using player_controls;
 using cleaningcabin;
-using NUnit.Framework;
+using PlayerControls;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(AudioSource))]
@@ -74,8 +74,8 @@ public class SweepingArea : InteractableBehaviour
     private void StartSweepingMinigame()
     {
         IsMiniGameActive = true;
-        cameraController.canLook = false;
-        movementController.canMove = false;
+        cameraController.PauseCameraMovement();
+        movementController.PauseMovement();
 
         playerPos.transform.position = Vector3.Lerp(playerPos.transform.position,
             minigameStartingPos.transform.position, transitionSpeed * Time.deltaTime);
@@ -95,8 +95,8 @@ public class SweepingArea : InteractableBehaviour
     {
         IsMiniGameActive = false;
         broomMD.ResetMiniGamePos();
-        cameraController.canLook = true;
-        movementController.canMove = true;
+        cameraController.ResumeCameraMovement();
+        movementController.ResumeMovement();
         playerPos.transform.position = playerPosDefaultPos;
         camPos.transform.rotation = camPosDefaultPos;
         // playerPos.transform.position = Vector3.Lerp(playerPosDefaultPos, playerPos.transform.position, transitionSpeed * Time.deltaTime);

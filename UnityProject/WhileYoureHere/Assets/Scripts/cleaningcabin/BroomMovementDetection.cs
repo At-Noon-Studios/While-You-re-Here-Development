@@ -24,10 +24,9 @@ namespace cleaningcabin
             
         [SerializeField] private Transform broomModel;
         [SerializeField] private SweepingArea sweepingArea;
-
-
-        public Vector3 _defaultLocalPos;
-        public Quaternion _defaultLocalRot;
+        
+        private Vector3 _defaultLocalPos;
+        private Quaternion _defaultLocalRot;
         public bool IsBroomBeingHeld => IsHeld;
 
         private new void Awake()
