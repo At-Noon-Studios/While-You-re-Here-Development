@@ -29,7 +29,7 @@ namespace TaskList
                 toggle.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = task.taskName;
                 toggle.isOn = task.isCompleted;
 
-                string id = task.taskID;
+                int id = task.taskID;
                 toggle.onValueChanged.AddListener(v =>
                     taskLoader.SetTaskCompleted(id, v)
                 );

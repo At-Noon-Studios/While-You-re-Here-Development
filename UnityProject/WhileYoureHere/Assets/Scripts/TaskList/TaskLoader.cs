@@ -8,7 +8,7 @@ namespace TaskList
     {
         [SerializeField] public List<Task> tasks;
 
-        private readonly Dictionary<string, Task> _taskDictionary = new();
+        private readonly Dictionary<int, Task> _taskDictionary = new();
 
         private void Awake()
         {
@@ -16,7 +16,7 @@ namespace TaskList
                 _taskDictionary[task.taskID] = task;
         }
 
-        public void SetTaskCompleted(string id, bool value)
+        public void SetTaskCompleted(int id, bool value)
         {
             if (_taskDictionary.TryGetValue(id, out var task))
                 task.isCompleted = value;
