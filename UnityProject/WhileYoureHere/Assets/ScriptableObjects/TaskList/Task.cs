@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ScriptableObjects.TodoList
+namespace ScriptableObjects.TaskList
 {
     [CreateAssetMenu(fileName = "Task", menuName = "ScriptableObjects/Task")]
     public class Task : ScriptableObject
