@@ -20,8 +20,9 @@ namespace EndDay
         protected override void Awake()
         {
             base.Awake();
-            _cameraController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CameraController>();
-            _movementController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<MovementController>();
+            var player = GameObject.FindGameObjectWithTag("Player");
+            _cameraController = player.GetComponentInChildren<CameraController>();
+            _movementController = player.GetComponentInChildren<MovementController>();
         }
         
         public override void Interact(IInteractor interactor)
@@ -46,6 +47,11 @@ namespace EndDay
             {
                 // quit game (or maybe change scene) can be added here 
             }
+        }
+
+        public override string InteractionText(IInteractor interactor)
+        {
+            return "End the day";
         }
     }
 }
