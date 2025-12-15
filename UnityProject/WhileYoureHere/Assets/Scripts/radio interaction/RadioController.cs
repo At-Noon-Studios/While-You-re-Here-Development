@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dialogue;
 using player_controls;
 using ScriptableObjects.Dialogue;
+using PlayerControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,7 @@ namespace radio_interaction
 
         [Header("radio data")] [HideInInspector]
         public RadioStateMachine RadioStateMachine;
+
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
@@ -54,6 +56,7 @@ namespace radio_interaction
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
             _movementController = player.GetComponent<MovementController>();
             _cameraController = player.GetComponentInChildren<CameraController>();
 
@@ -100,7 +103,6 @@ namespace radio_interaction
         {
             const float moveSpeed = 5f;
             const float rotateSpeed = 5f;
-
             cam.position = Vector3.Lerp(
                 cam.position,
                 _currentCameraPosition,

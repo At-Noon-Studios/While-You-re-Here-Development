@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using player_controls;
+using PlayerControls;
+using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
 using UI;
 
@@ -15,7 +17,8 @@ namespace dialogue
         [Header("UI")] [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")] [SerializeField] private float letterDelay = 0.01f;
+        [Header("Timing")]
+        [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         private AudioSource _audioSource;
@@ -31,6 +34,9 @@ namespace dialogue
         private string _currentFullSentence;
         private Coroutine _sentenceRoutine;
         private bool _isTyping;
+
+        private bool _cameraStopped;
+        private bool _movementStopped;
 
         [SerializeField] private float volume = 1;
         private int _resumeCharIndex;
@@ -69,15 +75,17 @@ namespace dialogue
             }
         }
 
-        public void StartDialogue(List<DialogueNode> dialogueNodes, string startId)
+        public void StartDialogue(DialogueInteractionConfig interactionConfig)
         {
             EventSystem.current?.SetSelectedGameObject(null);
 
             _nodes.Clear();
-            foreach (var n in dialogueNodes) _nodes[n.nodeID] = n;
+            foreach (var n in interactionConfig.dialogueNodes) _nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
-            DisplayNode(startId);
+            _movementStopped = interactionConfig.pausePlayerMovement;
+            _cameraStopped = interactionConfig.pauseCameraMovement;
+            DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
 
         public void StartRadioDialogue(DialogueNode node, float resumeTime, int startSentenceIndex = 0)
@@ -134,6 +142,10 @@ namespace dialogue
 
         private void PlayNextSentence()
         {
+            if (_currentNode.flag != null)
+            {
+                _currentNode.flag.currentValue = true;
+            }
             if (_sentenceIndex >= _activeSentences.Length)
             {
                 if (_currentNode.choices?.Count > 0)
@@ -199,7 +211,7 @@ namespace dialogue
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 print("sentence routine finished");
                 _isTyping = false;
-                
+
                 if (_sentenceIndex < _activeSentences.Length)
                     _sentenceIndex += 1;
                 if (_sentenceIndex == _activeSentences.Length)
@@ -288,6 +300,8 @@ namespace dialogue
         public float GetCurrentAudioTime()
         {
             return _audioSource.time != null ? _audioSource.time : 0;
+            if (_movementStopped) _movement?.ResumeMovement();
+            if (_cameraStopped) _cameraController?.ResumeCameraMovement();
         }
     }
 }
