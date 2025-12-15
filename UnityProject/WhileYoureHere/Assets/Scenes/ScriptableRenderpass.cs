@@ -10,9 +10,16 @@ namespace Scenes
     {
         private EdgeDetectionPass _renderPass;
         public Shader edgeDetectionShader;
-        public Color outlineColor = Color.black;
+        
+        public Color colorOutlineColor = Color.black;
+        public Color depthOutlineColor = Color.black;
+        public Color normalOutlineColor = Color.black;
         [Range(0.0f, 1.0f)]
-        public float threshold = 0.5f;
+        public float colorThreshold = 0.5f;
+        [Range(0.0f, 10.0f)]
+        public float depthThreshold = 0.5f;
+        [Range(0.0f, 10.0f)]
+        public float normalThreshold = 0.5f;
         
         public override void Create()
         {
@@ -28,13 +35,19 @@ namespace Scenes
         {
             if (_renderPass == null) return;
             
-            _renderPass.Setup(outlineColor, threshold);
+            _renderPass.Setup(colorOutlineColor, depthOutlineColor, normalOutlineColor, colorThreshold, depthThreshold,  normalThreshold);
             renderer.EnqueuePass(_renderPass);
         }
     }
-
+    
     public class EdgeDetectionPass : ScriptableRenderPass
     {
+        private static readonly int DepthThreshold = Shader.PropertyToID("_DepthThreshold");
+        private static readonly int ColorThreshold = Shader.PropertyToID("_ColorThreshold");
+        private static readonly int NormalThreshold = Shader.PropertyToID("_NormalThreshold");
+        private static readonly int DepthOutlineColor = Shader.PropertyToID("_DepthOutlineColor");
+        private static readonly int ColorOutlineColor = Shader.PropertyToID("_ColorOutlineColor");
+        private static readonly int NormalOutlineColor = Shader.PropertyToID("_NormalOutlineColor");
         private readonly Material _material;
 
         public EdgeDetectionPass(Shader shader)
@@ -42,12 +55,16 @@ namespace Scenes
             _material = CoreUtils.CreateEngineMaterial(shader);
         }
 
-        public void Setup(Color outlineColor, float threshold)
+        public void Setup(Color colorOutlineColor, Color depthOutlineColor, Color normalOutlineColor, float colorThreshold, float depthThreshold, float normalThreshold)
         {
             if (_material != null)
             {
-                _material.SetColor("_OutlineColor", outlineColor);
-                _material.SetFloat("_Threshold", threshold);
+                _material.SetColor(ColorOutlineColor, colorOutlineColor);
+                _material.SetColor(DepthOutlineColor, depthOutlineColor);
+                _material.SetColor(NormalOutlineColor, normalOutlineColor);
+                _material.SetFloat(ColorThreshold, colorThreshold);
+                _material.SetFloat(DepthThreshold, depthThreshold);
+                _material.SetFloat(NormalThreshold, normalThreshold);
             }
         }
         
@@ -74,5 +91,6 @@ namespace Scenes
             // CRITICAL STEP: Reassign the result as the main color buffer
             resourceData.cameraColor = destinationTexture;
         }
+        
     }
 }
