@@ -20,6 +20,7 @@ namespace radio_interaction
 
         [Header("radio data")] [HideInInspector]
         public RadioStateMachine RadioStateMachine;
+
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
@@ -36,6 +37,8 @@ namespace radio_interaction
         private Vector3 _currentCameraPosition;
 
         private Quaternion _currentCameraRotation;
+        private DialogueNode _lastPlayedNode;
+
         private class RadioChannelProgress
         {
             public int sentenceIndex;
@@ -54,6 +57,7 @@ namespace radio_interaction
             _tuneValue = 1f / radioTracks.Length;
             RadioStateMachine = new RadioStateMachine();
             RadioStateMachine.ChangeState(new RadioOffState(this));
+            _currentRadioIndex = 0;
         }
 
         private void Update()
@@ -184,17 +188,35 @@ namespace radio_interaction
 
         public void TurnRadioOn()
         {
-            if (_currentRadioIndex == 0)
+
+            if (_nodeSentenceProgress.TryGetValue(_lastPlayedNode, out RadioChannelProgress saved))
             {
-                PlayStatic();
+                // resumeIndex = saved.sentenceIndex;
+                // resumeTime = saved.audioTime;
+            }            
+            if (_lastPlayedNode != null && !IsStaticChannel(_currentRadioIndex))
+            {
+                dialogueManager.StartRadioDialogue(_lastPlayedNode,saved.audioTime,saved.sentenceIndex);
+                return;
             }
-            // else PlayClip(radioTracks[_currentRadioIndex].audioClip);
+            
+            if (IsStaticChannel(_currentRadioIndex))
+            {
+                DialogueNode staticNode = radioTracks[_currentRadioIndex].dialogueNode;
+                dialogueManager.StartRadioDialogue(staticNode,0);
+                _lastPlayedNode = staticNode;
+                return;
+            }
+            
+            DialogueNode node = radioTracks[_currentRadioIndex].dialogueNode;
+            dialogueManager.StartRadioDialogue(node,saved.audioTime,saved.sentenceIndex);
+            _lastPlayedNode = node;
         }
 
 
         public void TurnRadioOff()
         {
-            _audioSource.Stop();
+            _lastPlayedNode=radioTracks[_currentRadioIndex].dialogueNode;
             dialogueManager.EndDialogue();
         }
 
@@ -206,10 +228,11 @@ namespace radio_interaction
 
             if (_currentRadioIndex == newIndex)
                 return; // no station change
-            _currentRadioIndex = newIndex;
+            // _currentRadioIndex = newIndex;
+            OnStationChanged(newIndex);
             print("current index" + _currentRadioIndex);
-            var newNode = radioTracks[newIndex].dialogueNode;
-            ChangeNode(newNode);
+            // var newNode = radioTracks[newIndex].dialogueNode;
+            // ChangeNode(newNode);
         }
 
         private void ChangeNode(DialogueNode newNode)
@@ -229,8 +252,9 @@ namespace radio_interaction
                 resumeIndex = saved.sentenceIndex;
                 resumeTime = saved.audioTime;
             }
+
             Debug.Log($"Switching to {newNode.nodeID}, resumeIndex={resumeIndex}, resumeTime={resumeTime}");
-            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
+            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);//maybe change the parm to type RadioChannelProgress?
             dialogueManager.CurrentNode = newNode;
         }
 
@@ -247,9 +271,21 @@ namespace radio_interaction
             _nodeSentenceProgress[node] = progress;
         }
 
+        public void OnStationChanged(int index)
+        {
+            _currentRadioIndex = index;
+            DialogueNode node = radioTracks[index].dialogueNode;
+            ChangeNode(node);
+            _lastPlayedNode = node;
+        }
+
+        private bool IsStaticChannel(int index)
+        {
+            return radioTracks[index].nodeName == "radio_static" || radioTracks[index].dialogueNode == null;
+        }
 
         public bool OnCorrectChannel() => radioTracks[_currentRadioIndex].nodeName == "radio_clear_node";
-        
+
         #endregion
 
         #region private methods
@@ -272,7 +308,10 @@ namespace radio_interaction
             slider.localPosition = pos;
         }
 
-        private void PlayStatic() => PlayClip(radioTracks[0].audioClip);
+        private void PlayStatic()
+        {
+            ChangeNode(radioTracks[_currentRadioIndex].dialogueNode);
+        }
 
         #endregion
     }

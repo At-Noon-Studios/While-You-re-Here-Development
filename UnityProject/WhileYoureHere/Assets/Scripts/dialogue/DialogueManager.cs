@@ -157,9 +157,17 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
+
                 if (_audioSource == null)
                     _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
-
+                if (_currentNode.nodeID == "radio_static")
+                {
+                    _audioSource.loop = true;
+                    _audioSource.clip = sentence.audio;
+                    _audioSource.volume = volume;
+                    _audioSource.Play();
+                    yield break;
+                }
                 var startedClip = sentence.audio;
                 _audioSource.clip = sentence.audio;
                 _audioSource.volume = volume;
@@ -191,6 +199,11 @@ namespace dialogue
                 yield return new WaitForSeconds(sentenceDelay);
                 print("sentence routine finished");
                 _isTyping = false;
+                if (_audioSource.isPlaying)
+                {
+                    WaitForSeconds wait = new WaitForSeconds(sentence.audio.length - resumeTime);
+                    yield return wait;
+                }
                 if (_sentenceIndex < _activeSentences.Length)
                     _sentenceIndex += 1;
                 print("sentence INDEX = " + _sentenceIndex);
@@ -264,7 +277,7 @@ namespace dialogue
         {
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
-            _ui.HideDialogue();
+            _ui?.HideDialogue();
             gameObject.SetActive(false);
             // Cursor.lockState = CursorLockMode.Locked;
             // Cursor.visible = false;
