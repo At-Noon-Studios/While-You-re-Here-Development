@@ -4,6 +4,7 @@ using Interactable;
 using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
+using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace chopping_logs
     {
         [Header("Minigame Settings")] 
         [SerializeField] private Transform logPlaceholder;
+        [SerializeField] private EventChannel cancelEvent;
 
         [SerializeField] private Transform minigameStartPoint;
 
@@ -45,6 +47,22 @@ namespace chopping_logs
             }
         }
 
+        private void OnEnable()
+        {
+            cancelEvent.OnRaise += OnCancelInput;
+        }
+
+        private void OnDisable()
+        {
+            cancelEvent.OnRaise -= OnCancelInput;
+        }
+
+        private void OnCancelInput()
+        {
+            if (IsCurrentMinigameActive && IsMinigameActive)
+                EndMinigame();
+        }
+        
         public override void Interact(IInteractor interactor)
         {
             var player = GameObject.FindWithTag("Player");
