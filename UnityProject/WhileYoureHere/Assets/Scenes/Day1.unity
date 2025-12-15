@@ -811,6 +811,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 263df739b73d67140af48a1e8b8edda4, type: 3}
+--- !u!1 &1517825413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2034364289774809999, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 3331939893572690550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1727412458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1230,6 +1235,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8534379874927096128}
     - target: {fileID: 3436861685434282821, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 662d51b762cf4e64c848116861993bdd, type: 2}
+    - target: {fileID: 3436861685434282821, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: notebookManager
       value: 
       objectReference: {fileID: 6244422469016205612}
@@ -1514,7 +1523,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2fb64858eb47ac49a593cedf5735cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::notebook.NotebookManager
-  notebook: {fileID: 11400000, guid: c76b785de9413414aa48600d3007f046, type: 2}
+  notebook: {fileID: 1517825413}
+  notebookEvent: {fileID: 11400000, guid: c76b785de9413414aa48600d3007f046, type: 2}
 --- !u!114 &7097879429437767956 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6920691892933776911, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
