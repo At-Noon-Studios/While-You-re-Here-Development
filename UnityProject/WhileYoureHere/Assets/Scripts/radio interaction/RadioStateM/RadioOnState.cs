@@ -7,7 +7,6 @@
 
         public void Enter()
         {
-            _radioController.TurnRadioOn();
             _radioController.ShowOnCanvas();
         }
 
@@ -17,6 +16,7 @@
 
         public void Update()
         {
+
         }
     }
 }

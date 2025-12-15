@@ -13,6 +13,7 @@
 
         public void Exit()
         {
+            _radioController.TurnRadioOn();
         }
 
         public void Update()
