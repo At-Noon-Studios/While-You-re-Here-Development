@@ -65,7 +65,7 @@ public class SweepingArea : InteractableBehaviour
 
     void Update()
     {
-        Debug.Log("Status of mini-game is: " + IsMiniGameActive);
+        // Debug.Log("Status of mini-game is: " + IsMiniGameActive);
         if (!broom.IsBroomBeingHeld || !IsMiniGameActive) return;
         
         StartSweepingMinigame();
@@ -84,7 +84,7 @@ public class SweepingArea : InteractableBehaviour
 
         broomMD.SetMiniGameStartPos();
         time += Time.deltaTime;
-        if (time >= 2 && time <= 3)
+        if (time >= 4 && time <= 5)
         {
             EndSweepingMinigame();
             time = 0;
