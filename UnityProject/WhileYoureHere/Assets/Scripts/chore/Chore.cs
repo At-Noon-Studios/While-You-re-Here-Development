@@ -31,8 +31,8 @@ namespace chore
                 {
                     { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory },
                     { ChoreComponent.ChoreComponentType.LogPlacement, CcLogPlacement.CreateFactory},
-                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory}
-
+                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory},
+                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcLogChopping.CreateFactory}
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)
