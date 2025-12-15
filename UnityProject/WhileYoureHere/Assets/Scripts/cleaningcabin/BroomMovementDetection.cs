@@ -16,7 +16,7 @@ namespace cleaningcabin
         private float _broomYPos;
 
         private float _broomSpeed = 0.004f;
-        private float _sweepingSpeed = 20f;
+        [SerializeField] private float _sweepingSpeed = 5f;
         
         private Transform _basePos;
 
@@ -50,7 +50,7 @@ namespace cleaningcabin
         public void SetMiniGameStartPos()
         {
             broomModel.localRotation = Quaternion.Euler(-90f, 0f, 0f);
-            broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 2.5f);
+            broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 1.3f);
         }
 
         public void ResetMiniGamePos()
@@ -94,7 +94,7 @@ namespace cleaningcabin
                 // colorArea.material.color = tempcolor;
                 
                 Debug.Log("Sweeping scale before: " + sweepingScale);
-                sweepingScale = Vector3.Lerp(sweepingScale, Vector3.zero, Time.deltaTime * _broomSpeed);
+                sweepingArea.transform.localScale = Vector3.Lerp(sweepingArea.transform.localScale, Vector3.zero, Time.deltaTime * _sweepingSpeed);
                 Debug.Log("Sweeping scale after: " + sweepingScale);
                 
             }
