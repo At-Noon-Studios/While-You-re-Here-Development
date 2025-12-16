@@ -23,5 +23,17 @@ namespace radio_interaction
         {
             radioController.OnTunePressed();
         }
+
+        public override void OnHoverEnter(IInteractor interactor)
+        {
+            base.OnHoverEnter(interactor);
+            InteractiveCanvas.gameObject.SetActive(true);
+        }
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            base.OnHoverEnter(interactor);
+            InteractiveCanvas.gameObject.SetActive(false);
+        }
+        
     }
 }
