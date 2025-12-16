@@ -1,11 +1,10 @@
-﻿using chore;
-using ScriptableObjects.chores;
+﻿using ScriptableObjects.chores;
 
-namespace component.making_tea
+namespace chore.making_tea
 {
     public class CcWaterBoiled : ChoreComponent
     {
-        public CcWaterBoiled(string n, string d) : base(n, d)
+        private CcWaterBoiled(string n, string d) : base(n, d)
         {
             ComponentType = ChoreComponentType.WaterBoiled;
         }

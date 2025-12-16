@@ -1,22 +1,19 @@
-﻿using chore;
-using ScriptableObjects.chores;
+﻿using ScriptableObjects.chores;
 
-namespace component.making_tea
+namespace chore.making_tea
 {
     public class CcCupFilled : ChoreComponent
     {
-        private float _requiredFill;
-
-        public CcCupFilled(string n, string d, float req) : base(n, d)
+        private CcCupFilled(string name, string desc)
+            : base(name, desc)
         {
-            _requiredFill = req;
             ComponentType = ChoreComponentType.CupFilled;
         }
 
         public static ChoreComponent CreateFactory(SoChoreComponent soChore)
         {
             var so = soChore as SoCcCupFilled;
-            return new CcCupFilled(so.componentName, so.description, so.requiredFill);
+            return new CcCupFilled(so.componentName, so.description);
         }
 
         public override void EnableComponent()
@@ -31,7 +28,7 @@ namespace component.making_tea
             ChoreEvents.OnCupFilled -= Done;
         }
 
-        void Done()
+        private void Done()
         {
             MarkCompleted();
             TriggerComponentCompleted(this);

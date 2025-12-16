@@ -41,7 +41,7 @@ namespace Interactable
 
         private void Awake()
         {
-            _movementController = GetComponent<MovementController>();
+            // _movementController = GetComponent<MovementController>();
 
             _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
         }
@@ -104,39 +104,46 @@ namespace Interactable
                     CanDropTablePickup())
                     return;
 
-                if (_currentTarget != null)
+                if (NoTarget)
                 {
-                    if (_currentTarget.IsInteractableBy(this))
-                        _currentTarget.Interact(this);
-                    else
-                        _uiManager?.PulseInteractPrompt();
+                    if (_sittingChair != null)
+                        _sittingChair.ForceStandUp();
+
                     return;
                 }
 
-                if (_sittingChair != null)
-                    _sittingChair.ForceStandUp();
+                if (TargetInteractable)
+                {
+                    InteractWithTarget();
+                }
+                else
+                {
+                    _uiManager?.PulseInteractPrompt();
+                }
 
                 return;
             }
 
-            if (_currentTarget == null)
+            if (NoTarget)
             {
                 HeldObject?.Drop();
                 return;
             }
 
-            if (_currentTarget.IsInteractableBy(this))
+            if (TargetInteractable)
             {
-                _currentTarget.Interact(this);
-                return;
+                InteractWithTarget();
             }
-
-            _uiManager?.PulseInteractPrompt();
+            else
+            {
+                _uiManager?.PulseInteractPrompt();
+            }
         }
+
 
         private void ClickInteract()
         {
-            if (_currentTarget == null)
+            if (NoTarget)
             {
                 HeldObject?.Drop();
                 return;
@@ -144,13 +151,14 @@ namespace Interactable
 
             if (_currentTarget is IClickInteractable)
             {
-                _currentTarget.ClickInteract(this);
-                OnHoverExit(_currentTarget);
-                return;
+                ClickInteractWithTarget();
             }
-
-            _uiManager?.PulseInteractPrompt();
+            else
+            {
+                _uiManager?.PulseInteractPrompt();
+            }
         }
+
 
         #endregion
 
@@ -159,12 +167,12 @@ namespace Interactable
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
-            int hitCount = LookForHits(hits);
+            var hitCount = LookForHits(hits);
 
             IInteractable bestTarget = null;
-            float closestDistance = float.MaxValue;
+            var closestDistance = float.MaxValue;
 
-            for (int i = 0; i < hitCount; i++)
+            for (var i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
                     HeldObject != null)
@@ -190,29 +198,43 @@ namespace Interactable
                 data.InteractionReach);
         }
 
-        private void UpdateBestTarget(RaycastHit candidate, ref float closestDistance, ref IInteractable bestTarget, bool tableMode)
+        private void UpdateBestTarget(
+            RaycastHit candidate,
+            ref float closestDistance,
+            ref IInteractable bestTarget,
+            bool tableMode)
         {
             if (candidate.distance >= closestDistance)
                 return;
 
-            var collider = candidate.collider;
+            if (!TryGetBestInteractable(candidate.collider, tableMode, out var interactable))
+                return;
+
+            bestTarget = interactable;
+            closestDistance = candidate.distance;
+        }
+        
+        private bool TryGetBestInteractable(
+            Collider collider,
+            bool tableMode,
+            out IInteractable interactable)
+        {
+            interactable = null;
 
             if (tableMode)
             {
                 if (collider.TryGetComponent<ITablePickup>(out var tablePickup) &&
                     tablePickup.IsDetectableBy(this))
                 {
-                    bestTarget = tablePickup;
-                    closestDistance = candidate.distance;
-                    return;
+                    interactable = tablePickup;
+                    return true;
                 }
 
                 if (collider.TryGetComponent<ObjectHolder>(out var objectHolder) &&
                     objectHolder.IsDetectableBy(this))
                 {
-                    bestTarget = objectHolder;
-                    closestDistance = candidate.distance;
-                    return;
+                    interactable = objectHolder;
+                    return true;
                 }
             }
             else
@@ -220,19 +242,21 @@ namespace Interactable
                 if (collider.TryGetComponent<Placeable>(out var placeable) &&
                     placeable.IsDetectableBy(this))
                 {
-                    bestTarget = placeable;
-                    closestDistance = candidate.distance;
-                    return;
+                    interactable = placeable;
+                    return true;
                 }
             }
 
-            if (collider.TryGetComponent<IInteractable>(out var interactable) &&
-                interactable.IsDetectableBy(this))
+            if (collider.TryGetComponent<IInteractable>(out var fallback) &&
+                fallback.IsDetectableBy(this))
             {
-                bestTarget = interactable;
-                closestDistance = candidate.distance;
+                interactable = fallback;
+                return true;
             }
+
+            return false;
         }
+
 
         private void SetCurrentTarget(IInteractable newTarget)
         {
@@ -285,6 +309,10 @@ namespace Interactable
 
             _movementController.SetMovementModifier(modifier);
         }
+        
+        #endregion
+
+        #region Tablemode
 
         public void EnableTableMode(bool enable)
         {
@@ -308,7 +336,8 @@ namespace Interactable
 
             return false;
         }
-
+        
         #endregion
+        
     }
 }

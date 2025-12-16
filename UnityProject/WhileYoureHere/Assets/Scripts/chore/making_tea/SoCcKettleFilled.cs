@@ -1,7 +1,7 @@
 using ScriptableObjects.chores;
 using UnityEngine;
 
-namespace component.making_tea
+namespace chore.making_tea
 {
     [CreateAssetMenu(fileName="CcKettleFilled", menuName="QuestSystem/Components/KettleFilled", order=1)]
     public class SoCcKettleFilled : SoChoreComponent

@@ -21,7 +21,7 @@ namespace making_tea
         [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
 
         [Header("Camera FOV Settings")]
-        [SerializeField] private float sitFOV = 60f;
+        [SerializeField] [Range(0,180)] private float sitFOV = 60f;
         [SerializeField] private bool changeFOV = true;
 
         private float _originalFOV;

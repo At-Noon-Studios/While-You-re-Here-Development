@@ -1,16 +1,13 @@
-using chore;
 using ScriptableObjects.chores;
 
-namespace component.making_tea
+namespace chore.making_tea
 {
     public class CcKettleFilled : ChoreComponent
     {
-        private float _requiredFill;
 
-        public CcKettleFilled(string name, string desc, float requiredFill)
+        private CcKettleFilled(string name, string desc)
             : base(name, desc)
         {
-            _requiredFill = requiredFill;
             ComponentType = ChoreComponentType.KettleFilled;
         }
 
@@ -19,7 +16,7 @@ namespace component.making_tea
             var s = so as SoCcKettleFilled;
             if (s == null) return null;
 
-            return new CcKettleFilled(s.componentName, s.description, s.requiredFill);
+            return new CcKettleFilled(s.componentName, s.description);
         }
 
         public override void EnableComponent()

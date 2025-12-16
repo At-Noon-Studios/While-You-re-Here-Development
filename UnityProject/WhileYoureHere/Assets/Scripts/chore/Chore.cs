@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using component;
-using component.making_tea;
 using chore.chopping_wood;
+using chore.making_tea;
 using chore.scavenging;
 using ScriptableObjects.chores;
 using UnityEngine;
