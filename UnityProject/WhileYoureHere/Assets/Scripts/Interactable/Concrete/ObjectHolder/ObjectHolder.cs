@@ -105,7 +105,7 @@ namespace Interactable.Concrete.ObjectHolder
             pickup.ForceDropFromTableMode();
         }
 
-        public override bool InteractableBy(IInteractor interactor)
+        public override bool IsInteractableBy(IInteractor interactor)
         {
             if (interactor is PlayerInteractionController { IsTableMode: true })
                 return true;

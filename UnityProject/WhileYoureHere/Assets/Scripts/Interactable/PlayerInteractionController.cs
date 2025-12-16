@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Interactable
 {
+    [DisallowMultipleComponent]
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
         [Header("Interaction Settings")]
@@ -169,7 +170,7 @@ namespace Interactable
                     HeldObject != null)
                     continue;
 
-                UpdateBestTarget(hits[i], ref closest, ref bestTarget, IsTableMode);
+                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;
@@ -189,47 +190,47 @@ namespace Interactable
                 data.InteractionReach);
         }
 
-        private static void UpdateBestTarget(
-            RaycastHit hit,
-            ref float closest,
-            ref IInteractable best,
-            bool tableMode)
+        private void UpdateBestTarget(RaycastHit candidate, ref float closestDistance, ref IInteractable bestTarget, bool tableMode)
         {
-            if (hit.distance >= closest)
+            if (candidate.distance >= closestDistance)
                 return;
 
-            var col = hit.collider;
+            var collider = candidate.collider;
 
             if (tableMode)
             {
-                if (col.TryGetComponent<ITablePickup>(out var tp))
+                if (collider.TryGetComponent<ITablePickup>(out var tablePickup) &&
+                    tablePickup.IsDetectableBy(this))
                 {
-                    best = tp;
-                    closest = hit.distance;
+                    bestTarget = tablePickup;
+                    closestDistance = candidate.distance;
                     return;
                 }
 
-                if (col.TryGetComponent<ObjectHolder>(out var oh))
+                if (collider.TryGetComponent<ObjectHolder>(out var objectHolder) &&
+                    objectHolder.IsDetectableBy(this))
                 {
-                    best = oh;
-                    closest = hit.distance;
+                    bestTarget = objectHolder;
+                    closestDistance = candidate.distance;
                     return;
                 }
             }
             else
             {
-                if (col.TryGetComponent<Placeable>(out var placeable))
+                if (collider.TryGetComponent<Placeable>(out var placeable) &&
+                    placeable.IsDetectableBy(this))
                 {
-                    best = placeable;
-                    closest = hit.distance;
+                    bestTarget = placeable;
+                    closestDistance = candidate.distance;
                     return;
                 }
             }
 
-            if (col.TryGetComponent<IInteractable>(out var interactable))
+            if (collider.TryGetComponent<IInteractable>(out var interactable) &&
+                interactable.IsDetectableBy(this))
             {
-                best = interactable;
-                closest = hit.distance;
+                bestTarget = interactable;
+                closestDistance = candidate.distance;
             }
         }
 
@@ -243,8 +244,7 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-
-            _uiManager?.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.IsInteractableBy(this));
             target.OnHoverEnter(this);
         }
 
@@ -254,11 +254,23 @@ namespace Interactable
             target?.OnHoverExit(this);
         }
 
-        #endregion
+        private bool NoTarget => _currentTarget == null;
+        
+        private bool TargetInteractable => _currentTarget != null && _currentTarget.IsInteractableBy(this);
+        
+        private void InteractWithTarget()
+        {
+            _currentTarget?.Interact(this);
+            OnHoverEnter(_currentTarget); // Refresh
+        }
 
-        #region Utility
+        private void ClickInteractWithTarget()
+        {
+            _currentTarget?.ClickInteract(this);
+            OnHoverExit(_currentTarget);
+        }
 
-        private void UpdateMovementSpeed([CanBeNull] IHoldableObject obj)
+        private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
         {
             if (_movementController == null) return;
 

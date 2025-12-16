@@ -1,3 +1,4 @@
+using PlayerControls;
 using ScriptableObjects.Controls;
 using ScriptableObjects.Events;
 using UnityEngine;

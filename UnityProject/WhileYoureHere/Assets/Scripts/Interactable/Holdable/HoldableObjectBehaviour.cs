@@ -29,16 +29,18 @@ namespace Interactable.Holdable
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
+            Renderers = GetComponentsInChildren<Renderer>();
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
             var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
-            
-            var cam = player.GetComponentInChildren<Camera>();
-            if (cam != null)
-                _playerCamera = cam.transform;
+            if (player != null)
+            {
+                var cam = player.GetComponentInChildren<Camera>();
+                if (cam != null)
+                    _playerCamera = cam.transform;
+            }
         }
 
         protected void Start()
@@ -48,10 +50,9 @@ namespace Interactable.Holdable
 
         private void Update()
         {
-            if (interactionCanvas == null ||
+            if (!interactionCanvas ||
                 !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-            
+                !_playerCamera) return;
             interactionCanvas.transform.LookAt(_playerCamera);
             interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
@@ -69,26 +70,32 @@ namespace Interactable.Holdable
         
         private void PickUp(IInteractor interactor)
         {
-            GetComponent<PickUpSound>().PlayPickUpSound();
-
+            if (_heldVersion) SetHeldVisual(true, _heldVersion);
+            if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound()
             if (_currentHolder != null)
             {
                 _currentHolder.ClearHeldObject(this);
                 _currentHolder = null;
             }
-
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
         }
-
-        public void Drop()
+        
+        private void SetHeldVisual(bool state, GameObject heldVisual) {
+            heldVisual.SetActive(state);
+            foreach (var r in Renderers)
+            {
+                r.enabled = !state;
+            }
+        }
+        
+        public virtual void Drop()
         {
-            if (_holder == null)
-                throw new Exception("Tried to drop an item that wasn't being held");
-
+            if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
+            if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder.SetHeldObject(null);
             _holder = null;
 
@@ -117,8 +124,9 @@ namespace Interactable.Holdable
         {
             _rigidbody.isKinematic = true;
             transform.SetParent(interactor.HoldPoint);
-            transform.localRotation = Quaternion.Euler(data.Rotation);
-            transform.localPosition = data.Offset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+            transform.localPosition = data.HoldingOffset;
+            gameObject.layer = HoldLayer;
         }
 
         private void Detach()
@@ -128,6 +136,22 @@ namespace Interactable.Holdable
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
         }
+        
+        private void InitializeHeldVersion()
+        {
+            if (!data.HoldingPrefab) return;
+            _heldVersion = Instantiate(data.HoldingPrefab, transform, true);
+            _heldVersion!.transform.localPosition = data.HoldingPrefab.transform.position;
+            _heldVersion.SetActive(false);
+            DisableHeldVersionColliders();
+        }
+
+        private void DisableHeldVersionColliders()
+        {
+            var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
+            heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
+            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
+        }
 
         public override void OnHoverEnter(IInteractor interactor)
         {
@@ -135,7 +159,7 @@ namespace Interactable.Holdable
 
             var canInteract = _holder == null;
 
-            if (interactionCanvas != null)
+            if (interactionCanvas)
                 interactionCanvas.gameObject.SetActive(canInteract);
         }
 
@@ -143,7 +167,7 @@ namespace Interactable.Holdable
         {
             base.OnHoverExit(interactor);
 
-            if (interactionCanvas != null)
+            if (interactionCanvas)
                 interactionCanvas.gameObject.SetActive(false);
         }
 

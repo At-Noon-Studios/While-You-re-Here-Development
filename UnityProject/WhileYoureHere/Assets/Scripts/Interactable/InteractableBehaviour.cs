@@ -13,6 +13,7 @@ namespace Interactable
         private Renderer[] _renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
+        public bool blockInteraction = false;
 
         #region Unity event functions
         
@@ -32,7 +33,9 @@ namespace Interactable
         
         #region Interface implementation
         
-        public virtual bool InteractableBy(IInteractor interactor) => true;
+        public virtual bool IsInteractableBy(IInteractor interactor) => !blockInteraction;
+        
+        public virtual bool IsDetectableBy(IInteractor interactor) => !blockInteraction;
 
         public abstract void Interact(IInteractor interactor);
 
@@ -41,8 +44,14 @@ namespace Interactable
             
         }
 
+        public virtual void BlockInteraction(bool value)
+        {
+            blockInteraction = value;
+        }
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
+            if (blockInteraction) return;
             AddOutlineMaterialToRenderers();
         }
         
