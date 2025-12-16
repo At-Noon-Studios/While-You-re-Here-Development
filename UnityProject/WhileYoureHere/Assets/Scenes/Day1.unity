@@ -288,9 +288,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 954108481944852147, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+      propertyPath: furnace
+      value: 
+      objectReference: {fileID: 1284384227}
     - target: {fileID: 3622156644969669991, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+      propertyPath: mouseUpImage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+      propertyPath: guideLineImage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+      propertyPath: mouseDownImage
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6012344329808951788, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: m_Enabled
@@ -309,6 +325,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+--- !u!114 &1284384227 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6497605004374851616, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 3331939893572690550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48118b82d9804a8084cc76836e59518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
+--- !u!114 &2107201857 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
+  m_PrefabInstance: {fileID: 1242199016}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
 --- !u!108 &112480277093400875 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 4222807520271628449, guid: 0c21fee426bcddf4b91a514572eda541, type: 3}
@@ -344,6 +382,10 @@ PrefabInstance:
     - target: {fileID: 2505488507800546557, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 2770765682479429768, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3842484478832325192, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -385,11 +427,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7108461317686993886, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7108461317686993886, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744642309851371536, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 2107201857}
+    - target: {fileID: 8826726291947751137, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: stump
+      value: 
+      objectReference: {fileID: 3331939893572690551}
+    m_RemovedComponents:
+    - {fileID: 1012286234927280943, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+    - {fileID: 685878410467593054, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+    - {fileID: 4602267505526165020, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+--- !u!114 &3331939893572690551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7744642309851371536, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 3331939893572690550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c2ab104d18588499a92552d99bbe53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.Stump
 --- !u!65 &3331939893572690554 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 3274326374424613273, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
