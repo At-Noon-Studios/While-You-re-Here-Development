@@ -14,7 +14,7 @@ namespace make_a_fire
     {
         [Header("Burning Objects")] 
         [SerializeField] private HoldableObjectBehaviour newspaper;
-        [SerializeField] private List<HoldableObjectBehaviour> logs;
+        private List<FurnacePlaceable> logs;
         
         [Header("Fire Behaviour")] 
         [SerializeField] private VisualEffect fireParticle;
@@ -38,12 +38,12 @@ namespace make_a_fire
         private void Update()
         {
             if (!newspaper.IsPlaced) return;
-
+            logs = GameObject.FindObjectsOfType<FurnacePlaceable>().ToList();
             var currentPlacedLogs = CountPlacedLogs();
+            Debug.Log(currentPlacedLogs);
             if (currentPlacedLogs > _placedLogsCount)
             {
                 _placedLogsCount = currentPlacedLogs;
-
                 switch (_fireStarted)
                 {
                     case false when _placedLogsCount == 1:

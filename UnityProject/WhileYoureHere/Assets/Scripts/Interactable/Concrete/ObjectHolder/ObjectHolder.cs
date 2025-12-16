@@ -23,9 +23,10 @@ namespace Interactable.Concrete.ObjectHolder
             var heldGameObject = (heldObject as Component)?.gameObject;
             if (!heldGameObject) return;
             
-            var placedData = placedObjects.FirstOrDefault(e => e.objectPrefab == heldGameObject);
+            var placedData = placedObjects.FirstOrDefault(e => e.objectPrefab.GetType() == heldGameObject.GetType());
             if (placedData != null)
             {
+                placedObjects.Remove(placedData);
                 heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
                 _placedObjectsInHolders.Add(placedData);
             }
@@ -49,8 +50,7 @@ namespace Interactable.Concrete.ObjectHolder
             var heldGameObject = (heldObject as Component)?.gameObject;
             if (!heldGameObject) return false;
 
-            // Kan dit object hier geplaatst worden?
-            return placedObjects.Any(e => e.objectPrefab == heldGameObject);
+            return placedObjects.Any(e => e.objectPrefab.GetType() == heldGameObject.GetType());
         }
 
 

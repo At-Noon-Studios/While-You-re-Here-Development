@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8335175453207441324}
   - component: {fileID: -2941721790975030185}
   - component: {fileID: 841079358762332062}
-  - component: {fileID: 1892110810572749702}
   - component: {fileID: -3804988622431821018}
   - component: {fileID: -7836084308516250623}
+  - component: {fileID: -6755572252276641950}
   m_Layer: 0
   m_Name: PineLogHalf
   m_TagString: Untagged
@@ -143,20 +143,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0022, y: 0.0010999998, z: 0.0029999996}
   m_Center: {x: 0, y: 0.0005499999, z: 0}
---- !u!114 &1892110810572749702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4332810610412071041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
-  interactionCanvas: {fileID: 0}
-  data: {fileID: 11400000, guid: db20d450890e6804a9517db56d2c1f5d, type: 2}
 --- !u!114 &-3804988622431821018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +253,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6755572252276641950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4332810610412071041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f54d4bc8f114b4352be11b4dd221a8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FurnacePlaceable
+  blockInteraction: 0
+  interactionCanvas: {fileID: 0}
+  data: {fileID: 11400000, guid: db20d450890e6804a9517db56d2c1f5d, type: 2}
 --- !u!1 &9045743887614316777
 GameObject:
   m_ObjectHideFlags: 0
