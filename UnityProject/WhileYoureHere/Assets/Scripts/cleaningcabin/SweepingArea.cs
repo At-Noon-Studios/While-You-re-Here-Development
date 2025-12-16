@@ -24,6 +24,8 @@ public class SweepingArea : InteractableBehaviour
     public GameObject camPos;
 
     private Material _material;
+
+    private float _lerpSpeed = 1.0f;
     protected new void Awake()
     {
         base.Awake();

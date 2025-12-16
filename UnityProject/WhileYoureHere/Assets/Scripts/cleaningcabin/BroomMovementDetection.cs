@@ -11,10 +11,6 @@ namespace cleaningcabin
         private float _maxBroomXPos = 3f;
         private float _broomXPos;
 
-        private float _minBroomYPos = -3f;
-        private float _maxBroomYPos = 3f;
-        private float _broomYPos;
-
         private float _broomSpeed = 0.004f;
         [SerializeField] private float sweepingSpeed = 1f;
 
@@ -35,7 +31,6 @@ namespace cleaningcabin
             if (broomModel != null)
             {
                 _broomXPos = broomModel.localPosition.x;
-                _broomYPos = broomModel.localPosition.y;
             }
             _sweepingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material;
             _endingSweepingColor = Color.white;
@@ -44,7 +39,7 @@ namespace cleaningcabin
         public void SetMiniGameStartPos()
         {
             broomModel.localRotation = Quaternion.Euler(-90f, 0f, 0f);
-            broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 1.5f);
+            broomModel.localPosition = new Vector3(_broomXPos, 0f, 1.5f);
         }
 
         public void ResetMiniGamePos()
@@ -62,12 +57,7 @@ namespace cleaningcabin
             _broomXPos = Math.Clamp(_broomXPos, _minBroomXPos * sweepingArea.transform.localScale.x,
                 _maxBroomXPos * sweepingArea.transform.localScale.x);
 
-            _broomYPos += delta.y * _broomSpeed;
-            _broomYPos = Math.Clamp(_broomYPos, _minBroomYPos * sweepingArea.transform.localScale.y,
-                _maxBroomYPos * sweepingArea.transform.localScale.y);
-
-            var broomPos = new Vector3(_broomXPos, _broomYPos,
-                broomModel.localPosition.z);
+            var broomPos = new Vector3(_broomXPos, 0.25f, 2.5f);
             broomModel.localPosition = broomPos;
             
             if (delta.x != 0 && delta.y != 0)
