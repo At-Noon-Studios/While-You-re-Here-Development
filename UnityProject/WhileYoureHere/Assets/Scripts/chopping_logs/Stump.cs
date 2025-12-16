@@ -15,7 +15,6 @@ namespace chopping_logs
         [Header("Minigame Settings")] 
         [SerializeField] private Transform logPlaceholder;
         [SerializeField] private EventChannel cancelEvent;
-
         [SerializeField] private Transform minigameStartPoint;
 
         [Header("UI References")]
@@ -124,8 +123,7 @@ namespace chopping_logs
 
             controller.SetHeldObject(null);
         }
-
-
+        
         private void StartMinigame()
         {
             if (!_hasLog) return;
@@ -133,60 +131,51 @@ namespace chopping_logs
             IsMinigameActive = true;
             IsCurrentMinigameActive = true;
 
-            var camera = GameObject.FindWithTag("MainCamera");
             var player = GameObject.FindWithTag("Player");
-            if (player != null && minigameStartPoint != null)
-            {
-                player.transform.SetParent(minigameStartPoint);
+            var cameraController = Camera.main?.GetComponent<CameraController>();
 
-                player.transform.position = minigameStartPoint.position;
-                player.transform.rotation = minigameStartPoint.rotation;
-                camera.transform.rotation = minigameStartPoint.rotation;
+            if (player != null)
+            {
+                player.transform.SetPositionAndRotation(
+                    minigameStartPoint.position,
+                    minigameStartPoint.rotation
+                );
+
+                player.GetComponent<MovementController>()?.PauseMovement();
             }
 
-            player?.GetComponent<MovementController>()?.PauseMovement();
-
-            Camera.main?.GetComponent<CameraController>()?.PauseCameraMovement();
+            cameraController?.PauseCameraMovement();
 
             ChopUIManager.Instance?.ShowUI();
-
-            var axeDetector = player.GetComponentInChildren<AxeHitDetector>();
-            if (axeDetector != null)
-            {
-                axeDetector.SetBaseRotation();
-                Debug.Log("Base rotation set at minigame start.");
-            }
+            player.GetComponentInChildren<AxeHitDetector>()?.SetBaseRotation();
         }
-
+        
         public void EndMinigame()
         {
             IsMinigameActive = false;
             IsCurrentMinigameActive = false;
 
             var player = GameObject.FindWithTag("Player");
-            player.transform.SetParent(null);
+            var cameraController = Camera.main?.GetComponent<CameraController>();
 
-            player?.GetComponent<MovementController>()?.ResumeMovement();
+            player.GetComponent<MovementController>()?.ResumeMovement();
+            
+            cameraController?.SyncRotation(Camera.main.transform.rotation);
+            cameraController?.ResumeCameraMovement();
 
             ChopUIManager.Instance?.HideAllUI();
-            StartCoroutine(ResumeCameraAfterDelay(2f));
-
             StartCoroutine(PlayCrackTwice(0.12f));
 
             var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
-
             ClearLog();
 
             if (chopTarget != null)
-            {
                 ChoreEvents.TriggerLogChopped(chopTarget.GetLog());
-            }
         }
 
         private void ClearLog()
         {
-            if (_logObject != null)
-                Destroy(_logObject);
+            if (_logObject != null) Destroy(_logObject);
 
             _logObject = null;
             _hasLog = false;
@@ -223,31 +212,15 @@ namespace chopping_logs
             return string.Empty;
         }
 
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            HideInteractionSprites();
-        }
+        public override void OnHoverExit(IInteractor interactor) => HideInteractionSprites();
 
         private void HideInteractionSprites()
         {
-            if (placeLogSprite != null)
-                placeLogSprite.enabled = false;
-
-            if (cutLogSprite != null)
-                cutLogSprite.enabled = false;
+            if (placeLogSprite != null) placeLogSprite.enabled = false;
+            if (cutLogSprite != null) cutLogSprite.enabled = false;
         }
         
-        public bool IsReadyForChop()
-        {
-            return IsMinigameActive && _hasLog;
-        }
-
-        private static IEnumerator ResumeCameraAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            Camera.main?.GetComponent<CameraController>()?.ResumeCameraMovement();
-            Debug.Log("Camera movement resumed after delay.");
-        }
+        public bool IsReadyForChop() => IsMinigameActive && _hasLog;
 
         private IEnumerator PlayCrackTwice(float delayBetween)
         {
