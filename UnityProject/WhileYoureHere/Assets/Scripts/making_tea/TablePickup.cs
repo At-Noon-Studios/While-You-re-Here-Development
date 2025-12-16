@@ -103,7 +103,7 @@ namespace making_tea
 
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
-        public override bool InteractableBy(IInteractor interactor)
+        public bool InteractableBy(IInteractor interactor)
         {
             return (interactor as PlayerInteractionController)?.IsTableMode ?? false;
         }
@@ -163,6 +163,6 @@ namespace making_tea
                 interactionCanvasSecondary.gameObject.SetActive(false);
         }
 
-        public abstract override void EnableCollider(bool state);
+        public new abstract void EnableCollider(bool state);
     }
 }

@@ -1,5 +1,6 @@
 using Interactable;
 using player_controls;
+using PlayerControls;
 using UnityEngine;
 
 namespace making_tea
@@ -75,6 +76,8 @@ namespace making_tea
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
+        
+        public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
         {

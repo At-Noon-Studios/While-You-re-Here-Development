@@ -106,7 +106,7 @@ namespace Interactable
 
                 if (_currentTarget != null)
                 {
-                    if (_currentTarget.InteractableBy(this))
+                    if (_currentTarget.IsInteractableBy(this))
                         _currentTarget.Interact(this);
                     else
                         _uiManager?.PulseInteractPrompt();
@@ -125,7 +125,7 @@ namespace Interactable
                 return;
             }
 
-            if (_currentTarget.InteractableBy(this))
+            if (_currentTarget.IsInteractableBy(this))
             {
                 _currentTarget.Interact(this);
                 return;
@@ -162,7 +162,7 @@ namespace Interactable
             int hitCount = LookForHits(hits);
 
             IInteractable bestTarget = null;
-            float closest = float.MaxValue;
+            float closestDistance = float.MaxValue;
 
             for (int i = 0; i < hitCount; i++)
             {
@@ -274,13 +274,13 @@ namespace Interactable
         {
             if (_movementController == null) return;
 
-            if (obj == null)
+            if (holdableObject == null)
             {
                 _movementController.SetMovementModifier(1f);
                 return;
             }
 
-            float weight = Mathf.Clamp01(obj.Weight / 100f);
+            float weight = Mathf.Clamp01(holdableObject.Weight / 100f);
             float modifier = Mathf.Max(1f - weight, 0.4f);
 
             _movementController.SetMovementModifier(modifier);

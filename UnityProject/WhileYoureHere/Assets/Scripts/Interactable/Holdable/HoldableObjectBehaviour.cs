@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using ScriptableObjects.Interactable.Holdable;
 using UnityEngine;
 using Interactable.Concrete.ObjectHolder;
+using JetBrains.Annotations;
 
 namespace Interactable.Holdable
 {
@@ -16,11 +18,14 @@ namespace Interactable.Holdable
 
         private Rigidbody _rigidbody;
         private int _originalLayer;
-        private IInteractor _holder;
+        [CanBeNull] private IInteractor _holder;
+        [CanBeNull] private GameObject _heldVersion;
 
         private Transform _playerCamera;
 
         private ObjectHolder _currentHolder;
+        
+        private const int HoldLayer = 3;
 
         public bool IsCurrentlyHeld => _holder != null;
         public float Weight => data.Weight;
@@ -46,6 +51,7 @@ namespace Interactable.Holdable
         protected void Start()
         {
             _originalLayer = gameObject.layer;
+            InitializeHeldVersion();
         }
 
         private void Update()
@@ -71,7 +77,7 @@ namespace Interactable.Holdable
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
-            if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound()
+            if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
             if (_currentHolder != null)
             {
                 _currentHolder.ClearHeldObject(this);
