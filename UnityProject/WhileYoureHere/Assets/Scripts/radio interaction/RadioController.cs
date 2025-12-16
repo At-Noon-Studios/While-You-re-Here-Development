@@ -23,7 +23,8 @@ namespace radio_interaction
         [SerializeField] private Canvas onStateCanvas;
         [SerializeField] private Canvas offStateCanvas;
         [SerializeField] private Canvas slideCanvas;
-
+        [SerializeField] private DialogueManager dialogueManager;
+        [SerializeField] private AudioClip classicRadioClip;
         private const string ClearChannelNodeName = "radio_clear_node";
         private const string StaticChannelNodeName = "radio_static";
 
@@ -37,6 +38,8 @@ namespace radio_interaction
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
         private DialogueNode _lastPlayedNode;
+        private readonly Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
+        private AudioSource _audioSource;
 
         private readonly struct RadioChannelProgress
         {
@@ -49,10 +52,6 @@ namespace radio_interaction
                 AudioTime = audioTime;
             }
         }
-
-        private readonly Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
-
-        [SerializeField] private DialogueManager dialogueManager;
 
         private void Start()
         {
@@ -67,6 +66,7 @@ namespace radio_interaction
             RadioStateMachine.ChangeState(new RadioOffState(this));
 
             _currentStationIndex = 0;
+            PlayClassicRadio();
         }
 
         private void Update()
@@ -101,8 +101,8 @@ namespace radio_interaction
 
         public bool ResetCamera()
         {
-            const float moveSpeed = 5f;
-            const float rotateSpeed = 5f;
+            const float moveSpeed = 8f;
+            const float rotateSpeed = 8f;
             cam.position = Vector3.Lerp(
                 cam.position,
                 _currentCameraPosition,
@@ -114,8 +114,8 @@ namespace radio_interaction
                 Time.deltaTime * rotateSpeed
             );
 
-            var positionDone = Vector3.Distance(cam.position, _currentCameraPosition) < 0.01f;
-            var rotationDone = Quaternion.Angle(cam.rotation, _currentCameraRotation) < 0.5f;
+            var positionDone = Vector3.Distance(cam.position, _currentCameraPosition) < 1f;
+            var rotationDone = Quaternion.Angle(cam.rotation, _currentCameraRotation) < 1f;
             return positionDone && rotationDone;
         }
 
@@ -128,6 +128,20 @@ namespace radio_interaction
 
             MoveSlider(deltaX);
             _lastMousePos = current;
+        }
+
+        public void ExitResetCam()
+        {
+            _movementController?.ResumeMovement();
+            _cameraController?.ResumeCameraMovement();
+        }
+
+        public void EnterResetCam()
+        {
+            if (slideCanvas.gameObject.activeSelf)
+            {
+                ShowSlideCanvas(false);
+            }
         }
 
         public void EnterTuningMode()
@@ -148,10 +162,6 @@ namespace radio_interaction
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
-            _movementController?.ResumeMovement();
-            _cameraController?.ResumeCameraMovement();
-
             onStateCanvas.gameObject.SetActive(true);
         }
 
@@ -177,12 +187,12 @@ namespace radio_interaction
                     RadioStateMachine.ChangeState(new TuningState(this));
                     break;
                 case TuningState:
-                    RadioStateMachine.ChangeState(new RadioOnState(this));
+                    RadioStateMachine.ChangeState(new ResetCameraState(this));
                     break;
             }
         }
 
-        public void SlideCanvasStatus(bool value)
+        public void ShowSlideCanvas(bool value)
         {
             slideCanvas.gameObject.SetActive(value);
         }
@@ -281,13 +291,32 @@ namespace radio_interaction
 
         public bool DonePlayingCorrectChannel()
         {
-            if (dialogueManager == null || _lastPlayedNode == null || _lastPlayedNode.sentences == null)
+            if (!dialogueManager ||
+                !_lastPlayedNode ||
+                _lastPlayedNode.sentences is null)
                 return false;
 
-            // maybe adding a condition for the last sentence of the node and then playing music if finished
-            return dialogueManager.GetCurrentSentenceIndex() == _lastPlayedNode.sentences.Count;
+            var lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
+
+            var finishedAllSentences =
+                dialogueManager.GetCurrentSentenceIndex() >= lastSentenceIndex;
+
+            return finishedAllSentences && OnCorrectChannel();
         }
 
+        public void PlayClassicRadio()
+        {
+            _audioSource.Stop();
+            _audioSource.clip = classicRadioClip;
+            _audioSource.loop = true;
+            _audioSource.Play();
+        }
+
+        public float GetCorrectChannelSentenceLenght()
+        {
+            var lastSentence = _lastPlayedNode.sentences.Count - 1;
+            return dialogueManager.GetSentenceAudioTime(lastSentence);
+        }
         #endregion
 
         #region private methods

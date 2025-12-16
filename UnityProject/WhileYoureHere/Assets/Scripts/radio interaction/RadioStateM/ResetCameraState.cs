@@ -7,10 +7,12 @@
 
         public void Enter()
         {
+            _radioController.EnterResetCam();
         }
 
         public void Exit()
         {
+            _radioController.ExitResetCam();
         }
 
         public void Update()

@@ -10,13 +10,13 @@ namespace radio_interaction
         public TuningState(RadioController radioController) => _radioController = radioController;
         private float timer;
         private float sliderTimer;
-        private const float sliderLifeTime = 5f;
+        private const float SliderLifeTime = 5f;
 
         public void Enter()
         {
             Debug.Log("Entered Tuning State");
             _radioController.EnterTuningMode();
-            _radioController.SlideCanvasStatus(true);
+            _radioController.ShowSlideCanvas(true);
             timer = 0;
         }
 
@@ -34,9 +34,9 @@ namespace radio_interaction
             _radioController.HandleMouseMovement();
             _radioController.TuneRadio();
 
-            if (sliderTimer >= sliderLifeTime)
+            if (sliderTimer >= SliderLifeTime)
             {
-                _radioController.SlideCanvasStatus(false);
+                _radioController.ShowSlideCanvas(false);
             }
 
             if (!_radioController.OnCorrectChannel())
@@ -49,10 +49,8 @@ namespace radio_interaction
                 timer += Time.deltaTime;
             }
             else timer = 0;
-            Debug.Log("timer is "+ timer);
             if (timer >= _radioController.GetTuningTimer())
             {
-                Debug.Log("Tuning done");
                 _radioController.RadioStateMachine.ChangeState(new ResetCameraState(_radioController));
             }
         }

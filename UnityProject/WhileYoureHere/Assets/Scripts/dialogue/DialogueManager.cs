@@ -88,7 +88,7 @@ namespace dialogue
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
 
-        public void StartRadioDialogue(DialogueNode node, float resumeTime, int startSentenceIndex = 0)
+        public void StartRadioDialogue(DialogueNode node, float resumeTime =0, int startSentenceIndex = 0)
         {
             Debug.Log("radio dialogue started");
             _nodes.Clear();
@@ -98,6 +98,7 @@ namespace dialogue
             _sentenceIndex = startSentenceIndex;
             gameObject.SetActive(true);
 
+            
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
             if (!_nodes.TryGetValue(node.nodeID, out _currentNode))
@@ -105,6 +106,7 @@ namespace dialogue
                 EndDialogue();
                 return;
             }
+            
 
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
             // PlayNextSentence();
@@ -214,13 +216,13 @@ namespace dialogue
 
                 if (_sentenceIndex < _activeSentences.Length)
                     _sentenceIndex += 1;
-                if (_sentenceIndex == _activeSentences.Length)
+                if (_activeSentences == null || _sentenceIndex >= _activeSentences.Length)
                 {
                     EndDialogue();
                     _sentenceIndex = 0;
+                    yield break;
                 }
-                else
-                    _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+                _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
             }
         }
 
@@ -259,6 +261,7 @@ namespace dialogue
 
             PlayNextSentence();
         }
+        
 
         private void CreateChoices()
         {
@@ -289,7 +292,7 @@ namespace dialogue
             gameObject.SetActive(false);
             // Cursor.lockState = CursorLockMode.Locked;
             // Cursor.visible = false;
-            _audioSource.Stop();
+            _audioSource?.Stop();
             // _movement?.ResumeMovement();
             // _cameraController?.ResumeCameraMovement();
         }
@@ -299,9 +302,22 @@ namespace dialogue
 
         public float GetCurrentAudioTime()
         {
-            return _audioSource.time != null ? _audioSource.time : 0;
-            if (_movementStopped) _movement?.ResumeMovement();
-            if (_cameraStopped) _cameraController?.ResumeCameraMovement();
+            if (_audioSource == null || !_audioSource.isPlaying)
+                return 0f;
+
+            return Mathf.Clamp(_audioSource.time, 0f, _audioSource.clip.length);
+        }
+        public float GetSentenceAudioTime(int sentenceIndex)
+        {
+            if (_currentNode == null || _currentNode.sentences == null)
+                return 0f;
+
+            if ((uint)sentenceIndex >= (uint)_currentNode.sentences.Count)
+                return 0f;
+
+            var sentence = _currentNode.sentences[sentenceIndex];
+            var clip = sentence != null ? sentence.audio : null;
+            return clip != null ? clip.length : 0f;
         }
     }
 }

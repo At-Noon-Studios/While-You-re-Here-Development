@@ -515,7 +515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &596766669
 RectTransform:
   m_ObjectHideFlags: 0
@@ -624,6 +624,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4278788653330936533, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4330681419341919229, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10
@@ -781,6 +785,7 @@ MonoBehaviour:
   offStateCanvas: {fileID: 878993309}
   slideCanvas: {fileID: 596766670}
   dialogueManager: {fileID: 1319547671}
+  classicRadioClip: {fileID: 8300000, guid: b90960a971262194b8d16216f7724738, type: 3}
 --- !u!4 &1184728053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4330681419341919229, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
@@ -798,6 +803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d7daff59c4e9b4ab5068ce5b71ddf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::radio_interaction.RadioPowerInteraction
+  blockInteraction: 0
   InteractiveCanvas: {fileID: 0}
 --- !u!1 &1250859588
 GameObject:
@@ -1191,7 +1197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &2004500710
 SpriteRenderer:
   m_ObjectHideFlags: 0
