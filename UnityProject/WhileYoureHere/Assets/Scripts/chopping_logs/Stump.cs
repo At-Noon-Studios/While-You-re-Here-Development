@@ -11,20 +11,22 @@ namespace chopping_logs
 {
     public class Stump : InteractableBehaviour
     {
-        [Header("Minigame Settings")] 
-        [SerializeField] private Transform logPlaceholder;
+        [Header("Minigame Settings")] [SerializeField]
+        private Transform logPlaceholder;
 
         [SerializeField] private Transform minigameStartPoint;
 
-        [Header("UI References")]
-        [SerializeField] private ChopUIManager uiManager;
+        [Header("UI References")] [SerializeField]
+        private ChopUIManager uiManager;
 
-        [Header("Sound Settings")] 
-        [SerializeField] private AudioClip logPlaceSound;
-        [SerializeField] private AudioClip logCrackSound;
-        
-        [Header("Sprite settings")]
-        [SerializeField] private Image cutLogSprite;
+        [Header("Sound Settings")] [SerializeField]
+        private AudioClip[] logPlaceSound;
+
+        [SerializeField] private AudioClip[] logCrackSound;
+
+        [Header("Sprite settings")] [SerializeField]
+        private Image cutLogSprite;
+
         [SerializeField] private Image placeLogSprite;
 
         public static bool IsCurrentMinigameActive { get; private set; }
@@ -98,7 +100,7 @@ namespace chopping_logs
             {
                 if (_audioSource != null && logPlaceSound != null)
                 {
-                    _audioSource.PlayOneShot(logPlaceSound);
+                    _audioSource.PlayOneShot(logPlaceSound[Random.Range(0, logPlaceSound.Length - 1)]);
                 }
 
                 chopTarget.SetStump(this);
@@ -218,7 +220,7 @@ namespace chopping_logs
             if (cutLogSprite != null)
                 cutLogSprite.enabled = false;
         }
-        
+
         public bool IsReadyForChop()
         {
             return IsMinigameActive && _hasLog;
@@ -235,9 +237,9 @@ namespace chopping_logs
         {
             if (_audioSource == null || logCrackSound == null) yield break;
 
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
             yield return new WaitForSeconds(delayBetween);
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
         }
     }
 }

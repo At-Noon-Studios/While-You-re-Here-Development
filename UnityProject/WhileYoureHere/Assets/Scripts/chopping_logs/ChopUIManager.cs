@@ -9,7 +9,7 @@ namespace chopping_logs
         public static ChopUIManager Instance { get; private set; }
 
         [Header("Sound Settings")] 
-        [SerializeField] private AudioClip axeImpactSound;
+        [SerializeField] private AudioClip[] axeImpactSound;
 
         [Header("UI References")] 
         [SerializeField] private Image mouseUpImage;
@@ -79,7 +79,7 @@ namespace chopping_logs
         private void PlayAxeImpact()
         {
             if (axeImpactSound == null || _audioSource == null) return;
-            _audioSource.PlayOneShot(axeImpactSound);
+            _audioSource.PlayOneShot(axeImpactSound[Random.Range(0, axeImpactSound.Length - 1)]);
         }
 
         public void ShowUI()
