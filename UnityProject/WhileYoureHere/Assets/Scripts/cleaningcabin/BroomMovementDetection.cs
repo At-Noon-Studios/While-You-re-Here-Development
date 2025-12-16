@@ -16,26 +16,22 @@ namespace cleaningcabin
         private float _broomYPos;
 
         private float _broomSpeed = 0.004f;
-        [SerializeField] private float _sweepingSpeed = 5f;
+        [SerializeField] private float sweepingSpeed = 0.005f;
         
-        private Transform _basePos;
-
-        private Quaternion _baseRotation;
-        private bool _isBaseRotation;
+        // private Transform _basePos;
+        // private Quaternion _baseRotation;
+        // private bool _isBaseRotation;
 
         [SerializeField] private Transform broomModel;
         [SerializeField] private SweepingArea sweepingArea;
-
+        
         public bool IsBroomBeingHeld => IsHeld;
-        [SerializeField] private Material colorArea;
+        private Material _colorArea;
 
         [SerializeField] private GameObject sweepingAreaObj;
-
-        private Color _opacityColor = Color.darkGreen;
-        private float _opacity;
-
+        private Color _startingColor;
         private Color _endingColor;
-
+        
         [SerializeField] private Vector3 sweepingScale;   
         private new void Awake()
         {
@@ -43,14 +39,18 @@ namespace cleaningcabin
             if (broomModel != null)
             {
                 _broomXPos = broomModel.localPosition.x;
+                _broomYPos = broomModel.localPosition.y;
             }
-            sweepingScale = sweepingAreaObj.transform.localScale;
+            _startingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material.color;
+            _colorArea.color = Color.black;
+            _startingColor = _colorArea.color;
+            _endingColor = Color.white;
         }
 
         public void SetMiniGameStartPos()
         {
             broomModel.localRotation = Quaternion.Euler(-90f, 0f, 0f);
-            broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 1.3f);
+            broomModel.localPosition = new Vector3(_broomXPos, _broomYPos, 1.5f);
         }
 
         public void ResetMiniGamePos()
@@ -84,19 +84,12 @@ namespace cleaningcabin
 
             if (delta.x != 0 && delta.y != 0)
             {
-                // var end = new Color(colorArea.color.r, colorArea.color.g,  colorArea.color.b, 0);
-                // colorArea.color = Color.Lerp(colorArea.color, end, Time.deltaTime * _sweepingSpeed);
-                
-                // colorArea.material.color = Color.Lerp(colorArea.material.color, _opacityColor, Time.deltaTime * _sweepingSpeed);
-                // _opacity = Mathf.Lerp(colorArea.material.color.a, 0, _sweepingSpeed);
-                // Color tempcolor = colorArea.material.color;
-                // tempcolor.a = Mathf.MoveTowards(0, 1, Time.deltaTime);
-                // colorArea.material.color = tempcolor;
-                
-                Debug.Log("Sweeping scale before: " + sweepingScale);
-                sweepingArea.transform.localScale = Vector3.Lerp(sweepingArea.transform.localScale, Vector3.zero, Time.deltaTime * _sweepingSpeed);
-                Debug.Log("Sweeping scale after: " + sweepingScale);
-                
+                _colorArea.color = Color.Lerp(_colorArea.color, _endingColor, sweepingSpeed * Time.deltaTime);
+                // Debug.Log("is it 0 yet: " + sweepingSpeed * Time.deltaTime);
+                if (sweepingSpeed * Time.deltaTime >= 1)
+                {
+                    sweepingArea.EndSweepingMinigame();
+                }
             }
         }
     }

@@ -36,6 +36,7 @@ public class SweepingArea : InteractableBehaviour
     // Vector3 attempt1;
     // Quaternion attempt2;
 
+    private Material _material;
     protected new void Awake()
     {
         base.Awake();
@@ -85,15 +86,15 @@ public class SweepingArea : InteractableBehaviour
             transitionSpeed * Time.deltaTime);
 
         broomMD.SetMiniGameStartPos();
-        time += Time.deltaTime;
-        if (time >= 4 && time <= 5)
-        {
-            EndSweepingMinigame();
-            time = 0;
-        }
+        // time += Time.deltaTime;
+        // if (time >= 4 && time <= 5)
+        // {
+        //     EndSweepingMinigame();
+        //     time = 0;
+        // }
     }
 
-    private void EndSweepingMinigame()
+    public void EndSweepingMinigame()
     {
         IsMiniGameActive = false;
         broomMD.ResetMiniGamePos();
