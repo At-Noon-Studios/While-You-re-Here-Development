@@ -23,14 +23,6 @@ Shader "Custom/FullscreenEdgeDetection"
 
         Pass
         {
-            Stencil
-            {
-                Ref 1                 // Reference value matches your "Value" in the UI
-                Comp NotEqual            // Comparison Function: Only pass if stencil value == Ref value
-                Pass Keep             // If test passes, keep the current value
-                Fail Keep
-                ZFail Keep
-            }
             Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM

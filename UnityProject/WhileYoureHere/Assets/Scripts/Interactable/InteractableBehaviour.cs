@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interactable
 {
@@ -13,6 +12,7 @@ namespace Interactable
         private Renderer[] _renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
+        private int _originalLayer;
 
         #region Unity event functions
         
@@ -26,6 +26,7 @@ namespace Interactable
             _renderers = GetComponentsInChildren<Renderer>();
             if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
+            _originalLayer = gameObject.layer; // this should probably be in start, but I added it here to avoid issues with forgetting to call base.Start
         }
         
         #endregion
@@ -38,12 +39,12 @@ namespace Interactable
         
         public virtual void OnHoverEnter(IInteractor interactor)
         {
-            AddOutlineMaterialToRenderers();
+            gameObject.layer = LayerMask.NameToLayer("Outline");
         }
         
         public virtual void OnHoverExit(IInteractor interactor)
         {
-            RemoveOutlineMaterialFromRenderers();
+            gameObject.layer = _originalLayer;
         }
         
         public virtual string InteractionText(IInteractor interactor) => gameObject.name;
@@ -51,44 +52,6 @@ namespace Interactable
         public void EnableCollider(bool state)
         {
             _collider.enabled = state;
-        }
-        
-        #endregion
-        
-        #region Private methods
-        
-        private void AddOutlineMaterialToRenderers()
-        {
-            foreach (var rendererComponent in _renderers)
-            {
-                AddOutlineMaterialToRenderer(rendererComponent);
-            }
-        }
-
-        private void AddOutlineMaterialToRenderer(Renderer rendererComponent)
-        {
-            if (!rendererComponent || !_outlineMaterial) return;
-            var materials = rendererComponent.materials;
-            if (materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
-                return;
-            rendererComponent.materials = materials.Append(_outlineMaterial).ToArray();
-        }
-
-        private void RemoveOutlineMaterialFromRenderers()
-        {
-            foreach (var rendererComponent in _renderers)
-            {
-                RemoveOutlineMaterialFromRenderer(rendererComponent);
-            }
-        }
-
-        private void RemoveOutlineMaterialFromRenderer(Renderer rendererComponent)
-        {
-            if (!rendererComponent || !_outlineMaterial) return;
-            var materials = rendererComponent.materials;
-            if (!materials.Any(m => m.name.StartsWith(_outlineMaterial.name)))
-                return;
-            rendererComponent.materials = materials.Where(m => !m.name.StartsWith(_outlineMaterial.name)).ToArray();
         }
         
         #endregion
