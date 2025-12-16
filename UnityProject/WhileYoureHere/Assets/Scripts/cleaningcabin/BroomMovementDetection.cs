@@ -16,23 +16,19 @@ namespace cleaningcabin
         private float _broomYPos;
 
         private float _broomSpeed = 0.004f;
-        [SerializeField] private float sweepingSpeed = 0.005f;
-        
-        // private Transform _basePos;
-        // private Quaternion _baseRotation;
-        // private bool _isBaseRotation;
+        [SerializeField] private float sweepingSpeed = 1f;
 
         [SerializeField] private Transform broomModel;
         [SerializeField] private SweepingArea sweepingArea;
         
         public bool IsBroomBeingHeld => IsHeld;
-        private Material _colorArea;
 
         [SerializeField] private GameObject sweepingAreaObj;
-        private Color _startingColor;
-        private Color _endingColor;
         
-        [SerializeField] private Vector3 sweepingScale;   
+        private Material _sweepingColor;
+        private Color _endingSweepingColor;
+
+        private float _sweepingTimeInSeconds;
         private new void Awake()
         {
             base.Awake();
@@ -41,10 +37,8 @@ namespace cleaningcabin
                 _broomXPos = broomModel.localPosition.x;
                 _broomYPos = broomModel.localPosition.y;
             }
-            _startingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material.color;
-            _colorArea.color = Color.black;
-            _startingColor = _colorArea.color;
-            _endingColor = Color.white;
+            _sweepingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material;
+            _endingSweepingColor = Color.white;
         }
 
         public void SetMiniGameStartPos()
@@ -61,12 +55,7 @@ namespace cleaningcabin
 
         public void OnClean(InputValue inputValue)
         {
-            if (!sweepingArea.IsMiniGameActive)
-            {
-                Debug.Log("Minigame hasn't started!");
-                return;
-            }
-
+            if (!sweepingArea.IsMiniGameActive) return;
             var delta = inputValue.Get<Vector2>();
 
             _broomXPos += delta.x * _broomSpeed;
@@ -80,15 +69,15 @@ namespace cleaningcabin
             var broomPos = new Vector3(_broomXPos, _broomYPos,
                 broomModel.localPosition.z);
             broomModel.localPosition = broomPos;
-
-
+            
             if (delta.x != 0 && delta.y != 0)
             {
-                _colorArea.color = Color.Lerp(_colorArea.color, _endingColor, sweepingSpeed * Time.deltaTime);
-                // Debug.Log("is it 0 yet: " + sweepingSpeed * Time.deltaTime);
-                if (sweepingSpeed * Time.deltaTime >= 1)
+                _sweepingTimeInSeconds += Time.deltaTime;
+                _sweepingColor.color = Color.Lerp(_sweepingColor.color, _endingSweepingColor, sweepingSpeed * Time.deltaTime);
+                if(_sweepingTimeInSeconds >= 0.5 && _sweepingTimeInSeconds <= 1)
                 {
                     sweepingArea.EndSweepingMinigame();
+                    _sweepingTimeInSeconds = 0;
                 }
             }
         }
