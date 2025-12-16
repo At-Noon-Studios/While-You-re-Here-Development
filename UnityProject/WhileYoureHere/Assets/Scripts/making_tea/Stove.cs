@@ -21,6 +21,7 @@ namespace making_tea
 
         private float _heatTimer;
         private Coroutine _steamRoutine;
+        private Coroutine _heatRoutine;
 
         public bool isOn = true;
 
@@ -46,11 +47,11 @@ namespace making_tea
         private void Start()
         {
             if (_holder == null) return;
-            
+
             _holder.OnPlaced += HandlePlaced;
             _holder.OnRemoved += HandleRemoved;
         }
-        
+
         private void HandlePlaced(IHoldableObject obj)
         {
             _currentKettle = (obj as MonoBehaviour)?.GetComponent<KettleFill>();
@@ -58,10 +59,16 @@ namespace making_tea
 
             Debug.Log("Stove: kettle placed");
 
+            if (!HasEnoughWater())
+            {
+                Debug.Log("Stove: not enough water");
+                return;
+            }
+
             _steam = _currentKettle.GetComponentInChildren<ParticleSystem>();
             _heatTimer = 0f;
 
-            StartCoroutine(HeatRoutine());
+            _heatRoutine = StartCoroutine(HeatRoutine());
         }
 
         private IEnumerator HeatRoutine()
@@ -74,6 +81,12 @@ namespace making_tea
 
             while (_currentKettle != null && isOn)
             {
+                if (!HasEnoughWater())
+                {
+                    StopEffects();
+                    yield break;
+                }
+
                 _heatTimer += Time.deltaTime;
 
                 if (_heatTimer >= heatTime)
@@ -101,13 +114,25 @@ namespace making_tea
         public void ToggleStove()
         {
             isOn = !isOn;
+
             if (!isOn)
                 StopEffects();
+        }
+
+        private bool HasEnoughWater()
+        {
+            return _currentKettle != null && _currentKettle.fillAmount >= requiredFill;
         }
 
         private void StopEffects()
         {
             _heatTimer = 0f;
+
+            if (_heatRoutine != null)
+            {
+                StopCoroutine(_heatRoutine);
+                _heatRoutine = null;
+            }
 
             if (_boilingSource.isPlaying)
                 _boilingSource.Stop();
@@ -119,6 +144,7 @@ namespace making_tea
             {
                 if (_steamRoutine != null)
                     StopCoroutine(_steamRoutine);
+
                 _steamRoutine = StartCoroutine(SteamStopRoutine());
             }
 
