@@ -9,6 +9,8 @@ using PlayerControls;
 public class SweepingArea : InteractableBehaviour
 {
     [SerializeField] private BroomMovementDetection broom;
+    
+    [SerializeField] private Canvas broomInteractionCanvas;
 
     private AudioSource _audioSource;
     [SerializeField] private AudioClip popClip;
@@ -20,19 +22,20 @@ public class SweepingArea : InteractableBehaviour
     [SerializeField] Transform minigameStartingPos;
     public float transitionSpeed = 0.004f;
 
-    public GameObject playerPos;
-    public GameObject camPos;
+    private GameObject _playerPos;
+    private GameObject _camPos;
 
     private Material _material;
 
-    private float _lerpSpeed = 1.0f;
+    // private float _lerpSpeed = 1.0f;
     protected new void Awake()
     {
         base.Awake();
         _audioSource = GetComponent<AudioSource>();
-        camPos = GameObject.FindWithTag("MainCamera");
-        playerPos = GameObject.FindWithTag("Player");
+        _camPos = GameObject.FindWithTag("MainCamera");
+        _playerPos = GameObject.FindWithTag("Player");
         IsMiniGameActive = false;
+        // broomInteractionCanvas.gameObject.SetActive(true);
     }
     
     public override void Interact(IInteractor interactor)
@@ -40,23 +43,16 @@ public class SweepingArea : InteractableBehaviour
         if (broom == null) { Debug.LogWarning("Broom can't be found!"); return; }
 
         if (!broom.IsBroomBeingHeld || IsMiniGameActive) return;
-        // {
-        //     Debug.Log("You need to hold the broom for this!");
-        //     return;
-        // }
-        if (broom.IsBroomBeingHeld)
-        {
-            StartSweepingMinigame();
-        }
+        // if (!broom.IsBroomBeingHeld) return;
+        StartSweepingMinigame();
     }
 
     void Update()
     {
         if (!IsMiniGameActive) return;
-        // Transition schmoovly
-        playerPos.transform.position = Vector3.Lerp(playerPos.transform.position,
+        _playerPos.transform.position = Vector3.Lerp(_playerPos.transform.position,
             minigameStartingPos.transform.position, transitionSpeed * Time.deltaTime);
-        camPos.transform.rotation = Quaternion.Lerp(camPos.transform.rotation, minigameStartingPos.transform.rotation,
+        _camPos.transform.rotation = Quaternion.Lerp(_camPos.transform.rotation, minigameStartingPos.transform.rotation,
             transitionSpeed * Time.deltaTime);
     }
 
@@ -65,6 +61,7 @@ public class SweepingArea : InteractableBehaviour
         IsMiniGameActive = true;
         cameraController.PauseCameraMovement();
         movementController.PauseMovement();
+        if (broomInteractionCanvas != null) { broomInteractionCanvas.gameObject.SetActive(false);}
         broom.SetMiniGameStartPos();
     }
 

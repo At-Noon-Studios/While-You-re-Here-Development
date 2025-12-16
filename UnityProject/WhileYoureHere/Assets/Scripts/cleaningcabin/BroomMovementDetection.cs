@@ -20,11 +20,11 @@ namespace cleaningcabin
         public bool IsBroomBeingHeld => IsHeld;
 
         [SerializeField] private GameObject sweepingAreaObj;
-        
         private Material _sweepingColor;
+        
         private Color _endingSweepingColor;
-
         private float _sweepingTimeInSeconds;
+
         private new void Awake()
         {
             base.Awake();
@@ -33,13 +33,20 @@ namespace cleaningcabin
                 _broomXPos = broomModel.localPosition.x;
             }
             _sweepingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material;
+            // sweepingAreaObj.GetComponent<MeshRenderer>().material = _sweepingColor;
             _endingSweepingColor = Color.white;
         }
 
+        // public override void Interact(IInteractor interactor)
+        // {
+            // base.Interact(interactor);
+            // Debug.Log("Monster");
+        // }
+
         public void SetMiniGameStartPos()
         {
+            broomModel.localPosition = new Vector3(_broomXPos, 0.25f, 2.5f);
             broomModel.localRotation = Quaternion.Euler(-90f, 0f, 0f);
-            broomModel.localPosition = new Vector3(_broomXPos, 0f, 1.5f);
         }
 
         public void ResetMiniGamePos()
@@ -56,10 +63,8 @@ namespace cleaningcabin
             _broomXPos += delta.x * _broomSpeed;
             _broomXPos = Math.Clamp(_broomXPos, _minBroomXPos * sweepingArea.transform.localScale.x,
                 _maxBroomXPos * sweepingArea.transform.localScale.x);
-
-            var broomPos = new Vector3(_broomXPos, 0.25f, 2.5f);
-            broomModel.localPosition = broomPos;
             
+            broomModel.localPosition = new Vector3(_broomXPos, 0.25f, 2.5f);
             if (delta.x != 0 && delta.y != 0)
             {
                 _sweepingTimeInSeconds += Time.deltaTime;
