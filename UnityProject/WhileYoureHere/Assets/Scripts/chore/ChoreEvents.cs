@@ -37,5 +37,12 @@ namespace chore
         {
             OnLogChopped?.Invoke(logID);
         }
+        
+        public static event Action OnPaperPlacement;
+
+        public static void TriggerPaperPlacement()
+        {
+            OnPaperPlacement?.Invoke();
+        }
      }
 }

@@ -1,4 +1,5 @@
 using player_controls;
+using PlayerControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
