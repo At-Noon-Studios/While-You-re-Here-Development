@@ -291,18 +291,26 @@ namespace radio_interaction
 
         public bool DonePlayingCorrectChannel()
         {
-            if (!dialogueManager ||
-                !_lastPlayedNode ||
-                _lastPlayedNode.sentences is null)
+            if (dialogueManager == null 
+                || _lastPlayedNode == null 
+                || _lastPlayedNode.sentences == null 
+                || _lastPlayedNode.sentences.Count == 0)
                 return false;
 
-            var lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
+            int lastSentence = _lastPlayedNode.sentences.Count - 1;
+            int current = dialogueManager.GetCurrentSentenceIndex();
 
-            var finishedAllSentences =
-                dialogueManager.GetCurrentSentenceIndex() >= lastSentenceIndex;
+            if (!OnCorrectChannel())
+                return false;
 
-            return finishedAllSentences && OnCorrectChannel();
+            bool typingDone = dialogueManager.SentenceRoutineStopped();
+            bool audioDone = dialogueManager.GetCurrentAudioTime() <= 0.01f;
+            current += 1;
+            bool finishedAllSentences = current > lastSentence;
+
+            return typingDone && audioDone && finishedAllSentences;
         }
+
 
         public void PlayClassicRadio()
         {
@@ -314,9 +322,15 @@ namespace radio_interaction
 
         public float GetCorrectChannelSentenceLenght()
         {
-            var lastSentence = _lastPlayedNode.sentences.Count - 1;
-            return dialogueManager.GetSentenceAudioTime(lastSentence);
+            if (OnCorrectChannel())
+            {
+                var lastSentence = _lastPlayedNode.sentences.Count - 1;
+                return dialogueManager.GetSentenceAudioTime(lastSentence);
+            }
+
+            return 0f;
         }
+
         #endregion
 
         #region private methods
@@ -389,7 +403,6 @@ namespace radio_interaction
                 resumeTime = saved.AudioTime;
             }
 
-            Debug.Log($"Switching to {newNode.nodeID}, resumeIndex={resumeIndex}, resumeTime={resumeTime}");
             dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
             dialogueManager.CurrentNode = newNode;
         }

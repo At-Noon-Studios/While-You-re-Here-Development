@@ -90,7 +90,6 @@ namespace dialogue
 
         public void StartRadioDialogue(DialogueNode node, float resumeTime =0, int startSentenceIndex = 0)
         {
-            Debug.Log("radio dialogue started");
             _nodes.Clear();
             _nodes[node.nodeID] = node;
             _currentNode = node;
@@ -158,13 +157,11 @@ namespace dialogue
             }
 
             DialogueSentence sentence = _activeSentences[_sentenceIndex++];
-            print(" index changed to " + _sentenceIndex);
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
 
         private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
         {
-            print("sentence routine started");
             _isTyping = true;
             _currentFullSentence = sentence.text;
             _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
@@ -211,7 +208,6 @@ namespace dialogue
                 }
                 resumeTime=_audioSource.time;
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
-                print("sentence routine finished");
                 _isTyping = false;
 
                 if (_sentenceIndex < _activeSentences.Length)
@@ -318,6 +314,11 @@ namespace dialogue
             var sentence = _currentNode.sentences[sentenceIndex];
             var clip = sentence != null ? sentence.audio : null;
             return clip != null ? clip.length : 0f;
+        }
+
+        public bool SentenceRoutineStopped()
+        {
+            return _sentenceRoutine is null;
         }
     }
 }
