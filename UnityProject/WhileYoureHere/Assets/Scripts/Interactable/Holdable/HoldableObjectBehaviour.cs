@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
@@ -21,6 +23,7 @@ namespace Interactable.Holdable
         [CanBeNull] private GameObject _heldVersion;
 
         private Transform _playerCamera;
+        private ObjectHolder _currentHolder;
 
         public float Weight => data.Weight;
 
@@ -71,6 +74,13 @@ namespace Interactable.Holdable
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
+            
+            if (_currentHolder != null)
+            {
+                _currentHolder.ClearHeldObject(this);
+                _currentHolder = null;
+            }
+
             _holder = interactor;
             var heldObject = this;
             interactor.HeldObject?.Drop();
@@ -78,6 +88,18 @@ namespace Interactable.Holdable
             AttachTo(interactor);
             EnableCollider(false);
         }
+        
+        public void PickUpByInteractor(IInteractor interactor)
+        {
+            var chopTarget = GetComponentInChildren<LogChopTarget>();
+            if (chopTarget != null)
+            {
+                chopTarget.NotifyPickedUp();
+            }
+
+            PickUp(interactor);
+        }
+
         
         private void SetHeldVisual(bool state, GameObject heldVisual) {
             heldVisual.SetActive(state);
@@ -91,6 +113,8 @@ namespace Interactable.Holdable
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
+            _currentHolder?.ClearHeldObject(this);
+            _currentHolder = null;
             _holder.SetHeldObject(null);
             _holder = null;
 
@@ -98,8 +122,10 @@ namespace Interactable.Holdable
             EnableCollider(true);
         }
 
-        public virtual void Place(Vector3 position, Quaternion? rotation = null)
+        public virtual void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
         {
+            _currentHolder = holder;
+            
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
             _holder = null;
@@ -122,6 +148,20 @@ namespace Interactable.Holdable
             transform.localPosition = data.HoldingOffset;
             gameObject.layer = HoldLayer;
         }
+        
+        public void ResetPose()
+        {
+            if (_holder == null) return;
+
+            transform.SetParent(_holder.HoldPoint);
+            transform.localPosition = data.HoldingOffset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+
+            var rb = GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.isKinematic = true;
+        }
+
 
         private void Detach()
         {

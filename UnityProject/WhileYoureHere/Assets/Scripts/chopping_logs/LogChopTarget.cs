@@ -1,4 +1,5 @@
 using chore;
+using Interactable.Holdable;
 using UnityEngine;
 
 namespace chopping_logs
@@ -18,10 +19,10 @@ namespace chopping_logs
         
         
         
-        private void Start()
-        {
-            _stump = GetComponentInParent<Stump>();
-        }
+        // private void Start()
+        // {
+        //     _stump = GetComponentInParent<Stump>();
+        // }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -67,5 +68,19 @@ namespace chopping_logs
         public void SetStump(Stump stump) => _stump = stump;
 
         public int GetLog() => logID;
+        
+        public void NotifyPickedUp()
+        {
+            if (_stump != null)
+            {
+                var logRoot = GetComponentInParent<HoldableObjectBehaviour>();
+                if (logRoot != null)
+                {
+                    _stump.OnLogPickedUp(logRoot.gameObject);
+                }
+
+                _stump = null;
+            }
+        }
     }
 }

@@ -46,15 +46,8 @@ namespace chopping_logs
             }
         }
 
-        private void OnEnable()
-        {
-            cancelEvent.OnRaise += OnCancelInput;
-        }
-
-        private void OnDisable()
-        {
-            cancelEvent.OnRaise -= OnCancelInput;
-        }
+        private void OnEnable() => cancelEvent.OnRaise += OnCancelInput;
+        private void OnDisable() => cancelEvent.OnRaise -= OnCancelInput;
 
         private void OnCancelInput()
         {
@@ -67,27 +60,46 @@ namespace chopping_logs
             var player = GameObject.FindWithTag("Player");
             var heldController = player?.GetComponent<PlayerInteractionController>();
             var held = heldController?.HeldObject;
-
+            
+            if (_hasLog && held == null)
+            {
+                TakeLog(heldController);
+                return;
+            }
+            
             if (!_hasLog)
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
                 {
                     var chopTarget = pickableLog.GetComponentInChildren<LogChopTarget>();
                     if (chopTarget != null)
-                    {
                         ChoreEvents.TriggerLogPlaced(chopTarget.GetLog());
-                    }
 
                     PlaceLog(pickableLog, heldController);
+                    return;
                 }
             }
-
-
-            if (held is HoldableObjectBehaviour p && p.GetComponentInChildren<AxeHitDetector>() != null)
+            
+            if (_hasLog && held is HoldableObjectBehaviour h &&
+                h.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 StartMinigame();
             }
         }
+        
+        private void TakeLog(PlayerInteractionController player)
+        {
+            if (!_hasLog || _logObject == null) return;
+
+            var holdable = _logObject.GetComponent<HoldableObjectBehaviour>();
+            if (holdable == null) return;
+
+            holdable.PickUpByInteractor(player);
+
+            _logObject = null;
+            _hasLog = false;
+        }
+
 
         private void PlaceLog(HoldableObjectBehaviour pickableLog, PlayerInteractionController controller)
         {
@@ -96,17 +108,12 @@ namespace chopping_logs
             var rb = pickableLog.GetComponent<Rigidbody>();
             if (rb)
             {
-                rb.useGravity = false;
-                rb.constraints = RigidbodyConstraints.FreezeAll;
+                rb.useGravity = true;
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
-
-            var holdable = pickableLog.GetComponent<HoldableObjectBehaviour>();
-            if (holdable != null)
-            {
-                holdable.enabled = false;
-                Debug.Log($"HoldableObjectBehaviour disabled for log: {pickableLog.name}");
-            }
-
+            
             _logObject = pickableLog.gameObject;
             _hasLog = true;
 
@@ -122,6 +129,15 @@ namespace chopping_logs
             }
 
             controller.SetHeldObject(null);
+        }
+
+        public void OnLogPickedUp(GameObject pickedLog)
+        {
+            if (_logObject == pickedLog)
+            {
+                _logObject = null;
+                _hasLog = false;
+            }
         }
         
         private void StartMinigame()
@@ -143,7 +159,8 @@ namespace chopping_logs
 
                 player.GetComponent<MovementController>()?.PauseMovement();
             }
-
+            
+            cameraController?.SetMinigameRotation(minigameStartPoint.rotation);
             cameraController?.PauseCameraMovement();
 
             ChopUIManager.Instance?.ShowUI();
@@ -171,6 +188,10 @@ namespace chopping_logs
 
             if (chopTarget != null)
                 ChoreEvents.TriggerLogChopped(chopTarget.GetLog());
+            
+            var playerController = player.GetComponent<PlayerInteractionController>();
+            var heldBehaviour = playerController?.HeldObject as HoldableObjectBehaviour;
+            heldBehaviour?.ResetPose();
         }
 
         private void ClearLog()
@@ -194,13 +215,13 @@ namespace chopping_logs
 
             if (!_hasLog)
             {
-                if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
+                if (!_hasLog && held is HoldableObjectBehaviour pickableLog && pickableLog != null)
                 {
-                    if (placeLogSprite != null)
+                    if (pickableLog.CompareTag("Log") && placeLogSprite != null)
                         placeLogSprite.enabled = true;
-                }
 
-                return string.Empty;
+                    return string.Empty;
+                }
             }
 
             if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)

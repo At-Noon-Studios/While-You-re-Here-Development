@@ -73,7 +73,16 @@ namespace PlayerControls
             if (angle > 180f) angle -= 360f;
             return angle;
         }
+        
+        public void SetMinigameRotation(Quaternion rotation)
+        {
+            transform.rotation = rotation;
 
+            Vector3 euler = rotation.eulerAngles;
+            _xRotation = NormalizeAngle(euler.x);
+            _yRotation = NormalizeAngle(euler.y);
 
+            PauseCameraMovement();
+        }
     }
 }

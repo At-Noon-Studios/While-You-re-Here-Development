@@ -1,3 +1,4 @@
+using Interactable.Concrete.ObjectHolder;
 using UnityEngine;
 
 namespace Interactable.Holdable
@@ -8,6 +9,6 @@ namespace Interactable.Holdable
 
         public void Drop();
         
-        public void Place(Vector3 position, Quaternion? rotation = null);
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null);
     }
 }
