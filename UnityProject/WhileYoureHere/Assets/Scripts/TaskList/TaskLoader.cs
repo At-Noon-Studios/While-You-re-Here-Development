@@ -16,10 +16,16 @@ namespace TaskList
                 _taskDictionary[task.taskID] = task;
         }
 
-        public void SetTaskCompleted(int id, bool value)
+        public void SetTaskCompleted(int id)
         {
             if (_taskDictionary.TryGetValue(id, out var task))
-                task.isCompleted = value;
+                task.isCompleted = true;
+        }
+
+        public Task GetTaskByID(int id)
+        {
+            _taskDictionary.TryGetValue(id, out var task);
+            return task;
         }
     }
 }

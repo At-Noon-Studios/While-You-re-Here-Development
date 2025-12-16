@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using ScriptableObjects.TaskList;
 
 namespace TaskList
 {
@@ -12,88 +9,81 @@ namespace TaskList
     {
         [Header("References")]
         [SerializeField] private TaskLoader taskLoader;
-        [SerializeField] private GameObject taskTogglePrefab;
-        [SerializeField] private Canvas taskListCanvas;
+        [SerializeField] private GameObject taskImagePrefab;
+        [SerializeField] private Transform taskListContainer;
 
-        private Dictionary<int, Toggle> _taskToggles = new Dictionary<int, Toggle>();
+        private readonly Dictionary<int, Image> _taskImages = new();
 
-        private void OnEnable()
+        private void Awake()
         {
+            if(taskLoader == null)
+                taskLoader = FindObjectOfType<TaskLoader>();
+
+            if(taskLoader == null)
+                Debug.LogError("TaskLoader not found in scene!");
+        }
+
+        private void Start()
+        {
+            ResetTasksOnStart();
             Build();
-
-            #if UNITY_EDITOR
-            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            #endif
         }
 
-        private void OnDisable()
-        {
-            #if UNITY_EDITOR
-            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-            #endif
-        }
 
         public void Build()
         {
-            _taskToggles.Clear();
+            _taskImages.Clear();
 
-            foreach (Transform child in taskListCanvas.transform)
+            foreach (Transform child in taskListContainer)
                 Destroy(child.gameObject);
 
-            for (var i = taskLoader.tasks.Count - 1; i >= 0; i--)
+            foreach (var task in taskLoader.tasks)
             {
-                var task = taskLoader.tasks[i];
-                var toggle = Instantiate(taskTogglePrefab, taskListCanvas.transform)
-                    .GetComponent<Toggle>();
+                var go = Instantiate(taskImagePrefab, taskListContainer);
+                var image = go.GetComponent<Image>();
 
-                toggle.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = task.taskName;
-                toggle.isOn = task.isCompleted;
+                if (image == null)
+                {
+                    Debug.LogError("Task prefab must have an Image component");
+                    continue;
+                }
 
-                int id = task.taskID;
-                toggle.onValueChanged.AddListener(v =>
-                    taskLoader.SetTaskCompleted(id, v)
-                );
+                image.sprite = task.isCompleted ? task.completedSprite : task.uncompletedSprite;
 
-                _taskToggles[id] = toggle;
+                go.transform.SetAsFirstSibling();
+
+                _taskImages[task.taskID] = image;
             }
         }
 
-        public void TriggerCheckmark(int choreID)
+        public void TriggerCheckmark(int taskID)
         {
-            if (_taskToggles.TryGetValue(choreID, out var toggle))
+            taskLoader.SetTaskCompleted(taskID);
+
+            var task = taskLoader.GetTaskByID(taskID);
+            if(task == null)
             {
-                toggle.isOn = true;
-                taskLoader.SetTaskCompleted(choreID, true);
-                Debug.Log($"Chore {choreID} completed -> Task {choreID} checked");
+                Debug.LogWarning($"No task found with ID {taskID}");
+                return;
+            }
+
+            if (_taskImages.TryGetValue(taskID, out var image))
+            {
+                image.sprite = task.completedSprite;
+                Debug.Log($"Task {taskID} completed -> sprite updated");
             }
             else
             {
-                Debug.LogWarning($"No toggle found for choreID/taskID {choreID}");
+                Debug.LogWarning($"No image found for taskID {taskID}");
             }
         }
 
-        private void ResetAllToggles()
+        private void ResetTasksOnStart()
         {
-            foreach (var toggle in _taskToggles.Values)
+            foreach (var task in taskLoader.tasks)
             {
-                if (toggle != null)
-                    toggle.isOn = false;
+                task.isCompleted = false;
             }
         }
-
-        private void OnApplicationQuit()
-        {
-            ResetAllToggles();
-        }
-
-        #if UNITY_EDITOR
-        private void OnPlayModeStateChanged(PlayModeStateChange state)
-        {
-            if (state == PlayModeStateChange.ExitingPlayMode)
-            {
-                ResetAllToggles();
-            }
-        }
-        #endif
     }
 }

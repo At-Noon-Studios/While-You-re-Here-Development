@@ -43,13 +43,14 @@ namespace chore
             chore.OnChoreCompleted -= ChoreCompleted;
 
             taskListManager.TriggerCheckmark(chore.ChoreID);
-            
+
             ChoreEvents.TriggerChoreCompleted(chore);
-            
+
             var nextID = chore.ChoreID + 1;
             if (_chores.ContainsKey(nextID))
                 StartChore(nextID);
         }
+
 
         private void InitializeChores()
         {
