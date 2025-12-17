@@ -27,7 +27,7 @@ namespace Interactable.Concrete.ObjectHolder
             if (placedData != null)
             {
                 placedObjects.Remove(placedData);
-                heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation), this);
+                heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
                 _placedObjectsInHolders.Add(placedData);
             }
             

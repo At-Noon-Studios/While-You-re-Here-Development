@@ -104,6 +104,7 @@ namespace chopping_logs
         private void PlaceLog(HoldableObjectBehaviour pickableLog, PlayerInteractionController controller)
         {
             pickableLog.Place(logPlaceholder.position, logPlaceholder.rotation);
+            pickableLog.SetInteractionLocked(true);
 
             var rb = pickableLog.GetComponent<Rigidbody>();
             if (rb)
@@ -133,11 +134,13 @@ namespace chopping_logs
 
         public void OnLogPickedUp(GameObject pickedLog)
         {
-            if (_logObject == pickedLog)
-            {
-                _logObject = null;
-                _hasLog = false;
-            }
+            if (_logObject != pickedLog) return;
+            
+            var holdable = pickedLog.GetComponent<HoldableObjectBehaviour>();
+            holdable?.SetInteractionLocked(false);
+            
+            _logObject = null;
+            _hasLog = false;
         }
         
         private void StartMinigame()
@@ -202,7 +205,13 @@ namespace chopping_logs
 
         private void ClearLog()
         {
-            if (_logObject != null) Destroy(_logObject);
+            if (_logObject != null)
+            {
+                var holdable = _logObject.GetComponent<HoldableObjectBehaviour>();
+                holdable?.SetInteractionLocked(false);
+
+                Destroy(_logObject);
+            }
 
             _logObject = null;
             _hasLog = false;

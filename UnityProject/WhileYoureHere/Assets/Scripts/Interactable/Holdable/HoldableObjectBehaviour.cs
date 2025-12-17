@@ -27,6 +27,7 @@ namespace Interactable.Holdable
         public float Weight => data.Weight;
         
         public bool IsPlaced { get; private set; }
+        private bool _isLocked;
 
         private const int HoldLayer = 3;
 
@@ -67,6 +68,9 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
+            if (_isLocked)
+                return;
+            
             var chopTarget = GetComponentInChildren<LogChopTarget>();
             if (chopTarget != null && chopTarget.IsOnStump)
                 return;
@@ -187,8 +191,19 @@ namespace Interactable.Holdable
             if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
 
+        public void SetInteractionLocked(bool locked)
+        {
+            _isLocked = locked;
+            
+            if (interactionCanvas != null) 
+                interactionCanvas.gameObject.SetActive(!locked);
+        }
+        
         public override void OnHoverEnter(IInteractor interactor)
         {
+            if (_isLocked)
+                return;
+            
             base.OnHoverEnter(interactor);
 
             bool canInteract = _holder == null;
