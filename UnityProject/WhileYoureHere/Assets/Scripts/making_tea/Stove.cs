@@ -31,7 +31,7 @@ namespace making_tea
         private AudioSource _boilingSource;
         private AudioSource _whistleSource;
 
-        private ObjectHolder _holder;
+        private ObjectHolderSingle _holder;
 
         private void Awake()
         {
@@ -41,7 +41,7 @@ namespace making_tea
 
             _boilingSource.loop = true;
 
-            _holder = GetComponent<ObjectHolder>();
+            _holder = GetComponent<ObjectHolderSingle>();
         }
 
         private void Start()

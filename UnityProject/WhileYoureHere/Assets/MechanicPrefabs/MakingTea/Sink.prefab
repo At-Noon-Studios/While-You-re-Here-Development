@@ -5967,6 +5967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b841db83c9eb0448a64ca9acb31e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterTapInteractable
+  blockInteraction: 0
   tap: {fileID: 7645561983540674682}
   interactionCanvas: {fileID: 6467438596086582745}
 --- !u!1 &6205798897739486465
@@ -5979,7 +5980,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7267374308278113585}
   - component: {fileID: 8317072115137254324}
-  - component: {fileID: 5893637504786395392}
+  - component: {fileID: 7444118627195269826}
   m_Layer: 0
   m_Name: Sink
   m_TagString: Untagged
@@ -6026,7 +6027,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.19, y: 0.84, z: 0.75}
   m_Center: {x: 0, y: 0.5, z: -0.25}
---- !u!114 &5893637504786395392
+--- !u!114 &7444118627195269826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6035,9 +6036,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6205798897739486465}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
   placePoint: {fileID: 6728444307886316279}
   placedObjectRotation: {x: 0, y: -90, z: 0}
   interactionCanvas: {fileID: 153775382080975279}

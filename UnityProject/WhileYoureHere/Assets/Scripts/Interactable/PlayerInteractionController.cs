@@ -98,7 +98,7 @@ namespace Interactable
             if (IsTableMode)
             {
                 if (HeldObject == null &&
-                    _currentTarget is not ObjectHolder &&
+                    _currentTarget is not ObjectHolderSingle &&
                     CanDropTablePickup())
                     return;
 
@@ -228,10 +228,10 @@ namespace Interactable
                     return true;
                 }
 
-                if (collider.TryGetComponent<ObjectHolder>(out var objectHolder) &&
-                    objectHolder.IsDetectableBy(this))
+                if (collider.TryGetComponent<ObjectHolderSingle>(out var objectHolderSingle) &&
+                    objectHolderSingle.IsDetectableBy(this))
                 {
-                    interactable = objectHolder;
+                    interactable = objectHolderSingle;
                     return true;
                 }
             }

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2768078795355319132}
   - component: {fileID: 7443104029110816751}
   - component: {fileID: 315370760362098316}
-  - component: {fileID: 2388548839427044863}
   - component: {fileID: 3008197868093855392}
   - component: {fileID: 5934618777246662764}
+  - component: {fileID: 1212139645678443753}
   m_Layer: 0
   m_Name: stove.1
   m_TagString: Untagged
@@ -135,21 +135,6 @@ MonoBehaviour:
   whistleClip: {fileID: 8300000, guid: 1491c7d2717e8de498542d5426844e1c, type: 3}
   steamStopDelay: 1
   isOn: 1
---- !u!114 &2388548839427044863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425516385451286179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
-  placePoint: {fileID: 1274142726429900214}
-  placedObjectRotation: {x: 180, y: 90, z: 90}
-  interactionCanvas: {fileID: 8019854453253339132}
 --- !u!82 &3008197868093855392
 AudioSource:
   m_ObjectHideFlags: 0
@@ -344,6 +329,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1212139645678443753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425516385451286179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
+  placePoint: {fileID: 1274142726429900214}
+  placedObjectRotation: {x: 180, y: 90, z: 90}
+  interactionCanvas: {fileID: 8019854453253339132}
 --- !u!1 &627201941632771556
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,9 +987,9 @@ GameObject:
   - component: {fileID: 1602849584830585344}
   - component: {fileID: 3576127239961882968}
   - component: {fileID: 8387078593765282461}
-  - component: {fileID: 7681261913127330681}
   - component: {fileID: 2133274242852564427}
   - component: {fileID: 539507109068164441}
+  - component: {fileID: 4845172462162390234}
   m_Layer: 0
   m_Name: stove2
   m_TagString: Untagged
@@ -1108,21 +1109,6 @@ MonoBehaviour:
   whistleClip: {fileID: 8300000, guid: 1491c7d2717e8de498542d5426844e1c, type: 3}
   steamStopDelay: 1
   isOn: 1
---- !u!114 &7681261913127330681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6541015518118954374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
-  placePoint: {fileID: 2334967715293184246}
-  placedObjectRotation: {x: 180, y: 90, z: 90}
-  interactionCanvas: {fileID: 8096180724298654479}
 --- !u!82 &2133274242852564427
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1317,6 +1303,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4845172462162390234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541015518118954374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
+  placePoint: {fileID: 2334967715293184246}
+  placedObjectRotation: {x: 180, y: 90, z: 90}
+  interactionCanvas: {fileID: 8096180724298654479}
 --- !u!1 &7821971333519513252
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ namespace Interactable.Holdable
 
         private Transform _playerCamera;
 
-        private ObjectHolder _currentHolder;
+        private ObjectHolderSingle _currentHolder;
                 
         public bool IsPlaced { get; private set; }
 
@@ -112,7 +112,7 @@ namespace Interactable.Holdable
             IsPlaced = false;
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
         {
             _currentHolder = holder;
 

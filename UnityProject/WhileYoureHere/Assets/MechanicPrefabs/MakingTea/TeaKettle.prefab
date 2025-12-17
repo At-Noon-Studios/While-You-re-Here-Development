@@ -4943,7 +4943,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1bffd7a800c04fb4b8995a5b43287c48, type: 2}
+  - {fileID: 2100000, guid: ef829777798150e44b4c44fefba4aaec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5501,7 +5501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KettleChoreTrigger
   kettle: {fileID: 826776350751955637}
-  minFill: 0.2
+  minFill: 1
 --- !u!114 &8215212094655339604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5514,6 +5514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
+  blockInteraction: 0
   interactionCanvas: {fileID: 8027384727883364140}
   data: {fileID: 11400000, guid: ff67272ead1c0b249b7fed2da69790eb, type: 2}
 --- !u!114 &2548884878107669383
@@ -5528,6 +5529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c6aa802d592fa4183f042721f2092a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KettleTablePickup
+  blockInteraction: 0
   interactionCanvasPrimary: {fileID: 1814084298500879635}
   interactionCanvasSecondary: {fileID: 6243069260948579775}
 --- !u!114 &1719968151862680337
@@ -10932,7 +10934,7 @@ GameObject:
   - component: {fileID: 1615476873870131063}
   - component: {fileID: 8869179531432447876}
   - component: {fileID: 3497244920866946136}
-  - component: {fileID: 2787163569191242561}
+  - component: {fileID: 6169665869901121028}
   m_Layer: 0
   m_Name: LitPlace
   m_TagString: Untagged
@@ -10985,7 +10987,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2787163569191242561
+--- !u!114 &6169665869901121028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10994,9 +10996,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6192158421985202171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
   placePoint: {fileID: 913296303155999163}
   placedObjectRotation: {x: -90, y: 0, z: 0}
   interactionCanvas: {fileID: 2420350363602753800}

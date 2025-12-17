@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 5141050954329476219}
   - component: {fileID: 6795947196496256872}
   m_Layer: 0
-  m_Name: WYH_UI_PlaceLid_Placeholder
+  m_Name: WYH_UI_PlaceMug_Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 4283891443633258463}
   - component: {fileID: 9066007284153313550}
   - component: {fileID: 8599892444120058670}
-  - component: {fileID: 7246680092544250659}
+  - component: {fileID: 4991673112380585524}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -356,7 +356,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &7246680092544250659
+--- !u!114 &4991673112380585524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -365,9 +365,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2150056979109313105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
   placePoint: {fileID: 7690181851015279122}
   placedObjectRotation: {x: 0, y: 0, z: 0}
   interactionCanvas: {fileID: 6795947196496256872}
@@ -592,7 +593,7 @@ GameObject:
   - component: {fileID: 7366473877264578959}
   - component: {fileID: 4001991247312477976}
   - component: {fileID: 3676321510666829249}
-  - component: {fileID: 7202333495799310302}
+  - component: {fileID: 1446091466085696450}
   m_Layer: 0
   m_Name: Plane (1)
   m_TagString: Untagged
@@ -693,7 +694,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &7202333495799310302
+--- !u!114 &1446091466085696450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -702,9 +703,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8949314631313039470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
+  m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
+  blockInteraction: 0
   placePoint: {fileID: 4119186631685129279}
   placedObjectRotation: {x: 0, y: 0, z: 0}
   interactionCanvas: {fileID: 3423755549901230853}
