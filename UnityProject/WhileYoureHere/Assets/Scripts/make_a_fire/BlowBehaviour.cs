@@ -8,7 +8,7 @@ namespace make_a_fire
     public class BlowBehaviour : MonoBehaviour
     {
         [Header("Wind Configuration")] 
-        [SerializeField] private VisualEffect windEffect;
+        [SerializeField] private ParticleSystem windEffect;
         [SerializeField] private AudioClip blowAudio;
         [SerializeField] private EventChannel blowEvent;
         [SerializeField] private EventChannel blowAllowedEvent;
@@ -21,12 +21,15 @@ namespace make_a_fire
         private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
-            windEffect = GetComponent<VisualEffect>();
         }
 
         private void OnEnable()
         {
-            windEffect.Stop();
+            if (windEffect != null)
+            {
+                windEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
             blowEvent.OnRaise += TryBlow;
             blowAllowedEvent.OnRaise += EnableBlow;
         }
@@ -34,6 +37,7 @@ namespace make_a_fire
         private void OnDisable()
         {
             blowEvent.OnRaise -= TryBlow;
+            blowAllowedEvent.OnRaise -= EnableBlow;
         }
 
         private void EnableBlow()
@@ -41,12 +45,17 @@ namespace make_a_fire
             _canBlow = true;
         }
 
+        private void DisableBlow()
+        {
+            _canBlow = false;
+        }
+
         private void TryBlow()
         {
             if (!_canBlow) return;
             StartCoroutine(WindTimer());
 
-            var blowDirection = transform.TransformDirection(Vector3.up);
+            var blowDirection = transform.TransformDirection(Vector3.forward);
             Debug.DrawLine(transform.position, transform.position + blowDirection * blowDistance, Color.cyan, 1f);
             RaycastHit[] hits = Physics.RaycastAll(transform.position, blowDirection, blowDistance);
             foreach (var hit in hits)
@@ -55,6 +64,7 @@ namespace make_a_fire
                 if (hit.collider.CompareTag("Furnace"))
                 {
                     furnace.StartBigFire();
+                    DisableBlow();
                     break; 
                 }
             }
@@ -65,7 +75,7 @@ namespace make_a_fire
             windEffect.Play();
             _audioSource.PlayOneShot(blowAudio);
             yield return new WaitForSeconds(2f);
-            windEffect.Stop();
+            windEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             _audioSource.Stop();
         }
     }

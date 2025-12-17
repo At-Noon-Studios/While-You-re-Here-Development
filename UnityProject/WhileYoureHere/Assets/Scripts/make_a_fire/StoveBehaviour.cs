@@ -60,17 +60,20 @@ namespace make_a_fire
         private void StartSmallFire()
         {
             _fireStarted = true;
+            SetFireLifetime(0.2f);
+            
             fireParticle.gameObject.SetActive(true);
+            fireParticle.Play();
             
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
-            fireParticle.Play();
         }
 
         public void StartBigFire()
         {
+            SetFireLifetime(0.5f);
             _audioSource.PlayOneShot(chargedFire);
-            //need to add big fire later
+           
             ChoreEvents.TriggerPaperPlacement();
         }
 
@@ -86,5 +89,12 @@ namespace make_a_fire
             fireParticle.gameObject.SetActive(status);
             if (status) fireParticle.Play();
         }
+        
+        private void SetFireLifetime(float lifetime)
+        {
+            var main = fireParticle.main;
+            main.startLifetime = lifetime;
+        }
+
     }
 }
