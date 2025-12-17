@@ -80,12 +80,6 @@ namespace Interactable.Holdable
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
-            
-            if (_currentHolder != null)
-            {
-                _currentHolder.ClearHeldObject(this);
-                _currentHolder = null;
-            }
 
             _holder = interactor;
             var heldObject = this;
@@ -120,8 +114,6 @@ namespace Interactable.Holdable
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
-            _currentHolder?.ClearHeldObject(this);
-            _currentHolder = null;
             _holder.SetHeldObject(null);
             _holder = null;
             Detach();
