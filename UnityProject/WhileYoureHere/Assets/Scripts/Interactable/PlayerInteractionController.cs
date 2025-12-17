@@ -16,6 +16,7 @@ namespace Interactable
         [SerializeField] private Camera playerCamera;
         [Header("Listen to")] [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
+        [SerializeField] private EventChannel dropEvent;
         [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
@@ -45,12 +46,14 @@ namespace Interactable
         {
             interact.OnRaise += Interact;
             clickInteractEvent.OnRaise += clickInteract;
+            dropEvent.OnRaise += DropObject;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
             clickInteractEvent.OnRaise -= clickInteract;
+            dropEvent.OnRaise -= DropObject;
         }
 
         #endregion
@@ -73,8 +76,10 @@ namespace Interactable
 
         private void Interact()
         {
-            if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable)
+            if (NoTarget)
+                return;
+            
+            if (TargetInteractable)
             {
                 if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
                 InteractWithTarget();
@@ -84,12 +89,22 @@ namespace Interactable
 
         private void clickInteract()
         {
-            if (NoTarget) HeldObject?.Drop();
-            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
+            if (NoTarget)
+                return;
+            
+            if (_currentTarget is IClickInteractable &&
+                clickInteractEvent.OnRaise != null)
             {
                 ClickInteractWithTarget();
             }
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+            else
+                _uiManager
+                    .PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+        }
+
+        private void DropObject()
+        {
+            HeldObject?.Drop();
         }
 
         private void RefreshCurrentTarget()
