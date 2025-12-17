@@ -12,11 +12,11 @@ public class BroomConfig : ScriptableObject
     [SerializeField] private float lerpSpeed = 1.0f;
     
     [Header("Sound that should play while sweeping")]
-    [SerializeField] private AudioClip sweepingAudioCLip;
+    [SerializeField] private AudioClip sweepingAudioClip;
     
     public float MinBroomXPos => minBroomXPos;
     public float MaxBroomXPos => maxBroomXPos;
     public float BroomSpeed => broomSpeed;
     public float LerpSpeed => lerpSpeed;
-    public AudioClip SweepingAudioClip => sweepingAudioCLip;
+    public AudioClip SweepingAudioClip => sweepingAudioClip;
 }

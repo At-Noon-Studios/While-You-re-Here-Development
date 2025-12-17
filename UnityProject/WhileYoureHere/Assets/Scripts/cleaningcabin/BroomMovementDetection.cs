@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,17 +7,9 @@ namespace cleaningcabin
 {
     public class BroomMovementDetection : HoldableObjectBehaviour
     {
-        // private float _minBroomXPos = -3f;
-        // private float _maxBroomXPos = 3f;
-        // private float _broomSpeed = 0.004f;
-        // [Header("Speed Of Sweeping")]
-        // [SerializeField] private float sweepingSpeed = 1f;
-        
-        // private AudioSource _audioSource;
-        // [SerializeField] private AudioClip sweepingClip;
-
         private float _sweepingTimeInSeconds;
         private float _broomXPos;
+        [Header("Broom Configurations")]
         [SerializeField] private BroomConfig broomConfig;
         
         [Header("Sweeping References")]

@@ -8,17 +8,20 @@ using PlayerControls;
 [RequireComponent(typeof(AudioSource))]
 public class SweepingArea : InteractableBehaviour
 {
+    [Header("Broom Script Reference")]
     [SerializeField] private BroomMovementDetection broom;
 
-    // private AudioSource _audioSource;
-    // [SerializeField] private AudioClip popClip;
-    // public float transitionSpeed = 1f;
-
+    [Header("Sweeping Area Config Data")]
     [SerializeField] private SweepingAreaConfig sweepingAreaConfig;
+    
+    [Header("Camera and Movement-controllers")]
     public MovementController movementController;
     public CameraController cameraController;
+    
+    [Header("Is the mini game active or not")]
     public bool IsMiniGameActive { get; private set; }
     
+    [Header("Position of the starting point of the mini-game")]
     [SerializeField] private Transform minigameStartingPos;
 
     private GameObject _playerPos;
