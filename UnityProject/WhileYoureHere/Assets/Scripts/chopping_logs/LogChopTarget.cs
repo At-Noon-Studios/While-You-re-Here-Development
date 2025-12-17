@@ -1,5 +1,3 @@
-using chore;
-using Interactable.Holdable;
 using UnityEngine;
 
 namespace chopping_logs

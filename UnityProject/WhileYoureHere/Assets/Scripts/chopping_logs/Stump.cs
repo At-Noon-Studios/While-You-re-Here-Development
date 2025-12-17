@@ -72,7 +72,6 @@ namespace chopping_logs
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
                 {
                     var chopTarget = pickableLog.GetComponentInChildren<LogChopTarget>();
-                    Debug.Log($"Log has been placed");
                     if (chopTarget != null)
                         ChoreEvents.TriggerLogPlaced(chopTarget.GetLog());
 
