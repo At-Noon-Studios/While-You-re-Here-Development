@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ScriptableObjects.Interactable.Holdable
+namespace ScriptableObjects.Interactable
 {
     [CreateAssetMenu(fileName = "HoldableObject",  menuName = "ScriptableObjects/Interaction/HoldableObject")]
     public class HoldableObjectData : ScriptableObject

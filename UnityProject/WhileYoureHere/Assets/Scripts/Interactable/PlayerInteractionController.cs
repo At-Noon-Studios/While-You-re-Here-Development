@@ -153,7 +153,7 @@ namespace Interactable
             }
             else
             {
-                _uiManager?.PulseInteractPrompt();
+                _uiManager.PulseInteractPrompt();
             }
         }
 
@@ -260,7 +260,7 @@ namespace Interactable
         {
             OnHoverExit(_currentTarget);
             _currentTarget = newTarget;
-            OnHoverEnter(_currentTarget);
+            OnHoverEnter(newTarget);
         }
 
         private void OnHoverEnter(IInteractable target)
@@ -272,7 +272,7 @@ namespace Interactable
 
         private void OnHoverExit(IInteractable target)
         {
-            _uiManager?.HideInteractPrompt();
+            _uiManager.HideInteractPrompt();
             target?.OnHoverExit(this);
         }
 
@@ -295,15 +295,14 @@ namespace Interactable
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
         {
             if (_movementController == null) return;
-
             if (holdableObject == null)
             {
                 _movementController.SetMovementModifier(1f);
                 return;
             }
 
-            float weight = Mathf.Clamp01(holdableObject.Weight / 100f);
-            float modifier = Mathf.Max(1f - weight, 0.4f);
+            var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
+            var modifier = Mathf.Max(1f - weight, 0.4f);
 
             _movementController.SetMovementModifier(modifier);
         }

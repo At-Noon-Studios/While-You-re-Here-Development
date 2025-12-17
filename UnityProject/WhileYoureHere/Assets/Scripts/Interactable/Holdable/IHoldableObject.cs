@@ -5,10 +5,10 @@ namespace Interactable.Holdable
 {
     public interface IHoldableObject : IInteractable
     {
-        float Weight { get; }
+        public float Weight { get; }
 
-        void Drop();
+        public void Drop();
 
-        void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null);
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null);
     }
 }

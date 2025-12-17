@@ -189,14 +189,7 @@ namespace door
             if (_door != null) return;
             var parent = transform.parent;
             if (_door != null || transform.parent == null) return;
-            foreach (Transform sibling in parent.parent)
-            {
-                if (sibling == parent) continue;
-
-                if (!sibling.TryGetComponent(out DoorInteractable door)) continue;
-                _door = door;
-                break;
-            }
+            _door = parent.GetComponentInChildren<DoorInteractable>();
         }
         
         #endregion
