@@ -15,7 +15,10 @@ namespace chopping_logs
         
         [Header("Chore ID reference")]
         [SerializeField] private int logID;
-        
+
+        [Header("Sound Settings")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip[] chopSound;
         
         
         private void Start()
