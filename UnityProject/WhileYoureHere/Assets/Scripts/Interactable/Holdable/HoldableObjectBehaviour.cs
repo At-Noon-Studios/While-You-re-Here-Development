@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
 using UnityEngine;
@@ -192,9 +193,6 @@ namespace Interactable.Holdable
             base.OnHoverEnter(interactor);
 
             var canInteract = _holder == null;
-
-            if (interactionCanvas)
-                interactionCanvas.gameObject.SetActive(canInteract);
         }
         
         public override string InteractionText(IInteractor interactor)
