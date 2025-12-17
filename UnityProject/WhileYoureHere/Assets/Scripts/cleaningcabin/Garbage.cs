@@ -4,18 +4,16 @@ using Interactable;
 
 public class Garbage : InteractableBehaviour
 {
-    [SerializeField] BroomMovementDetection broom;
-    // private AudioSource _audioSource;
-    [SerializeField] AudioClip garbageClip;
-
+    [Header("Reference to the broom")]
+    [SerializeField] private BroomMovementDetection broom;
+    
+    [Header("Garbage Config Settings")]
+    [SerializeField] private GarbageConfig garbageConfig;
     public override void Interact(IInteractor interactor)
     {
-        if (broom.IsBroomBeingHeld)
-        {
-            AudioManager.instance.PlaySound(garbageClip, transform, 1);
-            Destroy(gameObject);
-        }
-        else if (!broom.IsBroomBeingHeld) return;
+        if (!broom.IsBroomBeingHeld) return;
+        AudioManager.instance.PlaySound(garbageConfig.GarbageCollectClip, transform, 1);
+        Destroy(gameObject);
     }
 
     public override string InteractionText(IInteractor interactor) => string.Empty;

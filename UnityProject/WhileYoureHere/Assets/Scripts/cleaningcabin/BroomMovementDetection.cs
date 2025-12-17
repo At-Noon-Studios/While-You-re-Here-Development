@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,24 +8,31 @@ namespace cleaningcabin
 {
     public class BroomMovementDetection : HoldableObjectBehaviour
     {
-        private float _minBroomXPos = -3f;
-        private float _maxBroomXPos = 3f;
+        // private float _minBroomXPos = -3f;
+        // private float _maxBroomXPos = 3f;
+        // private float _broomSpeed = 0.004f;
+        // [Header("Speed Of Sweeping")]
+        // [SerializeField] private float sweepingSpeed = 1f;
+        
+        // private AudioSource _audioSource;
+        // [SerializeField] private AudioClip sweepingClip;
+
+        private float _sweepingTimeInSeconds;
         private float _broomXPos;
-
-        private float _broomSpeed = 0.004f;
-        [SerializeField] private float sweepingSpeed = 1f;
-
+        [SerializeField] private BroomConfig broomConfig;
+        
+        [Header("Sweeping References")]
         [SerializeField] private Transform broomModel;
         [SerializeField] private SweepingArea sweepingArea;
         
+        [Header("Broom being held")]
         public bool IsBroomBeingHeld => IsHeld;
 
+        [Header("Sweepable Area")]
         [SerializeField] private GameObject sweepingAreaObj;
         private Material _sweepingColor;
-        
         private Color _endingSweepingColor;
-        private float _sweepingTimeInSeconds;
-
+        
         private new void Awake()
         {
             base.Awake();
@@ -32,16 +40,9 @@ namespace cleaningcabin
             {
                 _broomXPos = broomModel.localPosition.x;
             }
-            _sweepingColor = sweepingAreaObj.GetComponent<MeshRenderer>().material;
-            // sweepingAreaObj.GetComponent<MeshRenderer>().material = _sweepingColor;
+            _sweepingColor = sweepingAreaObj.GetComponent<Renderer>().material;
             _endingSweepingColor = Color.white;
         }
-
-        // public override void Interact(IInteractor interactor)
-        // {
-            // base.Interact(interactor);
-            // Debug.Log("Monster");
-        // }
 
         public void SetMiniGameStartPos()
         {
@@ -60,15 +61,15 @@ namespace cleaningcabin
             if (!sweepingArea.IsMiniGameActive) return;
             var delta = inputValue.Get<Vector2>();
 
-            _broomXPos += delta.x * _broomSpeed;
-            _broomXPos = Math.Clamp(_broomXPos, _minBroomXPos * sweepingArea.transform.localScale.x,
-                _maxBroomXPos * sweepingArea.transform.localScale.x);
+            _broomXPos += delta.x * broomConfig.BroomSpeed;
+            _broomXPos = Math.Clamp(_broomXPos, broomConfig.MinBroomXPos * sweepingArea.transform.localScale.x,
+                broomConfig.MaxBroomXPos * sweepingArea.transform.localScale.x);
             
             broomModel.localPosition = new Vector3(_broomXPos, 0.25f, 2.5f);
-            if (delta.x != 0 && delta.y != 0)
-            {
+            if (delta.x != 0)
+            { 
                 _sweepingTimeInSeconds += Time.deltaTime;
-                _sweepingColor.color = Color.Lerp(_sweepingColor.color, _endingSweepingColor, sweepingSpeed * Time.deltaTime);
+                _sweepingColor.color = Color.Lerp(_sweepingColor.color, _endingSweepingColor, Time.deltaTime * broomConfig.LerpSpeed);
                 if(_sweepingTimeInSeconds >= 0.5 && _sweepingTimeInSeconds <= 1)
                 {
                     sweepingArea.EndSweepingMinigame();

@@ -6,7 +6,8 @@ namespace Interactable
     /// <summary>
     /// A generic implementation of <see cref="IInteractable"></see>. A script should inherit from this class if you wish to create an interactable that already implements some standard visual feedback.
     /// </summary>
-    [RequireComponent(typeof(Collider))] // Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
+    [RequireComponent(
+        typeof(Collider))] // Not used in this script, but if you add InteractableBehaviour to something that doesn't have a collider you will never receive an 'Interact' callback.
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
         private Collider _collider;
@@ -23,26 +24,28 @@ namespace Interactable
         protected virtual void Awake()
         {
             _collider = GetComponent<Collider>();
-            if (_collider == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
+            if (_collider == null)
+                Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
             Renderers = GetComponentsInChildren<Renderer>();
-            if (Renderers == null || Renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
+            if (Renderers == null || Renderers.Length == 0)
+                Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
         }
 
         #endregion
 
         #region Interface implementation
-        
+
         public virtual bool IsInteractableBy(IInteractor interactor) => !blockInteraction;
-        
+
         public virtual bool IsDetectableBy(IInteractor interactor) => !blockInteraction;
 
         public abstract void Interact(IInteractor interactor);
 
         public virtual void ClickInteract(IInteractor interactor)
         {
-
         }
+
         public virtual void BlockInteraction(bool value)
         {
             blockInteraction = value;

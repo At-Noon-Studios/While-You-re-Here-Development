@@ -23,4 +23,14 @@ public class AudioManager : MonoBehaviour
         float audioClipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, audioClipLength);
     }
+
+    // public void PlayOneShot(AudioSource audioSource, AudioClip audioClip, float volume)
+    // {
+        // AudioSource audioSource = Instantiate(soundObject, transform.position, Quaternion.identity);
+        // audioSource.clip = audioClip;
+        // audioSource.volume = volume;
+        // float audioClipLength = audioSource.clip.length;
+        // audioSource.PlayOneShot(audioClip);
+        // Destroy(audioSource.gameObject, audioClipLength);
+    // }
 }
