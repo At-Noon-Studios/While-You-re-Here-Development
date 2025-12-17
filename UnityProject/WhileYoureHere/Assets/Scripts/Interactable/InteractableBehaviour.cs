@@ -57,7 +57,7 @@ namespace Interactable
             RemoveOutlineMaterialFromRenderers();
         }
         
-        public virtual string InteractionText(IInteractor interactor) => gameObject.name;
+        public virtual string InteractionText(IInteractor interactor) => string.Empty;
         
         public void EnableCollider(bool state)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ScriptableObjects.chores;
 using TaskList;
@@ -19,7 +20,7 @@ namespace chore
         {
             InitializeChores();
         }
-        
+
         public void StartChoreWithSo(SoChore soChore)
         {
             StartChore(soChore.id);

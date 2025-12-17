@@ -1,5 +1,6 @@
 using Interactable.Holdable;
 using JetBrains.Annotations;
+using making_tea;
 using player_controls;
 using ScriptableObjects.Events;
 using ScriptableObjects.Interactable;
@@ -12,16 +13,28 @@ namespace Interactable
     [DisallowMultipleComponent]
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
+        [Header("Interaction Settings")]
         [SerializeField] private PlayerInteractionData data;
+
+        [Header("Camera")]
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")] [SerializeField] private EventChannel interact;
+
+        [Header("Input Events")]
+        [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private EventChannel dropEvent;
+
+
+        [Header("Holding")]
         [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
+        private ChairInteractable _sittingChair;
+
+        public bool IsTableMode { get; private set; }
+        public Camera PlayerCamera => playerCamera;
 
         private const int InteractableRaycastAllocation = 16;
 
@@ -45,14 +58,14 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += clickInteract;
+            clickInteractEvent.OnRaise += ClickInteract;
             dropEvent.OnRaise += DropObject;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= clickInteract;
+            clickInteractEvent.OnRaise -= ClickInteract;
             dropEvent.OnRaise -= DropObject;
         }
 
@@ -72,7 +85,15 @@ namespace Interactable
 
         #endregion
 
-        #region Private methods
+        #region Chair helpers
+
+        public void SetSittingChair(ChairInteractable chair) => _sittingChair = chair;
+
+        public void ClearSittingChair() => _sittingChair = null;
+
+        #endregion
+
+        #region Interaction Core
 
         private void Interact()
         {
@@ -117,19 +138,75 @@ namespace Interactable
 
         private int LookForHits(RaycastHit[] result)
         {
-            var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            return Physics.SphereCastNonAlloc(ray, data.InteractionAssistRadius, result, data.InteractionReach);
+            if (playerCamera == null || data == null)
+                return 0;
+
+            Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            return Physics.SphereCastNonAlloc(ray,
+                data.InteractionAssistRadius,
+                result,
+                data.InteractionReach);
         }
 
-        private void UpdateBestTarget(RaycastHit candidate, ref float closestDistance,
-            ref IInteractable bestTarget)
+        private void UpdateBestTarget(
+            RaycastHit candidate,
+            ref float closestDistance,
+            ref IInteractable bestTarget,
+            bool tableMode)
         {
-            if (candidate.distance >= closestDistance ||
-                !candidate.collider.TryGetComponent<IInteractable>(out var interactable) || !interactable.IsDetectableBy(this)) return;
-            
+            if (candidate.distance >= closestDistance)
+                return;
+
+            if (!TryGetBestInteractable(candidate.collider, tableMode, out var interactable))
+                return;
+
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
+
+        private bool TryGetBestInteractable(
+            Collider collider,
+            bool tableMode,
+            out IInteractable interactable)
+        {
+            interactable = null;
+
+            if (tableMode)
+            {
+                if (collider.TryGetComponent<ITablePickup>(out var tablePickup) &&
+                    tablePickup.IsDetectableBy(this))
+                {
+                    interactable = tablePickup;
+                    return true;
+                }
+
+                if (collider.TryGetComponent<ObjectHolderSingle>(out var objectHolderSingle) &&
+                    objectHolderSingle.IsDetectableBy(this))
+                {
+                    interactable = objectHolderSingle;
+                    return true;
+                }
+            }
+            else
+            {
+                if (collider.TryGetComponent<Placeable>(out var placeable) &&
+                    placeable.IsDetectableBy(this))
+                {
+                    interactable = placeable;
+                    return true;
+                }
+            }
+
+            if (collider.TryGetComponent<IInteractable>(out var fallback) &&
+                fallback.IsDetectableBy(this))
+            {
+                interactable = fallback;
+                return true;
+            }
+
+            return false;
+        }
+
 
         private void SetCurrentTarget(IInteractable newTarget)
         {
@@ -182,5 +259,32 @@ namespace Interactable
         }
 
         #endregion
+
+        #region Tablemode
+
+        public void EnableTableMode(bool enable)
+        {
+            IsTableMode = enable;
+            Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = enable;
+        }
+
+        private static bool CanDropTablePickup()
+        {
+            var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
+
+            foreach (var p in pickups)
+            {
+                if (!p.IsTableHeld) continue;
+
+                p.Drop();
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
     }
 }

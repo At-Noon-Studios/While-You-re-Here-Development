@@ -11,9 +11,6 @@ namespace Interactable.Holdable
     [RequireComponent(typeof(Rigidbody))]
     public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
     {
-        [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
-
         [Header("Holdable Data")]
         [SerializeField] private HoldableObjectData data;
 
@@ -24,13 +21,16 @@ namespace Interactable.Holdable
 
         private Transform _playerCamera;
 
-        public float Weight => data.Weight;
-        
+        private ObjectHolderSingle _currentHolder;
+                
         public bool IsPlaced { get; private set; }
         private bool _isLocked;
 
         private const int HoldLayer = 3;
 
+        public bool IsCurrentlyHeld => _holder != null;
+        public float Weight => data.Weight;
+        
         private GameObject player;
 
         protected override void Awake()
@@ -38,9 +38,6 @@ namespace Interactable.Holdable
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
             Renderers = GetComponentsInChildren<Renderer>();
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
 
             player = GameObject.FindWithTag("Player");
             if (player != null)
@@ -57,15 +54,6 @@ namespace Interactable.Holdable
             InitializeHeldVersion();
         }
 
-        private void Update()
-        {
-            if (!interactionCanvas ||
-                !interactionCanvas.gameObject.activeSelf ||
-                !_playerCamera) return;
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
-        }
-
         public override void Interact(IInteractor interactor)
         {
             if (_isLocked)
@@ -74,26 +62,26 @@ namespace Interactable.Holdable
             var chopTarget = GetComponentInChildren<LogChopTarget>();
             if (chopTarget != null && chopTarget.IsOnStump)
                 return;
-
-            // var player = GameObject.FindWithTag("Player");
-            var pic = player.GetComponent<PlayerInteractionController>();
-            if (pic.HeldObject != null)
-                return;
             
-            PickUp(interactor);
+            if (interactor is PlayerInteractionController pic &&
+                (pic.IsTableMode || pic.HeldObject != null))
+                return;
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
+            PickUp(interactor);
         }
         
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
+            if (_currentHolder != null)
+            {
+                _currentHolder.ClearHeldObject(this);
+                _currentHolder = null;
+            }
             _holder = interactor;
-            var heldObject = this;
             interactor.HeldObject?.Drop();
-            interactor.SetHeldObject(heldObject);
+            interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
             IsPlaced = false;
@@ -130,9 +118,10 @@ namespace Interactable.Holdable
             IsPlaced = false;
         }
 
-        public virtual void Place(Vector3 position, Quaternion? rotation = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
         {
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
+            _currentHolder = holder;
             _holder?.SetHeldObject(null);
             _holder = null; 
             _rigidbody.isKinematic = true;
@@ -194,9 +183,6 @@ namespace Interactable.Holdable
         public void SetInteractionLocked(bool locked)
         {
             _isLocked = locked;
-            
-            if (interactionCanvas != null) 
-                interactionCanvas.gameObject.SetActive(!locked);
         }
         
         public override void OnHoverEnter(IInteractor interactor)
@@ -206,20 +192,9 @@ namespace Interactable.Holdable
             
             base.OnHoverEnter(interactor);
 
-            bool canInteract = _holder == null;
-
-            if (interactionCanvas)
-                interactionCanvas.gameObject.SetActive(canInteract);
+            var canInteract = _holder == null;
         }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            if (interactionCanvas)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-
+        
         public override string InteractionText(IInteractor interactor)
         {
             return string.Empty;
