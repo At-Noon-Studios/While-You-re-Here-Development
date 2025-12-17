@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using ScriptableObjects.Interactable.Holdable;
 using UnityEngine;
 using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
+using ScriptableObjects.Interactable;
 
 namespace Interactable.Holdable
 {
