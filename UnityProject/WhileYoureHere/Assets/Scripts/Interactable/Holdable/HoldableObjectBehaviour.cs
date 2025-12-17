@@ -63,6 +63,11 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
+            var player = GameObject.FindWithTag("Player");
+            var pic = player.GetComponent<PlayerInteractionController>();
+            if (pic.HeldObject != null)
+                return;
+            
             PickUp(interactor);
 
             if (interactionCanvas != null)
