@@ -9,8 +9,7 @@ namespace chore
         {
             ItemCollected,
             LogPlacement,
-            LogChop,
-            PaperPlacement
+            LogChop
         }
         
         public bool IsActive { get; private set; }

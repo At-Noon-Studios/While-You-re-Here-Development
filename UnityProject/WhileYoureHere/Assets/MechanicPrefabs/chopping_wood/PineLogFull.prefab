@@ -163,11 +163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc675471987517e4685ce345bd372130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.LogChopTarget
+  logHitSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+  logChoppedSound: {fileID: 8300000, guid: b7368bece4b0e18498ff5a20f12e4c36, type: 3}
   choppedLogQuarterPrefab: {fileID: 4332810610412071041, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
-  logID: 0
 --- !u!65 &7996437044054566703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -201,10 +202,10 @@ GameObject:
   - component: {fileID: 8323688028259626994}
   - component: {fileID: 6775719744202106519}
   - component: {fileID: 3381879496654767642}
+  - component: {fileID: 4020477179044756108}
   - component: {fileID: 4394337199327460341}
   - component: {fileID: -2916475332029505751}
   - component: {fileID: -32125335679554451}
-  - component: {fileID: 1307443733674676105}
   m_Layer: 0
   m_Name: PineLogFull
   m_TagString: Log
@@ -312,6 +313,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4020477179044756108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4896110722311012467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
+  interactionCanvas: {fileID: 5233859435976588483}
+  data: {fileID: 11400000, guid: 8e030f2732954a745b8fcafcd5b94db0, type: 2}
 --- !u!65 &4394337199327460341
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -443,18 +458,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
   pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
---- !u!114 &1307443733674676105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4896110722311012467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
-  blockInteraction: 0
-  interactionCanvas: {fileID: 5233859435976588483}
-  data: {fileID: 11400000, guid: 8e030f2732954a745b8fcafcd5b94db0, type: 2}

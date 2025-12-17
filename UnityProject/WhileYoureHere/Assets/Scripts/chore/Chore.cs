@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using chore.chopping_wood;
-using chore.make_a_fire;
 using chore.scavenging;
 using ScriptableObjects.chores;
 using UnityEngine;
@@ -32,8 +31,8 @@ namespace chore
                 {
                     { ChoreComponent.ChoreComponentType.ItemCollected, CcItemCollected.CreateFactory },
                     { ChoreComponent.ChoreComponentType.LogPlacement, CcLogPlacement.CreateFactory},
-                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory},
-                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcPaperPlacement.CreateFactory}
+                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory}
+
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)
