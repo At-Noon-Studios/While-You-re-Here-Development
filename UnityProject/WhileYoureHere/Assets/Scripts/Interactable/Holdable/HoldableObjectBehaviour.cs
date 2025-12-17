@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
-using UnityEngine;
+using chopping_logs;
 using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
 using ScriptableObjects.Interactable;
+using UnityEngine;
 
 namespace Interactable.Holdable
 {
@@ -26,6 +27,7 @@ namespace Interactable.Holdable
         private ObjectHolderSingle _currentHolder;
                 
         public bool IsPlaced { get; private set; }
+        private bool _isLocked;
 
         private const int HoldLayer = 3;
 
@@ -69,6 +71,13 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
+            if (_isLocked)
+                return;
+            
+            var chopTarget = GetComponentInChildren<LogChopTarget>();
+            if (chopTarget != null && chopTarget.IsOnStump)
+                return;
+            
             if (interactor is PlayerInteractionController pic &&
                 (pic.IsTableMode || pic.HeldObject != null))
                 return;
@@ -78,7 +87,6 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-
         
         private void PickUp(IInteractor interactor)
         {
@@ -96,6 +104,18 @@ namespace Interactable.Holdable
             EnableCollider(false);
             IsPlaced = false;
         }
+        
+        public void PickUpByInteractor(IInteractor interactor)
+        {
+            var chopTarget = GetComponentInChildren<LogChopTarget>();
+            if (chopTarget != null)
+            {
+                chopTarget.NotifyPickedUp();
+            }
+
+            PickUp(interactor);
+        }
+
         
         private void SetHeldVisual(bool state, GameObject heldVisual) {
             heldVisual.SetActive(state);
@@ -118,8 +138,8 @@ namespace Interactable.Holdable
 
         public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
         {
+            if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _currentHolder = holder;
-
             _holder?.SetHeldObject(null);
             _holder = null; 
             _rigidbody.isKinematic = true;
@@ -139,6 +159,20 @@ namespace Interactable.Holdable
             transform.localPosition = data.HoldingOffset;
             gameObject.layer = HoldLayer;
         }
+        
+        public void ResetPose()
+        {
+            if (_holder == null) return;
+
+            transform.SetParent(_holder.HoldPoint);
+            transform.localPosition = data.HoldingOffset;
+            transform.localRotation = Quaternion.Euler(data.HoldingRotation);
+
+            var rb = GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.isKinematic = true;
+        }
+
 
         private void Detach()
         {
@@ -164,8 +198,19 @@ namespace Interactable.Holdable
             if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
 
+        public void SetInteractionLocked(bool locked)
+        {
+            _isLocked = locked;
+            
+            if (interactionCanvas != null) 
+                interactionCanvas.gameObject.SetActive(!locked);
+        }
+        
         public override void OnHoverEnter(IInteractor interactor)
         {
+            if (_isLocked)
+                return;
+            
             base.OnHoverEnter(interactor);
 
             var canInteract = _holder == null;

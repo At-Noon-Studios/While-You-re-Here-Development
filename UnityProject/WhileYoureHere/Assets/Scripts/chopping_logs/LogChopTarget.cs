@@ -1,4 +1,3 @@
-using chore;
 using UnityEngine;
 
 namespace chopping_logs
@@ -16,12 +15,7 @@ namespace chopping_logs
         [Header("Chore ID reference")]
         [SerializeField] private int logID;
         
-        
-        
-        private void Start()
-        {
-            _stump = GetComponentInParent<Stump>();
-        }
+        public bool IsOnStump { get; private set; }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -61,11 +55,26 @@ namespace chopping_logs
                 }
             }
             _hits = 0;
-            _stump.EndMinigame();
+            _stump.EndMinigame(wasCancelled: false);
         }
-        
-        public void SetStump(Stump stump) => _stump = stump;
 
         public int GetLog() => logID;
+        
+        public void SetStump(Stump stump)
+        {
+            _stump = stump;
+            IsOnStump = true;
+        }
+
+        public void NotifyPickedUp()
+        {
+            if (_stump != null)
+            {
+                _stump.OnLogPickedUp(gameObject);
+                _stump = null;
+            }
+
+            IsOnStump = false;
+        }
     }
 }
