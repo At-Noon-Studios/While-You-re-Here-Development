@@ -57,7 +57,7 @@ namespace chopping_logs
                 }
             }
             _hits = 0;
-            _stump.EndMinigame();
+            _stump.EndMinigame(wasCancelled: false);
         }
 
         public int GetLog() => logID;

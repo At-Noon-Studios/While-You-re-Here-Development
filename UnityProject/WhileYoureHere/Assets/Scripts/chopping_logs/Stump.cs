@@ -52,7 +52,7 @@ namespace chopping_logs
         private void OnCancelInput()
         {
             if (IsCurrentMinigameActive && IsMinigameActive)
-                EndMinigame();
+                EndMinigame(wasCancelled: true);
         }
         
         public override void Interact(IInteractor interactor)
@@ -168,7 +168,7 @@ namespace chopping_logs
             player.GetComponentInChildren<AxeHitDetector>()?.SetBaseRotation();
         }
         
-        public void EndMinigame()
+        public void EndMinigame(bool wasCancelled)
         {
             IsMinigameActive = false;
             IsCurrentMinigameActive = false;
@@ -182,17 +182,23 @@ namespace chopping_logs
             cameraController?.ResumeCameraMovement();
 
             ChopUIManager.Instance?.HideAllUI();
+
+            var playerController = player.GetComponent<PlayerInteractionController>();
+            var heldBehaviour = playerController?.HeldObject as HoldableObjectBehaviour;
+            heldBehaviour?.ResetPose();
+            
+            if (wasCancelled)
+            {
+                return;
+            }
+            
             StartCoroutine(PlayCrackTwice(0.12f));
 
             var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
             ClearLog();
-
+            
             if (chopTarget != null)
                 ChoreEvents.TriggerLogChopped(chopTarget.GetLog());
-            
-            var playerController = player.GetComponent<PlayerInteractionController>();
-            var heldBehaviour = playerController?.HeldObject as HoldableObjectBehaviour;
-            heldBehaviour?.ResetPose();
         }
 
         private void ClearLog()
