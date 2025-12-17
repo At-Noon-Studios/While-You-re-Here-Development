@@ -23,6 +23,8 @@ namespace Interactable
         [Header("Input Events")]
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
+        [SerializeField] private EventChannel dropEvent;
+
 
         [Header("Holding")]
         [SerializeField] private Transform holdPoint;
@@ -46,8 +48,7 @@ namespace Interactable
 
         private void Start()
         {
-            if (_uiManager == null)
-                _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
+            _uiManager = UIManager.Instance;
         }
 
         private void Update()
@@ -57,19 +58,21 @@ namespace Interactable
 
         private void OnEnable()
         {
-            if (interact != null) interact.OnRaise += Interact;
-            if (clickInteractEvent != null) clickInteractEvent.OnRaise += ClickInteract;
+            interact.OnRaise += Interact;
+            clickInteractEvent.OnRaise += clickInteract;
+            dropEvent.OnRaise += DropObject;
         }
 
         private void OnDisable()
         {
-            if (interact != null) interact.OnRaise -= Interact;
-            if (clickInteractEvent != null) clickInteractEvent.OnRaise -= ClickInteract;
+            interact.OnRaise -= Interact;
+            clickInteractEvent.OnRaise -= clickInteract;
+            dropEvent.OnRaise -= DropObject;
         }
 
         #endregion
 
-        #region Interface - Holding
+        #region Interface implementation
 
         public Transform HoldPoint => holdPoint;
 
@@ -143,18 +146,24 @@ namespace Interactable
         {
             if (NoTarget)
             {
-                HeldObject?.Drop();
+                DropObject();
                 return;
             }
-
-            if (_currentTarget is IClickInteractable)
-            {
+            
+            if (_currentTarget is IClickInteractable &&
+                clickInteractEvent.OnRaise != null)            
+                {
                 ClickInteractWithTarget();
             }
             else
             {
                 _uiManager.PulseInteractPrompt();
             }
+        }
+
+          private void DropObject()
+        {
+            HeldObject?.Drop();        
         }
 
 
@@ -303,7 +312,6 @@ namespace Interactable
 
             var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
             var modifier = Mathf.Max(1f - weight, 0.4f);
-
             _movementController.SetMovementModifier(modifier);
         }
         
@@ -314,7 +322,6 @@ namespace Interactable
         public void EnableTableMode(bool enable)
         {
             IsTableMode = enable;
-
             Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = enable;
         }

@@ -31,6 +31,8 @@ namespace Interactable.Holdable
 
         public bool IsCurrentlyHeld => _holder != null;
         public float Weight => data.Weight;
+        
+        private GameObject player;
 
         protected override void Awake()
         {
@@ -41,7 +43,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            var player = GameObject.FindWithTag("Player");
+            player = GameObject.FindWithTag("Player");
             if (player != null)
             {
                 var cam = player.GetComponentInChildren<Camera>();
@@ -67,7 +69,8 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController { IsTableMode: true })
+            if (interactor is PlayerInteractionController pic &&
+                (pic.IsTableMode || pic.HeldObject != null))
                 return;
 
             PickUp(interactor);
@@ -75,6 +78,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
+
         
         private void PickUp(IInteractor interactor)
         {
