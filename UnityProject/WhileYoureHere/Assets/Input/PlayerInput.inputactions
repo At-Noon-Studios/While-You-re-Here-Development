@@ -77,6 +77,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TaskList",
+                    "type": "Button",
+                    "id": "89a4e52f-0b9a-4524-a8a3-29e222d1183d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -185,7 +194,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "SkipDialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -209,6 +218,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MouthBlow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c286a081-fbd6-4cc6-8773-0476eb5416ad",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TaskList",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

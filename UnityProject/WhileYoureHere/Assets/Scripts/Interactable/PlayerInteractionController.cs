@@ -78,7 +78,7 @@ namespace Interactable
         {
             if (NoTarget)
                 return;
-            
+
             if (TargetInteractable)
             {
                 if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
@@ -91,20 +91,18 @@ namespace Interactable
         {
             if (NoTarget)
                 return;
-            
+
             if (_currentTarget is IClickInteractable &&
                 clickInteractEvent.OnRaise != null)
             {
                 ClickInteractWithTarget();
             }
-            else
-                _uiManager
-                    .PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
         private void DropObject()
         {
-            HeldObject?.Drop();
+            HeldObject?.Drop();        
         }
 
         private void RefreshCurrentTarget()
