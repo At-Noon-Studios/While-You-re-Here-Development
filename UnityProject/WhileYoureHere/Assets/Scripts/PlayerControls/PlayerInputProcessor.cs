@@ -14,6 +14,8 @@ namespace player_controls
         [SerializeField] private EventChannel drop;
         [SerializeField] private EventChannel cancel;
 
+        [SerializeField] private EventChannel blow;
+        
         private void OnLook(InputValue inputValue)
         {
             look.Raise(inputValue.Get<Vector2>());
@@ -42,6 +44,11 @@ namespace player_controls
         private void OnCancel()
         {
             cancel.Raise();
+        }
+
+        private void OnMouthBlow()
+        {
+            blow.Raise();
         }
     }
 }

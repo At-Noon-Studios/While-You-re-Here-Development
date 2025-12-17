@@ -26,6 +26,8 @@ namespace Interactable.Holdable
         private ObjectHolder _currentHolder;
 
         public float Weight => data.Weight;
+        
+        public bool IsPlaced { get; private set; }
 
         private const int HoldLayer = 3;
 
@@ -91,6 +93,7 @@ namespace Interactable.Holdable
             interactor.SetHeldObject(heldObject);
             AttachTo(interactor);
             EnableCollider(false);
+            IsPlaced = false;
         }
         
         public void PickUpByInteractor(IInteractor interactor)
@@ -121,9 +124,9 @@ namespace Interactable.Holdable
             _currentHolder = null;
             _holder.SetHeldObject(null);
             _holder = null;
-
             Detach();
             EnableCollider(true);
+            IsPlaced = false;
         }
 
         public virtual void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
@@ -132,16 +135,14 @@ namespace Interactable.Holdable
             
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
-            _holder = null;
-
+            _holder = null; 
             _rigidbody.isKinematic = true;
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
-
             transform.position = position;
             transform.rotation = rotation ?? Quaternion.identity;
-
             EnableCollider(true);
+            IsPlaced = true;
         }
 
         private void AttachTo(IInteractor interactor)
