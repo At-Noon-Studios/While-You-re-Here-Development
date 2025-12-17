@@ -1,4 +1,4 @@
-﻿using Interactable.Holdable;
+using Interactable.Holdable;
 using JetBrains.Annotations;
 using player_controls;
 using ScriptableObjects.Events;

@@ -97,7 +97,7 @@ namespace dialogue
             _sentenceIndex = startSentenceIndex;
             gameObject.SetActive(true);
 
-            
+
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
             if (!_nodes.TryGetValue(node.nodeID, out _currentNode))
@@ -105,7 +105,7 @@ namespace dialogue
                 EndDialogue();
                 return;
             }
-            
+
 
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
             // PlayNextSentence();
@@ -257,7 +257,7 @@ namespace dialogue
 
             PlayNextSentence();
         }
-        
+
 
         private void CreateChoices()
         {

@@ -1,4 +1,4 @@
-﻿namespace radio_interaction
+namespace radio_interaction
 {
     public class ResetCameraState : IRadioState
     {
