@@ -23,13 +23,14 @@ namespace Interactable.Holdable
         [CanBeNull] private GameObject _heldVersion;
 
         private Transform _playerCamera;
-        private ObjectHolder _currentHolder;
 
         public float Weight => data.Weight;
         
         public bool IsPlaced { get; private set; }
 
         private const int HoldLayer = 3;
+
+        private GameObject player;
 
         protected override void Awake()
         {
@@ -40,7 +41,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            var player = GameObject.FindWithTag("Player");
+            player = GameObject.FindWithTag("Player");
             if (player != null)
             {
                 var cam = player.GetComponentInChildren<Camera>();
@@ -70,6 +71,11 @@ namespace Interactable.Holdable
             if (chopTarget != null && chopTarget.IsOnStump)
                 return;
 
+            // var player = GameObject.FindWithTag("Player");
+            var pic = player.GetComponent<PlayerInteractionController>();
+            if (pic.HeldObject != null)
+                return;
+            
             PickUp(interactor);
 
             if (interactionCanvas != null)
@@ -80,7 +86,6 @@ namespace Interactable.Holdable
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
-
             _holder = interactor;
             var heldObject = this;
             interactor.HeldObject?.Drop();
@@ -121,10 +126,8 @@ namespace Interactable.Holdable
             IsPlaced = false;
         }
 
-        public virtual void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
+        public virtual void Place(Vector3 position, Quaternion? rotation = null)
         {
-            _currentHolder = holder;
-            
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder?.SetHeldObject(null);
             _holder = null; 
