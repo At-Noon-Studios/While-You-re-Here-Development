@@ -1,8 +1,6 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using Interactable.Holdable;
-using JetBrains.Annotations;
-using making_tea;
+using make_a_fire;
 using UnityEngine;
 
 namespace Interactable.Concrete.ObjectHolder
@@ -12,125 +10,49 @@ namespace Interactable.Concrete.ObjectHolder
         [Header("Placement")]
         [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
-
-        [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
-
-        [CanBeNull] private IHoldableObject _heldObject;
-        private Transform _playerCamera;
-
-        public event Action<IHoldableObject> OnPlaced;
-        public event Action<IHoldableObject> OnRemoved;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-
-            var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
-            
-            var cam = player.GetComponentInChildren<Camera>();
-            if (cam != null)
-                _playerCamera = cam.transform;
-        }
-
-        private void Update()
-        {
-            if (interactionCanvas == null ||
-                !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-            
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
-        }
-
+          [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
+        private readonly List<PlacedObjectData> _placedObjectsInHolders = new List<PlacedObjectData>();
+    
         public override void Interact(IInteractor interactor)
         {
-            var pic = interactor as PlayerInteractionController;
+            var heldObject = interactor.HeldObject;
+            if (heldObject == null) return;
 
-            if (pic != null && pic.IsTableMode)
+            var heldGameObject = (heldObject as Component)?.gameObject;
+            if (!heldGameObject) return;
+            
+            var placedData = placedObjects.FirstOrDefault(e => e.objectPrefab.GetType() == heldGameObject.GetType());
+            if (placedData != null)
             {
-                HandleTableModePlacement();
-                return;
+                placedObjects.Remove(placedData);
+                heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
+                _placedObjectsInHolders.Add(placedData);
             }
-
-            if (_heldObject != null)
-                return;
-
-            if (interactor.HeldObject == null)
-                return;
-
-            _heldObject = interactor.HeldObject;
-
-            _heldObject.Place(placePoint.position,
-                              Quaternion.Euler(placedObjectRotation),
-                              this);
-
-            var go = ((MonoBehaviour)_heldObject).gameObject;
-            go.transform.SetParent(placePoint);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localRotation = Quaternion.Euler(placedObjectRotation);
-
-            OnPlaced?.Invoke(_heldObject);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
+            
+            interactor.SetHeldObject(null);
         }
-
-        public void ClearHeldObject(IHoldableObject obj)
-        {
-            if (_heldObject != obj) return;
-            OnRemoved?.Invoke(obj);
-
-            _heldObject = null;
-        }
-
-        private void HandleTableModePlacement()
-        {
-            var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
-            var pickup = pickups.FirstOrDefault(p => p.IsTableHeld);
-            if (pickup == null) return;
-
-            var obj = pickup.gameObject;
-            var rb = obj.GetComponent<Rigidbody>();
-            if (rb != null) rb.isKinematic = true;
-
-            obj.transform.SetParent(null);
-            obj.transform.position = placePoint.position;
-            obj.transform.rotation = Quaternion.Euler(placedObjectRotation);
-
-            pickup.ForceDropFromTableMode();
-        }
-
+        
         public override bool IsInteractableBy(IInteractor interactor)
         {
-            if (interactor is PlayerInteractionController { IsTableMode: true })
-                return true;
+            if (blockInteraction) return false;
 
-            return _heldObject == null &&
-                   interactor.HeldObject is IPlaceable;
+            var heldObject = interactor.HeldObject;
+            if (heldObject == null) return false;
+
+            var heldGameObject = (heldObject as Component)?.gameObject;
+            if (!heldGameObject) return false;
+
+            return placedObjects.Any(e => e.objectPrefab.GetType() == heldGameObject.GetType());
         }
-
-        public override void OnHoverEnter(IInteractor interactor)
+        
+        public override string InteractionText(IInteractor interactor)
         {
-            base.OnHoverEnter(interactor);
+            if (!IsInteractableBy(interactor))
+                return string.Empty;
 
-            var canInteract = _heldObject == null &&
-                              interactor.HeldObject is IPlaceable;
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(canInteract);
+            return "Place " + interactor.HeldObject.InteractionText(interactor);
         }
 
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
+        
     }
 }

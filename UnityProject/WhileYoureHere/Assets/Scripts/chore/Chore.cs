@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using chore.chopping_wood;
 using chore.making_tea;
+using chore.make_a_fire;
 using chore.scavenging;
 using ScriptableObjects.chores;
 using UnityEngine;
@@ -36,7 +37,8 @@ namespace chore
                     { ChoreComponent.ChoreComponentType.TeabagAdded, CcTeabagAdded.CreateFactory },
                     { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.LogPlacement, CcLogPlacement.CreateFactory},
-                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory}
+                    { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory},
+                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcPaperPlacement.CreateFactory}
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

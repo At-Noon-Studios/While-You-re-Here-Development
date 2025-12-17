@@ -14,7 +14,8 @@ namespace chore
             TeabagAdded,
             CupFilled,
             LogPlacement,
-            LogChop
+            LogChop,
+            PaperPlacement
         }
         
         public bool IsActive { get; private set; }

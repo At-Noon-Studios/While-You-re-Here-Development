@@ -24,7 +24,9 @@ namespace Interactable.Holdable
         private Transform _playerCamera;
 
         private ObjectHolder _currentHolder;
-        
+                
+        public bool IsPlaced { get; private set; }
+
         private const int HoldLayer = 3;
 
         public bool IsCurrentlyHeld => _holder != null;
@@ -88,6 +90,7 @@ namespace Interactable.Holdable
             interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
+            IsPlaced = false;
         }
         
         private void SetHeldVisual(bool state, GameObject heldVisual) {
@@ -104,9 +107,9 @@ namespace Interactable.Holdable
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _holder.SetHeldObject(null);
             _holder = null;
-
             Detach();
             EnableCollider(true);
+            IsPlaced = false;
         }
 
         public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null)
@@ -114,16 +117,14 @@ namespace Interactable.Holdable
             _currentHolder = holder;
 
             _holder?.SetHeldObject(null);
-            _holder = null;
-
+            _holder = null; 
             _rigidbody.isKinematic = true;
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
-
             transform.position = position;
             transform.rotation = rotation ?? Quaternion.identity;
-
             EnableCollider(true);
+            IsPlaced = true;
         }
 
         private void AttachTo(IInteractor interactor)
