@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Interactable.Holdable;
-using JetBrains.Annotations;
 using make_a_fire;
 using UnityEngine;
 
@@ -9,9 +7,9 @@ namespace Interactable.Concrete.ObjectHolder
 {
     public class ObjectHolder : InteractableBehaviour
     {
+        [Header("Placement")]
         [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
-        // [CanBeNull] private IHoldableObject _heldObject;
           [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
         private readonly List<PlacedObjectData> _placedObjectsInHolders = new List<PlacedObjectData>();
     
@@ -33,12 +31,6 @@ namespace Interactable.Concrete.ObjectHolder
             
             interactor.SetHeldObject(null);
         }
-
-        // public override bool IsInteractableBy(IInteractor interactor)
-        // {
-        //     if (_heldObject == null) return interactor.HeldObject is IPlaceable;
-        //     return true;
-        // }
         
         public override bool IsInteractableBy(IInteractor interactor)
         {
@@ -52,9 +44,6 @@ namespace Interactable.Concrete.ObjectHolder
 
             return placedObjects.Any(e => e.objectPrefab.GetType() == heldGameObject.GetType());
         }
-
-
-        // public override string InteractionText(IInteractor interactor) => _heldObject == null ? "Place " + (interactor.HeldObject?.InteractionText(interactor) ?? "held object") : "Pick up " + _heldObject.InteractionText(interactor);
         
         public override string InteractionText(IInteractor interactor)
         {
