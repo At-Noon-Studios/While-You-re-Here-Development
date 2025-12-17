@@ -41,9 +41,7 @@ namespace Interactable
 
         private void Awake()
         {
-            // _movementController = GetComponent<MovementController>();
-
-            _uiManager = UIManager.Instance ?? FindObjectOfType<UIManager>();
+            _movementController = GetComponent<MovementController>();
         }
 
         private void Start()
