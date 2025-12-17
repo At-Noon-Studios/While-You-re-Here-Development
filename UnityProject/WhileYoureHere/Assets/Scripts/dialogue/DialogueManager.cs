@@ -17,8 +17,7 @@ namespace dialogue
         [Header("UI")] [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")]
-        [SerializeField] private float letterDelay = 0.05f;
+        [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         private AudioSource _audioSource;
@@ -88,7 +87,7 @@ namespace dialogue
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
 
-        public void StartRadioDialogue(DialogueNode node, float resumeTime =0, int startSentenceIndex = 0)
+        public void StartRadioDialogue(DialogueNode node, float resumeTime = 0, int startSentenceIndex = 0)
         {
             _nodes.Clear();
             _nodes[node.nodeID] = node;
@@ -147,6 +146,7 @@ namespace dialogue
             {
                 _currentNode.flag.currentValue = true;
             }
+
             if (_sentenceIndex >= _activeSentences.Length)
             {
                 if (_currentNode.choices?.Count > 0)
@@ -206,7 +206,11 @@ namespace dialogue
 
                     yield return new WaitForSeconds(letterDelay);
                 }
-                resumeTime=_audioSource.time;
+
+                resumeTime = _audioSource.time;
+                if (resumeTime == 0)
+                    resumeTime = sentence.audio.length - 0.5f;
+                Debug.Log("resume time =" + resumeTime + "sentence length = " + sentence.audio.length);
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
 
@@ -218,6 +222,7 @@ namespace dialogue
                     _sentenceIndex = 0;
                     yield break;
                 }
+
                 _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
             }
         }
@@ -303,6 +308,7 @@ namespace dialogue
 
             return Mathf.Clamp(_audioSource.time, 0f, _audioSource.clip.length);
         }
+
         public float GetSentenceAudioTime(int sentenceIndex)
         {
             if (_currentNode == null || _currentNode.sentences == null)

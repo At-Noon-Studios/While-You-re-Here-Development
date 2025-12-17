@@ -66,7 +66,6 @@ namespace radio_interaction
             RadioStateMachine.ChangeState(new RadioOffState(this));
 
             _currentStationIndex = 0;
-            PlayClassicRadio();
         }
 
         private void Update()
@@ -291,9 +290,9 @@ namespace radio_interaction
 
         public bool DonePlayingCorrectChannel()
         {
-            if (dialogueManager == null 
-                || _lastPlayedNode == null 
-                || _lastPlayedNode.sentences == null 
+            if (dialogueManager == null
+                || _lastPlayedNode == null
+                || _lastPlayedNode.sentences == null
                 || _lastPlayedNode.sentences.Count == 0)
                 return false;
 
@@ -304,8 +303,9 @@ namespace radio_interaction
                 return false;
 
             bool typingDone = dialogueManager.SentenceRoutineStopped();
-            bool audioDone = dialogueManager.GetCurrentAudioTime() <= 0.01f;
-            current += 1;
+            bool audioDone = dialogueManager.GetCurrentAudioTime() <= 0.05f;
+            if (lastSentence == current)
+                current += 1;
             bool finishedAllSentences = current > lastSentence;
 
             return typingDone && audioDone && finishedAllSentences;
