@@ -1,3 +1,4 @@
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
@@ -106,7 +107,7 @@ namespace Interactable
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
-        private void clickInteract()
+        private void ClickInteract()
         {
             if (NoTarget) HeldObject?.Drop();
             else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
@@ -129,7 +130,7 @@ namespace Interactable
             var closestDistance = float.MaxValue;
             for (var i = 0; i < hitCount; i++)
             {
-                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
+                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;

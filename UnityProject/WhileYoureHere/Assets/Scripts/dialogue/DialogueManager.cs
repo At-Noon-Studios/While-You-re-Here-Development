@@ -172,20 +172,11 @@ namespace dialogue
                     _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 if (_currentNode.nodeID == "radio_static")
                 {
-                    _audioSource.loop = true;
-                    _audioSource.clip = sentence.audio;
-                    _audioSource.volume = volume;
-                    _audioSource.Play();
+                    PlayStaticAudio(sentence.audio);
                     yield break;
                 }
 
-                var startedClip = sentence.audio;
-                _audioSource.clip = sentence.audio;
-                _audioSource.volume = volume;
-                resumeTime = Mathf.Clamp(resumeTime, 0f, startedClip.length);
-                _audioSource.time = resumeTime;
-                _audioSource.Play();
-                _audioSource.loop = false;
+                resumeTime = PlayResumedAudio(sentence, resumeTime);
 
                 _resumeCharIndex = Mathf.FloorToInt((resumeTime / sentence.audio.length) * sentence.text.Length);
                 _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
@@ -214,17 +205,42 @@ namespace dialogue
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
 
-                if (_sentenceIndex < _activeSentences.Length)
-                    _sentenceIndex += 1;
-                if (_activeSentences == null || _sentenceIndex >= _activeSentences.Length)
-                {
-                    EndDialogue();
-                    _sentenceIndex = 0;
-                    yield break;
-                }
-
-                _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+                ProceedToNextSentence();
             }
+        }
+
+        private void ProceedToNextSentence()
+        {
+            if (_sentenceIndex < _activeSentences.Length)
+                _sentenceIndex += 1;
+            if (_activeSentences == null || _sentenceIndex >= _activeSentences.Length)
+            {
+                EndDialogue();
+                _sentenceIndex = 0;
+                return;
+            }
+
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+        }
+
+        private float PlayResumedAudio(DialogueSentence sentence, float resumeTime)
+        {
+            var startedClip = sentence.audio;
+            _audioSource.clip = sentence.audio;
+            _audioSource.volume = volume;
+            resumeTime = Mathf.Clamp(resumeTime, 0f, startedClip.length);
+            _audioSource.time = resumeTime;
+            _audioSource.Play();
+            _audioSource.loop = false;
+            return resumeTime;
+        }
+
+        private void PlayStaticAudio(AudioClip clip)
+        {
+            _audioSource.loop = true;
+            _audioSource.clip = clip;
+            _audioSource.volume = volume;
+            _audioSource.Play();
         }
 
         private IEnumerator TypeSentence(DialogueSentence sentence)
