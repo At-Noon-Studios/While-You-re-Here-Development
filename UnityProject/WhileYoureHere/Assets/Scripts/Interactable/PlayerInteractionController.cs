@@ -1,6 +1,6 @@
 ﻿using Interactable.Holdable;
 using JetBrains.Annotations;
-using player_controls;
+using PlayerControls;
 using ScriptableObjects.Events;
 using ScriptableObjects.Interactable;
 using UI;
@@ -21,6 +21,7 @@ namespace Interactable
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
+        private bool _interactingPaused;
 
         private const int InteractableRaycastAllocation = 16;
 
@@ -38,19 +39,19 @@ namespace Interactable
 
         private void Update()
         {
-            RefreshCurrentTarget();
+            if (!_interactingPaused) RefreshCurrentTarget();
         }
 
         private void OnEnable()
         {
             interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += clickInteract;
+            clickInteractEvent.OnRaise += ClickInteract;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= clickInteract;
+            clickInteractEvent.OnRaise -= ClickInteract;
         }
 
         #endregion
@@ -68,6 +69,22 @@ namespace Interactable
         }
 
         #endregion
+        
+        #region Public methods
+
+        public void PausePlayerInteraction()
+        {
+            OnDisable();
+            _interactingPaused = true;
+            SetHeldObject(null);
+        }
+
+        public void ResumePlayerInteraction()
+        {
+            OnEnable();
+        }
+        
+        #endregion
 
         #region Private methods
 
@@ -82,7 +99,7 @@ namespace Interactable
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
-        private void clickInteract()
+        private void ClickInteract()
         {
             if (NoTarget) HeldObject?.Drop();
             else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
@@ -161,7 +178,7 @@ namespace Interactable
 
         private void UpdateMovementSpeed([CanBeNull] IHoldableObject holdableObject)
         {
-            if (_movementController == null) return;
+            if (!_movementController) return;
             if (holdableObject == null)
             {
                 _movementController.SetMovementModifier(1f);

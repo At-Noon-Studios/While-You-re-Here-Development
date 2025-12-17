@@ -14,10 +14,10 @@ namespace PlayerControls
         private const float CircleDegrees = 360;
 
         public event Action<Quaternion> OnRotate;
-
+        
         private float _xRotation;
         private float _yRotation;
-
+        
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;

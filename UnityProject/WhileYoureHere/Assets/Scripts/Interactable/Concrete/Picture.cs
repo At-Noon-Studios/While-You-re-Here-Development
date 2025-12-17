@@ -1,15 +1,22 @@
-using Interactable;
+using Playable;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class Picture : InteractableBehaviour
+namespace Interactable.Concrete
 {
-    [SerializeField] private PlayableDirector director;
-    
-    
-    
-    public override void Interact(IInteractor interactor)
+    public class Picture : InteractableBehaviour
     {
-        director.Play();
+        [SerializeField] private PlayableDirector director;
+        private PlayableManager _playableManager;
+
+        private void Start()
+        {
+            _playableManager = PlayableManager.Instance;
+        }
+        
+        public override void Interact(IInteractor interactor)
+        {
+            _playableManager.Play(director);
+        }
     }
 }

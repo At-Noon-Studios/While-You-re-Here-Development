@@ -38,12 +38,11 @@ namespace Interactable.Holdable
                 interactionCanvas.gameObject.SetActive(false);
 
             var player = GameObject.FindWithTag("Player");
-            if (player != null)
-            {
-                var cam = player.GetComponentInChildren<Camera>();
-                if (cam != null)
-                    _playerCamera = cam.transform;
-            }
+            
+            if (player == null) return;
+            var cam = player.GetComponentInChildren<Camera>();
+            if (cam != null)
+                _playerCamera = cam.transform;
         }
 
         protected void Start()
@@ -65,7 +64,7 @@ namespace Interactable.Holdable
         {
             PickUp(interactor);
 
-            if (interactionCanvas != null)
+            if (interactionCanvas)
                 interactionCanvas.gameObject.SetActive(false);
         }
         
