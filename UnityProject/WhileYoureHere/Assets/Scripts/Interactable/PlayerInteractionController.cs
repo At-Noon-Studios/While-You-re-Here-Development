@@ -59,14 +59,14 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += clickInteract;
+            clickInteractEvent.OnRaise += ClickInteract;
             dropEvent.OnRaise += DropObject;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= clickInteract;
+            clickInteractEvent.OnRaise -= ClickInteract;
             dropEvent.OnRaise -= DropObject;
         }
 
