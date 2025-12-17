@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: b8684e333fad3754bbc7111f91bb5933, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -627,6 +627,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &609910845 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1458482718375950863, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+  m_PrefabInstance: {fileID: 1700085935}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dad5f49705e43947881759b3c896ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
 --- !u!1001 &692292409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -818,6 +829,7 @@ MonoBehaviour:
   playerCamera: {fileID: 1727462167}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
   clickInteractEvent: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
+  dropEvent: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
   holdPoint: {fileID: 1389581394}
 --- !u!82 &821599290
 AudioSource:
@@ -1072,7 +1084,7 @@ MonoBehaviour:
   onStateCanvas: {fileID: 2004500712}
   offStateCanvas: {fileID: 878993309}
   slideCanvas: {fileID: 596766670}
-  dialogueManager: {fileID: 1319547671}
+  dialogueManager: {fileID: 609910845}
   classicRadioClip: {fileID: 8300000, guid: b90960a971262194b8d16216f7724738, type: 3}
 --- !u!4 &1184728053 stripped
 Transform:
@@ -1172,17 +1184,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1319547671 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7925021156127453221, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
-  m_PrefabInstance: {fileID: 1700085935}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dad5f49705e43947881759b3c896ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
 --- !u!1 &1389581393
 GameObject:
   m_ObjectHideFlags: 0
