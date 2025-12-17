@@ -15,7 +15,7 @@ namespace make_a_fire
         private List<GameObject> logs;
         
         [Header("Fire Behaviour")] 
-        [SerializeField] private VisualEffect fireParticle;
+        [SerializeField] private ParticleSystem fireParticle;
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
@@ -64,14 +64,13 @@ namespace make_a_fire
             
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
-            fireParticle.SetVector3("FireVelocity", new Vector3(0, 0.1f, 0));
             fireParticle.Play();
         }
 
         public void StartBigFire()
         {
             _audioSource.PlayOneShot(chargedFire);
-            fireParticle.SetVector3("FireVelocity", new Vector3(0, 2f, 0));
+            //need to add big fire later
             ChoreEvents.TriggerPaperPlacement();
         }
 
