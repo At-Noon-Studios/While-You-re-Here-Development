@@ -17,12 +17,7 @@ namespace chopping_logs
         [Header("Chore ID reference")]
         [SerializeField] private int logID;
         
-        
-        
-        // private void Start()
-        // {
-        //     _stump = GetComponentInParent<Stump>();
-        // }
+        public bool IsOnStump { get; private set; }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -64,23 +59,24 @@ namespace chopping_logs
             _hits = 0;
             _stump.EndMinigame();
         }
-        
-        public void SetStump(Stump stump) => _stump = stump;
 
         public int GetLog() => logID;
         
+        public void SetStump(Stump stump)
+        {
+            _stump = stump;
+            IsOnStump = true;
+        }
+
         public void NotifyPickedUp()
         {
             if (_stump != null)
             {
-                var logRoot = GetComponentInParent<HoldableObjectBehaviour>();
-                if (logRoot != null)
-                {
-                    _stump.OnLogPickedUp(logRoot.gameObject);
-                }
-
+                _stump.OnLogPickedUp(gameObject);
                 _stump = null;
             }
+
+            IsOnStump = false;
         }
     }
 }

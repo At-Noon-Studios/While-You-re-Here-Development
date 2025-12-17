@@ -64,6 +64,10 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
+            var chopTarget = GetComponentInChildren<LogChopTarget>();
+            if (chopTarget != null && chopTarget.IsOnStump)
+                return;
+
             PickUp(interactor);
 
             if (interactionCanvas != null)
