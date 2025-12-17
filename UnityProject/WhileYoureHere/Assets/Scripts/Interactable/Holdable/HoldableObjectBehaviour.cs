@@ -24,13 +24,16 @@ namespace Interactable.Holdable
 
         private Transform _playerCamera;
 
-        public float Weight => data.Weight;
-        
+        private ObjectHolderSingle _currentHolder;
+                
         public bool IsPlaced { get; private set; }
         private bool _isLocked;
 
         private const int HoldLayer = 3;
 
+        public bool IsCurrentlyHeld => _holder != null;
+        public float Weight => data.Weight;
+        
         private GameObject player;
 
         protected override void Awake()
@@ -74,12 +77,11 @@ namespace Interactable.Holdable
             var chopTarget = GetComponentInChildren<LogChopTarget>();
             if (chopTarget != null && chopTarget.IsOnStump)
                 return;
-
-            // var player = GameObject.FindWithTag("Player");
-            var pic = player.GetComponent<PlayerInteractionController>();
-            if (pic.HeldObject != null)
-                return;
             
+            if (interactor is PlayerInteractionController pic &&
+                (pic.IsTableMode || pic.HeldObject != null))
+                return;
+
             PickUp(interactor);
 
             if (interactionCanvas != null)
@@ -90,10 +92,14 @@ namespace Interactable.Holdable
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
+            if (_currentHolder != null)
+            {
+                _currentHolder.ClearHeldObject(this);
+                _currentHolder = null;
+            }
             _holder = interactor;
-            var heldObject = this;
             interactor.HeldObject?.Drop();
-            interactor.SetHeldObject(heldObject);
+            interactor.SetHeldObject(this);
             AttachTo(interactor);
             EnableCollider(false);
             IsPlaced = false;
@@ -130,9 +136,10 @@ namespace Interactable.Holdable
             IsPlaced = false;
         }
 
-        public virtual void Place(Vector3 position, Quaternion? rotation = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
         {
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
+            _currentHolder = holder;
             _holder?.SetHeldObject(null);
             _holder = null; 
             _rigidbody.isKinematic = true;
@@ -206,7 +213,7 @@ namespace Interactable.Holdable
             
             base.OnHoverEnter(interactor);
 
-            bool canInteract = _holder == null;
+            var canInteract = _holder == null;
 
             if (interactionCanvas)
                 interactionCanvas.gameObject.SetActive(canInteract);
