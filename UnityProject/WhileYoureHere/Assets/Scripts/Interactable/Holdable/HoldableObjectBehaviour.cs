@@ -28,6 +28,8 @@ namespace Interactable.Holdable
 
         private const int HoldLayer = 3;
 
+        private GameObject player;
+
         protected override void Awake()
         {
             base.Awake();
@@ -37,7 +39,7 @@ namespace Interactable.Holdable
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            var player = GameObject.FindWithTag("Player");
+            player = GameObject.FindWithTag("Player");
             if (player != null)
             {
                 var cam = player.GetComponentInChildren<Camera>();
@@ -63,6 +65,11 @@ namespace Interactable.Holdable
 
         public override void Interact(IInteractor interactor)
         {
+            // var player = GameObject.FindWithTag("Player");
+            var pic = player.GetComponent<PlayerInteractionController>();
+            if (pic.HeldObject != null)
+                return;
+            
             PickUp(interactor);
 
             if (interactionCanvas != null)
