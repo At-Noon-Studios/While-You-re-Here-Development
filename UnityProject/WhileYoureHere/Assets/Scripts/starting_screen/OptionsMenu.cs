@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 namespace starting_screen
@@ -10,12 +11,18 @@ namespace starting_screen
     {
         [SerializeField] private TMP_Dropdown resolutionDropdown;
         [SerializeField] private Toggle fullScreenToggle;
+        
+        [SerializeField] private AudioMixer mixer;
+        [SerializeField] private Slider masterVolumeSlider;
+        [SerializeField] private Slider musicVolumeSlider;
+        [SerializeField] private Slider sfxVolumeSlider;
+        [SerializeField] private Button resetButton;
 
         private Resolution[] _allResolutions;
         private bool _isFullScreen;
         private int _currentResolutionIndex;
 
-        private List<Resolution> _selectedResolutionsList = new List<Resolution>();
+        private List<Resolution> _selectedResolutionsList;
 
         private void Start()
         {
