@@ -14,8 +14,17 @@ namespace chopping_logs
         
         [Header("Chore ID reference")]
         [SerializeField] private int logID;
+
+        [Header("Sound Settings")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip[] chopSound;
         
         public bool IsOnStump { get; private set; }
+
+        private void Start()
+        {
+            _stump = GetComponentInParent<Stump>();
+        }
 
         private void OnTriggerEnter(Collider other)
         {

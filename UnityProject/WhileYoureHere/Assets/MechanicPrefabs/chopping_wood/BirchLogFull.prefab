@@ -163,12 +163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc675471987517e4685ce345bd372130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.LogChopTarget
-  logHitSound: {fileID: 8300000, guid: 345c693cfd2d20a49b1b80071301cea3, type: 3}
-  logChoppedSound: {fileID: 8300000, guid: 0e8e8610fdc08ab44a295b1c1b28f527, type: 3}
   choppedLogQuarterPrefab: {fileID: 3098852687359175136, guid: 2620bc947ee20ad4eaa0b72e00439668, type: 3}
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
+  logID: 0
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!65 &6260370265582577840
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -325,7 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
-  interactionCanvas: {fileID: 910830782555833495}
+  blockInteraction: 0
   data: {fileID: 11400000, guid: 8e030f2732954a745b8fcafcd5b94db0, type: 2}
 --- !u!65 &8225176238916855207
 BoxCollider:
@@ -360,7 +361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!82 &8482804468976592081
 AudioSource:
   m_ObjectHideFlags: 0

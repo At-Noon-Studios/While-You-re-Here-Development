@@ -85,7 +85,7 @@ namespace making_tea
             if (_rb != null)
             {
                 _rb.isKinematic = true;
-                _rb.velocity = Vector3.zero;
+                _rb.linearVelocity = Vector3.zero;
                 _rb.angularVelocity = Vector3.zero;
             }
 
@@ -100,7 +100,7 @@ namespace making_tea
 
             if (_rb != null)
             {
-                _rb.velocity = Vector3.zero;
+                _rb.linearVelocity = Vector3.zero;
                 _rb.angularVelocity = Vector3.zero;
                 _rb.isKinematic = false;
             }
