@@ -14,14 +14,10 @@ namespace chore
             CupFilled,
             LogPlacement,
             LogChop,
-            PaperPlacement
+            PaperPlacement,
             WateringCanPickedUp,
             WateringCanFilled,
-            PlantWatered,
-            KettleFilled,
-            WaterBoiled,
-            TeabagAdded,
-            CupFilled
+            PlantWatered
         }
         
         public bool IsActive { get; private set; }

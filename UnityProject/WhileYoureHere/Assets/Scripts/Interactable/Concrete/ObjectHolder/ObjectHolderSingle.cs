@@ -29,12 +29,12 @@ namespace Interactable.Concrete.ObjectHolder
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
-            var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
-            
-            var cam = player.GetComponentInChildren<Camera>();
-            if (cam != null)
-                _playerCamera = cam.transform;
+            // var player = GameObject.FindWithTag("Player");
+            // if (player == null) return;
+            //
+            // var cam = player.GetComponentInChildren<Camera>();
+            // if (cam != null)
+            //     _playerCamera = cam.transform;
         }
 
         private void Update()

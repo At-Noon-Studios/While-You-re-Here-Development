@@ -1,7 +1,6 @@
-using System;
 using Interactable;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace making_tea
 {
@@ -36,7 +35,7 @@ namespace making_tea
         {
             base.OnHoverEnter(interactor);
 
-            if (!tap.isRunning && tapOnImage != null)
+            if (!tap.IsRunning && tapOnImage != null)
             {
                 tapOnImage.enabled = true;
                 tapOffImage.enabled = false;
