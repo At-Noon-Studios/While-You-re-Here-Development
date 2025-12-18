@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,24 +8,70 @@ namespace starting_screen
 {
     public class OptionsMenu : MonoBehaviour
     {
-        [Range(0, 100)]
-        private int _brightnessRange;
-        private int _brightnessPercentage;
-        private int _brightnessDefault;
-        
-        [Header("Brightness Slider")]
-        [SerializeField] private Slider brightnessSlider;
-        
-        
+        [SerializeField] private TMP_Dropdown resolutionDropdown;
+        [SerializeField] private Toggle fullScreenToggle;
+
+        private Resolution[] _allResolutions;
+        private bool _isFullScreen;
+        private int _currentResolutionIndex;
+
+        private List<Resolution> _selectedResolutionsList = new List<Resolution>();
+
         private void Start()
         {
-            _brightnessDefault = 50;
+            _allResolutions = Screen.resolutions;
+            var resolutionOptions = new List<string>();
+
+            foreach (var res in _allResolutions)
+            {
+                string newRes = res.width + " x " + res.height;
+                if (!resolutionOptions.Contains(newRes))
+                {
+                    resolutionOptions.Add(newRes);
+                    _selectedResolutionsList.Add(res);
+                }
+            }
+
+            resolutionOptions.Reverse();
+            _selectedResolutionsList.Reverse();
+
+            resolutionDropdown.ClearOptions();
+            resolutionDropdown.AddOptions(resolutionOptions);
+
+            _currentResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
+            resolutionDropdown.value = _currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
+
+            _isFullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1;
+            fullScreenToggle.isOn = _isFullScreen;
+
+            Screen.SetResolution(
+                _selectedResolutionsList[_currentResolutionIndex].width,
+                _selectedResolutionsList[_currentResolutionIndex].height,
+                _isFullScreen
+            );
         }
 
-        public void OnChangeBrightness(float brightness)
+        public void ChangeResolution()
         {
-            RenderSettings.ambientLight = Color.white * (brightness / 100f);
-            Debug.Log($"Brightness changed to: {brightness}");
+            _currentResolutionIndex = resolutionDropdown.value;
+            Screen.SetResolution(
+                _selectedResolutionsList[_currentResolutionIndex].width,
+                _selectedResolutionsList[_currentResolutionIndex].height,
+                _isFullScreen
+            );
+
+            PlayerPrefs.SetInt("ResolutionIndex", _currentResolutionIndex);
+            PlayerPrefs.Save();
+        }
+
+        public void ChangeFullScreen()
+        {
+            _isFullScreen = fullScreenToggle.isOn;
+            Screen.fullScreen = _isFullScreen;
+
+            PlayerPrefs.SetInt("FullScreen", _isFullScreen ? 1 : 0);
+            PlayerPrefs.Save();
         }
     }
 }
