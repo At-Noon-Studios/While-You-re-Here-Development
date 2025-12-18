@@ -7,10 +7,10 @@ namespace ScriptableObjects.Events
     public class EventChannel : ScriptableObject
     {
         public Action OnRaise;
-
         public void Raise()
         {
             OnRaise?.Invoke();
         }
+        
     }
 }

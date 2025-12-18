@@ -2,7 +2,7 @@
 
 namespace ScriptableObjects.Interactable
 {
-    [CreateAssetMenu(fileName = "PlayerInteractionData", menuName = "ScriptableObjects/PlayerInteractionData")]
+    [CreateAssetMenu(fileName = "PlayerInteractionData", menuName = "ScriptableObjects/Interaction/PlayerInteractionData")]
     public class PlayerInteractionData : ScriptableObject
     {
         [SerializeField] private float interactionReach;

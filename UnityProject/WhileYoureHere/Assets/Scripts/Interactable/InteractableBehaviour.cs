@@ -10,9 +10,10 @@ namespace Interactable
     public abstract class InteractableBehaviour : MonoBehaviour, IInteractable
     {
         private Collider _collider;
-        private Renderer[] _renderers;
+        protected Renderer[] Renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
+        public bool blockInteraction = false;
 
         #region Unity event functions
         
@@ -23,8 +24,8 @@ namespace Interactable
         {
             _collider = GetComponent<Collider>();
             if (_collider == null) Debug.LogError("Scene contains an InteractableBehaviour that doesn't have a collider.");
-            _renderers = GetComponentsInChildren<Renderer>();
-            if (_renderers == null || _renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
+            Renderers = GetComponentsInChildren<Renderer>();
+            if (Renderers == null || Renderers.Length == 0) Debug.LogWarning("Scene contains an InteractableBehaviour without any renderers.");
             _outlineMaterial = Resources.Load<Material>(OutlineMaterialResourcePath);
         }
         
@@ -32,12 +33,25 @@ namespace Interactable
         
         #region Interface implementation
         
-        public virtual bool InteractableBy(IInteractor interactor) => true;
+        public virtual bool IsInteractableBy(IInteractor interactor) => !blockInteraction;
+        
+        public virtual bool IsDetectableBy(IInteractor interactor) => !blockInteraction;
 
         public abstract void Interact(IInteractor interactor);
-        
+
+        public virtual void ClickInteract(IInteractor interactor)
+        {
+            
+        }
+
+        public virtual void BlockInteraction(bool value)
+        {
+            blockInteraction = value;
+        }
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
+            if (blockInteraction) return;
             AddOutlineMaterialToRenderers();
         }
         
@@ -46,7 +60,7 @@ namespace Interactable
             RemoveOutlineMaterialFromRenderers();
         }
         
-        public virtual string InteractionText(IInteractor interactor) => gameObject.name;
+        public virtual string InteractionText(IInteractor interactor) => string.Empty;
         
         public void EnableCollider(bool state)
         {
@@ -59,7 +73,7 @@ namespace Interactable
         
         private void AddOutlineMaterialToRenderers()
         {
-            foreach (var rendererComponent in _renderers)
+            foreach (var rendererComponent in Renderers)
             {
                 AddOutlineMaterialToRenderer(rendererComponent);
             }
@@ -76,7 +90,7 @@ namespace Interactable
 
         private void RemoveOutlineMaterialFromRenderers()
         {
-            foreach (var rendererComponent in _renderers)
+            foreach (var rendererComponent in Renderers)
             {
                 RemoveOutlineMaterialFromRenderer(rendererComponent);
             }

@@ -8,7 +8,14 @@ namespace chore
         public enum ChoreComponentType
         {
             EnemyKilled,
-            ItemCollected
+            ItemCollected,
+            KettleFilled,
+            WaterBoiled,
+            TeabagAdded,
+            CupFilled,
+            LogPlacement,
+            LogChop,
+            PaperPlacement
         }
         
         public bool IsActive { get; private set; }
