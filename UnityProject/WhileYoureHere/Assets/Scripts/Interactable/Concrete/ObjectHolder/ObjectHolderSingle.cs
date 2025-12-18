@@ -96,7 +96,6 @@ namespace Interactable.Concrete.ObjectHolder
 
             var obj = pickup.gameObject;
 
-            // WICHTIG: Erst droppen, dann platzieren
             pickup.ForceDropFromTableMode();
 
             var rb = obj.GetComponent<Rigidbody>();
