@@ -22,7 +22,7 @@ namespace starting_screen
         private bool _isFullScreen;
         private int _currentResolutionIndex;
 
-        private List<Resolution> _selectedResolutionsList;
+        private readonly List<Resolution> _selectedResolutionsList = new List<Resolution>();
 
         private void Start()
         {
@@ -31,7 +31,7 @@ namespace starting_screen
 
             foreach (var res in _allResolutions)
             {
-                string newRes = res.width + " x " + res.height;
+                var newRes = res.width + " x " + res.height;
                 if (!resolutionOptions.Contains(newRes))
                 {
                     resolutionOptions.Add(newRes);
