@@ -16,6 +16,7 @@ namespace starting_screen
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider sfxVolumeSlider;
+        [SerializeField] private Slider voiceVolumeSlider;
         [SerializeField] private Button resetButton;
 
         private Resolution[] _allResolutions;
