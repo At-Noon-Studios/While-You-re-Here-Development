@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 3123753680599519402}
   - component: {fileID: 3702020241699996778}
   - component: {fileID: 635460545059859215}
+  - component: {fileID: 7461235706524234327}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -280,7 +281,7 @@ MonoBehaviour:
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
   clickTune: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
   drop: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
-  cancel: {fileID: 0}
+  cancel: {fileID: 11400000, guid: 052682770d4bff846990332a14b7c326, type: 2}
   blow: {fileID: 11400000, guid: 79a0e3b3e2311422d9a945909ed6c1de, type: 2}
 --- !u!82 &5956156730005618975
 AudioSource:
@@ -425,6 +426,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListInputHandler
   taskListUI: {fileID: 0}
   taskListEventChannel: {fileID: 11400000, guid: de0175db2d6c60148aae10754b11a7b8, type: 2}
+--- !u!114 &7461235706524234327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78e043506a284920b7d143848d29704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls.FootstepsSound
+  audioSource: {fileID: 5956156730005618975}
+  fs: {fileID: 11400000, guid: f95f4b7ba546a479d8a6526933cb85a7, type: 2}
 --- !u!1 &4171835902495713361
 GameObject:
   m_ObjectHideFlags: 0
