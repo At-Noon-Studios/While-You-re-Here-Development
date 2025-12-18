@@ -7,7 +7,12 @@ namespace chore
     {
         public enum ChoreComponentType
         {
+            EnemyKilled,
             ItemCollected,
+            KettleFilled,
+            WaterBoiled,
+            TeabagAdded,
+            CupFilled,
             LogPlacement,
             LogChop,
             PaperPlacement
