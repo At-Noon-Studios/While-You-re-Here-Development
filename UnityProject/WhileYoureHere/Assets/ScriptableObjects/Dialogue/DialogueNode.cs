@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using dialogue;
+using ScriptableObjects.Gamestate;
 
 namespace ScriptableObjects.Dialogue
 {
@@ -19,5 +20,8 @@ namespace ScriptableObjects.Dialogue
 
         [Header("Next Node (if no choices)")]
         public string targetNodeID;
+
+        [Header("Flag to set after dialogue finishes")]
+        public SoGamestateFlag flag;
     }
 }

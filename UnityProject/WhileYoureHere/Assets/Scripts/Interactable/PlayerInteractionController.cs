@@ -1,5 +1,7 @@
-﻿using Interactable.Holdable;
+﻿using Interactable.Concrete.ObjectHolder;
+using Interactable.Holdable;
 using JetBrains.Annotations;
+using making_tea;
 using player_controls;
 using ScriptableObjects.Events;
 using ScriptableObjects.Interactable;
@@ -9,21 +11,35 @@ using UnityEngine.InputSystem;
 
 namespace Interactable
 {
+    [DisallowMultipleComponent]
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
+        [Header("Interaction Settings")]
         [SerializeField] private PlayerInteractionData data;
+
+        [Header("Camera")]
         [SerializeField] private Camera playerCamera;
-        [Header("Listen to")] [SerializeField] private EventChannel interact;
+
+        [Header("Input Events")]
+        [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
+        [SerializeField] private EventChannel dropEvent;
+
+
+        [Header("Holding")]
         [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
         private MovementController _movementController;
+        private ChairInteractable _sittingChair;
+
+        public bool IsTableMode { get; private set; }
+        public Camera PlayerCamera => playerCamera;
 
         private const int InteractableRaycastAllocation = 16;
 
-        #region Unity event functions {
+        #region Unity
 
         private void Awake()
         {
@@ -43,13 +59,15 @@ namespace Interactable
         private void OnEnable()
         {
             interact.OnRaise += Interact;
-            clickInteractEvent.OnRaise += clickInteract;
+            clickInteractEvent.OnRaise += ClickInteract;
+            dropEvent.OnRaise += DropObject;
         }
 
         private void OnDisable()
         {
             interact.OnRaise -= Interact;
-            clickInteractEvent.OnRaise -= clickInteract;
+            clickInteractEvent.OnRaise -= ClickInteract;
+            dropEvent.OnRaise -= DropObject;
         }
 
         #endregion
@@ -68,59 +86,184 @@ namespace Interactable
 
         #endregion
 
-        #region Private methods
+        #region Chair helpers
+
+        public void SetSittingChair(ChairInteractable chair) => _sittingChair = chair;
+
+        public void ClearSittingChair() => _sittingChair = null;
+
+        #endregion
+
+        #region Interaction Core
 
         private void Interact()
         {
-            if (NoTarget) HeldObject?.Drop();
-            else if (TargetInteractable)
+            if (IsTableMode)
             {
-                if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
+                if (HeldObject == null &&
+                    _currentTarget is not ObjectHolderSingle &&
+                    CanDropTablePickup())
+                    return;
+
+                if (NoTarget)
+                {
+                    if (_sittingChair != null)
+                        _sittingChair.ForceStandUp();
+
+                    return;
+                }
+
+                if (TargetInteractable)
+                {
+                    InteractWithTarget();
+                }
+                else
+                {
+                    _uiManager?.PulseInteractPrompt();
+                }
+
+                return;
+            }
+
+            if (NoTarget)
+            {
+                HeldObject?.Drop();
+                return;
+            }
+
+            if (TargetInteractable)
+            {
                 InteractWithTarget();
             }
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+            else
+            {
+                _uiManager?.PulseInteractPrompt();
+            }
         }
 
-        private void clickInteract()
+
+        private void ClickInteract()
         {
-            if (NoTarget) HeldObject?.Drop();
-            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
+            if (NoTarget)
             {
+                DropObject();
+                return;
+            }
+            
+            if (_currentTarget is IClickInteractable &&
+                clickInteractEvent.OnRaise != null)            
+                {
                 ClickInteractWithTarget();
             }
-            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+            else
+            {
+                _uiManager.PulseInteractPrompt();
+            }
         }
+
+          private void DropObject()
+        {
+            HeldObject?.Drop();        
+        }
+
+
+        #endregion
+
+        #region Target detection
 
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
             var hitCount = LookForHits(hits);
+
             IInteractable bestTarget = null;
             var closestDistance = float.MaxValue;
+
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out var holdable) && HeldObject != null) break;
-                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget);
+                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
+                    HeldObject != null)
+                    continue;
+
+                UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;
+
             SetCurrentTarget(bestTarget);
         }
 
         private int LookForHits(RaycastHit[] result)
         {
-            var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            return Physics.SphereCastNonAlloc(ray, data.InteractionAssistRadius, result, data.InteractionReach);
+            if (playerCamera == null || data == null)
+                return 0;
+
+            Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            return Physics.SphereCastNonAlloc(ray,
+                data.InteractionAssistRadius,
+                result,
+                data.InteractionReach);
         }
 
-        private static void UpdateBestTarget(RaycastHit candidate, ref float closestDistance,
-            ref IInteractable bestTarget)
+        private void UpdateBestTarget(
+            RaycastHit candidate,
+            ref float closestDistance,
+            ref IInteractable bestTarget,
+            bool tableMode)
         {
-            if (candidate.distance >= closestDistance ||
-                !candidate.collider.TryGetComponent<IInteractable>(out var interactable)) return;
+            if (candidate.distance >= closestDistance)
+                return;
+
+            if (!TryGetBestInteractable(candidate.collider, tableMode, out var interactable))
+                return;
+
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
+        
+        private bool TryGetBestInteractable(
+            Collider collider,
+            bool tableMode,
+            out IInteractable interactable)
+        {
+            interactable = null;
+
+            if (tableMode)
+            {
+                if (collider.TryGetComponent<ITablePickup>(out var tablePickup) &&
+                    tablePickup.IsDetectableBy(this))
+                {
+                    interactable = tablePickup;
+                    return true;
+                }
+
+                if (collider.TryGetComponent<ObjectHolderSingle>(out var objectHolderSingle) &&
+                    objectHolderSingle.IsDetectableBy(this))
+                {
+                    interactable = objectHolderSingle;
+                    return true;
+                }
+            }
+            else
+            {
+                if (collider.TryGetComponent<Placeable>(out var placeable) &&
+                    placeable.IsDetectableBy(this))
+                {
+                    interactable = placeable;
+                    return true;
+                }
+            }
+
+            if (collider.TryGetComponent<IInteractable>(out var fallback) &&
+                fallback.IsDetectableBy(this))
+            {
+                interactable = fallback;
+                return true;
+            }
+
+            return false;
+        }
+
 
         private void SetCurrentTarget(IInteractable newTarget)
         {
@@ -132,7 +275,7 @@ namespace Interactable
         private void OnHoverEnter(IInteractable target)
         {
             if (target == null) return;
-            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.InteractableBy(this));
+            _uiManager.ShowInteractPrompt(target.InteractionText(this), target.IsInteractableBy(this));
             target.OnHoverEnter(this);
         }
 
@@ -143,9 +286,9 @@ namespace Interactable
         }
 
         private bool NoTarget => _currentTarget == null;
-
-        private bool TargetInteractable => _currentTarget != null && _currentTarget.InteractableBy(this);
-
+        
+        private bool TargetInteractable => _currentTarget != null && _currentTarget.IsInteractableBy(this);
+        
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
@@ -171,7 +314,34 @@ namespace Interactable
             var modifier = Mathf.Max(1f - weight, 0.4f);
             _movementController.SetMovementModifier(modifier);
         }
-
+        
         #endregion
+
+        #region Tablemode
+
+        public void EnableTableMode(bool enable)
+        {
+            IsTableMode = enable;
+            Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = enable;
+        }
+
+        private static bool CanDropTablePickup()
+        {
+            var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
+
+            foreach (var p in pickups)
+            {
+                if (!p.IsTableHeld) continue;
+
+                p.Drop();
+                return true;
+            }
+
+            return false;
+        }
+        
+        #endregion
+        
     }
 }

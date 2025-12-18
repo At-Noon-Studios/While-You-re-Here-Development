@@ -3,26 +3,24 @@ using ScriptableObjects.Controls;
 using ScriptableObjects.Events;
 using UnityEngine;
 
-namespace player_controls
+namespace PlayerControls
 {
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private CameraData data;
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
+        
+        private const float CircleDegrees = 360;
 
         public event Action<Quaternion> OnRotate;
 
         private float _xRotation;
         private float _yRotation;
 
-        private bool _isLookSubscribed;
-        public bool canLook = true;
-
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            SubscribeLook();
         }
 
         private void OnEnable() => SubscribeLook();
@@ -30,24 +28,18 @@ namespace player_controls
 
         private void SubscribeLook()
         {
-            if (_isLookSubscribed) return;
             look.OnRaise += OnLookInput;
-            _isLookSubscribed = true;
         }
 
         private void UnsubscribeLook()
         {
-            if (!_isLookSubscribed) return;
             look.OnRaise -= OnLookInput;
-            _isLookSubscribed = false;
         }
 
         private void OnLookInput(Vector2 mouseDelta)
         {
-            if (!canLook) return;
-
-            _yRotation += mouseDelta.x * data.Sensitivity;
-            _xRotation += -mouseDelta.y * data.Sensitivity;
+            _yRotation += (mouseDelta.x * data.Sensitivity) % CircleDegrees;
+            _xRotation += (-mouseDelta.y * data.Sensitivity) % CircleDegrees;
             _xRotation = Mathf.Clamp(_xRotation, data.MinYAngle, data.MaxYAngle);
 
             var rot = Quaternion.Euler(_xRotation, _yRotation, 0);
@@ -58,14 +50,39 @@ namespace player_controls
 
         public void PauseCameraMovement()
         {
-            canLook = false;
-            UnsubscribeLook();
+            OnDisable();
         }
         
         public void ResumeCameraMovement()
         {
-            canLook = true;
-            SubscribeLook();
+            OnEnable();
+        }
+        
+        public void SyncRotation(Quaternion worldRotation)
+        {
+            Vector3 euler = worldRotation.eulerAngles;
+
+            _xRotation = NormalizeAngle(euler.x);
+            _yRotation = NormalizeAngle(euler.y);
+
+            transform.rotation = worldRotation;
+        }
+        
+        private float NormalizeAngle(float angle)
+        {
+            if (angle > 180f) angle -= 360f;
+            return angle;
+        }
+        
+        public void SetMinigameRotation(Quaternion rotation)
+        {
+            transform.rotation = rotation;
+
+            Vector3 euler = rotation.eulerAngles;
+            _xRotation = NormalizeAngle(euler.x);
+            _yRotation = NormalizeAngle(euler.y);
+
+            PauseCameraMovement();
         }
     }
 }

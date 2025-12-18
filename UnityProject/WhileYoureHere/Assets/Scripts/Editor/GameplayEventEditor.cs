@@ -4,116 +4,118 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(GameplayEvent))]
-	public class GameplayEventDrawer : PropertyDrawer
-	{
-		private float x, y, w, h;
-		private int _skipRowsForEvent;
-		
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-		{
-			float h = base.GetPropertyHeight(property, label);
-			int rows = 1;
-			if (property.FindPropertyRelative("_expanded").boolValue)
-			{
-				rows += 4;
-				GameplayEventType gameplayEventType = (GameplayEventType)property.FindPropertyRelative("type").enumValueIndex;
-				if (gameplayEventType == GameplayEventType.BooleanChange) rows += 3;
-				else if (gameplayEventType is GameplayEventType.SkyboxChange or GameplayEventType.Cutscene or GameplayEventType.Dialogue) rows += 2;
-				else if (gameplayEventType is GameplayEventType.InvokeCustomEvent)
-				{
-					rows += 7;
-					_skipRowsForEvent = 5;
-					var serializedProperty = property.FindPropertyRelative("eventToInvoke.m_PersistentCalls.m_Calls");
-					rows += Mathf.Max(serializedProperty.arraySize -1, 0) * 3;
-					_skipRowsForEvent += Mathf.Max(serializedProperty.arraySize -1, 0) * 3;	
-				}
-				
-				TriggeredBy trigger =  (TriggeredBy)property.FindPropertyRelative("triggeredBy").enumValueIndex;
-				if (trigger is TriggeredBy.AfterSetTime) rows += 1;
-				else if (trigger is TriggeredBy.OnChoresCompleted)
-				{
-					rows += 1;
-					var serializedProperty = property.FindPropertyRelative("choresToComplete");
-					if (serializedProperty.isExpanded) rows += Mathf.Max(2 + serializedProperty.arraySize, 0);
-				} else if (trigger is TriggeredBy.BooleansToTrue)
-				{
-					rows += 1;
-					var serializedProperty = property.FindPropertyRelative("booleansToBeTrue");
-					if (serializedProperty.isExpanded) rows += Mathf.Max(2 + serializedProperty.arraySize, 0);
-				}
-			}
+    [CustomPropertyDrawer(typeof(GameplayEvent))]
+    public class GameplayEventDrawer : PropertyDrawer
+    {
+        private ISpecialField _eventField;
+        private ISpecialField _triggerField;
 
-			return h * rows;
-		}
+        private GameplayEventType _cachedEventType;
+        private TriggeredBy _cachedTriggerType;
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			var pExpanded = property.FindPropertyRelative("_expanded");
-			h = base.GetPropertyHeight(property, label);
-			position.height = h;
-			pExpanded.boolValue = EditorGUI.Foldout(position, pExpanded.boolValue, label);
-			if (!pExpanded.boolValue) return;
-			position.y += h;
-			position.height = GetPropertyHeight(property, label) - h;
-			EditorGUI.BeginProperty(position, label, property);
-			
-			x = position.x;
-			y = position.y;
-			w = position.width;
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            EnsureFields(property);
 
-			AddField("type", property);
-			AddField("triggeredBy", property);
-			y += h;
+            var line = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            var height = line;
 
-			var type = property.FindPropertyRelative("type");
-			var triggeredBy = property.FindPropertyRelative("triggeredBy");
-			
-			var gameplayEventType = (GameplayEventType)type.enumValueIndex;
-			switch (gameplayEventType)
-			{
-				case GameplayEventType.BooleanChange:
-					AddField("booleanToChange", property); 
-					AddField("newValue", property);
-					break;
-				case GameplayEventType.SkyboxChange:
-					AddField("hourOfDay", property);
-					break;
-				case GameplayEventType.InvokeCustomEvent:
-					AddField("eventToInvoke", property);
-					y += h * _skipRowsForEvent;
-					break;
-				case GameplayEventType.Dialogue:
-					AddField("dialogueToPlay", property);
-					break;
-				case GameplayEventType.Cutscene:
-					AddField("cutsceneToPlay", property);
-					break;
-			}
-			var trigger = (TriggeredBy)triggeredBy.enumValueIndex;
-			switch (trigger)
-			{
-				case TriggeredBy.AfterSetTime:
-					AddField("triggerAfterSeconds", property);
-					break;
-				case TriggeredBy.OnChoresCompleted:
-					AddField("choresToComplete", property);
-					break;
-				case TriggeredBy.BooleansToTrue:
-					AddField("booleansToBeTrue", property);
-					break;
-			}
-			
-			EditorGUI.EndProperty();
-		}
+            var expanded = property.FindPropertyRelative("_expanded");
+            if (!expanded.boolValue)
+                return height;
 
-		private void AddField(string propertyName, SerializedProperty property)
-		{
-			y += h;
-			var rect = new Rect(x, y, w, h);
-			var serializedProperty = property.FindPropertyRelative(propertyName);
+            height += line * 2;
+            height += _eventField.GetHeight(property) * line;
+            height += _triggerField.GetHeight(property) * line;
 
-			EditorGUI.PropertyField(rect, serializedProperty, new GUIContent(serializedProperty.displayName));
-		}
-	}
+            return height;
+        }
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EnsureFields(property);
+
+            var line = EditorGUIUtility.singleLineHeight;
+            var spacing = EditorGUIUtility.standardVerticalSpacing;
+
+            var expanded = property.FindPropertyRelative("_expanded");
+
+            var foldRect = new Rect(position.x, position.y, position.width, line);
+            expanded.boolValue = EditorGUI.Foldout(foldRect, expanded.boolValue, label, true);
+
+            if (!expanded.boolValue)
+                return;
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            var y = foldRect.y + line + spacing;
+
+            DrawProperty(ref y, position, property, "type");
+            DrawProperty(ref y, position, property, "triggeredBy");
+            foreach (var f in _eventField.GetFields())
+                DrawProperty(ref y, position, property, f);
+
+            foreach (var f in _triggerField.GetFields())
+                DrawProperty(ref y, position, property, f);
+
+            EditorGUI.EndProperty();
+        }
+
+        private void DrawProperty(ref float y, Rect totalRect, SerializedProperty parent, string propName)
+        {
+            var sub = parent.FindPropertyRelative(propName);
+            var h = EditorGUI.GetPropertyHeight(sub, true);
+            var r = new Rect(totalRect.x, y, totalRect.width, h);
+            EditorGUI.PropertyField(r, sub, true);
+            y += h + EditorGUIUtility.standardVerticalSpacing;
+        }
+
+        private void EnsureFields(SerializedProperty property)
+        {
+            var typeProp = property.FindPropertyRelative("type");
+            var trigProp = property.FindPropertyRelative("triggeredBy");
+
+            var currentEventType = (GameplayEventType)typeProp.enumValueIndex;
+            var currentTriggerType = (TriggeredBy)trigProp.enumValueIndex;
+
+            if (_eventField == null || _cachedEventType != currentEventType)
+            {
+                _cachedEventType = currentEventType;
+                _eventField = CreateEventField(currentEventType);
+            }
+
+            if (_triggerField == null || _cachedTriggerType != currentTriggerType)
+            {
+                _cachedTriggerType = currentTriggerType;
+                _triggerField = CreateTriggerField(currentTriggerType);
+            }
+        }
+
+        private static ISpecialField CreateEventField(GameplayEventType type)
+        {
+            return type switch
+            {
+                GameplayEventType.BooleanChange => new BooleanChangeSpecialField(),
+                GameplayEventType.SkyboxChange => new SkyboxChangeSpecialField(),
+                GameplayEventType.Cutscene => new CutsceneSpecialField(),
+                GameplayEventType.Dialogue => new AudioFragmentSpecialField(),
+                GameplayEventType.ProgressToNextActivity => new EmptyField(),
+                GameplayEventType.InvokeCustomEvent => new EventToInvokeSpecialField(),
+                _ => new EmptyField()
+            };
+        }
+
+        private static ISpecialField CreateTriggerField(TriggeredBy type)
+        {
+            return type switch
+            {
+                TriggeredBy.StartOfActivity => new EmptyField(),
+                TriggeredBy.AfterSetTime => new AfterSetTimeSpecialField(),
+                TriggeredBy.AfterFinishActivity => new EmptyField(),
+                TriggeredBy.OnChoresCompleted => new OnChoresCompletedSpecialField(),
+                TriggeredBy.BooleansToTrue => new BooleansToTrueSpecialField(),
+                _ => new EmptyField()
+            };
+        }
+    }
 }
