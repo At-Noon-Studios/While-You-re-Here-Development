@@ -15,7 +15,7 @@ namespace make_a_fire
         private List<GameObject> logs;
         
         [Header("Fire Behaviour")] 
-        [SerializeField] private VisualEffect fireParticle;
+        [SerializeField] private ParticleSystem fireParticle;
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
@@ -60,18 +60,20 @@ namespace make_a_fire
         private void StartSmallFire()
         {
             _fireStarted = true;
+            SetFireLifetime(0.2f);
+            
             fireParticle.gameObject.SetActive(true);
+            fireParticle.Play();
             
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
-            fireParticle.SetVector3("FireVelocity", new Vector3(0, 0.1f, 0));
-            fireParticle.Play();
         }
 
         public void StartBigFire()
         {
+            SetFireLifetime(0.5f);
             _audioSource.PlayOneShot(chargedFire);
-            fireParticle.SetVector3("FireVelocity", new Vector3(0, 2f, 0));
+           
             ChoreEvents.TriggerPaperPlacement();
         }
 
@@ -87,5 +89,12 @@ namespace make_a_fire
             fireParticle.gameObject.SetActive(status);
             if (status) fireParticle.Play();
         }
+        
+        private void SetFireLifetime(float lifetime)
+        {
+            var main = fireParticle.main;
+            main.startLifetime = lifetime;
+        }
+
     }
 }
