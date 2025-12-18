@@ -20,8 +20,8 @@ namespace Interactable.Holdable
         [CanBeNull] private GameObject _heldVersion;
 
         private Transform _playerCamera;
-
         private ObjectHolderSingle _currentHolder;
+        private AnimationInteraction _animationInteraction;
                 
         public bool IsPlaced { get; private set; }
         private bool _isLocked;
@@ -45,6 +45,8 @@ namespace Interactable.Holdable
                 var cam = player.GetComponentInChildren<Camera>();
                 if (cam != null)
                     _playerCamera = cam.transform;
+                
+                _animationInteraction = player.GetComponentInChildren<AnimationInteraction>();
             }
         }
 
@@ -85,6 +87,7 @@ namespace Interactable.Holdable
             AttachTo(interactor);
             EnableCollider(false);
             IsPlaced = false;
+            _animationInteraction.CheckInteraction(gameObject, AnimationInteractionType.Grab);
         }
         
         public void PickUpByInteractor(IInteractor interactor)
@@ -116,6 +119,7 @@ namespace Interactable.Holdable
             Detach();
             EnableCollider(true);
             IsPlaced = false;
+            _animationInteraction.CheckInteraction(gameObject, AnimationInteractionType.Drop);
         }
 
         public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
@@ -131,6 +135,7 @@ namespace Interactable.Holdable
             transform.rotation = rotation ?? Quaternion.identity;
             EnableCollider(true);
             IsPlaced = true;
+            _animationInteraction.CheckInteraction(gameObject, AnimationInteractionType.Drop);
         }
 
         private void AttachTo(IInteractor interactor)
