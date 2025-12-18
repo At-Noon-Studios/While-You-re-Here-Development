@@ -95,15 +95,22 @@ namespace Interactable.Concrete.ObjectHolder
             if (pickup == null) return;
 
             var obj = pickup.gameObject;
+
+            pickup.ForceDropFromTableMode();
+
             var rb = obj.GetComponent<Rigidbody>();
-            if (rb != null) rb.isKinematic = true;
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
 
             obj.transform.SetParent(null);
             obj.transform.position = placePoint.position;
             obj.transform.rotation = Quaternion.Euler(placedObjectRotation);
-
-            pickup.ForceDropFromTableMode();
         }
+
 
         public override bool IsInteractableBy(IInteractor interactor)
         {

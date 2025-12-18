@@ -9,13 +9,16 @@ namespace making_tea
         [SerializeField] private Canvas interactionCanvasPrimary;
         [SerializeField] private Canvas interactionCanvasSecondary;
 
+        [Header("Table Settings")]
+        [SerializeField] private LayerMask tableLayer;
+        [SerializeField] private float liftHeight = 0.15f;
+
         protected bool IsLifted;
         protected PlayerInteractionController Pic;
 
         private Rigidbody _rb;
         private Transform _playerCamera;
 
-        private const float FixedLiftHeight = 1.5f;
         private const float FixedRayDistance = 10f;
 
         protected override void Awake()
@@ -54,10 +57,11 @@ namespace making_tea
                 interactionCanvasPrimary.transform.Rotate(0f, 180f, 0f);
             }
 
-            if (interactionCanvasSecondary == null || !interactionCanvasSecondary.gameObject.activeSelf) return;
-            
-            interactionCanvasSecondary.transform.LookAt(_playerCamera);
-            interactionCanvasSecondary.transform.Rotate(0f, 180f, 0f);
+            if (interactionCanvasSecondary != null && interactionCanvasSecondary.gameObject.activeSelf)
+            {
+                interactionCanvasSecondary.transform.LookAt(_playerCamera);
+                interactionCanvasSecondary.transform.Rotate(0f, 180f, 0f);
+            }
         }
 
         private void FollowMouse()
@@ -65,12 +69,10 @@ namespace making_tea
             var cam = Pic.PlayerCamera;
             var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            if (!Physics.Raycast(ray, out var hit, FixedRayDistance))
+            if (!Physics.Raycast(ray, out var hit, FixedRayDistance, tableLayer))
                 return;
 
-            var pos = hit.point;
-            pos.y = FixedLiftHeight;
-            transform.position = pos;
+            transform.position = hit.point + Vector3.up * liftHeight;
         }
 
         public bool IsTableHeld => IsLifted;
@@ -81,7 +83,11 @@ namespace making_tea
             Pic = p;
 
             if (_rb != null)
+            {
                 _rb.isKinematic = true;
+                _rb.velocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+            }
 
             EnableCollider(false);
             ShowSecondaryUI();
@@ -93,13 +99,20 @@ namespace making_tea
             Pic = null;
 
             if (_rb != null)
+            {
+                _rb.velocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
                 _rb.isKinematic = false;
+            }
 
             EnableCollider(true);
             ShowPrimaryUI();
         }
 
-        public virtual void ForceDropFromTableMode() => Drop();
+        public virtual void ForceDropFromTableMode()
+        {
+            Drop();
+        }
 
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
@@ -158,7 +171,7 @@ namespace making_tea
         {
             if (interactionCanvasPrimary != null)
                 interactionCanvasPrimary.gameObject.SetActive(false);
-        
+
             if (interactionCanvasSecondary != null)
                 interactionCanvasSecondary.gameObject.SetActive(false);
         }
