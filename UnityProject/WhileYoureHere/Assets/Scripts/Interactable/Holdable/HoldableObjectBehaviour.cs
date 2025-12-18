@@ -11,9 +11,6 @@ namespace Interactable.Holdable
     [RequireComponent(typeof(Rigidbody))]
     public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
     {
-        [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
-
         [Header("Holdable Data")]
         [SerializeField] private HoldableObjectData data;
 
@@ -42,9 +39,6 @@ namespace Interactable.Holdable
             _rigidbody = GetComponent<Rigidbody>();
             Renderers = GetComponentsInChildren<Renderer>();
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-
             player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -58,15 +52,6 @@ namespace Interactable.Holdable
         {
             _originalLayer = gameObject.layer;
             InitializeHeldVersion();
-        }
-
-        private void Update()
-        {
-            if (!interactionCanvas ||
-                !interactionCanvas.gameObject.activeSelf ||
-                !_playerCamera) return;
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
 
         public override void Interact(IInteractor interactor)
@@ -83,9 +68,6 @@ namespace Interactable.Holdable
                 return;
 
             PickUp(interactor);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
         }
         
         private void PickUp(IInteractor interactor)
@@ -201,9 +183,6 @@ namespace Interactable.Holdable
         public void SetInteractionLocked(bool locked)
         {
             _isLocked = locked;
-            
-            if (interactionCanvas != null) 
-                interactionCanvas.gameObject.SetActive(!locked);
         }
         
         public override void OnHoverEnter(IInteractor interactor)
@@ -214,19 +193,8 @@ namespace Interactable.Holdable
             base.OnHoverEnter(interactor);
 
             var canInteract = _holder == null;
-
-            if (interactionCanvas)
-                interactionCanvas.gameObject.SetActive(canInteract);
         }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            if (interactionCanvas)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-
+        
         public override string InteractionText(IInteractor interactor)
         {
             return string.Empty;
