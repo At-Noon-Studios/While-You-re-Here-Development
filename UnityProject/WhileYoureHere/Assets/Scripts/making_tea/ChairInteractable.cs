@@ -1,96 +1,169 @@
+using Interactable;
+using player_controls;
+using PlayerControls;
 using UnityEngine;
-using player_controls;   // Für MovementController, CameraController, PlayerInteractionController
-using Interactable;      // Für IInteractable, IInteractor
 
-public class ChairInteractable : MonoBehaviour, IInteractable
+namespace making_tea
 {
-    [Header("References")]
-    [SerializeField] private Transform sitPoint;
-    [SerializeField] private Transform lookTarget;
-
-    private bool isSitting = false;
-
-    private PlayerInteractionController pic;
-    private MovementController movement;
-    private CameraController cameraController;
-    private Transform player;
-    private Camera playerCam;
-
-    public bool InteractableBy(IInteractor interactor)
+    public class ChairInteractable : InteractableBehaviour
     {
-        return true;
-    }
+        [Header("Interaction UI")]
+        [SerializeField] private Canvas interactionCanvas;
 
-    public string InteractionText(IInteractor interactor)
-    {
-        return isSitting ? "[F] Stand up" : "[E] Sit";
-    }
+        [Header("References")]
+        [SerializeField] private Transform sitPoint;
+        [SerializeField] private Transform lookTarget;
 
-    public void EnableCollider(bool enable)
-    {
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-            col.enabled = enable;
-    }
+        [Header("Camera Sitting Position Offset")]
+        [SerializeField] private Vector3 cameraSitOffset = new Vector3(0f, 0f, 0f);
 
-    public void OnHoverEnter(IInteractor interactor)
-    {
-    }
+        [Header("Camera Sitting Rotation Offset")]
+        [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
 
-    public void OnHoverExit(IInteractor interactor)
-    {
-    }
+        [Header("Camera FOV Settings")]
+        [SerializeField] [Range(0,180)] private float sitFOV = 60f;
+        [SerializeField] private bool changeFOV = true;
 
-    // Haupt-Interact-Methode
-    public void Interact(IInteractor interactor)
-    {
-        if (!isSitting)
-            Sit(interactor);
-        else
-            StandUp();
-    }
-    
-    private void Sit(IInteractor interactor)
-    {
-        var p = interactor as PlayerInteractionController;
-        if (p == null)
+        private float _originalFOV;
+
+        private bool _isSitting;
+
+        private PlayerInteractionController _pic;
+        private MovementController _movement;
+        private CameraController _cameraController;
+        private Transform _player;
+        private Camera _playerCam;
+
+        private Transform _playerCamera;
+
+        private Vector3 _originalCameraLocalPos;
+        private Quaternion _originalCameraLocalRot;
+
+        protected override void Awake()
         {
-            Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
-            return;
+            base.Awake();
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+                _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
         }
 
-        player = p.transform;
-        movement = p.GetComponent<MovementController>();
-        playerCam = p.GetComponentInChildren<Camera>();
-        cameraController = p.GetComponentInChildren<CameraController>();
-
-        if (movement != null) movement.enabled = false;
-        if (cameraController != null) cameraController.enabled = false;
-
-        player.position = sitPoint.position;
-        player.rotation = sitPoint.rotation;
-
-        if (lookTarget != null && playerCam != null)
+        private void Update()
         {
-            Vector3 dir = lookTarget.position - playerCam.transform.position;
-            playerCam.transform.rotation = Quaternion.LookRotation(dir);
+            if (interactionCanvas == null ||
+                !interactionCanvas.gameObject.activeSelf ||
+                _playerCamera == null) return;
+            
+            interactionCanvas.transform.LookAt(_playerCamera);
+            interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
 
-        isSitting = true;
-        
-        pic = interactor as PlayerInteractionController;
-        pic.EnableTableMode(true);
+        public override void OnHoverEnter(IInteractor interactor)
+        {
+            base.OnHoverEnter(interactor);
 
-    }
+            if (!_isSitting && interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(true);
+        }
 
-    private void StandUp()
-    {
-        if (movement != null) movement.enabled = true;
-        if (cameraController != null) cameraController.enabled = true;
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            base.OnHoverExit(interactor);
 
-        isSitting = false;
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+        }
         
-        pic.EnableTableMode(false);
-        
+        public override string InteractionText(IInteractor interactor) => string.Empty;
+
+        public override void Interact(IInteractor interactor)
+        {
+            if (!_isSitting)
+                Sit(interactor);
+            else
+                StandUp();
+        }
+
+        private void Sit(IInteractor interactor)
+        {
+            if (interactor is not PlayerInteractionController p)
+            {
+                Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
+                return;
+            }
+
+            _player = p.transform;
+            _movement = p.GetComponent<MovementController>();
+            _playerCam = p.GetComponentInChildren<Camera>();
+            _cameraController = p.GetComponentInChildren<CameraController>();
+
+            if (_movement != null) _movement.enabled = false;
+            if (_cameraController != null) _cameraController.enabled = false;
+
+            _player.position = sitPoint.position;
+            _player.rotation = sitPoint.rotation;
+
+            if (_playerCam != null)
+            {
+                _originalCameraLocalPos = _playerCam.transform.localPosition;
+                _originalCameraLocalRot = _playerCam.transform.localRotation;
+
+                _originalFOV = _playerCam.fieldOfView;
+            }
+
+            if (lookTarget != null && _playerCam != null)
+            {
+                var dir = lookTarget.position - _playerCam.transform.position;
+                _playerCam.transform.rotation = Quaternion.LookRotation(dir);
+            }
+
+            if (_playerCam != null)
+                _playerCam.transform.localPosition += cameraSitOffset;
+
+            if (_playerCam != null)
+                _playerCam.transform.localRotation *= Quaternion.Euler(cameraSitRotationOffset);
+
+            if (changeFOV && _playerCam != null)
+                _playerCam.fieldOfView = sitFOV;
+
+            _isSitting = true;
+
+            _pic = p;
+            _pic.EnableTableMode(true);
+            _pic.SetSittingChair(this);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
+        }
+
+        private void StandUp()
+        {
+            if (_movement != null) _movement.enabled = true;
+            if (_cameraController != null) _cameraController.enabled = true;
+
+            if (_playerCam != null)
+            {
+                _playerCam.transform.localPosition = _originalCameraLocalPos;
+                _playerCam.transform.localRotation = _originalCameraLocalRot;
+
+                if (changeFOV)
+                    _playerCam.fieldOfView = _originalFOV;
+            }
+
+            _isSitting = false;
+
+            if (_pic == null) return;
+            _pic.EnableTableMode(false);
+            _pic.ClearSittingChair();
+        }
+
+        public void ForceStandUp()
+        {
+            if (_isSitting)
+                StandUp();
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Interactable
+namespace Interactable
 {
-    public interface IInteractable
+    public interface  IInteractable
     {
         /// <summary>
         /// Determines the text that will be used when rendering the interaction prompt when looking at interactable objects.
@@ -12,13 +12,22 @@
         public string InteractionText(IInteractor interactor);
         
         /// <summary>
-        /// Determines whether <paramref name="interactor"/> is allowed to interact with this this <see cref="IInteractable"/> component.
+        /// Determines whether <paramref name="interactor"/> is allowed to interact with this <see cref="IInteractable"/> component.
         /// <returns>A bool that is used to determine whether an interaction can occur.</returns>
         /// </summary>
         /// <param name="interactor">
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
-        public bool InteractableBy(IInteractor interactor);
+        public bool IsInteractableBy(IInteractor interactor);
+     
+        /// <summary>
+        /// Determines whether <paramref name="interactor"/> is able to detect this <see cref="IInteractable"/> component.
+        /// <returns>A bool that is used to determine whether this instance is detectable.</returns>
+        /// </summary>
+        /// <param name="interactor">
+        /// The <see cref="IInteractor"/> that is performing the interaction.
+        /// </param>
+        public bool IsDetectableBy(IInteractor interactor);
         
         /// <summary>
         /// Called when a <see cref="PlayerInteractionController"/> 
@@ -29,6 +38,7 @@
         /// The <see cref="IInteractor"/> that is performing the interaction.
         /// </param>
         public void Interact(IInteractor interactor);
+        public void ClickInteract(IInteractor interactor);
         
         /// <summary>
         /// OnHoverEnter is called when a <see cref="PlayerInteractionController"/> 

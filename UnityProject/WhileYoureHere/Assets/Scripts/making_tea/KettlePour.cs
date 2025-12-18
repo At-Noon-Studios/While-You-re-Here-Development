@@ -1,5 +1,4 @@
-﻿using chore;
-using Interactable.Holdable;
+﻿using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,29 +6,49 @@ namespace making_tea
 {
     public class KettlePour : MonoBehaviour
     {
+        [Header("Kettle References")]
         public KettleFill kettle;
-        public KettleFill targetCup;
         public ParticleSystem pourStream;
-        public AudioSource pourSound;
-        public AudioSource spillSound;
         public Transform pivot;
 
+        [Header("Audio")]
+        [SerializeField] private AudioClip pourClip;
+
+        [Header("Pour Settings")]
         public float pourAngle = 120f;
         public float rotateSpeed = 8f;
         public float pourSpeed = 0.25f;
 
-        private Rigidbody _rb;
+        private AudioSource _audio;
+        private PlayerInput _playerInput;
+
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
 
+        private bool _isPourPressed;
+        private bool _wasPouring;
+
+        private void Awake()
+        {
+            _audio = GetComponent<AudioSource>();
+
+            var player = GameObject.FindWithTag("Player");
+            if (player == null) return;
+            
+            _playerInput = player.GetComponent<PlayerInput>();
+
+            if (_playerInput == null) return;
+            _playerInput.actions["Pour"].performed += ctx => _isPourPressed = true;
+            _playerInput.actions["Pour"].canceled += ctx => _isPourPressed = false;
+        }
+
         private void Start()
         {
-            _rb = GetComponent<Rigidbody>();
-
             if (pivot == null)
                 pivot = transform;
 
             _uprightRot = pivot.localRotation;
+
             _pourRot = Quaternion.Euler(
                 pivot.localEulerAngles.x,
                 pivot.localEulerAngles.y,
@@ -39,74 +58,37 @@ namespace making_tea
 
         private void Update()
         {
-            var isHeld = false;
-            var isTableHeld = false;
+            var isHeld = TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld;
+            var isTableHeld = TryGetComponent<KettleTablePickup>(out var t) && t.IsTableHeld;
 
-            if (TryGetComponent<HoldableObjectBehaviour>(out var h))
-                isHeld = h.IsCurrentlyHeld;
-            
-            if (TryGetComponent<KettleTablePickup>(out var t))
-                isTableHeld = t.IsTableHeld;
-
-            var leftClick = Mouse.current != null && Mouse.current.leftButton.isPressed;
-            
-            var wantsPour =
+            var canPour =
                 (isHeld || isTableHeld) &&
-                leftClick &&
-                kettle.fillAmount > 0f;
+                kettle != null &&
+                kettle.fillAmount > 0f &&
+                _isPourPressed;
 
-            if (wantsPour)
+            if (canPour)
             {
-                pivot.localRotation = Quaternion.Lerp(
-                    pivot.localRotation,
-                    _pourRot,
-                    Time.deltaTime * rotateSpeed
-                );
+                if (!_wasPouring && pourClip != null)
+                    _audio.PlayOneShot(pourClip);
+
+                _wasPouring = true;
+
+                pivot.localRotation = Quaternion.Lerp(pivot.localRotation, _pourRot, Time.deltaTime * rotateSpeed);
 
                 if (pourStream && !pourStream.isPlaying)
                     pourStream.Play();
-                
-                if (pourSound && !pourSound.isPlaying)
-                    pourSound.Play();
 
-                var delta = pourSpeed * Time.deltaTime;
-                var give = Mathf.Min(delta, kettle.fillAmount);
-
-                kettle.fillAmount -= give;
-                if (targetCup)
-                    targetCup.fillAmount += give;
-                
-                if (targetCup && targetCup.fillAmount >= 0.2f)
-                {
-                    ChoreEvents.TriggerCupFilled();
-                }
-                if (targetCup && targetCup.fillAmount > targetCup.maxFill)
-                {
-                    if (!spillSound.isPlaying)
-                        spillSound.Play();
-                }
-                else
-                {
-                    if (spillSound.isPlaying)
-                        spillSound.Stop();
-                }
+                kettle.fillAmount = Mathf.Max(0f, kettle.fillAmount - pourSpeed * Time.deltaTime);
             }
             else
             {
-                pivot.localRotation = Quaternion.Lerp(
-                    pivot.localRotation,
-                    _uprightRot,
-                    Time.deltaTime * rotateSpeed
-                );
+                _wasPouring = false;
+
+                pivot.localRotation = Quaternion.Lerp(pivot.localRotation, _uprightRot, Time.deltaTime * rotateSpeed);
 
                 if (pourStream && pourStream.isPlaying)
                     pourStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                
-                if (pourSound && pourSound.isPlaying)
-                    pourSound.Stop();
-                
-                if (spillSound && spillSound.isPlaying)
-                    spillSound.Stop();
             }
         }
     }

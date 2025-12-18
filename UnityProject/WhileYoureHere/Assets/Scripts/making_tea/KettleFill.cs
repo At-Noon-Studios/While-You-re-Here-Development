@@ -1,24 +1,42 @@
+using System.Linq;
 using UnityEngine;
 
 namespace making_tea
 {
     public class KettleFill : MonoBehaviour
     {
-        public float fillAmount = 0f;
+        [Header("Fill Settings")]
+        public float fillAmount;
         public float maxFill = 1f;
         public float fillSpeed = 0.25f;
 
         [HideInInspector]
-        public bool isFilling = false;
+        public bool isFilling;
 
-        void Update()
+        private void Update()
         {
+            if (!CanFill())
+            {
+                isFilling = false;
+                return;
+            }
+            
             if (!isFilling || !(fillAmount < maxFill)) return;
             fillAmount += fillSpeed * Time.deltaTime;
             fillAmount = Mathf.Clamp(fillAmount, 0f, maxFill);
         }
 
-        public void StartFilling()  => isFilling = true;
-        public void StopFilling()   => isFilling = false;
+        public void StartFilling() => isFilling = true;
+        public void StopFilling() => isFilling = false;
+        
+        public bool CanFill()
+        {
+            return !HasLid();
+        }
+
+        private bool HasLid()
+        {
+            return GetComponentsInChildren<Transform>(true).Any(t => t.CompareTag("Lid"));
+        }
     }
 }

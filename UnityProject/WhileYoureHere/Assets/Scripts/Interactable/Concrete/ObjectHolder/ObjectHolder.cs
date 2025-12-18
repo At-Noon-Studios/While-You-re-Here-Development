@@ -1,5 +1,6 @@
-using Interactable.Holdable;
-using JetBrains.Annotations;
+using System.Collections.Generic;
+using System.Linq;
+using make_a_fire;
 using UnityEngine;
 
 namespace Interactable.Concrete.ObjectHolder
@@ -9,89 +10,49 @@ namespace Interactable.Concrete.ObjectHolder
         [Header("Placement")]
         [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
-        
-        [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
-
-        [CanBeNull] private IHoldableObject _heldObject;
-        private Transform _playerCamera;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-            
-            // var player = GameObject.FindWithTag("Player");
-            // if (player != null)
-            // {
-            //     var cam = player.GetComponentInChildren<Camera>();
-            //     if (cam != null)
-            //         _playerCamera = cam.transform;
-            // }
-        }
-
-        private void Update()
-        {
-            if (interactionCanvas != null &&
-                interactionCanvas.gameObject.activeSelf &&
-                _playerCamera != null)
-            {
-                interactionCanvas.transform.LookAt(_playerCamera);
-                interactionCanvas.transform.Rotate(0f, 180f, 0f);
-            }
-        }
-
+          [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
+        private readonly List<PlacedObjectData> _placedObjectsInHolders = new List<PlacedObjectData>();
+    
         public override void Interact(IInteractor interactor)
         {
-            if (_heldObject == null)
+            var heldObject = interactor.HeldObject;
+            if (heldObject == null) return;
+
+            var heldGameObject = (heldObject as Component)?.gameObject;
+            if (!heldGameObject) return;
+            
+            var placedData = placedObjects.FirstOrDefault(e => e.objectPrefab.GetType() == heldGameObject.GetType());
+            if (placedData != null)
             {
-                if (interactor.HeldObject == null) return;
-
-                _heldObject = interactor.HeldObject;
-                _heldObject.Place(placePoint.position, Quaternion.Euler(placedObjectRotation), this);
-                return;
+                placedObjects.Remove(placedData);
+                heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
+                _placedObjectsInHolders.Add(placedData);
             }
-
-            _heldObject.Interact(interactor);
-            _heldObject = null;
+            
+            interactor.SetHeldObject(null);
         }
-
-        public void ClearHeldObject(IHoldableObject obj)
+        
+        public override bool IsInteractableBy(IInteractor interactor)
         {
-            if (_heldObject == obj)
-                _heldObject = null;
+            if (blockInteraction) return false;
+
+            var heldObject = interactor.HeldObject;
+            if (heldObject == null) return false;
+
+            var heldGameObject = (heldObject as Component)?.gameObject;
+            if (!heldGameObject) return false;
+
+            return placedObjects.Any(e => e.objectPrefab.GetType() == heldGameObject.GetType());
         }
-
-        public override bool InteractableBy(IInteractor interactor)
-        {
-            return _heldObject == null &&
-                   interactor.HeldObject is IPlaceable;
-        }
-
-        public override void OnHoverEnter(IInteractor interactor)
-        {
-            base.OnHoverEnter(interactor);
-
-            bool canInteract = _heldObject == null &&
-                               interactor.HeldObject is IPlaceable;
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(canInteract);
-        }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-
+        
         public override string InteractionText(IInteractor interactor)
         {
-            return string.Empty;
+            if (!IsInteractableBy(interactor))
+                return string.Empty;
+
+            return "Place " + interactor.HeldObject.InteractionText(interactor);
         }
+
+        
     }
 }

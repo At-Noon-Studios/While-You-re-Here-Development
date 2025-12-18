@@ -1,11 +1,13 @@
+using System;
 using Interactable;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace making_tea
 {
     public class WaterTapInteractable : InteractableBehaviour
     {
+        [Header("Water Tap Reference")]
         [Header("Interaction UI")]
         [SerializeField] private Image tapOnImage;
         [SerializeField] private Image tapOffImage;

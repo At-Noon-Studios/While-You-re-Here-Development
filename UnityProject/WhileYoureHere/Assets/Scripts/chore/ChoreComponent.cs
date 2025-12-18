@@ -5,20 +5,27 @@ namespace chore
 {
     public abstract class ChoreComponent
     {
-        public bool IsActive { get; private set; }
-        
         public enum ChoreComponentType
         {
+            ItemCollected,
+            KettleFilled,
+            WaterBoiled,
+            TeabagAdded,
+            CupFilled,
+            LogPlacement,
+            LogChop,
+            PaperPlacement
             WateringCanPickedUp,
             WateringCanFilled,
             PlantWatered,
             KettleFilled,
             WaterBoiled,
             TeabagAdded,
-            CupFilled,
-            ItemCollected
+            CupFilled
         }
         
+        public bool IsActive { get; private set; }
+
         public event Action<ChoreComponent> OnComponentCompleted;
 
         protected void TriggerComponentCompleted(ChoreComponent choreComponent)

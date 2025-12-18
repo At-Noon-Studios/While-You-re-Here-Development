@@ -1,15 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using chore;
+using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace gamestate
 {
+    [RequireComponent(typeof(ChoreManager))]
+    [RequireComponent(typeof(TimeManager))]
     public class GamestateManager : MonoBehaviour
     {
+        public List<SoGamestateFlag> listOfFlags = new List<SoGamestateFlag>();
+        
         [Header("List with activities of this day")]
         [SerializeField] private List<Activity>  activities = new List<Activity>();
         
@@ -23,14 +29,25 @@ namespace gamestate
         
         public int currentDay;
         
-        [HideInInspector]
-        public bool notebookPickedUp = false;
-        
         private void Awake()
         {
             _instance = this;
             _timeManager = GetComponent<TimeManager>();
             _choreManager = GetComponent<ChoreManager>();
+            SetFlagsToDefault();
+        }
+
+        private void OnApplicationQuit()
+        {
+            SetFlagsToDefault();
+        }
+
+        private void SetFlagsToDefault()
+        {
+            foreach (var flag in listOfFlags)
+            {
+                flag.currentValue = flag.defaultValue;
+            }
         }
         
         private void Start()
@@ -58,11 +75,11 @@ namespace gamestate
 
         private void CheckBooleansTrue(GameplayEvent gameplayEvent)
         {
-            foreach (var boolean in gameplayEvent.booleansToBeTrue)
+            foreach (var flag in gameplayEvent.booleansToBeTrue)
             {
-                if (!(bool)_instance.GetType().GetField(boolean).GetValue(_instance)) return;
-                HandleTrigger(gameplayEvent);
+                if (!flag.currentValue) return;
             }
+            HandleTrigger(gameplayEvent);
         }
 
         public static GamestateManager GetInstance()
@@ -87,6 +104,7 @@ namespace gamestate
             catch (ArgumentOutOfRangeException e)
             {
                 Debug.LogError("No new activity was found: " + e.Message);
+                return;
             }
             HandleStartActivity();
         }
@@ -105,9 +123,9 @@ namespace gamestate
             }
         }
 
-        private void BooleanChange(string boolName, bool value)
+        private void BooleanChange(SoGamestateFlag flag, bool value)
         {
-            _instance.GetType().GetField(boolName).SetValue(_instance, value);
+            flag.currentValue = value;
         }
 
         private void SkyboxChange(int hourOfDay)
@@ -152,14 +170,14 @@ namespace gamestate
                 case GameplayEventType.BooleanChange:
                     BooleanChange(gameplayEvent.booleanToChange, gameplayEvent.newValue);
                     break;
-                case GameplayEventType.SkyboxChange:
+                case GameplayEventType.SkyboxChange: 
                     SkyboxChange(gameplayEvent.hourOfDay);
                     break;
                 case GameplayEventType.Cutscene:
                     PlayCutscene();
                     break;
                 case GameplayEventType.Dialogue:
-                    PlayDialogue(gameplayEvent.dialogueToPlay);
+                    PlayDialogue(gameplayEvent.audioToPlay);
                     break;
                 case GameplayEventType.ProgressToNextActivity:
                     GoToNextActivity();

@@ -4,22 +4,34 @@ namespace making_tea
 {
     public class WaterTap : MonoBehaviour
     {
+        [Header("Water Stream Reference")]
         public ParticleSystem waterStream;
 
         [Header("Audio")]
-        public AudioSource tapSound;
+        public AudioClip waterLoopClip;
+
+        private AudioSource _audio;
 
         [SerializeField]
-        private bool _isRunning = false;
+        private bool isRunning;
 
-        public bool isRunning
+        public bool IsRunning
         {
-            get => _isRunning;
+            get => isRunning;
             private set
             {
-                _isRunning = value;
+                isRunning = value;
                 UpdateWaterState();
             }
+        }
+
+        private void Awake()
+        {
+            _audio ??= GetComponent<AudioSource>();
+            _audio ??= gameObject.AddComponent<AudioSource>();
+            
+            _audio.loop = true;
+            _audio.playOnAwake = false;
         }
 
         private void Start()
@@ -29,31 +41,48 @@ namespace making_tea
 
         private void OnValidate()
         {
+            if (!Application.isPlaying)
+            {
+                if (waterStream == null) return;
+                
+                if (isRunning)
+                    waterStream.Play();
+                else
+                    waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                return;
+            }
+
             UpdateWaterState();
         }
 
         public void ToggleTap()
         {
-            isRunning = !isRunning;
+            IsRunning = !IsRunning;
         }
 
         private void UpdateWaterState()
         {
-            if (waterStream == null) return;
+            if (_audio == null)
+                return;
 
-            if (_isRunning)
+            if (isRunning)
             {
-                waterStream.Play();
+                if (waterStream != null && !waterStream.isPlaying)
+                    waterStream.Play();
 
-                if (tapSound && !tapSound.isPlaying)
-                    tapSound.Play();
+                if (waterLoopClip == null) return;
+                
+                _audio.clip = waterLoopClip;
+                if (!_audio.isPlaying)
+                    _audio.Play();
             }
             else
             {
-                waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                if (waterStream != null)
+                    waterStream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-                if (tapSound && tapSound.isPlaying)
-                    tapSound.Stop();
+                if (_audio.isPlaying)
+                    _audio.Stop();
             }
         }
     }

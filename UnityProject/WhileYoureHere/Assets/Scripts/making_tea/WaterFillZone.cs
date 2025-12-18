@@ -10,9 +10,15 @@ namespace making_tea
         private void OnTriggerStay(Collider other)
         {
             var kettle = other.GetComponentInParent<KettleFill>();
-
             if (kettle == null) return;
-            if (tap.isRunning)
+
+            if (!kettle.CanFill())
+            {
+                kettle.StopFilling();
+                return;
+            }
+
+            if (tap.IsRunning)
                 kettle.StartFilling();
             else
                 kettle.StopFilling();
@@ -21,7 +27,8 @@ namespace making_tea
         private void OnTriggerExit(Collider other)
         {
             var kettle = other.GetComponentInParent<KettleFill>();
-            if (kettle != null) kettle.StopFilling();
+            if (kettle != null)
+                kettle.StopFilling();
         }
     }
 }

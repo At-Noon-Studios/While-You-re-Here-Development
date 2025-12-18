@@ -1,65 +1,114 @@
 using chore;
 using UnityEngine;
 using System.Collections;
+using Interactable.Concrete.ObjectHolder;
+using Interactable.Holdable;
 
 namespace making_tea
 {
     public class Stove : MonoBehaviour
     {
+        [Header("Heating Settings")]
         public float requiredFill = 0.2f;
         public float heatTime = 3f;
 
-        [Header("Audio")]
-        public AudioSource whistleSound;
-        public AudioSource boilingSound;
+        [Header("Audio Clips")]
+        public AudioClip boilingClip;
+        public AudioClip whistleClip;
 
         [Header("Steam Settings")]
-        public float steamStopDelay = 3f;
+        public float steamStopDelay = 1.5f;
 
         private float _heatTimer;
-        private Coroutine steamStopRoutine;
+        private Coroutine _steamRoutine;
+        private Coroutine _heatRoutine;
 
-        public bool isOn = false;
-        private KettleFill currentKettle;  // track the kettle on the stove
+        public bool isOn = true;
 
-        private void OnTriggerStay(Collider other)
+        private KettleFill _currentKettle;
+        private ParticleSystem _steam;
+
+        private AudioSource _boilingSource;
+        private AudioSource _whistleSource;
+
+        private ObjectHolderSingle _holder;
+
+        private void Awake()
         {
-            if (!isOn) return;
+            var sources = GetComponents<AudioSource>();
+            _boilingSource = sources.Length > 0 ? sources[0] : gameObject.AddComponent<AudioSource>();
+            _whistleSource = sources.Length > 1 ? sources[1] : gameObject.AddComponent<AudioSource>();
 
-            var kettle = other.GetComponentInParent<KettleFill>();
-            if (kettle == null) return;
+            _boilingSource.loop = true;
 
-            currentKettle = kettle;
+            _holder = GetComponent<ObjectHolderSingle>();
+        }
 
-            if (kettle.fillAmount < requiredFill)
-                return;
+        private void Start()
+        {
+            if (_holder == null) return;
 
-            var steam = kettle.GetComponentInChildren<ParticleSystem>();
+            _holder.OnPlaced += HandlePlaced;
+            _holder.OnRemoved += HandleRemoved;
+        }
 
-            if (!boilingSound.isPlaying)
-                boilingSound.Play();
+        private void HandlePlaced(IHoldableObject obj)
+        {
+            _currentKettle = (obj as MonoBehaviour)?.GetComponent<KettleFill>();
+            if (_currentKettle == null) return;
 
-            _heatTimer += Time.deltaTime;
+            Debug.Log("Stove: kettle placed");
 
-            if (_heatTimer >= heatTime)
+            if (!HasEnoughWater())
             {
-                if (steam != null && !steam.isPlaying)
-                    steam.Play();
+                Debug.Log("Stove: not enough water");
+                return;
+            }
 
-                if (!whistleSound.isPlaying)
-                    whistleSound.Play();
+            _steam = _currentKettle.GetComponentInChildren<ParticleSystem>();
+            _heatTimer = 0f;
 
-                ChoreEvents.TriggerWaterBoiled();
+            _heatRoutine = StartCoroutine(HeatRoutine());
+        }
+
+        private IEnumerator HeatRoutine()
+        {
+            if (!_boilingSource.isPlaying && boilingClip != null)
+            {
+                _boilingSource.clip = boilingClip;
+                _boilingSource.Play();
+            }
+
+            while (_currentKettle != null && isOn)
+            {
+                if (!HasEnoughWater())
+                {
+                    StopEffects();
+                    yield break;
+                }
+
+                _heatTimer += Time.deltaTime;
+
+                if (_heatTimer >= heatTime)
+                {
+                    if (_steam != null && !_steam.isPlaying)
+                        _steam.Play();
+
+                    if (!_whistleSource.isPlaying && whistleClip != null)
+                    {
+                        _whistleSource.PlayOneShot(whistleClip);
+                        ChoreEvents.TriggerWaterBoiled();
+                    }
+                }
+
+                yield return null;
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void HandleRemoved(IHoldableObject obj)
         {
-            var kettle = other.GetComponentInParent<KettleFill>();
-            if (kettle == null) return;
-
-            Debug.Log("Stove: kettle left stove");
-            StopSteamWithDelay(kettle);
+            Debug.Log("Stove: kettle removed");
+            StopEffects();
         }
 
         public void ToggleStove()
@@ -67,37 +116,47 @@ namespace making_tea
             isOn = !isOn;
 
             if (!isOn)
-            {
-                Debug.Log("Stove turned OFF");
-                if (currentKettle != null)
-                    StopSteamWithDelay(currentKettle);
-            }
+                StopEffects();
         }
 
-        private void StopSteamWithDelay(KettleFill kettle)
+        private bool HasEnoughWater()
+        {
+            return _currentKettle != null && _currentKettle.fillAmount >= requiredFill;
+        }
+
+        private void StopEffects()
         {
             _heatTimer = 0f;
 
-            if (boilingSound.isPlaying)
-                boilingSound.Stop();
-            if (whistleSound.isPlaying)
-                whistleSound.Stop();
+            if (_heatRoutine != null)
+            {
+                StopCoroutine(_heatRoutine);
+                _heatRoutine = null;
+            }
 
-            var steam = kettle.GetComponentInChildren<ParticleSystem>();
-            if (steam == null) return;
+            if (_boilingSource.isPlaying)
+                _boilingSource.Stop();
 
-            if (steamStopRoutine != null)
-                StopCoroutine(steamStopRoutine);
+            if (_whistleSource.isPlaying)
+                _whistleSource.Stop();
 
-            steamStopRoutine = StartCoroutine(StopSteamAfterDelay(steam));
+            if (_steam != null && _steam.isPlaying)
+            {
+                if (_steamRoutine != null)
+                    StopCoroutine(_steamRoutine);
+
+                _steamRoutine = StartCoroutine(SteamStopRoutine());
+            }
+
+            _currentKettle = null;
         }
 
-        private IEnumerator StopSteamAfterDelay(ParticleSystem steam)
+        private IEnumerator SteamStopRoutine()
         {
             yield return new WaitForSeconds(steamStopDelay);
 
-            if (steam != null && steam.isPlaying)
-                steam.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            if (_steam != null)
+                _steam.Stop();
         }
     }
 }

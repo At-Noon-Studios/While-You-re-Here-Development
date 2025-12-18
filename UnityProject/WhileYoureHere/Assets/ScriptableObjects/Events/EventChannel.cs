@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ScriptableObjects.Events
@@ -7,7 +7,6 @@ namespace ScriptableObjects.Events
     public class EventChannel : ScriptableObject
     {
         public Action OnRaise;
-
         public void Raise()
         {
             OnRaise?.Invoke();

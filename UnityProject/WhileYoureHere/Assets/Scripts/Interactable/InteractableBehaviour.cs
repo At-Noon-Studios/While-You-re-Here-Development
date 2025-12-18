@@ -13,6 +13,7 @@ namespace Interactable
         protected Renderer[] Renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
+        public bool blockInteraction = false;
 
         #region Unity event functions
         
@@ -32,12 +33,25 @@ namespace Interactable
         
         #region Interface implementation
         
-        public virtual bool InteractableBy(IInteractor interactor) => true;
+        public virtual bool IsInteractableBy(IInteractor interactor) => !blockInteraction;
+        
+        public virtual bool IsDetectableBy(IInteractor interactor) => !blockInteraction;
 
         public abstract void Interact(IInteractor interactor);
-        
+
+        public virtual void ClickInteract(IInteractor interactor)
+        {
+            
+        }
+
+        public virtual void BlockInteraction(bool value)
+        {
+            blockInteraction = value;
+        }
+
         public virtual void OnHoverEnter(IInteractor interactor)
         {
+            if (blockInteraction) return;
             AddOutlineMaterialToRenderers();
         }
         
@@ -46,7 +60,7 @@ namespace Interactable
             RemoveOutlineMaterialFromRenderers();
         }
         
-        public virtual string InteractionText(IInteractor interactor) => gameObject.name;
+        public virtual string InteractionText(IInteractor interactor) => string.Empty;
         
         public void EnableCollider(bool state)
         {

@@ -1,6 +1,5 @@
-using gardening;
-using Interactable.Concrete.ObjectHolder;
 using UnityEngine;
+using Interactable.Concrete.ObjectHolder;
 
 namespace Interactable.Holdable
 {
@@ -9,7 +8,7 @@ namespace Interactable.Holdable
         public float Weight { get; }
 
         public void Drop();
-        
-        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolder holder = null);
+
+        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null);
     }
 }
