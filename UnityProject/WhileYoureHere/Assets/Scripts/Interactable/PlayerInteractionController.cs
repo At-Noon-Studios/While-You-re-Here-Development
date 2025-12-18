@@ -76,12 +76,14 @@ namespace Interactable
         {
             OnDisable();
             _interactingPaused = true;
-            SetHeldObject(null);
+            OnHoverExit(_currentTarget);
+            SetCurrentTarget(null);
         }
 
         public void ResumePlayerInteraction()
         {
             OnEnable();
+            _interactingPaused = false;
         }
         
         #endregion
