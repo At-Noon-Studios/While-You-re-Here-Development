@@ -145,6 +145,11 @@ MonoBehaviour:
   mouseUpImage: {fileID: 5876956780588192833}
   mouseDownImage: {fileID: 4799603342762445536}
   guideLineImage: {fileID: 6196135674866492545}
+--- !u!1 &388796807 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8233411102942291440, guid: 55d0c968049cd50448bf933165031995, type: 3}
+  m_PrefabInstance: {fileID: 2638949317826318608}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &752396885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1798,6 +1803,7 @@ GameObject:
   - component: {fileID: 9015969335976960641}
   - component: {fileID: 1612960545977861725}
   - component: {fileID: 4497165406910133529}
+  - component: {fileID: 9015969335976960642}
   m_Layer: 0
   m_Name: PineLogFull (4)
   m_TagString: Log
@@ -3340,8 +3346,9 @@ GameObject:
   - component: {fileID: 1139628903756988963}
   - component: {fileID: 3900519524478470381}
   - component: {fileID: 2681770425800257292}
+  - component: {fileID: 5067033201132926045}
   m_Layer: 0
-  m_Name: RadioV2 (1)
+  m_Name: RadioV2
   m_TagString: RadioAudioSource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6096,7 +6103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 8408770392919267304}
   audioSource: {fileID: 0}
@@ -10648,6 +10654,7 @@ GameObject:
   - component: {fileID: 8145343555169601029}
   - component: {fileID: 1907091420890882777}
   - component: {fileID: 3637816157145387421}
+  - component: {fileID: 8807451086086637437}
   m_Layer: 0
   m_Name: PineLogFull (2)
   m_TagString: Log
@@ -13286,25 +13293,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1246031519560115468
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4695375946316920180}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 5067033201132926044}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.1907}
-  m_SizeDelta: {x: 0.9684, y: 0.5818}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1252616915584347099
 Transform:
   m_ObjectHideFlags: 0
@@ -16383,7 +16371,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 7618025540315792563}
   audioSource: {fileID: 5787746468103025456}
@@ -17322,6 +17309,7 @@ GameObject:
   - component: {fileID: 7582130784285945105}
   - component: {fileID: 163370400337185229}
   - component: {fileID: 3048707755966724745}
+  - component: {fileID: 8875513889917276415}
   m_Layer: 0
   m_Name: PineLogFull
   m_TagString: Log
@@ -18266,6 +18254,7 @@ GameObject:
   - component: {fileID: 7625480101130029578}
   - component: {fileID: 193213354463588054}
   - component: {fileID: 3072908001923784082}
+  - component: {fileID: 8918867640518195174}
   m_Layer: 0
   m_Name: PineLogFull (1)
   m_TagString: Log
@@ -20416,11 +20405,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases:
-  - {fileID: 633917761998754250}
-  - {fileID: 8476776686664354714}
-  - {fileID: 5484490647759926948}
-  - {fileID: 3105798141165454077}
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 283422859061634025}
   audioSource: {fileID: 4180597145100162154}
@@ -28645,7 +28629,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8233411102942291440, guid: 55d0c968049cd50448bf933165031995, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4532089800279522522}
   m_SourcePrefab: {fileID: 100100000, guid: 55d0c968049cd50448bf933165031995, type: 3}
 --- !u!1 &2640122785280191623
 GameObject:
@@ -43837,6 +43824,7 @@ GameObject:
   - component: {fileID: 4246438279341384538}
   - component: {fileID: 6147250578188574100}
   - component: {fileID: 5091529875438562548}
+  - component: {fileID: 9166005229781710206}
   m_Layer: 0
   m_Name: TaskList
   m_TagString: Untagged
@@ -47942,7 +47930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueInteraction
   blockInteraction: 1
-  interactionCanvas: {fileID: 6592419872049457378}
+  interactionCanvas: {fileID: 0}
   interactionUI: {fileID: 0}
   dialogueLoader: {fileID: 0}
   config: {fileID: 11400000, guid: 85cd8e474adb38c48a497851b59ceeea, type: 2}
@@ -54436,6 +54424,43 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5697640146305505765, guid: 55d0c968049cd50448bf933165031995, type: 3}
   m_PrefabInstance: {fileID: 2638949317826318608}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4532089800279522518 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5313020708364394333, guid: 55d0c968049cd50448bf933165031995, type: 3}
+  m_PrefabInstance: {fileID: 2638949317826318608}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388796807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::picking_up_objects.Pickable
+--- !u!114 &4532089800279522522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388796807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 2, y: 1}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 4532089800279522518}
+    worldOffset: {x: 0, y: 0.3, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 2
 --- !u!33 &4535061793939899099
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -56463,24 +56488,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2283202991059270238}
   m_Mesh: {fileID: -7443724666282046697, guid: b06e9a255ce15204d84536720e157378, type: 3}
---- !u!1 &4695375946316920180
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1246031519560115468}
-  - component: {fileID: 8096755329256669390}
-  - component: {fileID: 6592419872049457378}
-  m_Layer: 0
-  m_Name: WYH_UI_TurnOn
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!64 &4697228173755438583
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -60153,9 +60160,34 @@ Transform:
   - {fileID: 1714469827679817611}
   - {fileID: 1147827573376177883}
   - {fileID: 3345394898752400991}
-  - {fileID: 1246031519560115468}
   m_Father: {fileID: 4199048515343272442}
   m_LocalEulerAnglesHint: {x: 0.015, y: 181.03, z: -0.009}
+--- !u!114 &5067033201132926045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273714428973456713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Turn On
+    sprite: {fileID: 21300000, guid: 6fb5677cc0043284c985ee4b28e49367, type: 3}
+    size: {x: 2.2, y: 1}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 3900519524478470381}
+    worldOffset: {x: 0, y: 0.3, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.2
 --- !u!1 &5067361201953320549
 GameObject:
   m_ObjectHideFlags: 0
@@ -65860,7 +65892,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 4267646840674685897}
   audioSource: {fileID: 0}
@@ -72555,7 +72586,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.InteractableTaskListObject
   blockInteraction: 0
   taskListUI: {fileID: 6733118290761291377}
-  interactionCanvas: {fileID: 419845988414007831}
 --- !u!4 &6148260830879250588
 Transform:
   m_ObjectHideFlags: 0
@@ -74583,7 +74613,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 6454157128192570853}
   audioSource: {fileID: 6952248121415172710}
@@ -76660,29 +76689,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866125861634555284}
   m_Mesh: {fileID: -8361226185520391881, guid: c99bc4e4066bf1c449f8ce25dfdaa3cc, type: 3}
---- !u!223 &6592419872049457378
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4695375946316920180}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!4 &6595469383435399492
 Transform:
   m_ObjectHideFlags: 0
@@ -92301,64 +92307,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127906039380827539}
   m_Mesh: {fileID: -6531274427930807323, guid: c99bc4e4066bf1c449f8ce25dfdaa3cc, type: 3}
---- !u!212 &8096755329256669390
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4695375946316920180}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6fb5677cc0043284c985ee4b28e49367, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 5, y: 1.5}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!4 &8098469358605853063
 Transform:
   m_ObjectHideFlags: 0
@@ -94503,6 +94451,7 @@ GameObject:
   - component: {fileID: 1470290907704620177}
   - component: {fileID: 7608577182200978671}
   - component: {fileID: 6867145926734208874}
+  - component: {fileID: 8268680490803531899}
   m_Layer: 0
   m_Name: Newspaper
   m_TagString: Untagged
@@ -94510,6 +94459,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8268680490803531899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268680490803531898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 2, y: 2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7608577182200978671}
+    worldOffset: {x: 0, y: 0.3, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 2
 --- !u!33 &8268698853874628437
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98689,7 +98664,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 774899886509170858}
   audioSource: {fileID: 3686867227999704873}
@@ -100239,6 +100213,7 @@ GameObject:
   - component: {fileID: 525907580904909647}
   - component: {fileID: 7796062376725712787}
   - component: {fileID: 4916358918662307031}
+  - component: {fileID: 8666560162894663882}
   m_Layer: 0
   m_Name: PineLogFull (3)
   m_TagString: Log
@@ -100246,6 +100221,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8666560162894663882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666560162894663881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.4, y: 0.2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 899645700352109110}
+    worldOffset: {x: 0, y: 0.4, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!33 &8667744810149928373
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -101500,6 +101501,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
   blockInteraction: 0
   data: {fileID: 11400000, guid: 8e030f2732954a745b8fcafcd5b94db0, type: 2}
+--- !u!114 &8807451086086637437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009855709480762755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.4, y: 0.2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 8807451086086637436}
+    worldOffset: {x: 0, y: 0.4, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!33 &8813729610508727168
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -102389,6 +102416,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8875513889917276415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598931123567335063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.4, y: 0.2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7064295212010351720}
+    worldOffset: {x: 0, y: 0.4, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!1 &8876191842091462421
 GameObject:
   m_ObjectHideFlags: 0
@@ -102725,6 +102778,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8918867640518195174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646784076286046604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.4, y: 0.2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7125658985077541747}
+    worldOffset: {x: 0, y: 0.4, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!33 &8926227460746470418
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -103743,6 +103822,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0022, y: 0.0021999995, z: 0.0029999996}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9015969335976960642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150449422048581895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.4, y: 0.2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 8516131524344341496}
+    worldOffset: {x: 0, y: 0.4, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!33 &9017622170135236946
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -105316,6 +105421,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9166005229781710206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3539122780291677900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.3, y: 1}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 6147250578188574100}
+    worldOffset: {x: 0, y: 0.3, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01
 --- !u!33 &9167505478241740904
 MeshFilter:
   m_ObjectHideFlags: 0

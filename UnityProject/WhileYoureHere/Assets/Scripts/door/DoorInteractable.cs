@@ -7,8 +7,6 @@ namespace door
 {
     public class DoorInteractable : InteractableBehaviour
     {
-        [Header("Interaction Canvases (0=open front, 1=open back, 2=close front, 3=close back)")]
-        [SerializeField] private List<Canvas> interactionCanvases;
 
         [Header("Door Config")]
         [SerializeField] private DoorConfig config;
@@ -40,8 +38,6 @@ namespace door
 
             if (!audioSource) audioSource = gameObject.AddComponent<AudioSource>();
 
-            interactionCanvases?.ForEach(c => c.gameObject.SetActive(false));
-
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -56,18 +52,7 @@ namespace door
         {
             Quaternion target = isOpen ? _openRotation : _closeRotation;
             doorPivot.localRotation = Quaternion.Lerp(doorPivot.localRotation, target, Time.deltaTime * (config?.openSpeed ?? 2f));
-
-            if (_playerCamera != null && interactionCanvases != null)
-            {
-                interactionCanvases.ForEach(c =>
-                {
-                    if (c.gameObject.activeSelf)
-                    {
-                        c.transform.LookAt(_playerCamera);
-                        c.transform.Rotate(0f, 180f, 0f);
-                    }
-                });
-            }
+            
         }
         public override void Interact(IInteractor interactor)
         {
@@ -84,27 +69,6 @@ namespace door
                 else if (!isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
-        
-
-        public override void OnHoverEnter(IInteractor interactor)
-        {
-            base.OnHoverEnter(interactor);
-            if (!_playerCamera || interactionCanvases == null || isLocked) return;
-
-            bool isFront = Vector3.Dot(doorPivot.forward, (_playerCamera.position - doorPivot.position).normalized) > 0f;
-
-            interactionCanvases.ForEach(c => c.gameObject.SetActive(false));
-
-            int index = !isOpen ? (isFront ? 0 : 1) : (isFront ? 2 : 3);
-            if (index < interactionCanvases.Count)
-                interactionCanvases[index].gameObject.SetActive(true);
-        }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-            interactionCanvases?.ForEach(c => c.gameObject.SetActive(false));
-        }
 
         public override bool IsInteractableBy(IInteractor interactor) => !isLocked;
         
@@ -112,10 +76,7 @@ namespace door
         
         public override string InteractionText(IInteractor interactor)
         {
-            if (isLocked)
-                return "Door is locked"; 
-
-            return isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
+            return string.Empty;
         }
     }
 }
