@@ -558,6 +558,10 @@ PrefabInstance:
       propertyPath: newspaper
       value: 
       objectReference: {fileID: 7608577182200978671}
+    - target: {fileID: 2956981227599943794, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: d855518431313974c9aeafc71360acc3, type: 2}
     - target: {fileID: 2986926253783904050, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: blockInteraction
       value: 1
@@ -28152,10 +28156,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8233411102942291440, guid: 55d0c968049cd50448bf933165031995, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 4532089800279522522}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55d0c968049cd50448bf933165031995, type: 3}
 --- !u!1 &2640122785280191623
 GameObject:
@@ -48407,22 +48408,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5697640146305505765, guid: 55d0c968049cd50448bf933165031995, type: 3}
   m_PrefabInstance: {fileID: 2638949317826318608}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4532089800279522522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140240076}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound:
-  - {fileID: 8300000, guid: 15ce2e7dff563ee4fbd602316aad1055, type: 3}
-  - {fileID: 8300000, guid: 82de28fdf5fe59c49b5e3f07289276e9, type: 3}
-  - {fileID: 8300000, guid: 76897c9b5441beb4986193d413f21ed9, type: 3}
 --- !u!33 &4535061793939899099
 MeshFilter:
   m_ObjectHideFlags: 0
