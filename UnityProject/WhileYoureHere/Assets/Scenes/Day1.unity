@@ -198,7 +198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+  axeImpactSound:
+  - {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+  - {fileID: 8300000, guid: 345c693cfd2d20a49b1b80071301cea3, type: 3}
+  - {fileID: 8300000, guid: 96314a40dca9bdf4babf2e1c05f4951c, type: 3}
   mouseUpImage: {fileID: 5876956780588192833}
   mouseDownImage: {fileID: 4799603342762445536}
   guideLineImage: {fileID: 6196135674866492545}
@@ -353,6 +356,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1719968151862680337, guid: 3b3676b4a4727c94d863e9a50a9c0f02, type: 3}
+      propertyPath: pickupSound.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1719968151862680337, guid: 3b3676b4a4727c94d863e9a50a9c0f02, type: 3}
+      propertyPath: 'pickupSound.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b769474f41e35534aaacc3b6bfd1df6e, type: 3}
     - target: {fileID: 3183291353599320960, guid: 3b3676b4a4727c94d863e9a50a9c0f02, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -365,6 +376,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TeaKettle
       objectReference: {fileID: 0}
+    - target: {fileID: 5038206789359132076, guid: 3b3676b4a4727c94d863e9a50a9c0f02, type: 3}
+      propertyPath: pourClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bb2df7e11ff3a91459b6820c43b45b0d, type: 3}
     - target: {fileID: 5546975325091508805, guid: 3b3676b4a4727c94d863e9a50a9c0f02, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -478,6 +493,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7645561983540674682, guid: 4971ef86b180f704dab95072659b55fb, type: 3}
+      propertyPath: isRunning
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7645561983540674682, guid: 4971ef86b180f704dab95072659b55fb, type: 3}
+      propertyPath: waterLoopClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 971eb5ec9e1dd0b4881de473d7de7fb1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -491,6 +514,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 1182303385849737684, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: burningFire
+      value: 
+      objectReference: {fileID: 8300000, guid: 34654379206a2b244a575e4f168a7079, type: 3}
+    - target: {fileID: 1182303385849737684, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: chargedFire
+      value: 
+      objectReference: {fileID: 8300000, guid: 4ca9e55d801511a4c83a0bb3115bbedd, type: 3}
+    - target: {fileID: 1182303385849737684, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: matchStrike
+      value: 
+      objectReference: {fileID: 8300000, guid: b11f14d9c5fc1eb4d8d8dd00797647b3, type: 3}
+    - target: {fileID: 1412161379628742009, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: boilingClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 95e098ad15d3d53459323b3b534fec6a, type: 3}
+    - target: {fileID: 1412161379628742009, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: whistleClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f6f1e551e366a604cbf04f57a7aa4073, type: 3}
+    - target: {fileID: 2642823818863368680, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: boilingClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 95e098ad15d3d53459323b3b534fec6a, type: 3}
+    - target: {fileID: 2642823818863368680, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: whistleClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f6f1e551e366a604cbf04f57a7aa4073, type: 3}
     - target: {fileID: 6301518217209945658, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: m_Name
       value: Furnace
@@ -813,19 +864,19 @@ PrefabInstance:
     - target: {fileID: 954108481944852147, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: furnace
       value: 
-      objectReference: {fileID: 1284384227}
+      objectReference: {fileID: 0}
     - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: mouseUpImage
       value: 
-      objectReference: {fileID: 724092412}
+      objectReference: {fileID: 0}
     - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: guideLineImage
       value: 
-      objectReference: {fileID: 1964452702}
+      objectReference: {fileID: 0}
     - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: mouseDownImage
       value: 
-      objectReference: {fileID: 1957329556}
+      objectReference: {fileID: 0}
     - target: {fileID: 6012344329808951788, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -926,38 +977,36 @@ PrefabInstance:
       propertyPath: cancel
       value: 
       objectReference: {fileID: 11400000, guid: 052682770d4bff846990332a14b7c326, type: 2}
-    - target: {fileID: 954108481944852147, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: furnace
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: mouseUpImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: guideLineImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: mouseDownImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6012344329808951788, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9001461804659304033, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1242199018}
+    - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 273177102}
   m_SourcePrefab: {fileID: 100100000, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+--- !u!82 &1242199017 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5956156730005618975, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+  m_PrefabInstance: {fileID: 1242199016}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1242199018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273177093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78e043506a284920b7d143848d29704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControls.FootstepsSound
+  audioSource: {fileID: 1242199017}
+  fs: {fileID: 11400000, guid: f95f4b7ba546a479d8a6526933cb85a7, type: 2}
 --- !u!1 &1480937962 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 286276147600278783, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -28375,6 +28424,8 @@ MonoBehaviour:
   - {fileID: 1548545487075426663}
   - {fileID: 9070504216808352551}
   logID: 1
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!4 &2681319054710386900
 Transform:
   m_ObjectHideFlags: 0
@@ -28946,6 +28997,8 @@ MonoBehaviour:
   - {fileID: 1548545487075426663}
   - {fileID: 9070504216808352551}
   logID: 1
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!1 &2736483646739777935
 GameObject:
   m_ObjectHideFlags: 0
@@ -32439,7 +32492,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!4 &3048728013348437431
 Transform:
   m_ObjectHideFlags: 0
@@ -32761,7 +32815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!4 &3077454386087479651
 Transform:
   m_ObjectHideFlags: 0
@@ -38547,6 +38602,8 @@ MonoBehaviour:
   - {fileID: 1548545487075426663}
   - {fileID: 9070504216808352551}
   logID: 1
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!33 &3598794647202796965
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -39439,7 +39496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!4 &3640812487067039185
 Transform:
   m_ObjectHideFlags: 0
@@ -45683,7 +45741,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 49de98d32d51fe04bb9691a502621f6f, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 7c5c203d0ed0da445bc5375f88dbd4bf, type: 3}
+  - {fileID: 8300000, guid: 49de98d32d51fe04bb9691a502621f6f, type: 3}
 --- !u!23 &4247629393699108818
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -47542,6 +47602,8 @@ MonoBehaviour:
   - {fileID: 1548545487075426663}
   - {fileID: 9070504216808352551}
   logID: 1
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!33 &4455756204216772272
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -48083,7 +48145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!33 &4497476148401221176
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -51984,7 +52047,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 6dd7508354a9e38459564fbe0a6ea058, type: 3}
+  m_Resource: {fileID: 8300000, guid: defaecc391cbd6a4892f86bc7413233f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -52415,7 +52478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!23 &4919472327500021628
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -52520,6 +52584,66 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 273177102}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: logCrackSound.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: logPlaceSound.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b7368bece4b0e18498ff5a20f12e4c36, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 0e8e8610fdc08ab44a295b1c1b28f527, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a0a73cb0bc9536d4fb6477454d7e71f3, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e266197fcd4c88e40bc8e1ac3229c231, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 5095276a8062faa418ff2fc89fb9655e, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 209a61967cef61444bdea582cf2ed523, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logCrackSound.Array.data[6]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a5f5748108362834eaaaa4bb9b362187, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: de7eef7cbc7496d4ab5ebbb26840c25c, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ad9c400442a680c4696ff290ce7fc71e, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ba508f6e6f4004a46a1baa0968230b56, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 26146e2a544dabb439a79f8ad6cbf062, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c080624037dec4245a007ae5447f5d9d, type: 3}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: 'logPlaceSound.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 1062ca7df2a7d3a41b1d7f2ddb8060da, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -58311,6 +58435,8 @@ MonoBehaviour:
   - {fileID: 1548545487075426663}
   - {fileID: 9070504216808352551}
   logID: 1
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!4 &5448977096433468902
 Transform:
   m_ObjectHideFlags: 0
@@ -72577,7 +72703,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 0}
+  pickupSound:
+  - {fileID: 8300000, guid: 501366a47cdccd84d85dd88d375f3b6a, type: 3}
+  - {fileID: 8300000, guid: bb69d43c2df5694498e9fcd665124215, type: 3}
 --- !u!33 &6867347972582812768
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -89754,6 +89882,10 @@ PrefabInstance:
       propertyPath: activities.Array.data[6].events.Array.data[2].eventToInvoke.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4516491931648755095, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+      propertyPath: tooFarFromCabinVoiceLine
+      value: 
+      objectReference: {fileID: 8300000, guid: e4aa145629567344ca2f4588258d05bd, type: 3}
     - target: {fileID: 4973827368064958843, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
