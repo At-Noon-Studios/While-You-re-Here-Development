@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ScriptableObjects.dialogue;
 using UnityEngine;
 using ScriptableObjects.Dialogue;
 
@@ -7,20 +8,20 @@ namespace dialogue
 {
     public class DialogueLoader : MonoBehaviour
     {
-        [SerializeField] private List<DialogueNode> dialogueNodes;
-        [SerializeField] private string startingNodeId = "start";
         [SerializeField] private DialogueManager dialogueManager;
+        private DialogueInteractionConfig _config;
 
-        public void StartDialogue(List<DialogueNode> configDialogueNodes)
+        public void StartDialogue(DialogueInteractionConfig config)
         {
-            if (dialogueNodes.Count == 0 || dialogueManager == null) return;
+            if (config.dialogueNodes.Count == 0 || dialogueManager == null) return;
+            _config = config;
             StartCoroutine(StartDialogueNextFrame());
         }
 
         private IEnumerator StartDialogueNextFrame()
         {
             yield return null;
-            dialogueManager.StartDialogue(dialogueNodes, startingNodeId);
+            dialogueManager.StartDialogue(_config);
         }
     }
 }
