@@ -21,8 +21,8 @@ namespace chopping_logs
         [SerializeField] private ChopUIManager uiManager;
 
         [Header("Sound Settings")] 
-        [SerializeField] private AudioClip logPlaceSound;
-        [SerializeField] private AudioClip logCrackSound;
+        [SerializeField] private AudioClip[] logPlaceSound;
+        [SerializeField] private AudioClip[] logCrackSound;
         
         [Header("Sprite settings")]
         [SerializeField] private Image cutLogSprite;
@@ -123,7 +123,7 @@ namespace chopping_logs
             {
                 if (_audioSource != null && logPlaceSound != null)
                 {
-                    _audioSource.PlayOneShot(logPlaceSound);
+                    _audioSource.PlayOneShot(logPlaceSound[Random.Range(0, logPlaceSound.Length - 1)]);
                 }
 
                 chopTarget.SetStump(this);
@@ -262,9 +262,9 @@ namespace chopping_logs
         {
             if (_audioSource == null || logCrackSound == null) yield break;
 
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
             yield return new WaitForSeconds(delayBetween);
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
         }
     }
 }
