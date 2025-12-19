@@ -19,7 +19,7 @@ namespace Interactable.Holdable
         [CanBeNull] protected IInteractor _holder;
         [CanBeNull] private GameObject _heldVersion;
 
-        private Transform _playerCamera;
+        protected Transform _playerCamera;
 
         private ObjectHolderSingle _currentHolder;
                 

@@ -13,10 +13,11 @@ namespace Fishing {
         private bool _isCasting;
         private float _castingForce;
         private LineController _lineController;
+        private bool _isMaxCharge;
 
         public float castingForceMultiplier;
         public float chargeCastTiltMultiplier;
-        public float maxCharge;
+        public float maxChargeTimeInMilliseconds;
         
         public GameObject line;
         public GameObject fishingRodTop;
@@ -55,14 +56,25 @@ namespace Fishing {
 
         private void ChargeCast()
         {
+            if (!_isCasting) StartCoroutine(TimeDownMaxCharge());
             _isCasting = true;
-            _castingForce = Mathf.Min(_castingForce + castingForceMultiplier, maxCharge);
-            if (_castingForce < maxCharge) transform.Rotate(-chargeCastTiltMultiplier, 0, 0);
+            if (_isMaxCharge) return;
+            _castingForce += castingForceMultiplier * Time.deltaTime;
+            transform.Rotate(-chargeCastTiltMultiplier, 0, 0);
+        }
+
+        private IEnumerator TimeDownMaxCharge()
+        {
+            _isMaxCharge = false;
+            yield return new WaitForSeconds(maxChargeTimeInMilliseconds);
+            _isMaxCharge = true;
         }
 
         private void CastLine()
         {
-            // instantiate the floater, get the rigidbody and apply force. start drawing line, check what it hits
+            var floater = Instantiate(floaterPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
+            floater.gameObject.GetComponent<Rigidbody>().AddForce(_castingForce * _playerCamera.forward, ForceMode.Impulse);
+            _lineController.SetUpLine(new []{fishingRodTop.transform, floater.transform});
             line.SetActive(false);
             _isLineCast = true;
             _isCasting = false;

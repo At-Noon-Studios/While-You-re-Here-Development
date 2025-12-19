@@ -6,7 +6,7 @@ namespace Fishing
     public class LineController : MonoBehaviour
     {
         private LineRenderer _lineRenderer;
-        private Transform[] _points;
+        private Transform[] _points = Array.Empty<Transform>();
 
         private void Awake()
         {
