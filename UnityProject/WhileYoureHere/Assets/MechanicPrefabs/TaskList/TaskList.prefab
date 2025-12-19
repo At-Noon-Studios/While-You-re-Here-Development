@@ -436,7 +436,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 49de98d32d51fe04bb9691a502621f6f, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 7c5c203d0ed0da445bc5375f88dbd4bf, type: 3}
+  - {fileID: 8300000, guid: 49de98d32d51fe04bb9691a502621f6f, type: 3}
 --- !u!114 &2460979694562148416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +453,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.InteractableTaskListObject
   blockInteraction: 0
   taskListUI: {fileID: 3033345065132886949}
-  interactionCanvas: {fileID: 0}
 --- !u!114 &3585132865003778336
 MonoBehaviour:
   m_ObjectHideFlags: 0
