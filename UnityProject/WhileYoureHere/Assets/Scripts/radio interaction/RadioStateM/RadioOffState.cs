@@ -1,4 +1,4 @@
-﻿namespace radio_interaction
+namespace radio_interaction
 {
     public class RadioOffState : IRadioState
     {
@@ -13,6 +13,7 @@
 
         public void Exit()
         {
+            _radioController.TurnRadioOn();
         }
 
         public void Update()

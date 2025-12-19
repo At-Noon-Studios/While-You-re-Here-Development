@@ -1,4 +1,4 @@
-﻿using Interactable.Concrete.ObjectHolder;
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
@@ -39,7 +39,7 @@ namespace Interactable
 
         private const int InteractableRaycastAllocation = 16;
 
-        #region Unity
+        #region Unity event functions {
 
         private void Awake()
         {
@@ -98,98 +98,42 @@ namespace Interactable
 
         private void Interact()
         {
-            if (IsTableMode)
-            {
-                if (HeldObject == null &&
-                    _currentTarget is not ObjectHolderSingle &&
-                    CanDropTablePickup())
-                    return;
+            if (NoTarget) HeldObject?.Drop();
 
-                if (NoTarget)
-                {
-                    if (_sittingChair != null)
-                        _sittingChair.ForceStandUp();
-
-                    return;
-                }
-
-                if (TargetInteractable)
-                {
-                    InteractWithTarget();
-                }
-                else
-                {
-                    _uiManager?.PulseInteractPrompt();
-                }
-
-                return;
-            }
-
-            if (NoTarget)
-            {
-                HeldObject?.Drop();
-                return;
-            }
-
-            if (TargetInteractable)
-            {
+            // if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
+            else if (_currentTarget is IEInteractable && interact.OnRaise != null)
                 InteractWithTarget();
-            }
-            else
-            {
-                _uiManager?.PulseInteractPrompt();
-            }
-        }
 
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
+        }
 
         private void ClickInteract()
         {
-            if (NoTarget)
+            if (NoTarget) HeldObject?.Drop();
+            else if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
             {
-                DropObject();
-                return;
-            }
-            
-            if (_currentTarget is IClickInteractable &&
-                clickInteractEvent.OnRaise != null)            
-                {
                 ClickInteractWithTarget();
             }
-            else
-            {
-                _uiManager.PulseInteractPrompt();
-            }
+            else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
-          private void DropObject()
+        private void DropObject()
         {
-            HeldObject?.Drop();        
+            HeldObject?.Drop();
         }
-
-
-        #endregion
-
-        #region Target detection
 
         private void RefreshCurrentTarget()
         {
             var hits = new RaycastHit[InteractableRaycastAllocation];
             var hitCount = LookForHits(hits);
-
             IInteractable bestTarget = null;
             var closestDistance = float.MaxValue;
-
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
-                    HeldObject != null)
-                    continue;
-
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
 
             if (bestTarget == _currentTarget) return;
-
             SetCurrentTarget(bestTarget);
         }
 
@@ -220,7 +164,7 @@ namespace Interactable
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
-        
+
         private bool TryGetBestInteractable(
             Collider collider,
             bool tableMode,
@@ -314,7 +258,7 @@ namespace Interactable
             var modifier = Mathf.Max(1f - weight, 0.4f);
             _movementController.SetMovementModifier(modifier);
         }
-        
+
         #endregion
 
         #region Tablemode
@@ -340,8 +284,8 @@ namespace Interactable
 
             return false;
         }
-        
+
         #endregion
-        
+
     }
 }

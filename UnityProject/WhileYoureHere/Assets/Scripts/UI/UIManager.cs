@@ -56,7 +56,9 @@ namespace UI
 
         public void HideDialogue()
         {
-            dialoguePanel?.SetActive(false);
+
+            dialogueText.text = "";
+            // dialoguePanel?.SetActive(false);
         }
     }
 }

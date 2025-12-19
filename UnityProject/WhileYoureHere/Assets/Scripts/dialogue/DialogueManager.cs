@@ -14,12 +14,10 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] private Transform choicesContainer;
+        [Header("UI")] [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")]
-        [SerializeField] private float letterDelay = 0.05f;
+        [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         private AudioSource _audioSource;
@@ -34,17 +32,22 @@ namespace dialogue
         private int _sentenceIndex;
         private string _currentFullSentence;
         private Coroutine _sentenceRoutine;
+        private float _CurrentResumeAudioTime;
         private bool _isTyping;
 
         private bool _cameraStopped;
         private bool _movementStopped;
 
         [SerializeField] private float volume = 1;
+        private int _resumeCharIndex;
+
+        private void Awake()
+        {
+            _ui = UIManager.Instance;
+        }
 
         private void Start()
         {
-            _ui = UIManager.Instance;
-
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -68,7 +71,9 @@ namespace dialogue
             }
             else
             {
-                PlayNextSentence();
+                // PlayNextSentence();
+                ProceedToNextSentence();
+
             }
         }
 
@@ -83,6 +88,29 @@ namespace dialogue
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
+        }
+
+        public void StartRadioDialogue(DialogueNode node, float resumeTime = 0, int startSentenceIndex = 0)
+        {
+            _nodes.Clear();
+            _nodes[node.nodeID] = node;
+            _currentNode = node;
+            _activeSentences = node.sentences.ToArray();
+            _sentenceIndex = startSentenceIndex;
+            gameObject.SetActive(true);
+
+
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
+            if (!_nodes.TryGetValue(node.nodeID, out _currentNode))
+            {
+                EndDialogue();
+                return;
+            }
+
+
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
+            // PlayNextSentence();
         }
 
         private void DisplayNode(string id)
@@ -121,6 +149,7 @@ namespace dialogue
             {
                 _currentNode.flag.currentValue = true;
             }
+
             if (_sentenceIndex >= _activeSentences.Length)
             {
                 if (_currentNode.choices?.Count > 0)
@@ -134,6 +163,94 @@ namespace dialogue
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
 
+        private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
+        {
+            _isTyping = true;
+            _currentFullSentence = sentence.text;
+            _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+
+            if (sentence.audio != null)
+            {
+                if (_audioSource == null)
+                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                if (_currentNode.nodeID == "radio_static")
+                {
+                    PlayStaticAudio(sentence.audio);
+                    yield break;
+                }
+
+                resumeTime = PlayResumedAudio(sentence, resumeTime);
+
+                _resumeCharIndex = Mathf.FloorToInt((resumeTime / sentence.audio.length) * sentence.text.Length);
+                _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
+
+                string output = sentence.text.Substring(0, _resumeCharIndex);
+                _ui.ShowDialogue(_currentNode.speakerName, output);
+
+                for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
+                {
+                    if (!_isTyping)
+                    {
+                        _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                        yield break;
+                    }
+
+                    output += sentence.text[i];
+                    _ui.ShowDialogue(_currentNode.speakerName, output);
+
+                    yield return new WaitForSeconds(letterDelay);
+                }
+
+                resumeTime = _audioSource.time;
+                _CurrentResumeAudioTime = _audioSource.time;
+                if (resumeTime == 0)
+                {
+                    _CurrentResumeAudioTime = _audioSource.time;
+                    resumeTime = sentence.audio.length - 0.5f;
+                }
+                
+                // Debug.Log("resume time =" + resumeTime + "sentence length = " + sentence.audio.length);
+                yield return new WaitForSeconds(sentence.audio.length - resumeTime);
+                _isTyping = false;
+
+                ProceedToNextSentence();
+            }
+        }
+
+        private void ProceedToNextSentence()
+        {
+            if (_sentenceIndex < _activeSentences.Length)
+                _sentenceIndex += 1;
+            if (_activeSentences == null || _sentenceIndex >= _activeSentences.Length)
+            {
+                EndDialogue();
+                _sentenceIndex = 0;
+                return;
+            }
+
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+        }
+
+        private float PlayResumedAudio(DialogueSentence sentence, float resumeTime)
+        {
+            var startedClip = sentence.audio;
+            _audioSource.clip = sentence.audio;
+            _audioSource.volume = volume;
+            resumeTime = Mathf.Clamp(resumeTime, 0f, startedClip.length);
+            _audioSource.time = resumeTime;
+            _audioSource.Play();
+            _audioSource.loop = false;
+            return resumeTime;
+        }
+
+        private void PlayStaticAudio(AudioClip clip)
+        {
+            _audioSource.loop = true;
+            _audioSource.clip = clip;
+            _audioSource.volume = volume;
+            _audioSource.Play();
+        }
+
         private IEnumerator TypeSentence(DialogueSentence sentence)
         {
             _isTyping = true;
@@ -141,7 +258,8 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                if (_audioSource == null) _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                if (_audioSource == null)
+                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.Stop();
                 _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
                 _audioSource.volume = volume;
@@ -165,9 +283,10 @@ namespace dialogue
 
             _isTyping = false;
             yield return new WaitForSeconds(sentenceDelay);
-            
+
             PlayNextSentence();
         }
+
 
         private void CreateChoices()
         {
@@ -189,18 +308,47 @@ namespace dialogue
                 EndDialogue();
         }
 
-        private void EndDialogue()
+        public void EndDialogue()
         {
+            // need to ask Arian what to keep here otherwise i am gonna make a new method
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
-
-            _ui.HideDialogue();
+            _ui?.HideDialogue();
             gameObject.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            _audioSource.Stop();
-            if (_movementStopped) _movement?.ResumeMovement();
-            if (_cameraStopped) _cameraController?.ResumeCameraMovement();
+            // Cursor.lockState = CursorLockMode.Locked;
+            // Cursor.visible = false;
+            _audioSource?.Stop();
+            // _movement?.ResumeMovement();
+            // _cameraController?.ResumeCameraMovement();
+        }
+
+        public int GetCurrentSentenceIndex() => _sentenceIndex;
+        public DialogueNode CurrentNode { get; set; }
+
+        public float GetCurrentResumeAudioTime()
+        {
+            if (_audioSource == null || !_audioSource.isPlaying)
+                return 0f;
+
+            return _CurrentResumeAudioTime;
+        }
+
+        public float GetSentenceAudioTime(int sentenceIndex)
+        {
+            if (_currentNode == null || _currentNode.sentences == null)
+                return 0f;
+
+            if ((uint)sentenceIndex >= (uint)_currentNode.sentences.Count)
+                return 0f;
+
+            var sentence = _currentNode.sentences[sentenceIndex];
+            var clip = sentence != null ? sentence.audio : null;
+            return clip != null ? clip.length : 0f;
+        }
+
+        public bool SentenceRoutineStopped()
+        {
+            return _sentenceRoutine is null;
         }
     }
 }
