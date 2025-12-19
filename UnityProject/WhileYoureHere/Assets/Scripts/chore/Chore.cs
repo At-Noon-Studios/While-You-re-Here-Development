@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using component.gardening;
 using chore.chopping_wood;
 using chore.making_tea;
 using chore.make_a_fire;
@@ -38,7 +39,11 @@ namespace chore
                     { ChoreComponent.ChoreComponentType.CupFilled, CcCupFilled.CreateFactory },
                     { ChoreComponent.ChoreComponentType.LogPlacement, CcLogPlacement.CreateFactory},
                     { ChoreComponent.ChoreComponentType.LogChop, CcLogChopping.CreateFactory},
-                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcPaperPlacement.CreateFactory}
+                    { ChoreComponent.ChoreComponentType.PaperPlacement, CcPaperPlacement.CreateFactory},
+                    { ChoreComponent.ChoreComponentType.WateringCanPickedUp, CcWateringCanPickedUp.CreateFactory },
+                    { ChoreComponent.ChoreComponentType.WateringCanFilled, CcWateringCanFilled.CreateFactory},
+                    { ChoreComponent.ChoreComponentType.PlantWatered, CcPlantWatered.CreateFactory }
+
                 };
 
         public Chore(string name, int id, List<SoChoreComponent> choreComponents)

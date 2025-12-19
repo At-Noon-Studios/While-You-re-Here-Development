@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ScriptableObjects.Events
@@ -11,6 +11,5 @@ namespace ScriptableObjects.Events
         {
             OnRaise?.Invoke();
         }
-        
     }
 }

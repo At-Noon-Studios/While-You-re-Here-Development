@@ -1,59 +1,65 @@
-using System;
 using Interactable;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace making_tea
 {
     public class WaterTapInteractable : InteractableBehaviour
     {
         [Header("Water Tap Reference")]
-        public WaterTap tap;
-
         [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
-
+        [SerializeField] private Image tapOnImage;
+        [SerializeField] private Image tapOffImage;
+        
+        public WaterTap tap;
         private Transform _playerCamera;
-
+        
         protected override void Awake()
         {
             base.Awake();
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-
-            var player = GameObject.FindWithTag("Player");
-            if (player != null)
-                _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
+            if (tapOnImage != null) tapOnImage.enabled = false;
+            if (tapOffImage != null) tapOffImage.enabled = false;
         }
-
+        
         private void Update()
         {
-            if (interactionCanvas == null ||
-                !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-            
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
+            if (_playerCamera != null)
+            {
+               if (tapOnImage != null && tapOnImage.enabled) tapOnImage.transform.LookAt(_playerCamera);
+               if (tapOffImage != null && tapOffImage.enabled) tapOffImage.transform.LookAt(_playerCamera);
+            }
         }
-
+        
         public override void OnHoverEnter(IInteractor interactor)
         {
             base.OnHoverEnter(interactor);
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(true);
+            if (!tap.IsRunning && tapOnImage != null)
+            {
+                tapOnImage.enabled = true;
+                tapOffImage.enabled = false;
+            }
+            else
+            {
+                tapOffImage.enabled = true;
+                tapOnImage.enabled = false;
+            }
         }
 
         public override void OnHoverExit(IInteractor interactor)
         {
             base.OnHoverExit(interactor);
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
+            if (tapOnImage != null)
+                tapOnImage.enabled = false;
+            if (tapOffImage != null)
+                tapOffImage.enabled = false;
         }
-
-        public override string InteractionText(IInteractor interactor) => string.Empty;
+        public override string InteractionText(IInteractor interactor)
+        {
+            return string.Empty;
+        }
 
         public override void Interact(IInteractor interactor)
         {
