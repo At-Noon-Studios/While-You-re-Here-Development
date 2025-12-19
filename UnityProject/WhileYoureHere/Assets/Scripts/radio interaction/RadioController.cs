@@ -287,6 +287,38 @@ namespace radio_interaction
         }
 
         public bool OnCorrectChannel() => radioTracks[_currentStationIndex].nodeName == ClearChannelNodeName;
+        //
+        // public bool DonePlayingCorrectChannel()
+        // {
+        //     if (dialogueManager == null
+        //         || _lastPlayedNode == null
+        //         || _lastPlayedNode.sentences == null
+        //         || _lastPlayedNode.sentences.Count == 0)
+        //         return false;
+        //     Debug.Log("sentence count" +_lastPlayedNode.sentences.Count);
+        //     int lastSentence = _lastPlayedNode.sentences.Count-1;
+        //     int current = dialogueManager.GetCurrentSentenceIndex();
+        //     var sentenceClipLenght = dialogueManager.GetSentenceAudioTime(lastSentence);
+        //     if (!OnCorrectChannel())
+        //         return false;
+        //     Debug.Log("current sentence count before check =" +current);
+        //     Debug.Log("GetCurrentAudioTime  before check =" +dialogueManager.GetCurrentResumeAudioTime());
+        //     Debug.Log("sentenceClipLenght before check =" +sentenceClipLenght);
+        //
+        //     bool audioDone = dialogueManager.GetCurrentResumeAudioTime()-sentenceClipLenght  <= 0.5f;
+        //     
+        //     if ( current == lastSentence )
+        //     {
+        //             current++;
+        //     }
+        //     Debug.Log("current sentence count after check =" +current);
+        //     Debug.Log("GetCurrentAudioTime  after check =" +dialogueManager.GetCurrentResumeAudioTime());
+        //     Debug.Log("sentenceClipLenght after check =" +sentenceClipLenght);
+        //     bool finishedAllSentences = current > lastSentence;
+        //     Debug.Log("finishedAllSentences after check =" +finishedAllSentences);
+        //
+        //     return finishedAllSentences && audioDone;
+        // }
 
         public bool DonePlayingCorrectChannel()
         {
@@ -296,19 +328,32 @@ namespace radio_interaction
                 || _lastPlayedNode.sentences.Count == 0)
                 return false;
 
-            int lastSentence = _lastPlayedNode.sentences.Count - 1;
-            int current = dialogueManager.GetCurrentSentenceIndex();
-
             if (!OnCorrectChannel())
                 return false;
 
-            bool typingDone = dialogueManager.SentenceRoutineStopped();
-            bool audioDone = dialogueManager.GetCurrentAudioTime() <= 0.05f;
-            if (lastSentence == current)
-                current += 1;
-            bool finishedAllSentences = current > lastSentence;
+            int lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
+            int currentSentenceIndex = dialogueManager.GetCurrentSentenceIndex();
 
-            return typingDone && audioDone && finishedAllSentences;
+            // Case 1: The DialogueManager has already moved past the last sentence
+            if (currentSentenceIndex > lastSentenceIndex)
+            {
+                return true;
+            }
+
+            // Case 2: We are on the last sentence, check if audio is finished
+            if (currentSentenceIndex == lastSentenceIndex)
+            {
+                float currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
+                float totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
+
+                // If currentAudioTime is 0 but we are on the last sentence, it might mean it finished and stopped.
+                // Otherwise, check if we are within a very small margin of the end.
+                bool audioFinished = currentAudioTime >= (totalClipLength - 0.1f) || (currentAudioTime == 0 && totalClipLength > 0);
+                
+                return audioFinished;
+            }
+
+            return false;
         }
 
 
@@ -379,7 +424,7 @@ namespace radio_interaction
 
             var progress = new RadioChannelProgress(
                 dialogueManager.GetCurrentSentenceIndex(),
-                dialogueManager.GetCurrentAudioTime()
+                dialogueManager.GetCurrentResumeAudioTime()
             );
 
             _nodeSentenceProgress[node] = progress;

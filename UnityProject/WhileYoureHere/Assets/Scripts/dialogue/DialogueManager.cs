@@ -32,6 +32,7 @@ namespace dialogue
         private int _sentenceIndex;
         private string _currentFullSentence;
         private Coroutine _sentenceRoutine;
+        private float _CurrentResumeAudioTime;
         private bool _isTyping;
 
         private bool _cameraStopped;
@@ -70,7 +71,9 @@ namespace dialogue
             }
             else
             {
-                PlayNextSentence();
+                // PlayNextSentence();
+                ProceedToNextSentence();
+
             }
         }
 
@@ -199,9 +202,14 @@ namespace dialogue
                 }
 
                 resumeTime = _audioSource.time;
+                _CurrentResumeAudioTime = _audioSource.time;
                 if (resumeTime == 0)
+                {
+                    _CurrentResumeAudioTime = _audioSource.time;
                     resumeTime = sentence.audio.length - 0.5f;
-                Debug.Log("resume time =" + resumeTime + "sentence length = " + sentence.audio.length);
+                }
+                
+                // Debug.Log("resume time =" + resumeTime + "sentence length = " + sentence.audio.length);
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
 
@@ -317,12 +325,12 @@ namespace dialogue
         public int GetCurrentSentenceIndex() => _sentenceIndex;
         public DialogueNode CurrentNode { get; set; }
 
-        public float GetCurrentAudioTime()
+        public float GetCurrentResumeAudioTime()
         {
             if (_audioSource == null || !_audioSource.isPlaying)
                 return 0f;
 
-            return Mathf.Clamp(_audioSource.time, 0f, _audioSource.clip.length);
+            return _CurrentResumeAudioTime;
         }
 
         public float GetSentenceAudioTime(int sentenceIndex)
