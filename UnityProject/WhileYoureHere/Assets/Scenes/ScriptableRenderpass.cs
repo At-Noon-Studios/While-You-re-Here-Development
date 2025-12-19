@@ -57,15 +57,13 @@ namespace Scenes
 
         public void Setup(Color colorOutlineColor, Color depthOutlineColor, Color normalOutlineColor, float colorThreshold, float depthThreshold, float normalThreshold)
         {
-            if (_material != null)
-            {
-                _material.SetColor(ColorOutlineColor, colorOutlineColor);
-                _material.SetColor(DepthOutlineColor, depthOutlineColor);
-                _material.SetColor(NormalOutlineColor, normalOutlineColor);
-                _material.SetFloat(ColorThreshold, colorThreshold);
-                _material.SetFloat(DepthThreshold, depthThreshold);
-                _material.SetFloat(NormalThreshold, normalThreshold);
-            }
+            if (_material == null) return;
+            _material.SetColor(ColorOutlineColor, colorOutlineColor);
+            _material.SetColor(DepthOutlineColor, depthOutlineColor);
+            _material.SetColor(NormalOutlineColor, normalOutlineColor);
+            _material.SetFloat(ColorThreshold, colorThreshold);
+            _material.SetFloat(DepthThreshold, depthThreshold);
+            _material.SetFloat(NormalThreshold, normalThreshold);
         }
         
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -75,22 +73,17 @@ namespace Scenes
             const string renderPassName = "EdgeDetectionPass";
             
             var resourceData = frameData.Get<UniversalResourceData>();
-            // This is the source texture we are reading from
             var sourceTexture = resourceData.activeColorTexture;
             
-            // Define a new temporary texture for our output (the destination)
             var destinationDescriptor = renderGraph.GetTextureDesc(sourceTexture); 
             destinationDescriptor.name = $"CameraColor-{renderPassName}-Destination";
             destinationDescriptor.clearBuffer = false;
             var destinationTexture = renderGraph.CreateTexture(destinationDescriptor);
             
-            // Blit from source to destination using our material
             RenderGraphUtils.BlitMaterialParameters parameters = new(sourceTexture, destinationTexture, _material, 0);
             renderGraph.AddBlitPass(parameters, renderPassName);
             
-            // CRITICAL STEP: Reassign the result as the main color buffer
             resourceData.cameraColor = destinationTexture;
         }
-        
     }
 }

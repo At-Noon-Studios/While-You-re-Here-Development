@@ -56,19 +56,17 @@ Shader "Custom/FullscreenEdgeDetection"
                 float _NormalThreshold;
             CBUFFER_END
 
+            static const float4 positions[3] = 
+            {
+                float4(-1.0, -1.0, 0.0, 1.0),
+                float4(-1.0,  3.0, 0.0, 1.0),
+                float4( 3.0, -1.0, 0.0, 1.0)
+            };
+
             Varyings vert(uint vertexID : SV_VertexID)
             {
                 Varyings output;
-                
-                float4 positions[3] = 
-                {
-                    float4(-1.0, -1.0, 0.0, 1.0),
-                    float4(-1.0,  3.0, 0.0, 1.0),
-                    float4( 3.0, -1.0, 0.0, 1.0)
-                };
-
                 output.positionHCS = positions[vertexID];
-
                 return output;
             }
 

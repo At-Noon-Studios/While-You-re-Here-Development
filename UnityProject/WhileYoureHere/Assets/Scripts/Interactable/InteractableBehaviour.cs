@@ -12,7 +12,7 @@ namespace Interactable
         private Renderer[] _renderers;
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
-        private int _originalLayer;
+        protected int _originalLayer;
 
         #region Unity event functions
         

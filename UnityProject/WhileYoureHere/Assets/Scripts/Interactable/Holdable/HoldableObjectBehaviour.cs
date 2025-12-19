@@ -10,7 +10,6 @@ namespace Interactable.Holdable
     {
         [SerializeField] private HoldableObjectData data;
         private Rigidbody _rigidbody;
-        private int _originalLayer;
         [CanBeNull] private IInteractor _holder;
 
         public float Weight => data.Weight;
@@ -19,11 +18,6 @@ namespace Interactable.Holdable
         {
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
-        }
-        
-        protected void Start()
-        {
-            _originalLayer = gameObject.layer;
         }
         
         public override void Interact(IInteractor interactor)
