@@ -1,38 +1,25 @@
 using System.Collections.Generic;
+using chopping_logs;
+using door;
+using Interactable;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.UI;
-using Interactable;
-using door;
 
 namespace UI.DynamicUI
 {
     public class DynamicUIManager : MonoBehaviour
     {
-        public enum LookAtTarget
-        {
-            Camera
-        }
-
-        public enum ActivationMode
-        {
-            Always,
-            InteractableHovered
-        }
-
-        public enum DoorState
-        {
-            None,
-            Open,
-            Closed,
-            Locked
-        }
+        public enum LookAtTarget { Camera }
+        public enum ActivationMode { Always, InteractableHovered }
+        public enum DoorState { None, Open, Closed, Locked }
+        public enum StumpState { None, CutLog, PlaceLog }
 
         [System.Serializable]
         public class WorldSpaceUIElement
         {
+            [Header("General")]
             [SerializeField] private string elementName;
-
-            [Header("Sprite")]
             [SerializeField] private Sprite sprite;
             [SerializeField] private Vector2 size = new Vector2(64, 64);
 
@@ -42,17 +29,14 @@ namespace UI.DynamicUI
 
             [Header("Activation")]
             [SerializeField] private ActivationMode activationMode = ActivationMode.Always;
-            [SerializeField] private InteractableBehaviour interactableBehaviour;
+            [SerializeField] public InteractableBehaviour interactableBehaviour;
 
-            [Header("Door State")]
-            [SerializeField] public DoorInteractable door;
-            [SerializeField] public DoorState requiredDoorState = DoorState.None;
+            [Header("Required States")]
+            [SerializeField] private DoorState requiredDoorState = DoorState.None;
+            [SerializeField] private StumpState requiredStumpState = StumpState.None;
 
-            [Header("Position Offset (non-door)")]
-            [SerializeField] private Vector3 worldOffset = Vector3.up;
-
-            [Header("Door UI Offset")]
-            [SerializeField] private Vector3 doorOffset = new Vector3(0, 1.2f, 1.5f);
+            [Header("Offset")]
+            [SerializeField] private Vector3 offset = Vector3.up;
 
             [Header("Look At")]
             [SerializeField] private LookAtTarget lookAtTarget = LookAtTarget.Camera;
@@ -61,35 +45,57 @@ namespace UI.DynamicUI
             [HideInInspector] public Image image;
             [HideInInspector] public RectTransform rectTransform;
 
-            public Vector3 Offset => worldOffset;
-            public Vector3 DoorOffset => doorOffset;
+            public Vector3 Offset => offset;
             public Sprite Sprite => sprite;
             public Vector2 Size => size;
             public LookAtTarget LookTarget => lookAtTarget;
 
-            public bool IsActive
+            public bool IsActive => CheckIsActive();
+
+            private bool CheckIsActive()
             {
-                get
-                {
-                    if (activationMode == ActivationMode.InteractableHovered)
-                    {
-                        if (interactableBehaviour == null ||
-                            !interactableBehaviour.IsHovered ||
-                            interactableBehaviour.blockInteraction)
-                            return false;
-                    }
+                if (activationMode == ActivationMode.InteractableHovered && 
+                    (interactableBehaviour == null || !interactableBehaviour.IsHovered || interactableBehaviour.blockInteraction))
+                    return false;
 
-                    if (door == null || requiredDoorState == DoorState.None)
-                        return true;
+                if (interactableBehaviour == null) return false;
 
-                    if (door.isLocked)
-                        return requiredDoorState == DoorState.Locked;
+                if (interactableBehaviour is DoorInteractable door && requiredDoorState != DoorState.None)
+                    return CheckDoorState(door);
 
-                    if (door.isOpen)
-                        return requiredDoorState == DoorState.Closed;
+                if (interactableBehaviour is Stump stump && requiredStumpState != StumpState.None)
+                    return CheckStumpState(stump);
 
-                    return requiredDoorState == DoorState.Open;
-                }
+                return true;
+            }
+
+            private bool CheckDoorState(DoorInteractable door)
+            {
+                if (door.isLocked) return requiredDoorState == DoorState.Locked;
+                if (door.isOpen) return requiredDoorState == DoorState.Closed;
+                return requiredDoorState == DoorState.Open;
+            }
+
+            private bool CheckStumpState(Stump stump)
+            {
+                if (!interactableBehaviour.IsHovered) return false;
+                return GetStumpState(stump) == requiredStumpState;
+            }
+
+            private StumpState GetStumpState(Stump stump)
+            {
+                if (stump == null) return StumpState.None;
+
+                var held = GameObject.FindWithTag("Player")?
+                    .GetComponent<PlayerInteractionController>()?.HeldObject;
+
+                if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
+                    return StumpState.CutLog;
+
+                if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
+                    return StumpState.PlaceLog;
+
+                return StumpState.None;
             }
         }
 
@@ -104,10 +110,7 @@ namespace UI.DynamicUI
         private void Awake()
         {
             mainCamera = Camera.main;
-
-            var player = GameObject.FindWithTag("Player");
-            if (player != null) playerTransform = player.transform;
-
+            playerTransform = GameObject.FindWithTag("Player")?.transform;
             CreateWorldCanvas();
             InitializeElements();
         }
@@ -121,17 +124,17 @@ namespace UI.DynamicUI
 
         private void CreateWorldCanvas()
         {
-            GameObject canvasObj = new GameObject("WorldSpaceCanvas");
+            var canvasObj = new GameObject("WorldSpaceCanvas");
             canvasObj.transform.SetParent(transform);
             canvasObj.transform.localRotation = Quaternion.identity;
+            canvasObj.transform.localPosition = Vector3.zero;
 
             worldCanvas = canvasObj.AddComponent<Canvas>();
             worldCanvas.renderMode = RenderMode.WorldSpace;
             worldCanvas.worldCamera = mainCamera;
 
-            CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+            var scaler = canvasObj.AddComponent<CanvasScaler>();
             scaler.dynamicPixelsPerUnit = 10;
-
             canvasObj.AddComponent<GraphicRaycaster>();
             canvasObj.transform.localScale = Vector3.one * canvasScale;
         }
@@ -140,22 +143,28 @@ namespace UI.DynamicUI
         {
             foreach (var element in worldSpaceElements)
             {
-                GameObject uiObj = new GameObject(element.GetHashCode().ToString());
-                uiObj.transform.SetParent(worldCanvas.transform);
-                uiObj.transform.localRotation = Quaternion.identity;
-
-                Image img = uiObj.AddComponent<Image>();
-                img.sprite = element.Sprite;
-
-                RectTransform rect = img.rectTransform;
-                rect.sizeDelta = element.Size;
-                rect.pivot = Vector2.one * 0.5f;
-                rect.localScale = new Vector3(element.flipX ? -1 : 1, element.flipY ? -1 : 1, 1);
-
-                element.uiObject = uiObj;
-                element.image = img;
-                element.rectTransform = rect;
+                SetupUIElement(element);
             }
+        }
+
+        private void SetupUIElement(WorldSpaceUIElement element)
+        {
+            var uiObj = new GameObject(element.GetHashCode().ToString());
+            uiObj.transform.SetParent(worldCanvas.transform);
+            uiObj.transform.localRotation = Quaternion.identity;
+            uiObj.transform.localPosition = Vector3.zero;
+
+            var img = uiObj.AddComponent<Image>();
+            img.sprite = element.Sprite;
+
+            var rect = img.rectTransform;
+            rect.sizeDelta = element.Size;
+            rect.pivot = Vector2.one * 0.5f;
+            rect.localScale = new Vector3(element.flipX ? -1 : 1, element.flipY ? -1 : 1, 1);
+
+            element.uiObject = uiObj;
+            element.image = img;
+            element.rectTransform = rect;
         }
 
         private void UpdateElements()
@@ -167,45 +176,65 @@ namespace UI.DynamicUI
                 bool active = element.IsActive;
                 element.uiObject.SetActive(active);
                 element.image.enabled = active;
-
                 if (!active) continue;
 
-                element.image.sprite = element.Sprite;
-                element.rectTransform.sizeDelta = element.Size;
-
-                Vector3 targetPos = transform.position + element.Offset;
-
-                if (element.door != null && playerTransform != null)
-                {
-                    Vector3 toPlayer = (playerTransform.position - element.door.transform.position).normalized;
-                    Vector3 doorRight = element.door.transform.right;
-                    Vector3 worldUp = Vector3.up;
-
-                    targetPos = element.door.transform.position
-                                + doorRight * element.DoorOffset.x
-                                + worldUp * element.DoorOffset.y
-                                + toPlayer * element.DoorOffset.z;
-                }
-
-                element.uiObject.transform.position = targetPos;
+                UpdateUIElementSpriteAndSize(element);
+                UpdateUIElementPosition(element);
             }
+        }
+
+        private void UpdateUIElementSpriteAndSize(WorldSpaceUIElement element)
+        {
+            element.image.sprite = element.Sprite;
+            element.rectTransform.sizeDelta = element.Size;
+        }
+
+        private void UpdateUIElementPosition(WorldSpaceUIElement element)
+        {
+            Vector3 targetPos = element.Offset;
+            if (element.interactableBehaviour != null)
+                targetPos += element.interactableBehaviour.transform.position;
+
+            if (element.interactableBehaviour is DoorInteractable && playerTransform != null)
+                targetPos = CalculateDoorUIPosition(element);
+
+            element.uiObject.transform.position = targetPos;
+        }
+
+        private Vector3 CalculateDoorUIPosition(WorldSpaceUIElement element)
+        {
+            Vector3 toPlayer = (playerTransform.position - element.interactableBehaviour.transform.position).normalized;
+            Vector3 right = element.interactableBehaviour.transform.right;
+            Vector3 up = Vector3.up;
+            return element.interactableBehaviour.transform.position
+                   + right * element.Offset.x
+                   + up * element.Offset.y
+                   + toPlayer * element.Offset.z;
         }
 
         private void UpdateLookDirections()
         {
+            if (mainCamera == null) return;
+
             foreach (var element in worldSpaceElements)
             {
                 if (element.uiObject == null || !element.uiObject.activeSelf) continue;
-
-                if (element.LookTarget == LookAtTarget.Camera && mainCamera != null)
-                    element.uiObject.transform.LookAt(mainCamera.transform);
+                if (element.LookTarget == LookAtTarget.Camera)
+                    RotateUIElementTowardsCamera(element);
             }
+        }
+
+        private void RotateUIElementTowardsCamera(WorldSpaceUIElement element)
+        {
+            Vector3 direction = element.uiObject.transform.position - mainCamera.transform.position;
+            direction.y = 0;
+            if (direction.sqrMagnitude > 0.001f)
+                element.uiObject.transform.rotation = Quaternion.LookRotation(direction);
         }
 
         private void UpdateCanvasScale()
         {
-            float referenceHeight = 1080f;
-            float scaleFactor = Screen.height / referenceHeight;
+            float scaleFactor = Screen.height / 1080f;
             worldCanvas.transform.localScale = Vector3.one * canvasScale * scaleFactor;
         }
     }

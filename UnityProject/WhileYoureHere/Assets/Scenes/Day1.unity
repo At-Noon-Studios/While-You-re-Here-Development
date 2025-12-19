@@ -145,6 +145,11 @@ MonoBehaviour:
   mouseUpImage: {fileID: 5876956780588192833}
   mouseDownImage: {fileID: 4799603342762445536}
   guideLineImage: {fileID: 6196135674866492545}
+--- !u!1 &321253361 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4665210623557238785, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+  m_PrefabInstance: {fileID: 4920790915356153604}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &388796807 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8233411102942291440, guid: 55d0c968049cd50448bf933165031995, type: 3}
@@ -54453,15 +54458,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 4, y: 2}
-    flipX: 1
+    size: {x: 2, y: 1}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 4532089800279522518}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.3, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.15, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -58677,10 +58681,23 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 273177102}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: cutLogSprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: placeLogSprite
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8785836756455937302, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+    - {fileID: 7162872216033724617, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4665210623557238785, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 6132182593004121770}
   m_SourcePrefab: {fileID: 100100000, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
 --- !u!33 &4922399733586879308
 MeshFilter:
@@ -59201,7 +59218,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
   m_PrefabInstance: {fileID: 4920790915356153604}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 321253361}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1c2ab104d18588499a92552d99bbe53, type: 3}
@@ -60188,10 +60205,9 @@ MonoBehaviour:
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 3900519524478470381}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.3, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -72315,6 +72331,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6203428372750504205, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
   m_PrefabInstance: {fileID: 4920790915356153604}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6132182593004121770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321253361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Cut Log
+    sprite: {fileID: 21300000, guid: aed6eefb2686f7043a88224bc9cb80de, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 0
+    interactableBehaviour: {fileID: 4991979103771736678}
+    requiredDoorState: 0
+    requiredStumpState: 1
+    offset: {x: 0, y: 1, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Place Log
+    sprite: {fileID: 21300000, guid: e373becc79cbc2042a9164649422be2f, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 0
+    interactableBehaviour: {fileID: 4991979103771736678}
+    requiredDoorState: 0
+    requiredStumpState: 2
+    offset: {x: 0, y: 1, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 3
 --- !u!23 &6133498213185412595
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -85181,45 +85239,42 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Open Door
     sprite: {fileID: 21300000, guid: 75db1db779aa3ab4bb5ffb405ff813df, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1853369214462094905}
-    door: {fileID: 1853369214462094905}
     requiredDoorState: 1
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: 0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: 0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Close Door
     sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1853369214462094905}
-    door: {fileID: 1853369214462094905}
     requiredDoorState: 2
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: 0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: 0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Door Locked
     sprite: {fileID: 21300000, guid: 342692f1347293f4d9574604ef6a235e, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1853369214462094905}
-    door: {fileID: 1853369214462094905}
     requiredDoorState: 3
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: 0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: 0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -93578,10 +93633,9 @@ MonoBehaviour:
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 6409098690469089770}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.3, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -94047,45 +94101,42 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Open Door
     sprite: {fileID: 21300000, guid: 75db1db779aa3ab4bb5ffb405ff813df, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1537529641660441025}
-    door: {fileID: 1537529641660441025}
     requiredDoorState: 1
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Close Door
     sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1537529641660441025}
-    door: {fileID: 1537529641660441025}
     requiredDoorState: 2
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Door Locked
     sprite: {fileID: 21300000, guid: 342692f1347293f4d9574604ef6a235e, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 1537529641660441025}
-    door: {fileID: 1537529641660441025}
     requiredDoorState: 3
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -94632,15 +94683,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 3, y: 4}
-    flipX: 1
+    size: {x: 1, y: 3}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 7608577182200978671}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.3, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -100397,15 +100447,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 1, y: 0.5}
-    flipX: 1
+    size: {x: 0.5, y: 0.25}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 899645700352109110}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.4, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -101478,45 +101527,42 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Open Door
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 8515798485607581144}
-    door: {fileID: 8515798485607581144}
     requiredDoorState: 1
-    worldOffset: {x: -1, y: 0.5, z: 0.5}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Close Door
     sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 8515798485607581144}
-    door: {fileID: 8515798485607581144}
     requiredDoorState: 2
-    worldOffset: {x: -1, y: 0.5, z: 0.5}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Door Locked
     sprite: {fileID: 21300000, guid: 342692f1347293f4d9574604ef6a235e, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.5}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 8515798485607581144}
-    door: {fileID: 8515798485607581144}
     requiredDoorState: 3
-    worldOffset: {x: -1, y: 0.5, z: 0.5}
-    doorOffset: {x: -0.8, y: 0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: -0.8, y: 1, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -101739,15 +101785,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 1, y: 0.5}
-    flipX: 1
+    size: {x: 0.5, y: 0.25}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 8807451086086637436}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.4, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -102657,15 +102702,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 1, y: 0.5}
-    flipX: 1
+    size: {x: 0.5, y: 0.25}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 7064295212010351720}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.4, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -103022,15 +103066,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 1, y: 0.5}
-    flipX: 1
+    size: {x: 0.5, y: 0.25}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 7125658985077541747}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.4, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -104069,15 +104112,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 1, y: 0.5}
-    flipX: 1
+    size: {x: 0.5, y: 0.25}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 8516131524344341496}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.4, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -105359,45 +105401,42 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Open Door
     sprite: {fileID: 21300000, guid: 75db1db779aa3ab4bb5ffb405ff813df, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 2, y: 0.75}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 6368958415227543277}
-    door: {fileID: 6368958415227543277}
     requiredDoorState: 1
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: 0, y: 0, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Close Door
     sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.75}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 6368958415227543277}
-    door: {fileID: 6368958415227543277}
     requiredDoorState: 2
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: -0.8, y: -0.8, z: 0}
+    requiredStumpState: 0
+    offset: {x: 0, y: 1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   - elementName: Door Locked
     sprite: {fileID: 21300000, guid: 342692f1347293f4d9574604ef6a235e, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 1
+    size: {x: 1.5, y: 0.75}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 6368958415227543277}
-    door: {fileID: 6368958415227543277}
     requiredDoorState: 3
-    worldOffset: {x: 0.3, y: 0.5, z: 1}
-    doorOffset: {x: -0.8, y: -0.8, z: 0.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -105730,15 +105769,14 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 0.5, y: 3}
-    flipX: 1
+    size: {x: 0.25, y: 1}
+    flipX: 0
     flipY: 0
     activationMode: 1
     interactableBehaviour: {fileID: 6147250578188574100}
-    door: {fileID: 0}
     requiredDoorState: 0
-    worldOffset: {x: 0, y: 0.3, z: 0}
-    doorOffset: {x: 0, y: 1.2, z: 1.5}
+    requiredStumpState: 0
+    offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
