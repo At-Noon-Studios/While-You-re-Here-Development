@@ -342,7 +342,10 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: ac98f96b47763f4418c118a2ede49cd0, type: 2}
   castingForceMultiplier: 30
   chargeCastTiltMultiplier: 0.5
-  maxChargeTimeInMilliseconds: 0.5
+  framesForMaxCharge: 150
+  framesForMinCharge: 50
+  reelSpeed: 2
+  reelFramesBeforeCatch: 300
   line: {fileID: 2934692068184434534}
   fishingRodTop: {fileID: 3285110073232115756}
   floaterPrefab: {fileID: 8973423918605776283, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
@@ -472,8 +475,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0023994446
-        value: 0.122341156
+        time: 0.016788483
+        value: 0.047878265
         inSlope: 0
         outSlope: 0
         tangentMode: 0
