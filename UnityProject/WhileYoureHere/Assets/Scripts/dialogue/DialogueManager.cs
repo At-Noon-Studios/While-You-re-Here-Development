@@ -32,7 +32,7 @@ namespace dialogue
         private int _sentenceIndex;
         private string _currentFullSentence;
         private Coroutine _sentenceRoutine;
-        private float _CurrentResumeAudioTime;
+        private float _currentResumeAudioTime;
         private bool _isTyping;
 
         private bool _cameraStopped;
@@ -73,7 +73,6 @@ namespace dialogue
             {
                 // PlayNextSentence();
                 ProceedToNextSentence();
-
             }
         }
 
@@ -202,14 +201,13 @@ namespace dialogue
                 }
 
                 resumeTime = _audioSource.time;
-                _CurrentResumeAudioTime = _audioSource.time;
-                if (resumeTime == 0)
+                _currentResumeAudioTime = resumeTime;
+                if (resumeTime == 0f)
                 {
-                    _CurrentResumeAudioTime = _audioSource.time;
-                    resumeTime = sentence.audio.length - 0.5f;
+                    _currentResumeAudioTime = _audioSource.time;
+                    resumeTime = sentence.audio.length - 0.1f;
                 }
                 
-                // Debug.Log("resume time =" + resumeTime + "sentence length = " + sentence.audio.length);
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
 
@@ -227,7 +225,7 @@ namespace dialogue
                 _sentenceIndex = 0;
                 return;
             }
-
+            _currentResumeAudioTime = 0f;
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
         }
 
@@ -329,8 +327,7 @@ namespace dialogue
         {
             if (_audioSource == null || !_audioSource.isPlaying)
                 return 0f;
-
-            return _CurrentResumeAudioTime;
+            return _audioSource.time ;
         }
 
         public float GetSentenceAudioTime(int sentenceIndex)
@@ -344,11 +341,6 @@ namespace dialogue
             var sentence = _currentNode.sentences[sentenceIndex];
             var clip = sentence != null ? sentence.audio : null;
             return clip != null ? clip.length : 0f;
-        }
-
-        public bool SentenceRoutineStopped()
-        {
-            return _sentenceRoutine is null;
         }
     }
 }

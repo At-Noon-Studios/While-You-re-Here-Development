@@ -15,21 +15,20 @@ namespace radio_interaction
 
         public void Exit()
         {
+            _wasDonePlayingCorrectChannel = false;
         }
 
         public void Update()
         {
-            if (_wasDonePlayingCorrectChannel)
-                return;
+            if (_wasDonePlayingCorrectChannel) return;
 
             if (_radioController.DonePlayingCorrectChannel())
             {
-                Debug.Log("Playing Classic Radio");
-                _radioController.PlayClassicRadio();
                 _wasDonePlayingCorrectChannel = true;
             }
 
-
+            if (!_wasDonePlayingCorrectChannel) return;
+            _radioController.PlayClassicRadio();
         }
     }
 }

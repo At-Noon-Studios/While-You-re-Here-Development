@@ -40,7 +40,7 @@ namespace radio_interaction
         private DialogueNode _lastPlayedNode;
         private readonly Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
         private AudioSource _audioSource;
-
+        private bool _isPlayingClassicRadio;
         private readonly struct RadioChannelProgress
         {
             public readonly int SentenceIndex;
@@ -173,6 +173,7 @@ namespace radio_interaction
                     break;
                 case RadioOnState:
                 case TuningState:
+                    //TODO add reset tuning state to off when e is pressed
                     RadioStateMachine.ChangeState(new RadioOffState(this));
                     break;
             }
@@ -268,6 +269,7 @@ namespace radio_interaction
             }
 
             dialogueManager.EndDialogue();
+            _isPlayingClassicRadio = false;
         }
 
         public void TuneRadio()
@@ -287,38 +289,6 @@ namespace radio_interaction
         }
 
         public bool OnCorrectChannel() => radioTracks[_currentStationIndex].nodeName == ClearChannelNodeName;
-        //
-        // public bool DonePlayingCorrectChannel()
-        // {
-        //     if (dialogueManager == null
-        //         || _lastPlayedNode == null
-        //         || _lastPlayedNode.sentences == null
-        //         || _lastPlayedNode.sentences.Count == 0)
-        //         return false;
-        //     Debug.Log("sentence count" +_lastPlayedNode.sentences.Count);
-        //     int lastSentence = _lastPlayedNode.sentences.Count-1;
-        //     int current = dialogueManager.GetCurrentSentenceIndex();
-        //     var sentenceClipLenght = dialogueManager.GetSentenceAudioTime(lastSentence);
-        //     if (!OnCorrectChannel())
-        //         return false;
-        //     Debug.Log("current sentence count before check =" +current);
-        //     Debug.Log("GetCurrentAudioTime  before check =" +dialogueManager.GetCurrentResumeAudioTime());
-        //     Debug.Log("sentenceClipLenght before check =" +sentenceClipLenght);
-        //
-        //     bool audioDone = dialogueManager.GetCurrentResumeAudioTime()-sentenceClipLenght  <= 0.5f;
-        //     
-        //     if ( current == lastSentence )
-        //     {
-        //             current++;
-        //     }
-        //     Debug.Log("current sentence count after check =" +current);
-        //     Debug.Log("GetCurrentAudioTime  after check =" +dialogueManager.GetCurrentResumeAudioTime());
-        //     Debug.Log("sentenceClipLenght after check =" +sentenceClipLenght);
-        //     bool finishedAllSentences = current > lastSentence;
-        //     Debug.Log("finishedAllSentences after check =" +finishedAllSentences);
-        //
-        //     return finishedAllSentences && audioDone;
-        // }
 
         public bool DonePlayingCorrectChannel()
         {
@@ -334,46 +304,40 @@ namespace radio_interaction
             int lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
             int currentSentenceIndex = dialogueManager.GetCurrentSentenceIndex();
 
-            // Case 1: The DialogueManager has already moved past the last sentence
-            if (currentSentenceIndex > lastSentenceIndex)
-            {
-                return true;
-            }
+            if (currentSentenceIndex != lastSentenceIndex) return false;
 
-            // Case 2: We are on the last sentence, check if audio is finished
-            if (currentSentenceIndex == lastSentenceIndex)
-            {
-                float currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
-                float totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
+            float currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
+            float totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
 
-                // If currentAudioTime is 0 but we are on the last sentence, it might mean it finished and stopped.
-                // Otherwise, check if we are within a very small margin of the end.
-                bool audioFinished = currentAudioTime >= (totalClipLength - 0.1f) || (currentAudioTime == 0 && totalClipLength > 0);
-                
-                return audioFinished;
-            }
-
-            return false;
+            bool audioFinished = currentAudioTime >= (totalClipLength - 0.1f);
+            return audioFinished;
         }
 
 
         public void PlayClassicRadio()
         {
-            _audioSource.Stop();
-            _audioSource.clip = classicRadioClip;
-            _audioSource.loop = true;
-            _audioSource.Play();
+            if (_isPlayingClassicRadio) return;
+            if(dialogueManager != null)
+            {
+                dialogueManager.EndDialogue();
+            }
+
+            if (!_isPlayingClassicRadio)
+            {
+                _audioSource.Stop();
+                _audioSource.clip = classicRadioClip;
+                _audioSource.loop = true;
+                _audioSource.Play();
+                _isPlayingClassicRadio = true;
+            }
+   
         }
 
         public float GetCorrectChannelSentenceLenght()
         {
-            if (OnCorrectChannel())
-            {
-                var lastSentence = _lastPlayedNode.sentences.Count - 1;
-                return dialogueManager.GetSentenceAudioTime(lastSentence);
-            }
-
-            return 0f;
+            if (!OnCorrectChannel()) return 0f;
+            var lastSentence = _lastPlayedNode.sentences.Count - 1;
+            return dialogueManager.GetSentenceAudioTime(lastSentence);
         }
 
         #endregion
