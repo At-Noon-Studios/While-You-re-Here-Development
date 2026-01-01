@@ -142,9 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
   axeImpactSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
-  mouseUpImage: {fileID: 5876956780588192833}
-  mouseDownImage: {fileID: 4799603342762445536}
-  guideLineImage: {fileID: 6196135674866492545}
 --- !u!1 &321253361 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4665210623557238785, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
@@ -57391,17 +57388,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6039486702215736798}
   m_Mesh: {fileID: -4147266318922990756, guid: b06e9a255ce15204d84536720e157378, type: 3}
---- !u!114 &4799603342762445536 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7023423994906553678, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!33 &4799795486095887418
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -58693,6 +58679,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 8785836756455937302, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
     - {fileID: 7162872216033724617, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+    - {fileID: 2903586805490222268, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4665210623557238785, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
@@ -69493,17 +69480,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5876956780588192833 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7802587681624723177, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &5877865400647711674
 Transform:
   m_ObjectHideFlags: 0
@@ -72349,7 +72325,7 @@ MonoBehaviour:
     size: {x: 1, y: 0.5}
     flipX: 0
     flipY: 0
-    activationMode: 0
+    activationMode: 1
     interactableBehaviour: {fileID: 4991979103771736678}
     requiredDoorState: 0
     requiredStumpState: 1
@@ -72363,11 +72339,53 @@ MonoBehaviour:
     size: {x: 1, y: 0.5}
     flipX: 0
     flipY: 0
-    activationMode: 0
+    activationMode: 1
     interactableBehaviour: {fileID: 4991979103771736678}
     requiredDoorState: 0
     requiredStumpState: 2
     offset: {x: 0, y: 1, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: MouseUp
+    sprite: {fileID: 21300000, guid: fafde48b7fe33f8488fdd4d8a2ee788f, type: 3}
+    size: {x: 0.5, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 0
+    interactableBehaviour: {fileID: 4991979103771736678}
+    requiredDoorState: 0
+    requiredStumpState: 3
+    offset: {x: 0, y: 1.2, z: -0.08}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: MouseDown
+    sprite: {fileID: 21300000, guid: 335ecdaccb5e4c34d84f40f3cc943ec7, type: 3}
+    size: {x: 0.5, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 0
+    interactableBehaviour: {fileID: 4991979103771736678}
+    requiredDoorState: 0
+    requiredStumpState: 4
+    offset: {x: 0, y: 1.2, z: -0.08}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: GuideLine
+    sprite: {fileID: 21300000, guid: 409cf8317b93af84294884d6dfce52e5, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 0
+    interactableBehaviour: {fileID: 4991979103771736678}
+    requiredDoorState: 0
+    requiredStumpState: 5
+    offset: {x: 0, y: 1.2, z: 0.08}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
@@ -73181,17 +73199,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2711758112661956048}
   m_Mesh: {fileID: 7169490162621683060, guid: 1a0fa5c07dd2b458aa1d4eed08546356, type: 3}
---- !u!114 &6196135674866492545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4609289111648160669, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &6202837775480378640
 Transform:
   m_ObjectHideFlags: 0

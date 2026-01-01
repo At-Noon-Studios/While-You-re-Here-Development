@@ -13,7 +13,8 @@ namespace UI.DynamicUI
         public enum LookAtTarget { Camera }
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
-        public enum StumpState { None, CutLog, PlaceLog }
+
+        public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -54,7 +55,7 @@ namespace UI.DynamicUI
 
             private bool CheckIsActive()
             {
-                if (activationMode == ActivationMode.InteractableHovered && 
+                if (activationMode == ActivationMode.InteractableHovered &&
                     (interactableBehaviour == null || !interactableBehaviour.IsHovered || interactableBehaviour.blockInteraction))
                     return false;
 
@@ -75,28 +76,45 @@ namespace UI.DynamicUI
                 if (door.isOpen) return requiredDoorState == DoorState.Closed;
                 return requiredDoorState == DoorState.Open;
             }
-
+            
             private bool CheckStumpState(Stump stump)
             {
-                if (!interactableBehaviour.IsHovered) return false;
-                return GetStumpState(stump) == requiredStumpState;
+                if (stump == null) return false;
+
+                if (!stump.IsMinigameActive)
+                {
+                    var held = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>()?.HeldObject;
+
+                    if (requiredStumpState == StumpState.CutLog 
+                        && held is HoldableObjectBehaviour h 
+                        && h.GetComponentInChildren<AxeHitDetector>() != null
+                        && stump.HasLog)
+                        return true;
+
+                    if (requiredStumpState == StumpState.PlaceLog 
+                        && held is HoldableObjectBehaviour log 
+                        && log.CompareTag("Log"))
+                        return true;
+
+                    if (!interactableBehaviour.IsHovered)
+                        return false;
+
+                    return false;
+                }
+
+                if (requiredStumpState == StumpState.GuideLine)
+                    return true;
+
+                if (requiredStumpState == StumpState.MouseUp && ChopUIManager.IsAxeDown)
+                    return true;
+
+                if (requiredStumpState == StumpState.MouseDown && !ChopUIManager.IsAxeDown)
+                    return true;
+
+                return false;
             }
-
-            private StumpState GetStumpState(Stump stump)
-            {
-                if (stump == null) return StumpState.None;
-
-                var held = GameObject.FindWithTag("Player")?
-                    .GetComponent<PlayerInteractionController>()?.HeldObject;
-
-                if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
-                    return StumpState.CutLog;
-
-                if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
-                    return StumpState.PlaceLog;
-
-                return StumpState.None;
-            }
+            
         }
 
         [Header("World Space UI Settings")]
