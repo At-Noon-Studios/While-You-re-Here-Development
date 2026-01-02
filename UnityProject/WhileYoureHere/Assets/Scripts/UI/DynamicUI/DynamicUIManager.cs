@@ -245,7 +245,6 @@ namespace UI.DynamicUI
         private void RotateUIElementTowardsCamera(WorldSpaceUIElement element)
         {
             Vector3 direction = element.uiObject.transform.position - mainCamera.transform.position;
-            direction.y = 0;
             if (direction.sqrMagnitude > 0.001f)
                 element.uiObject.transform.rotation = Quaternion.LookRotation(direction);
         }
