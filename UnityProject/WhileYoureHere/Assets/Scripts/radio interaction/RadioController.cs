@@ -41,6 +41,7 @@ namespace radio_interaction
         private readonly Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
         private AudioSource _audioSource;
         private bool _isPlayingClassicRadio;
+
         private readonly struct RadioChannelProgress
         {
             public readonly int SentenceIndex;
@@ -172,9 +173,11 @@ namespace radio_interaction
                     RadioStateMachine.ChangeState(new RadioOnState(this));
                     break;
                 case RadioOnState:
+                    RadioStateMachine.ChangeState(new RadioOffState(this));
+                    break;
                 case TuningState:
                     //TODO add reset tuning state to off when e is pressed
-                    RadioStateMachine.ChangeState(new RadioOffState(this));
+                    RadioStateMachine.ChangeState(new TuningOffState(this));
                     break;
             }
         }
@@ -254,22 +257,31 @@ namespace radio_interaction
 
         public void TurnRadioOff()
         {
+            _isPlayingClassicRadio = false;
+
             // Save progress for the node that was actually playing (if any)
             var nodeToSave = dialogueManager != null ? dialogueManager.CurrentNode : null;
-            if (nodeToSave == null && radioTracks is { Length: > 0 } &&
-                _currentStationIndex >= 0 && _currentStationIndex < radioTracks.Length)
+
+            // If DialogueManager doesn't have a node, fall back to _lastPlayedNode
+            if (nodeToSave == null)
             {
-                nodeToSave = radioTracks[_currentStationIndex].dialogueNode;
+                nodeToSave = _lastPlayedNode;
             }
 
-            if (nodeToSave != null)
+            // ONLY save if nodeToSave is not null AND it's not the node we just finished.
+            if (nodeToSave != null && _lastPlayedNode != null)
             {
                 SaveCurrentDialogueProgress(nodeToSave);
                 _lastPlayedNode = nodeToSave;
             }
+            else
+            {
+                if (nodeToSave != null)
+                    _nodeSentenceProgress.Remove(nodeToSave);
+                _lastPlayedNode = null;
+            }
 
             dialogueManager.EndDialogue();
-            _isPlayingClassicRadio = false;
         }
 
         public void TuneRadio()
@@ -310,6 +322,13 @@ namespace radio_interaction
             float totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
 
             bool audioFinished = currentAudioTime >= (totalClipLength - 0.1f);
+
+            if (audioFinished && _lastPlayedNode != null)
+            {
+                _nodeSentenceProgress.Remove(_lastPlayedNode);
+                _lastPlayedNode = null;
+            }
+
             return audioFinished;
         }
 
@@ -317,7 +336,7 @@ namespace radio_interaction
         public void PlayClassicRadio()
         {
             if (_isPlayingClassicRadio) return;
-            if(dialogueManager != null)
+            if (dialogueManager != null)
             {
                 dialogueManager.EndDialogue();
             }
@@ -330,7 +349,6 @@ namespace radio_interaction
                 _audioSource.Play();
                 _isPlayingClassicRadio = true;
             }
-   
         }
 
         public float GetCorrectChannelSentenceLenght()

@@ -26,6 +26,7 @@ namespace radio_interaction
             {
                 _wasDonePlayingCorrectChannel = true;
             }
+            else _wasDonePlayingCorrectChannel = false;
 
             if (!_wasDonePlayingCorrectChannel) return;
             _radioController.PlayClassicRadio();

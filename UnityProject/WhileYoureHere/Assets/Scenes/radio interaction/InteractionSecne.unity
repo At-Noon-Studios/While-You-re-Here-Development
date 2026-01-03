@@ -746,6 +746,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8473762825181136258, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      propertyPath: m_Size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473762825181136258, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      propertyPath: m_Size.z
+      value: 0.47
+      objectReference: {fileID: 0}
     - target: {fileID: 8756248668001901288, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_Name
       value: RadioV2
@@ -809,7 +817,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+  axeImpactSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   mouseUpImage: {fileID: 0}
   mouseDownImage: {fileID: 0}
   guideLineImage: {fileID: 0}
