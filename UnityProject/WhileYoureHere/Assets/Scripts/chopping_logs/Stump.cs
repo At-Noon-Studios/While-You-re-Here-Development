@@ -212,9 +212,9 @@ namespace chopping_logs
         {
             if (_audioSource == null || logCrackSound == null) yield break;
 
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
             yield return new WaitForSeconds(delayBetween);
-            _audioSource.PlayOneShot(logCrackSound);
+            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
         }
     }
 }
