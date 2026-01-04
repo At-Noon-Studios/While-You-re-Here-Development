@@ -63,37 +63,29 @@ namespace UI.DynamicUI
 
             private bool CheckIsActive()
             {
-                // Bestaande checks
                 if (activationMode == ActivationMode.InteractableHovered &&
                     (interactableBehaviour == null || !interactableBehaviour.IsHovered || interactableBehaviour.blockInteraction))
                     return false;
 
                 if (interactableBehaviour == null) return false;
 
-                // Door check
                 if (interactableBehaviour is DoorInteractable door && requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
 
-                // Stump check
                 if (interactableBehaviour is Stump stump && requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
 
-                // 🫖 Kettle check
                 if (requiredKettleState != KettleState.None)
                     return CheckKettleState();
 
-// Check of er een requiredHeldObject is toegewezen
                 if (requiredHeldObject != null)
                 {
-                    // Zoek het object dat de speler momenteel vasthoudt
                     var held = GameObject.FindWithTag("Player")?.GetComponent<PlayerInteractionController>()?.HeldObject;
 
-                    // Als de speler het juiste object niet vasthoudt, geen UI tonen
                     if (held != requiredHeldObject) 
                         return false;
                 }
 
-// 🫖 Kettle check
                 if (requiredKettleState != KettleState.None)
                     return CheckKettleState();
 
@@ -103,11 +95,9 @@ namespace UI.DynamicUI
 
             private bool CheckKettleState()
             {
-                // Zoek de KettlePour in de scene
                 var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
                 if (kettlePour == null || kettlePour.kettle == null) return false;
 
-                // Voor Pouring state: moet gevuld zijn en vastgehouden
                 if (requiredKettleState == KettleState.Pouring)
                 {
                     bool isFilled = kettlePour.kettle.fillAmount > 0f;
@@ -119,8 +109,7 @@ namespace UI.DynamicUI
 
                 return false;
             }
-
-
+            
             private bool CheckDoorState(DoorInteractable door)
             {
                 if (door.isLocked) return requiredDoorState == DoorState.Locked;
