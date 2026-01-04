@@ -22,9 +22,10 @@ namespace chopping_logs
 
         public static bool IsCurrentMinigameActive { get; private set; }
         public bool IsMinigameActive { get; private set; }
+
+        private GameObject _logObject;
         public bool HasLog => _hasLog;
         
-        private GameObject _logObject;
         private bool _hasLog;
         private AudioSource _audioSource;
 
@@ -53,7 +54,7 @@ namespace chopping_logs
             var player = GameObject.FindWithTag("Player");
             var heldController = player?.GetComponent<PlayerInteractionController>();
             var held = heldController?.HeldObject;
-
+            
             if (_hasLog && held == null)
             {
                 TakeLog(heldController);
@@ -212,9 +213,9 @@ namespace chopping_logs
         {
             if (_audioSource == null || logCrackSound == null) yield break;
 
-            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
+            _audioSource.PlayOneShot(logCrackSound);
             yield return new WaitForSeconds(delayBetween);
-            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
+            _audioSource.PlayOneShot(logCrackSound);
         }
     }
 }

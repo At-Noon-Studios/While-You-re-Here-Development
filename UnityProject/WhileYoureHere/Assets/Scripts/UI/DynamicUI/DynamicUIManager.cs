@@ -13,8 +13,13 @@ namespace UI.DynamicUI
         public enum LookAtTarget { Camera }
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
-
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
+
+        public enum KettleState
+        {
+            None,
+            Pouring
+        }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -32,9 +37,12 @@ namespace UI.DynamicUI
             [SerializeField] private ActivationMode activationMode = ActivationMode.Always;
             [SerializeField] public InteractableBehaviour interactableBehaviour;
 
+            [SerializeField] private HoldableObjectBehaviour requiredHeldObject;
+            
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
+            [SerializeField] private KettleState requiredKettleState = KettleState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
@@ -55,20 +63,63 @@ namespace UI.DynamicUI
 
             private bool CheckIsActive()
             {
+                // Bestaande checks
                 if (activationMode == ActivationMode.InteractableHovered &&
                     (interactableBehaviour == null || !interactableBehaviour.IsHovered || interactableBehaviour.blockInteraction))
                     return false;
 
                 if (interactableBehaviour == null) return false;
 
+                // Door check
                 if (interactableBehaviour is DoorInteractable door && requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
 
+                // Stump check
                 if (interactableBehaviour is Stump stump && requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
 
+                // 🫖 Kettle check
+                if (requiredKettleState != KettleState.None)
+                    return CheckKettleState();
+
+// Check of er een requiredHeldObject is toegewezen
+                if (requiredHeldObject != null)
+                {
+                    // Zoek het object dat de speler momenteel vasthoudt
+                    var held = GameObject.FindWithTag("Player")?.GetComponent<PlayerInteractionController>()?.HeldObject;
+
+                    // Als de speler het juiste object niet vasthoudt, geen UI tonen
+                    if (held != requiredHeldObject) 
+                        return false;
+                }
+
+// 🫖 Kettle check
+                if (requiredKettleState != KettleState.None)
+                    return CheckKettleState();
+
                 return true;
+
             }
+
+            private bool CheckKettleState()
+            {
+                // Zoek de KettlePour in de scene
+                var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
+                if (kettlePour == null || kettlePour.kettle == null) return false;
+
+                // Voor Pouring state: moet gevuld zijn en vastgehouden
+                if (requiredKettleState == KettleState.Pouring)
+                {
+                    bool isFilled = kettlePour.kettle.fillAmount > 0f;
+                    bool isHeld = (kettlePour.TryGetComponent<Interactable.Holdable.HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld)
+                                  || (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+
+                    return isFilled && isHeld;
+                }
+
+                return false;
+            }
+
 
             private bool CheckDoorState(DoorInteractable door)
             {
@@ -221,13 +272,12 @@ namespace UI.DynamicUI
 
         private Vector3 CalculateDoorUIPosition(WorldSpaceUIElement element)
         {
-            Vector3 toPlayer = (playerTransform.position - element.interactableBehaviour.transform.position).normalized;
-            Vector3 right = element.interactableBehaviour.transform.right;
-            Vector3 up = Vector3.up;
-            return element.interactableBehaviour.transform.position
-                   + right * element.Offset.x
-                   + up * element.Offset.y
-                   + toPlayer * element.Offset.z;
+            Transform t = element.interactableBehaviour.transform;
+
+            return t.position
+                   + t.right   * element.Offset.x
+                   + t.up      * element.Offset.y
+                   + t.forward * element.Offset.z;
         }
 
         private void UpdateLookDirections()
