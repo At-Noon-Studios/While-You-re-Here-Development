@@ -31,8 +31,6 @@ namespace EndDay
             _videoPlayer.Play();
         }
         
-        public IEnumerator 
-
         public override string InteractionText(IInteractor interactor)
         {
             return "End the day";
