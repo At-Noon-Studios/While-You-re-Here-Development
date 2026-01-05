@@ -33,6 +33,7 @@ namespace Interactable
         private UIManager _uiManager;
         private MovementController _movementController;
         private ChairInteractable _sittingChair;
+        private bool _interactingPaused;
 
         public bool IsTableMode { get; private set; }
         public Camera PlayerCamera => playerCamera;
@@ -53,6 +54,7 @@ namespace Interactable
 
         private void Update()
         {
+            if (_interactingPaused) return;
             RefreshCurrentTarget();
         }
 
@@ -313,6 +315,20 @@ namespace Interactable
             var weight = Mathf.Clamp01(holdableObject.Weight / 100f);
             var modifier = Mathf.Max(1f - weight, 0.4f);
             _movementController.SetMovementModifier(modifier);
+        }
+        
+        public void PausePlayerInteraction()
+        {
+            OnDisable();
+            _interactingPaused = true;
+            OnHoverExit(_currentTarget);
+            SetCurrentTarget(null);
+        }
+
+        public void ResumePlayerInteraction()
+        {
+            OnEnable();
+            _interactingPaused = false;
         }
         
         #endregion
