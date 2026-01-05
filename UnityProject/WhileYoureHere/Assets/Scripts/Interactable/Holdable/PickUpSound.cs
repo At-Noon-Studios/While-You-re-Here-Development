@@ -5,7 +5,7 @@ namespace Interactable.Holdable
     public class PickUpSound : MonoBehaviour
     {
         [Header("Sound Settings")]
-        [SerializeField] private AudioClip pickupSound;
+        [SerializeField] private AudioClip[] pickupSound;
         private AudioSource _audioSource;
 
         void Awake()
@@ -17,7 +17,7 @@ namespace Interactable.Holdable
         {
             if (pickupSound != null)
             {
-                _audioSource.PlayOneShot(pickupSound);
+                _audioSource.PlayOneShot(pickupSound[Random.Range(0, pickupSound.Length - 1)]);
             }
         }
     }

@@ -57,5 +57,32 @@ namespace PlayerControls
         {
             OnEnable();
         }
+        
+        public void SyncRotation(Quaternion worldRotation)
+        {
+            Vector3 euler = worldRotation.eulerAngles;
+
+            _xRotation = NormalizeAngle(euler.x);
+            _yRotation = NormalizeAngle(euler.y);
+
+            transform.rotation = worldRotation;
+        }
+        
+        private float NormalizeAngle(float angle)
+        {
+            if (angle > 180f) angle -= 360f;
+            return angle;
+        }
+        
+        public void SetMinigameRotation(Quaternion rotation)
+        {
+            transform.rotation = rotation;
+
+            Vector3 euler = rotation.eulerAngles;
+            _xRotation = NormalizeAngle(euler.x);
+            _yRotation = NormalizeAngle(euler.y);
+
+            PauseCameraMovement();
+        }
     }
 }
