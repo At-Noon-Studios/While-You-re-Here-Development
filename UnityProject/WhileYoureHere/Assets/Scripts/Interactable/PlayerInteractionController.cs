@@ -33,6 +33,7 @@ namespace Interactable
         private UIManager _uiManager;
         private MovementController _movementController;
         private ChairInteractable _sittingChair;
+        private bool _isInteracting { get; set; }
 
         public bool IsTableMode { get; private set; }
         public Camera PlayerCamera => playerCamera;
@@ -53,7 +54,7 @@ namespace Interactable
 
         private void Update()
         {
-            RefreshCurrentTarget();
+                RefreshCurrentTarget();
         }
 
         private void OnEnable()
@@ -102,8 +103,10 @@ namespace Interactable
 
             // if (_currentTarget is IClickInteractable || interact.OnRaise == null) return;
             else if (_currentTarget is IEInteractable && interact.OnRaise != null)
+            {
+                _isInteracting = true;
                 InteractWithTarget();
-
+            }
             else _uiManager.PulseInteractPrompt(); // Target is interactable, but interaction is not allowed
         }
 
@@ -134,6 +137,8 @@ namespace Interactable
             }
 
             if (bestTarget == _currentTarget) return;
+            if(_isInteracting)
+                
             SetCurrentTarget(bestTarget);
         }
 
@@ -227,6 +232,7 @@ namespace Interactable
         {
             _uiManager.HideInteractPrompt();
             target?.OnHoverExit(this);
+            SetIsInteracting(false);
         }
 
         private bool NoTarget => _currentTarget == null;
@@ -261,6 +267,7 @@ namespace Interactable
 
         #endregion
 
+        public void SetIsInteracting(bool isInteracting) => _isInteracting = isInteracting;
         #region Tablemode
 
         public void EnableTableMode(bool enable)

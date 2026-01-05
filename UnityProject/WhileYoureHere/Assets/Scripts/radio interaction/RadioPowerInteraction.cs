@@ -14,6 +14,10 @@ namespace radio_interaction
             radioController = GetComponentInParent<RadioController>();
         }
 
+        public void Update()
+        {
+        }
+
         public override void Interact(IInteractor interactor)
         {
             radioController.OnPowerPressed();

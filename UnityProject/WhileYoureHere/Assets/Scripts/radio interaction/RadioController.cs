@@ -202,7 +202,7 @@ namespace radio_interaction
 
         public void ShowOffCanvas()
         {
-            offStateCanvas.gameObject.SetActive(true);
+            offStateCanvas.gameObject.SetActive(false);
             onStateCanvas.gameObject.SetActive(false);
             slideCanvas.gameObject.SetActive(false);
         }
