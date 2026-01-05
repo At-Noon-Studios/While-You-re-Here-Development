@@ -107,9 +107,7 @@ namespace dialogue
                 return;
             }
 
-
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
-            // PlayNextSentence();
         }
 
         private void DisplayNode(string id)
@@ -207,7 +205,7 @@ namespace dialogue
                     _currentResumeAudioTime = _audioSource.time;
                     resumeTime = sentence.audio.length - 0.1f;
                 }
-                
+
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
 
@@ -225,6 +223,7 @@ namespace dialogue
                 _sentenceIndex = 0;
                 return;
             }
+
             _currentResumeAudioTime = 0f;
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
         }
@@ -327,7 +326,7 @@ namespace dialogue
         {
             if (_audioSource == null || !_audioSource.isPlaying)
                 return 0f;
-            return _audioSource.time ;
+            return _audioSource.time;
         }
 
         public float GetSentenceAudioTime(int sentenceIndex)
