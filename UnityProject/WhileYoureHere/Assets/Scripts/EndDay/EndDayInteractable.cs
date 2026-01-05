@@ -29,6 +29,14 @@ namespace EndDay
             _movementController.PauseMovement();
             blockInteraction = true;
             _videoPlayer.Play();
+            StartCoroutine(GoToNextScene());
+        }
+
+        private IEnumerator GoToNextScene()
+        {
+            //prepare new scene?
+            yield return new WaitForSeconds((float)_videoPlayer.clip.length);
+            //go to new scene
         }
         
         public override string InteractionText(IInteractor interactor)
