@@ -779,11 +779,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c2ab104d18588499a92552d99bbe53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.Stump
+  blockInteraction: 0
   logPlaceholder: {fileID: 8503196878061719864}
+  cancelEvent: {fileID: 0}
   minigameStartPoint: {fileID: 3118032339183961853}
   uiManager: {fileID: 0}
-  logPlaceSound: {fileID: 8300000, guid: de7eef7cbc7496d4ab5ebbb26840c25c, type: 3}
-  logCrackSound: {fileID: 8300000, guid: e266197fcd4c88e40bc8e1ac3229c231, type: 3}
+  logPlaceSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  logCrackSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   cutLogSprite: {fileID: 1490511139899724330}
   placeLogSprite: {fileID: 7880075677052000447}
 --- !u!136 &3718470649230737743
