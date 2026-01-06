@@ -7,26 +7,11 @@ namespace chopping_logs
 {
     public class LogBasket : InteractableBehaviour
     {
-        [Header("Basket Settings")]
         [SerializeField] private Transform[] logSlots;
         [SerializeField] private string acceptedTag = "HalfLog";
 
-        private HoldableObjectBehaviour _basketHoldable;
-
-        private int CurrentCount =>
-            logSlots.Count(slot => slot != null && slot.childCount > 0);
-
-        private bool IsFull =>
-            logSlots == null || CurrentCount >= logSlots.Length;
-
-        private bool IsEmpty =>
-            logSlots == null || logSlots.All(slot => slot == null || slot.childCount == 0);
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _basketHoldable = GetComponent<HoldableObjectBehaviour>();
-        }
+        private int CurrentCount => logSlots.Count(s => s != null && s.childCount > 0);
+        private bool IsFull => CurrentCount >= logSlots.Length;
 
         public override bool IsInteractableBy(IInteractor interactor)
         {
@@ -34,147 +19,99 @@ namespace chopping_logs
 
             var held = interactor.HeldObject;
 
-            // Iets in hand → proberen op te slaan
-            if (held != null)
+            if (held == null)
             {
-                if (!TryGetHeldGameObject(held, out var go))
-                    return false;
-
-                if (!IsAccepted(go))
-                    return false;
-
-                return !IsFull;
+                return CurrentCount > 0;
             }
 
-            // Niets in hand → altijd interactie mogelijk
-            // (log pakken OF basket oppakken)
-            return true;
+            if (!TryGetGameObject(held, out var go)) return false;
+            if (!IsAccepted(go)) return false;
+
+            return !IsFull;
         }
 
         public override void Interact(IInteractor interactor)
         {
             var held = interactor.HeldObject;
 
-            // LOG IN BASKET LEGGEN
             if (held != null)
             {
                 TryStoreLog(held, interactor);
-                return;
             }
-
-            // LOG UIT BASKET HALEN
-            if (!IsEmpty)
+            else
             {
-                TakeLog(interactor);
-                return;
+                TryTakeLog(interactor);
             }
-
-            // BASKET OPPAKKEN (alleen als leeg)
-            TryPickUpBasket(interactor);
         }
 
         private void TryStoreLog(IHoldableObject held, IInteractor interactor)
         {
             if (IsFull) return;
-            if (!TryGetHeldGameObject(held, out var go)) return;
+            if (!TryGetGameObject(held, out var go)) return;
             if (!IsAccepted(go)) return;
 
-            var freeSlot = GetFirstFreeSlot();
-            if (freeSlot == null) return;
+            var slot = logSlots.FirstOrDefault(s => s != null && s.childCount == 0);
+            if (slot == null) return;
 
-            held.Place(freeSlot.position, freeSlot.rotation);
-
-            go.transform.SetParent(freeSlot);
+            held.Place(slot.position, slot.rotation);
+            go.transform.SetParent(slot);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
 
             interactor.SetHeldObject(null);
         }
 
-        private Transform GetFirstFreeSlot()
+        private void TryTakeLog(IInteractor interactor)
         {
-            foreach (var slot in logSlots)
+            if (CurrentCount == 0) return;
+
+            var slot = logSlots.LastOrDefault(s => s != null && s.childCount > 0);
+            if (slot == null) return;
+
+            var logObject = slot.GetChild(0).gameObject;
+            var holdable = logObject.GetComponent<IHoldableObject>();
+            if (holdable == null) return;
+
+            if (holdable is HoldableObjectBehaviour hob)
             {
-                if (slot == null) continue;
-                if (slot.childCount == 0)
-                    return slot;
+                hob.PickUpByInteractor(interactor);
             }
-            return null;
-        }
-
-        private void TakeLog(IInteractor interactor)
-        {
-            if (interactor is not PlayerInteractionController player) return;
-            if (player.HeldObject != null) return;
-
-            for (int i = logSlots.Length - 1; i >= 0; i--)
+            else
             {
-                var slot = logSlots[i];
-                if (slot == null || slot.childCount == 0) continue;
-
-                var log = slot.GetComponentInChildren<HoldableObjectBehaviour>();
-                if (log == null) continue;
-
-                log.PickUpByInteractor(player);
-                return;
+                logObject.transform.SetParent(null);
+                interactor.SetHeldObject(holdable);
             }
         }
 
-        private void TryPickUpBasket(IInteractor interactor)
-        {
-            if (_basketHoldable == null) return;
-            if (interactor is not PlayerInteractionController player) return;
-            if (player.HeldObject != null) return;
-
-            _basketHoldable.PickUpByInteractor(player);
-        }
 
         public override string InteractionText(IInteractor interactor)
         {
             var held = interactor.HeldObject;
 
-            if (held == null)
+            if (held != null)
             {
-                if (!IsEmpty)
-                    return "Pak een houtblok uit de mand";
-
-                return _basketHoldable != null
-                    ? "Pak de mand op"
-                    : string.Empty;
+                if (!TryGetGameObject(held, out var go)) return string.Empty;
+                if (!IsAccepted(go) || IsFull) return string.Empty;
+                return "Put log in crate";
             }
 
-            if (!TryGetHeldGameObject(held, out var go))
-                return string.Empty;
-
-            if (!IsFull && IsAccepted(go))
-                return "Leg het hout in de mand";
+            if (CurrentCount > 0)
+            {
+                return "Take log from crate";
+            }
 
             return string.Empty;
         }
 
-        // =========================
-        // Helpers (CRASH-PROOF)
-        // =========================
-
-        private bool TryGetHeldGameObject(IHoldableObject held, out GameObject go)
+        private bool TryGetGameObject(IHoldableObject held, out GameObject go)
         {
-            if (held is MonoBehaviour mb)
-            {
-                go = mb.gameObject;
-                return true;
-            }
-
-            go = null;
-            return false;
+            go = held is MonoBehaviour mb ? mb.gameObject : null;
+            return go != null;
         }
 
         private bool IsAccepted(GameObject go)
         {
-            if (string.IsNullOrEmpty(acceptedTag))
-                return true;
-
-            // SAFE: crasht nooit
-            return go.tag == acceptedTag;
+            return string.IsNullOrEmpty(acceptedTag) || go.CompareTag(acceptedTag);
         }
     }
 }
