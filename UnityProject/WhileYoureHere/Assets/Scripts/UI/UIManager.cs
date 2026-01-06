@@ -50,7 +50,7 @@ namespace UI
             if (dialoguePanel) dialoguePanel.SetActive(true);
             if (!dialogueText) return;
             dialogueText.text = !string.IsNullOrEmpty(speaker)
-                    ? $"<color={speakerColor}><b>{speaker}</b></color>\n{line}"
+                    ? $"<color={speakerColor}><b>{speaker}: </b></color>{line}"
                     : line;
         }
 
