@@ -8,6 +8,7 @@ using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
+using TMPro;
 using UI;
 
 namespace dialogue
@@ -67,7 +68,7 @@ namespace dialogue
             if (_isTyping)
             {
                 _isTyping = false;
-                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence);
+                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence, "");
             }
             else
             {
@@ -162,9 +163,9 @@ namespace dialogue
 
         private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
         {
-            _isTyping = true;
+            _isTyping = false;
             _currentFullSentence = sentence.text;
-            _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+            _ui.ShowDialogue(_currentNode.speakerName, sentence.text, "");
 
             if (sentence.audio != null)
             {
@@ -182,30 +183,36 @@ namespace dialogue
                 _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
 
                 string output = sentence.text.Substring(0, _resumeCharIndex);
-                _ui.ShowDialogue(_currentNode.speakerName, output);
+                // TextMeshProUGUI text = _currentNode.speakerName;
+                _ui.ShowDialogue(_currentNode.speakerName, output, _currentNode.speakerNameColor);
 
                 // This can be disabled for now the text can be displayed at once and still can be skipped
-                for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
+                // for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
+                // {
+                //     if (!_isTyping)
+                //     {
+                //         _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                //     }
+                //     else
+                //     {
+                //         output += sentence.text[i];
+                //         _ui.ShowDialogue(_currentNode.speakerName, output);
+                //
+                //         yield return new WaitForSeconds(letterDelay);
+                //     }
+                // }
+
+                if (!_isTyping)
                 {
-                    if (!_isTyping)
-                    {
-                        _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
-                        yield break;
-                    }
-
-                    output += sentence.text[i];
-                    _ui.ShowDialogue(_currentNode.speakerName, output);
-
-                    yield return new WaitForSeconds(letterDelay);
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text, "");
                 }
-
                 resumeTime = _audioSource.time;
                 _currentResumeAudioTime = resumeTime;
-                if (resumeTime == 0f)
-                {
-                    _currentResumeAudioTime = _audioSource.time;
-                    resumeTime = sentence.audio.length - 0.1f;
-                }
+                // if (resumeTime == 0f)
+                // {
+                //     _currentResumeAudioTime = _audioSource.time;
+                //     resumeTime = sentence.audio.length - 0.1f;
+                // }
 
                 yield return new WaitForSeconds(sentence.audio.length - resumeTime);
                 _isTyping = false;
@@ -270,12 +277,12 @@ namespace dialogue
             {
                 if (!_isTyping)
                 {
-                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text, "");
                     yield break;
                 }
 
                 output += c;
-                _ui.ShowDialogue(_currentNode.speakerName, output);
+                _ui.ShowDialogue(_currentNode.speakerName, output, "");
                 yield return new WaitForSeconds(letterDelay);
             }
 
