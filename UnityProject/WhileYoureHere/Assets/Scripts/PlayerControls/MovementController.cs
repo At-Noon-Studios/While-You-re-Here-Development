@@ -29,7 +29,6 @@ namespace player_controls
         CharacterController _controller;
         
         private float _timer;
-        private Camera _mainCamera;
         private CameraController _cameraController;
         private float _defaultYPos;
         private float _speedModifier = 1f;
@@ -44,9 +43,8 @@ namespace player_controls
         void Awake()
         {
             _controller = GetComponent<CharacterController>();
-            _mainCamera = GetComponentInChildren<Camera>();
-            _cameraController = _mainCamera.gameObject.GetComponent<CameraController>();
-            _defaultYPos = _mainCamera.transform.localPosition.y;
+            _cameraController = GetComponentInChildren<CameraController>();
+            _defaultYPos = _cameraController.transform.localPosition.y;
         }
 
         void OnEnable()
@@ -74,10 +72,10 @@ namespace player_controls
             {
                 _timer += Time.deltaTime * playerData.WalkBobSpeed;
             
-                _mainCamera.transform.localPosition = new Vector3(
-                    _mainCamera.transform.localPosition.x, 
+                _cameraController.transform.localPosition = new Vector3(
+                    _cameraController.transform.localPosition.x, 
                     _defaultYPos + Mathf.Sin(_timer) * playerData.WalkBobAmount, 
-                    _mainCamera.transform.localPosition.z);
+                    _cameraController.transform.localPosition.z);
             }
         }
 
