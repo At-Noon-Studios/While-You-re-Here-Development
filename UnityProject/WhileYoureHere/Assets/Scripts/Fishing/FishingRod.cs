@@ -1,6 +1,8 @@
 using System;
-using System.Collections;
 using Interactable.Holdable;
+using player_controls;
+using PlayerControls;
+using ScriptableObjects.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,22 +10,18 @@ namespace Fishing {
     public class FishingRod : HoldableObjectBehaviour
     {
         private PlayerInput _playerInput;
+        private MovementController _movementController;
+        private CameraController _cameraController;
         private bool _isCastPullPressed;
         private bool _isLineCast;
         private GameObject _caughtFish;
         private bool _isCasting;
-        private float _castingForce;
         private LineController _lineController;
-        private int _currentCharge;
         private int _currentReel;
         private GameObject _spawnedFloater;
 
-        [Header("Casting line settings")]
-        public float castingForceMultiplier;
-        public float chargeCastTiltMultiplier;
-        public int framesForMaxCharge;
-        public int framesForMinCharge;
-
+        public float castingForce;
+        
         [Header("Reeling line settings")] 
         public float reelSpeed;
         public float reelFramesBeforeCatch;
@@ -34,7 +32,8 @@ namespace Fishing {
         
         public static event Action<GameObject> OnFishCaught;
         public static void TriggerFishCaught(GameObject fish) => OnFishCaught?.Invoke(fish);
-
+        
+        private Action<Vector2> look;
 
         protected override void Awake()
         {
@@ -43,6 +42,8 @@ namespace Fishing {
             if (player == null) return;
             
             _playerInput = player.GetComponent<PlayerInput>();
+            _movementController = player.GetComponent<MovementController>();
+            _cameraController = player.GetComponentInChildren<CameraController>();
 
             if (_playerInput == null) return;
             _playerInput.actions["CastPullFishingRod"].performed += ctx => _isCastPullPressed = true;
@@ -57,9 +58,8 @@ namespace Fishing {
             {
                 if (!_isLineCast)
                 {
-                    ChargeCast();
+                    StartCast();
                 }
-                else PullLine();
             }
             else
             {
@@ -67,61 +67,50 @@ namespace Fishing {
             }
         }
 
-        private void ChargeCast()
+        private void StartCast()
         {
-            if (_currentCharge >= framesForMaxCharge) return;
-            _currentCharge++;
             _isCasting = true;
-            _castingForce += castingForceMultiplier * Time.deltaTime;
-            transform.Rotate(-chargeCastTiltMultiplier, 0, 0);
+            _movementController.PauseMovement();
+            _cameraController.PauseCameraMovement();
+            // start hand towards corner
+            look += UpdateMousePosition;
+        }
+
+        private void UpdateMousePosition(Vector2 mousePosition)
+        {
+            Debug.Log($"Mouse position: {mousePosition}");
+            if (mousePosition.x > -400 && mousePosition.y > 200)
+            {
+                look -= UpdateMousePosition;
+                CastLine();
+            }
         }
 
         private void UnChargeCast()
         {
-            if (_currentCharge > framesForMinCharge)
-            {
-                CastLine();
-            } else if (_currentCharge <= 0)
-            {
-                _isCasting = false;
-                _currentCharge = 0;
-                _castingForce = 0;
-            } else {
-                _currentCharge--;
-                _castingForce -= castingForceMultiplier * Time.deltaTime;
-                transform.Rotate(chargeCastTiltMultiplier, 0, 0);
-            }
+            //move hand back to original position
+            _isCasting = false;
+            _cameraController.ResumeCameraMovement();
+            _movementController.ResumeMovement();
+            OnThrowFishingRod -= UpdateMousePosition;
         }
-        
 
         private void CastLine()
         {
             _spawnedFloater = Instantiate(floaterPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
-            _spawnedFloater.gameObject.GetComponent<Rigidbody>().AddForce(_castingForce * _playerCamera.forward, ForceMode.Impulse);
+            _spawnedFloater.gameObject.GetComponent<Rigidbody>().AddForce(castingForce * _playerCamera.forward, ForceMode.Impulse);
             _lineController.SetUpLine(new []{fishingRodTop.transform, _spawnedFloater.transform});
             OnFishCaught += ListenForFishCaught;
             line.SetActive(false);
             ResetPose();
             _isLineCast = true;
             _isCasting = false;
-            _castingForce = 0;
-            _currentCharge = 0;
         }
 
         private void ListenForFishCaught(GameObject fish)
         {
             //if fish not null, trigger some kind of effect
             _caughtFish = fish;
-        }
-
-        private void PullLine()
-        {
-            OnFishCaught -= ListenForFishCaught;
-            if (_caughtFish != null) 
-            {
-                ReelInFish();
-            }
-            else ReturnLine();
         }
 
         private void ReelInFish()
@@ -148,6 +137,21 @@ namespace Fishing {
             _isLineCast = false;
             Destroy(_spawnedFloater);
             _spawnedFloater = null;
+        }
+
+        private void OnReelFishingRod()
+        {
+            OnFishCaught -= ListenForFishCaught;
+            if (_caughtFish != null) 
+            {
+                ReelInFish();
+            }
+            else ReturnLine();
+        }
+
+        private void OnThrowFishingRod(Vector2 mousePosition)
+        {
+            look.Invoke(mousePosition);
         }
     }
 }
