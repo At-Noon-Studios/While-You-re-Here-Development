@@ -184,6 +184,7 @@ namespace dialogue
                 string output = sentence.text.Substring(0, _resumeCharIndex);
                 _ui.ShowDialogue(_currentNode.speakerName, output);
 
+                // This can be disabled for now the text can be displayed at once and still can be skipped
                 for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
                 {
                     if (!_isTyping)
