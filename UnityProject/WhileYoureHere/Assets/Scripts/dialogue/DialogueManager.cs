@@ -8,6 +8,7 @@ using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
+using TMPro;
 using UI;
 
 namespace dialogue
@@ -67,11 +68,10 @@ namespace dialogue
             if (_isTyping)
             {
                 _isTyping = false;
-                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence);
+                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence, _currentNode.speakerNameColor);
             }
             else
             {
-                // PlayNextSentence();
                 ProceedToNextSentence();
             }
         }
@@ -107,9 +107,7 @@ namespace dialogue
                 return;
             }
 
-
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
-            // PlayNextSentence();
         }
 
         private void DisplayNode(string id)
@@ -164,55 +162,58 @@ namespace dialogue
 
         private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
         {
-            _isTyping = true;
+            _isTyping = false;
             _currentFullSentence = sentence.text;
-            _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+            _ui.ShowDialogue(_currentNode.speakerName, sentence.text, _currentNode.speakerNameColor);
 
-            if (sentence.audio != null)
+            if (sentence.audio is null) yield break;
+            if (_audioSource is null)
+                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+            if (_currentNode.nodeID == "radio_static")
             {
-                if (_audioSource == null)
-                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
-                if (_currentNode.nodeID == "radio_static")
-                {
-                    PlayStaticAudio(sentence.audio);
-                    yield break;
-                }
-
-                resumeTime = PlayResumedAudio(sentence, resumeTime);
-
-                _resumeCharIndex = Mathf.FloorToInt((resumeTime / sentence.audio.length) * sentence.text.Length);
-                _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
-
-                string output = sentence.text.Substring(0, _resumeCharIndex);
-                _ui.ShowDialogue(_currentNode.speakerName, output);
-
-                for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
-                {
-                    if (!_isTyping)
-                    {
-                        _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
-                        yield break;
-                    }
-
-                    output += sentence.text[i];
-                    _ui.ShowDialogue(_currentNode.speakerName, output);
-
-                    yield return new WaitForSeconds(letterDelay);
-                }
-
-                resumeTime = _audioSource.time;
-                _currentResumeAudioTime = resumeTime;
-                if (resumeTime == 0f)
-                {
-                    _currentResumeAudioTime = _audioSource.time;
-                    resumeTime = sentence.audio.length - 0.1f;
-                }
-                
-                yield return new WaitForSeconds(sentence.audio.length - resumeTime);
-                _isTyping = false;
-
-                ProceedToNextSentence();
+                PlayStaticAudio(sentence.audio);
+                yield break;
             }
+
+            /*
+                 * this is needed if we decided to keep rollen text instead of viewing it at once
+            */
+            resumeTime = PlayResumedAudio(sentence, resumeTime);
+            // _resumeCharIndex = Mathf.FloorToInt((resumeTime / sentence.audio.length) * sentence.text.Length);
+            // _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
+            //
+            // string output = sentence.text.Substring(0, _resumeCharIndex);
+            // _ui.ShowDialogue(_currentNode.speakerName, output, _currentNode.speakerNameColor);
+
+            // This can be disabled for now the text can be displayed at once and still can be skipped
+            // for (int i = _resumeCharIndex; i < sentence.text.Length; i++)
+            // {
+            //     if (!_isTyping)
+            //     {
+            //         _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+            //     }
+            //     else
+            //     {
+            //         output += sentence.text[i];
+            //         _ui.ShowDialogue(_currentNode.speakerName, output);
+            //
+            //         yield return new WaitForSeconds(letterDelay);
+            //     }
+            // }
+                
+            resumeTime = _audioSource.time;
+            _currentResumeAudioTime = resumeTime;
+            //* same here
+                
+            // if (resumeTime == 0f)
+            // {
+            //     _currentResumeAudioTime = _audioSource.time;
+            //     resumeTime = sentence.audio.length - 0.1f;
+            // }
+
+            yield return new WaitForSeconds(sentence.audio.length - resumeTime);
+
+            ProceedToNextSentence();
         }
 
         private void ProceedToNextSentence()
@@ -225,6 +226,7 @@ namespace dialogue
                 _sentenceIndex = 0;
                 return;
             }
+
             _currentResumeAudioTime = 0f;
             _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
         }
@@ -270,12 +272,12 @@ namespace dialogue
             {
                 if (!_isTyping)
                 {
-                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text);
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text, _currentNode.speakerNameColor);
                     yield break;
                 }
 
                 output += c;
-                _ui.ShowDialogue(_currentNode.speakerName, output);
+                _ui.ShowDialogue(_currentNode.speakerName, output, _currentNode.speakerNameColor);
                 yield return new WaitForSeconds(letterDelay);
             }
 
@@ -308,16 +310,11 @@ namespace dialogue
 
         public void EndDialogue()
         {
-            // need to ask Arian what to keep here otherwise i am gonna make a new method
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
             _ui?.HideDialogue();
             gameObject.SetActive(false);
-            // Cursor.lockState = CursorLockMode.Locked;
-            // Cursor.visible = false;
             _audioSource?.Stop();
-            // _movement?.ResumeMovement();
-            // _cameraController?.ResumeCameraMovement();
         }
 
         public int GetCurrentSentenceIndex() => _sentenceIndex;
@@ -327,7 +324,7 @@ namespace dialogue
         {
             if (_audioSource == null || !_audioSource.isPlaying)
                 return 0f;
-            return _audioSource.time ;
+            return _audioSource.time;
         }
 
         public float GetSentenceAudioTime(int sentenceIndex)
