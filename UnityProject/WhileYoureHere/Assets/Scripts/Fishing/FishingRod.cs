@@ -19,6 +19,7 @@ namespace Fishing {
         private LineController _lineController;
         private int _currentReel;
         private GameObject _spawnedFloater;
+        private Vector2 _mouseDelta;
 
         public float castingForce;
         
@@ -56,7 +57,7 @@ namespace Fishing {
             if (_holder == null) return;
             if (_isCastPullPressed)
             {
-                if (!_isLineCast)
+                if (!_isLineCast && !_isCasting)
                 {
                     StartCast();
                 }
@@ -73,13 +74,15 @@ namespace Fishing {
             _movementController.PauseMovement();
             _cameraController.PauseCameraMovement();
             // start hand towards corner
+            _mouseDelta = new Vector2();
             look += UpdateMousePosition;
         }
 
         private void UpdateMousePosition(Vector2 mousePosition)
         {
-            Debug.Log($"Mouse position: {mousePosition}");
-            if (mousePosition.x > -400 && mousePosition.y > 200)
+            _mouseDelta += mousePosition;
+            Debug.Log($"Mouse position: {_mouseDelta}");
+            if (_mouseDelta.x < -800 && _mouseDelta.y > 600)
             {
                 look -= UpdateMousePosition;
                 CastLine();
@@ -92,7 +95,7 @@ namespace Fishing {
             _isCasting = false;
             _cameraController.ResumeCameraMovement();
             _movementController.ResumeMovement();
-            OnThrowFishingRod -= UpdateMousePosition;
+            look -= UpdateMousePosition;
         }
 
         private void CastLine()
@@ -131,7 +134,6 @@ namespace Fishing {
 
         private void ReturnLine()
         {
-            //unsub from mouse listen until cancel pressed
             line.SetActive(true);
             _lineController.SetUpLine(Array.Empty<Transform>());
             _isLineCast = false;
@@ -149,9 +151,9 @@ namespace Fishing {
             else ReturnLine();
         }
 
-        private void OnThrowFishingRod(Vector2 mousePosition)
+        private void OnThrowFishingRod(InputValue mousePosition)
         {
-            look.Invoke(mousePosition);
+            look?.Invoke(mousePosition.Get<Vector2>());
         }
     }
 }
