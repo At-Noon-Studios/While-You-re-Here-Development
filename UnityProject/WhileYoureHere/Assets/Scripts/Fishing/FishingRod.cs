@@ -3,6 +3,7 @@ using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.Events;
+using ScriptableObjects.Fishing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,25 +15,25 @@ namespace Fishing {
         private CameraController _cameraController;
         private bool _isCastPullPressed;
         private bool _isLineCast;
-        private GameObject _caughtFish;
+        private SoFish _caughtFish;
         private bool _isCasting;
         private LineController _lineController;
-        private int _currentReel;
+        private Vector3 _reelTargetPosition;
         private GameObject _spawnedFloater;
         private Vector2 _mouseDelta;
+        private float _currentReelSpeed;
 
         public float castingForce;
-        
-        [Header("Reeling line settings")] 
-        public float reelSpeed;
-        public float reelFramesBeforeCatch;
+        public float distanceFromShoreForCatch;
+        public float minReelTime;
+
         
         public GameObject line;
         public GameObject fishingRodTop;
         public GameObject floaterPrefab;
         
-        public static event Action<GameObject> OnFishCaught;
-        public static void TriggerFishCaught(GameObject fish) => OnFishCaught?.Invoke(fish);
+        public static event Action<SoFish> OnFishCaught;
+        public static void TriggerFishCaught(SoFish fish) => OnFishCaught?.Invoke(fish);
         
         private Action<Vector2> look;
 
@@ -81,12 +82,9 @@ namespace Fishing {
         private void UpdateMousePosition(Vector2 mousePosition)
         {
             _mouseDelta += mousePosition;
-            Debug.Log($"Mouse position: {_mouseDelta}");
-            if (_mouseDelta.x < -800 && _mouseDelta.y > 600)
-            {
-                look -= UpdateMousePosition;
-                CastLine();
-            }
+            if (_mouseDelta.x > -800 || _mouseDelta.y < 600) return;
+            look -= UpdateMousePosition;
+            CastLine();
         }
 
         private void UnChargeCast()
@@ -100,49 +98,58 @@ namespace Fishing {
 
         private void CastLine()
         {
+            _isCasting = false;
+            _isLineCast = true;
             _spawnedFloater = Instantiate(floaterPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
             _spawnedFloater.gameObject.GetComponent<Rigidbody>().AddForce(castingForce * _playerCamera.forward, ForceMode.Impulse);
             _lineController.SetUpLine(new []{fishingRodTop.transform, _spawnedFloater.transform});
             OnFishCaught += ListenForFishCaught;
             line.SetActive(false);
             ResetPose();
-            _isLineCast = true;
-            _isCasting = false;
         }
 
-        private void ListenForFishCaught(GameObject fish)
+        private void ListenForFishCaught(SoFish fish)
         {
-            //if fish not null, trigger some kind of effect
+            var camPosition = _playerCamera.transform.position;
+            camPosition.y = _spawnedFloater.transform.position.y;
+            camPosition.z = _spawnedFloater.transform.position.z;
+            // needs work
+            _reelTargetPosition = new Vector3(camPosition.x, camPosition.y, camPosition.z);
+            
+            
+            
             _caughtFish = fish;
+            _currentReelSpeed = Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) / minReelTime;
+            Debug.Log(_currentReelSpeed);
         }
 
         private void ReelInFish()
         {
-            if (_currentReel >= reelFramesBeforeCatch)
+            var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, _reelTargetPosition, _currentReelSpeed);
+            _spawnedFloater.transform.position = direction;
+            if (Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) <= distanceFromShoreForCatch )
             {
-                _currentReel = 0;
+                //do catch animation here
                 ReturnLine();
-                Instantiate(_caughtFish, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
+                Instantiate(_caughtFish.fishPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
                 _caughtFish = null;
             }
-            var camPosition = _playerCamera.transform.position;
-            camPosition.y = _spawnedFloater.transform.position.y;
-            var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, camPosition, reelSpeed * Time.deltaTime);
-            _spawnedFloater.transform.position = direction;
-            _currentReel++;
         }
 
         private void ReturnLine()
         {
+            _isLineCast = false;
             line.SetActive(true);
             _lineController.SetUpLine(Array.Empty<Transform>());
-            _isLineCast = false;
             Destroy(_spawnedFloater);
             _spawnedFloater = null;
+            _cameraController.ResumeCameraMovement();
+            _movementController.ResumeMovement();
         }
 
         private void OnReelFishingRod()
         {
+            if (!_isLineCast) return;
             OnFishCaught -= ListenForFishCaught;
             if (_caughtFish != null) 
             {
