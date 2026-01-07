@@ -7,6 +7,7 @@ using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Video;
 
 namespace gamestate
 {
@@ -26,6 +27,7 @@ namespace gamestate
         private ChoreManager _choreManager;
         private GameObject _player;
         private AudioSource _playerAudioSource;
+        private VideoPlayer _videoPlayer;
         
         public int currentDay;
         
@@ -34,6 +36,7 @@ namespace gamestate
             _instance = this;
             _timeManager = GetComponent<TimeManager>();
             _choreManager = GetComponent<ChoreManager>();
+            _videoPlayer = GetComponent<VideoPlayer>();
             SetFlagsToDefault();
         }
 
@@ -133,9 +136,17 @@ namespace gamestate
             _timeManager.ChangeTime(currentDay, hourOfDay);
         }
 
-        private void PlayCutscene()
+        private void PlayCutscene(VideoClip clip)
         {
-            // wont be implemented yet
+            _videoPlayer.clip = clip;
+            _videoPlayer.Play();
+            StartCoroutine(StopCutscene((float)clip.length));
+        }
+
+        private IEnumerator StopCutscene(float stopAfterSeconds)
+        {
+            yield return new WaitForSeconds(stopAfterSeconds);
+            _videoPlayer.Stop();
         }
 
         private void PlayDialogue(AudioClip clip)
@@ -174,7 +185,7 @@ namespace gamestate
                     SkyboxChange(gameplayEvent.hourOfDay);
                     break;
                 case GameplayEventType.Cutscene:
-                    PlayCutscene();
+                    PlayCutscene(gameplayEvent.cutsceneToPlay);
                     break;
                 case GameplayEventType.Dialogue:
                     PlayDialogue(gameplayEvent.audioToPlay);
