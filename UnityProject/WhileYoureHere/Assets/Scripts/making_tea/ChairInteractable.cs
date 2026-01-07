@@ -35,7 +35,7 @@ namespace making_tea
         private static bool _playerAlreadySeatedAtStart;
         private bool _standUpLocked;
         private bool _isSitting;
-        private ChairInteractable _activeChair;
+        private static ChairInteractable _activeChair;
 
         private PlayerInteractionController _pic;
         private MovementController _movement;
@@ -62,8 +62,6 @@ namespace making_tea
 
         private void Start()
         {
-            Debug.Log($"[Chair] Start called on {gameObject.name}, startSitting={startSitting}");
-            
             if (!startSitting) return;
             StartCoroutine(StartSittingRoutine());
         }
@@ -128,6 +126,8 @@ namespace making_tea
 
         public override void OnHoverExit(IInteractor interactor)
         {
+            if (_activeChair != null && _activeChair != this) return;
+            
             base.OnHoverExit(interactor);
 
             if (interactionCanvas != null)
