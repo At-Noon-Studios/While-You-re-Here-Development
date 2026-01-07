@@ -1,4 +1,5 @@
-﻿using Interactable.Concrete.ObjectHolder;
+﻿using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
@@ -8,7 +9,6 @@ using ScriptableObjects.Interactable;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using chopping_logs;
 
 namespace Interactable
 {
@@ -128,10 +128,6 @@ namespace Interactable
 
             if (NoTarget)
             {
-                // Eerst checken of we een basket dragen (die heeft geen HeldObject)
-                if (TryDropCarriedBasket())
-                    return;
-                
                 HeldObject?.Drop();
                 return;
             }
@@ -186,9 +182,12 @@ namespace Interactable
 
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
-                    HeldObject != null)
+                if (HeldObject != null &&
+                    hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
+                    !hits[i].collider.TryGetComponent<LogBasket>(out _))
+                {
                     continue;
+                }
 
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
@@ -345,22 +344,6 @@ namespace Interactable
 
             return false;
         }
-
-        private bool TryDropCarriedBasket()
-        {
-            var baskets = FindObjectsByType<LogBasket>(FindObjectsSortMode.None);
-
-            foreach (var basket in baskets)
-            {
-                if (!basket.IsCarriedBy(this)) continue;
-
-                basket.DropIfCarriedBy(this);
-                return true;
-            }
-
-            return false;
-        }
-        
         #endregion
         
     }
