@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using chore;
+using making_tea;
 using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
@@ -111,14 +112,16 @@ namespace gamestate
 
         private void HandleStartActivity()
         {
-            foreach (var gameplayEvent in _currentActivity.events )
+            Debug.Log("[GameState] HandleStartActivity called for Activity[0]");
+
+            foreach (var gameplayEvent in _currentActivity.events)
             {
+                Debug.Log($"[GameState] Event Trigger: {gameplayEvent.triggeredBy}, Type: {gameplayEvent.type}");
+        
                 if (gameplayEvent.triggeredBy is TriggeredBy.StartOfActivity)
                 {
+                    Debug.Log("[GameState] StartOfActivity event found, calling HandleTrigger");
                     HandleTrigger(gameplayEvent);
-                } else if (gameplayEvent.triggeredBy is TriggeredBy.AfterSetTime)
-                {
-                    StartCoroutine(ScheduleTrigger(gameplayEvent));
                 }
             }
         }
