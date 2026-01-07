@@ -8,6 +8,7 @@ using ScriptableObjects.Interactable;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using chopping_logs;
 
 namespace Interactable
 {
@@ -127,6 +128,10 @@ namespace Interactable
 
             if (NoTarget)
             {
+                // Eerst checken of we een basket dragen (die heeft geen HeldObject)
+                if (TryDropCarriedBasket())
+                    return;
+                
                 HeldObject?.Drop();
                 return;
             }
@@ -335,6 +340,21 @@ namespace Interactable
                 if (!p.IsTableHeld) continue;
 
                 p.Drop();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryDropCarriedBasket()
+        {
+            var baskets = FindObjectsByType<LogBasket>(FindObjectsSortMode.None);
+
+            foreach (var basket in baskets)
+            {
+                if (!basket.IsCarriedBy(this)) continue;
+
+                basket.DropIfCarriedBy(this);
                 return true;
             }
 

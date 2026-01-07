@@ -5,13 +5,26 @@ using UnityEngine;
 
 namespace chopping_logs
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class LogBasket : InteractableBehaviour
     {
         [SerializeField] private Transform[] logSlots;
         [SerializeField] private string acceptedTag = "HalfLog";
+        [SerializeField] private Vector3 carryOffsetPosition;
+        [SerializeField] private Vector3 carryOffsetEulerAngles;
+
+        private IInteractor _currentCarrier;
+        private Rigidbody _rb;
 
         private int CurrentCount => logSlots.Count(s => s != null && s.childCount > 0);
         private bool IsFull => CurrentCount >= logSlots.Length;
+        private bool IsCarried => _currentCarrier != null;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _rb = GetComponent<Rigidbody>();
+        }
 
         public override bool IsInteractableBy(IInteractor interactor)
         {
@@ -19,15 +32,16 @@ namespace chopping_logs
 
             var held = interactor.HeldObject;
 
-            if (held == null)
+            if (held != null)
             {
-                return CurrentCount > 0;
+                if (!TryGetGameObject(held, out var go)) return false;
+                if (!IsAccepted(go)) return false;
+
+                return !IsFull;
             }
 
-            if (!TryGetGameObject(held, out var go)) return false;
-            if (!IsAccepted(go)) return false;
-
-            return !IsFull;
+            if (!IsCarried) return true;
+            return _currentCarrier == interactor;
         }
 
         public override void Interact(IInteractor interactor)
@@ -40,7 +54,7 @@ namespace chopping_logs
             }
             else
             {
-                TryTakeLog(interactor);
+                ToggleCarry(interactor);
             }
         }
 
@@ -61,46 +75,35 @@ namespace chopping_logs
             interactor.SetHeldObject(null);
         }
 
-        private void TryTakeLog(IInteractor interactor)
+        private void ToggleCarry(IInteractor interactor)
         {
-            if (CurrentCount == 0) return;
-
-            var slot = logSlots.LastOrDefault(s => s != null && s.childCount > 0);
-            if (slot == null) return;
-
-            var logObject = slot.GetChild(0).gameObject;
-            var holdable = logObject.GetComponent<IHoldableObject>();
-            if (holdable == null) return;
-
-            if (holdable is HoldableObjectBehaviour hob)
+            if (!IsCarried)
             {
-                hob.PickUpByInteractor(interactor);
-            }
-            else
-            {
-                logObject.transform.SetParent(null);
-                interactor.SetHeldObject(holdable);
-            }
-        }
+                _currentCarrier = interactor;
 
+                if (_rb != null)
+                    _rb.isKinematic = true;
 
-        public override string InteractionText(IInteractor interactor)
-        {
-            var held = interactor.HeldObject;
+                var holdPoint = interactor.HoldPoint;
+                if (holdPoint != null)
+                {
+                    transform.SetParent(holdPoint);
+                    transform.localPosition = carryOffsetPosition;
+                    transform.localRotation = Quaternion.Euler(carryOffsetEulerAngles);
+                }
 
-            if (held != null)
-            {
-                if (!TryGetGameObject(held, out var go)) return string.Empty;
-                if (!IsAccepted(go) || IsFull) return string.Empty;
-                return "Put log in crate";
+                return;
             }
 
-            if (CurrentCount > 0)
+            if (_currentCarrier == interactor)
             {
-                return "Take log from crate";
-            }
+                transform.SetParent(null, true);
 
-            return string.Empty;
+                if (_rb != null)
+                    _rb.isKinematic = false;
+
+                _currentCarrier = null;
+            }
         }
 
         private bool TryGetGameObject(IHoldableObject held, out GameObject go)
@@ -112,6 +115,24 @@ namespace chopping_logs
         private bool IsAccepted(GameObject go)
         {
             return string.IsNullOrEmpty(acceptedTag) || go.CompareTag(acceptedTag);
+        }
+
+        public bool IsCarriedBy(IInteractor interactor)
+        {
+            return IsCarried && _currentCarrier == interactor;
+        }
+
+        public void DropIfCarriedBy(IInteractor interactor)
+        {
+            if (IsCarriedBy(interactor))
+            {
+                transform.SetParent(null, true);
+
+                if (_rb != null)
+                    _rb.isKinematic = false;
+
+                _currentCarrier = null;
+            }
         }
     }
 }
