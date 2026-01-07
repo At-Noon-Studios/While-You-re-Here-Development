@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace radio_interaction
 {
+    [RequireComponent(typeof(DialogueManager))]
     public class RadioController : MonoBehaviour
     {
         [Header("audio tracks")] [SerializeField]
@@ -176,7 +177,6 @@ namespace radio_interaction
                     RadioStateMachine.ChangeState(new RadioOffState(this));
                     break;
                 case TuningState:
-                    //TODO add reset tuning state to off when e is pressed
                     RadioStateMachine.ChangeState(new TuningOffState(this));
                     break;
             }
@@ -262,13 +262,11 @@ namespace radio_interaction
             // Save progress for the node that was actually playing (if any)
             var nodeToSave = dialogueManager != null ? dialogueManager.CurrentNode : null;
 
-            // If DialogueManager doesn't have a node, fall back to _lastPlayedNode
             if (nodeToSave == null)
             {
                 nodeToSave = _lastPlayedNode;
             }
 
-            // ONLY save if nodeToSave is not null AND it's not the node we just finished.
             if (nodeToSave != null && _lastPlayedNode != null)
             {
                 SaveCurrentDialogueProgress(nodeToSave);
@@ -313,21 +311,19 @@ namespace radio_interaction
             if (!OnCorrectChannel())
                 return false;
 
-            int lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
-            int currentSentenceIndex = dialogueManager.GetCurrentSentenceIndex();
+            var lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
+            var currentSentenceIndex = dialogueManager.GetCurrentSentenceIndex();
 
             if (currentSentenceIndex != lastSentenceIndex) return false;
 
-            float currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
-            float totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
+            var currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
+            var totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
 
-            bool audioFinished = currentAudioTime >= (totalClipLength - 0.1f);
+            var audioFinished = currentAudioTime >= (totalClipLength - 0.1f);
 
-            if (audioFinished && _lastPlayedNode != null)
-            {
-                _nodeSentenceProgress.Remove(_lastPlayedNode);
-                _lastPlayedNode = null;
-            }
+            if (!audioFinished || _lastPlayedNode == null) return audioFinished;
+            _nodeSentenceProgress.Remove(_lastPlayedNode);
+            _lastPlayedNode = null;
 
             return audioFinished;
         }
@@ -341,14 +337,12 @@ namespace radio_interaction
                 dialogueManager.EndDialogue();
             }
 
-            if (!_isPlayingClassicRadio)
-            {
-                _audioSource.Stop();
-                _audioSource.clip = classicRadioClip;
-                _audioSource.loop = true;
-                _audioSource.Play();
-                _isPlayingClassicRadio = true;
-            }
+            if (_isPlayingClassicRadio) return;
+            _audioSource.Stop();
+            _audioSource.clip = classicRadioClip;
+            _audioSource.loop = true;
+            _audioSource.Play();
+            _isPlayingClassicRadio = true;
         }
 
         public float GetCorrectChannelSentenceLenght()
@@ -358,13 +352,14 @@ namespace radio_interaction
             return dialogueManager.GetSentenceAudioTime(lastSentence);
         }
 
+        
         #endregion
 
         #region private methods
 
         private bool TryValidateRadioSetup(out string error)
         {
-            if (dialogueManager == null)
+            if (dialogueManager is null)
             {
                 error = "TurnRadioOn: dialogueManager is not assigned.";
                 return false;

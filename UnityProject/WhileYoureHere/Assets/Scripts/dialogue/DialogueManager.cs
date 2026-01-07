@@ -8,7 +8,6 @@ using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
-using TMPro;
 using UI;
 
 namespace dialogue
@@ -53,26 +52,31 @@ namespace dialogue
             if (player != null)
             {
                 _movement = player.GetComponent<MovementController>();
-                _cameraController = player.GetComponentInChildren<CameraController>();
+                _cameraController =
+                    player.GetComponentInChildren<CameraController>();
                 _playerInput = player.GetComponent<PlayerInput>();
 
                 if (_playerInput != null)
-                    _playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+                    _playerInput.actions["SkipDialogue"].performed +=
+                        OnSkipDialogue;
             }
         }
 
         private void OnSkipDialogue(InputAction.CallbackContext ctx)
         {
-            if (!gameObject.activeSelf || choicesContainer.childCount > 0) return;
-
+            if (!gameObject.activeSelf || _currentNode == null ||
+                choicesContainer.childCount > 0) return;
+            var nrSentences = _currentNode.sentences.Count - 1;
             if (_isTyping)
             {
                 _isTyping = false;
-                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence, _currentNode.speakerNameColor);
+                _ui.ShowDialogue(_currentNode.speakerName, _currentFullSentence,
+                    _currentNode.speakerNameColor);
             }
             else
             {
-                ProceedToNextSentence();
+                if (_sentenceIndex < nrSentences)
+                    ProceedToNextSentence();
             }
         }
 
@@ -81,7 +85,8 @@ namespace dialogue
             EventSystem.current?.SetSelectedGameObject(null);
 
             _nodes.Clear();
-            foreach (var n in interactionConfig.dialogueNodes) _nodes[n.nodeID] = n;
+            foreach (var n in interactionConfig.dialogueNodes)
+                _nodes[n.nodeID] = n;
 
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
@@ -89,8 +94,11 @@ namespace dialogue
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
 
-        public void StartRadioDialogue(DialogueNode node, float resumeTime = 0, int startSentenceIndex = 0)
+        public void StartRadioDialogue(DialogueNode node, float resumeTime = 0,
+            int startSentenceIndex = 0)
         {
+            if (node == null) return;
+
             _nodes.Clear();
             _nodes[node.nodeID] = node;
             _currentNode = node;
@@ -107,7 +115,9 @@ namespace dialogue
                 return;
             }
 
-            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], resumeTime));
+            _sentenceRoutine = StartCoroutine(
+                TypeSentenceWithResume(_activeSentences[_sentenceIndex],
+                    resumeTime));
         }
 
         private void DisplayNode(string id)
@@ -160,15 +170,18 @@ namespace dialogue
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
 
-        private IEnumerator TypeSentenceWithResume(DialogueSentence sentence, float resumeTime)
+        private IEnumerator TypeSentenceWithResume(DialogueSentence sentence,
+            float resumeTime)
         {
             _isTyping = false;
             _currentFullSentence = sentence.text;
-            _ui.ShowDialogue(_currentNode.speakerName, sentence.text, _currentNode.speakerNameColor);
+            _ui.ShowDialogue(_currentNode.speakerName, sentence.text,
+                _currentNode.speakerNameColor);
 
             if (sentence.audio is null) yield break;
             if (_audioSource is null)
-                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
+                    .GetComponent<AudioSource>();
             if (_currentNode.nodeID == "radio_static")
             {
                 PlayStaticAudio(sentence.audio);
@@ -176,8 +189,8 @@ namespace dialogue
             }
 
             /*
-                 * this is needed if we decided to keep rollen text instead of viewing it at once
-            */
+             * this is needed if we decided to keep rollen text instead of viewing it at once
+             */
             resumeTime = PlayResumedAudio(sentence, resumeTime);
             // _resumeCharIndex = Mathf.FloorToInt((resumeTime / sentence.audio.length) * sentence.text.Length);
             // _resumeCharIndex = Mathf.Clamp(_resumeCharIndex, 0, sentence.text.Length - 1);
@@ -200,11 +213,11 @@ namespace dialogue
             //         yield return new WaitForSeconds(letterDelay);
             //     }
             // }
-                
+
             resumeTime = _audioSource.time;
             _currentResumeAudioTime = resumeTime;
             //* same here
-                
+
             // if (resumeTime == 0f)
             // {
             //     _currentResumeAudioTime = _audioSource.time;
@@ -218,9 +231,22 @@ namespace dialogue
 
         private void ProceedToNextSentence()
         {
+            if (_sentenceRoutine != null)
+                StopCoroutine(_sentenceRoutine);
+
+            if (_audioSource != null)
+                _audioSource.Stop();
+
+            if (_activeSentences == null)
+            {
+                EndDialogue();
+                return;
+            }
+
             if (_sentenceIndex < _activeSentences.Length)
                 _sentenceIndex += 1;
-            if (_activeSentences == null || _sentenceIndex >= _activeSentences.Length)
+            if (_activeSentences == null ||
+                _sentenceIndex >= _activeSentences.Length)
             {
                 EndDialogue();
                 _sentenceIndex = 0;
@@ -228,10 +254,12 @@ namespace dialogue
             }
 
             _currentResumeAudioTime = 0f;
-            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
+            _sentenceRoutine = StartCoroutine(
+                TypeSentenceWithResume(_activeSentences[_sentenceIndex], 0f));
         }
 
-        private float PlayResumedAudio(DialogueSentence sentence, float resumeTime)
+        private float PlayResumedAudio(DialogueSentence sentence,
+            float resumeTime)
         {
             var startedClip = sentence.audio;
             _audioSource.clip = sentence.audio;
@@ -259,9 +287,12 @@ namespace dialogue
             if (sentence.audio != null)
             {
                 if (_audioSource == null)
-                    _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                    _audioSource = GameObject
+                        .FindWithTag(sentence.tagOfAudioSource)
+                        .GetComponent<AudioSource>();
                 _audioSource.Stop();
-                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource).GetComponent<AudioSource>();
+                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
+                    .GetComponent<AudioSource>();
                 _audioSource.volume = volume;
                 _audioSource.clip = sentence.audio;
                 _audioSource.Play();
@@ -272,12 +303,14 @@ namespace dialogue
             {
                 if (!_isTyping)
                 {
-                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text, _currentNode.speakerNameColor);
+                    _ui.ShowDialogue(_currentNode.speakerName, sentence.text,
+                        _currentNode.speakerNameColor);
                     yield break;
                 }
 
                 output += c;
-                _ui.ShowDialogue(_currentNode.speakerName, output, _currentNode.speakerNameColor);
+                _ui.ShowDialogue(_currentNode.speakerName, output,
+                    _currentNode.speakerNameColor);
                 yield return new WaitForSeconds(letterDelay);
             }
 
@@ -293,8 +326,10 @@ namespace dialogue
             foreach (var choice in _currentNode.choices)
             {
                 var btn = Instantiate(choiceButtonPrefab, choicesContainer);
-                btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = choice.choiceText;
-                btn.GetComponent<Button>().onClick.AddListener(() => DisplayNode(choice.targetNodeID));
+                btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text =
+                    choice.choiceText;
+                btn.GetComponent<Button>().onClick
+                    .AddListener(() => DisplayNode(choice.targetNodeID));
             }
 
             EventSystem.current?.SetSelectedGameObject(null);
