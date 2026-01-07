@@ -45,12 +45,12 @@ namespace UI
         }
 
     
-        public void ShowDialogue(string speaker, string line, string speakerColor="white")
+        public void ShowDialogue(string speaker, string line)
         {
             if (dialoguePanel) dialoguePanel.SetActive(true);
             if (!dialogueText) return;
             dialogueText.text = !string.IsNullOrEmpty(speaker)
-                    ? $"<color={speakerColor}><b>{speaker}: </b></color>{line}"
+                    ? $"<b>{speaker}</b>\n{line}"
                     : line;
         }
 

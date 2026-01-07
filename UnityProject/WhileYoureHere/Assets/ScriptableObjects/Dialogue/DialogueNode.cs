@@ -11,7 +11,6 @@ namespace ScriptableObjects.Dialogue
         [Header("Node Info")]
         public string nodeID;
         public string speakerName;
-        public string speakerNameColor;
 
         [Header("Dialogue Sentences")]
         public List<DialogueSentence> sentences;
