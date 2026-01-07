@@ -23,6 +23,8 @@ namespace make_a_fire
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
         
+        private Light _fireLight;
+        
         private int _placedLogsCount;
         private bool _fireStarted;
         private AudioSource _audioSource;
@@ -31,6 +33,8 @@ namespace make_a_fire
         {
             PlayFireEffect(false);
             _audioSource = GetComponent<AudioSource>();
+            _fireLight = GetComponent<Light>();
+            _fireLight.intensity = 0.0f;
         }
 
         private void Update()
@@ -67,6 +71,8 @@ namespace make_a_fire
             
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
+            
+            _fireLight.intensity = 2.0f;
         }
 
         public void StartBigFire()
@@ -75,6 +81,8 @@ namespace make_a_fire
             _audioSource.PlayOneShot(chargedFire);
            
             ChoreEvents.TriggerPaperPlacement();
+            
+            _fireLight.intensity = 4.0f;
         }
 
         private void MakeFireSound()
