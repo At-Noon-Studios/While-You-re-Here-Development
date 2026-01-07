@@ -183,6 +183,8 @@ namespace chopping_logs
             cameraController?.SyncRotation(Camera.main.transform.rotation);
             cameraController?.ResumeCameraMovement();
 
+            player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
+
             ChopUIManager.Instance?.HideAllUI();
 
             var playerController = player.GetComponent<PlayerInteractionController>();
