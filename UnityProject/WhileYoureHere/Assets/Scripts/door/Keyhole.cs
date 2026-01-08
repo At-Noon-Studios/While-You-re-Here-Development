@@ -2,10 +2,12 @@
 using System.Linq;
 using Interactable;
 using Interactable.Concrete.Key;
+using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.Events;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace door
@@ -15,27 +17,20 @@ namespace door
         [Header("Key Placement Settings")]
         [SerializeField] private Transform keyHolePosition;
         [SerializeField] private Vector3 keyRotation;
-
+        
         private CameraController _cameraController;
         private MovementController _movementController;
-
+        
         [Header("Listen to")]
         [SerializeField] private Vector2EventChannel look;
         [SerializeField] private EventChannel interact;
-
+        
         private UIManager _uiManager;
         private DoorInteractable _door;
-
+        
         private Operation _currentOperation;
 
-        public enum UnlockDirection
-        {
-            TurnRightIsUnlock,
-            TurnLeftIsUnlock
-        }
-
-        [Header("Lock Logic")]
-        [SerializeField] private UnlockDirection unlockDirection = UnlockDirection.TurnRightIsUnlock;
+        #region Unity event functions
 
         protected override void Awake()
         {
@@ -43,14 +38,14 @@ namespace door
             FindDoorInParentOrParentSibling();
             if (_door == null) Debug.LogError("Keyhole should have a " + nameof(DoorInteractable) + " parent", this);
         }
-
+        
         private void Start()
         {
             _uiManager = UIManager.Instance;
             if (_uiManager == null) Debug.LogError("UI Manager not found");
-
+            
             var player = GameObject.FindWithTag("Player");
-
+            
             _cameraController = player.GetComponentInChildren<CameraController>();
             if (_cameraController == null) Debug.LogError("Camera controller not found");
             _movementController = player.GetComponentInChildren<MovementController>();
@@ -66,25 +61,33 @@ namespace door
         {
             interact.OnRaise -= AttemptFinishOperatingLock;
         }
+        
+        #endregion
+        
+        #region Overrides 
 
         public override void Interact(IInteractor interactor)
         {
             if (interactor.HeldObject is not Key key) return;
             StartOperatingLock(new Operation(key, interactor));
         }
-
+        
         public override bool IsDetectableBy(IInteractor interactor)
         {
             return base.IsDetectableBy(interactor) && CanStartOperating(interactor) && !_door.isOpen && _door.IsFinishedMoving();
         }
-
+        
         public override string InteractionText(IInteractor interactor) => "Operate the lock";
-
+        
+        #endregion
+        
+        #region Private methods
+        
         private void AttemptFinishOperatingLock()
         {
             StartCoroutine(DelayInteract());
         }
-
+        
         private void StartOperatingLock(Operation operation)
         {
             _currentOperation = operation;
@@ -96,12 +99,8 @@ namespace door
         private void PlaceKey()
         {
             if (!CurrentlyBeingOperated) return;
-
-            Quaternion baseRotation = keyHolePosition.rotation * Quaternion.Euler(keyRotation) * Quaternion.AngleAxis(180f, Vector3.up);
-
-            _currentOperation.Key.Place(keyHolePosition.position, baseRotation);
-            _currentOperation.Key.transform.SetParent(keyHolePosition, true);
-            _currentOperation.Key.SetBaseRotation(baseRotation);
+            _currentOperation.Key.Place(keyHolePosition.position, Quaternion.Euler(keyRotation));
+            _currentOperation.Key.transform.SetParent(transform);
             _currentOperation.Key.detectable = false;
         }
 
@@ -115,6 +114,7 @@ namespace door
         {
             StopOperatingLock();
             _door.isLocked = isLocked;
+            if (!isLocked) _door.isOpen = true;
         }
 
         private void StopOperatingLock()
@@ -125,7 +125,7 @@ namespace door
             look.OnRaise -= RotateKey;
             ResumePlayer();
         }
-
+        
         public bool CurrentlyBeingOperated => _currentOperation != null;
 
         private void ResetCurrentKey()
@@ -133,7 +133,6 @@ namespace door
             if (!CurrentlyBeingOperated) return;
             _currentOperation.Key.Interact(_currentOperation.Interactor);
             _currentOperation.Key.ResetRotation();
-            _currentOperation.Key.ResetPose();
             _currentOperation.Key.detectable = true;
         }
 
@@ -152,7 +151,7 @@ namespace door
 
         private void RotateKey(Vector2 mouseDelta)
         {
-            _currentOperation.Key.RotateKey(-mouseDelta.x);
+            _currentOperation.Key.RotateKey(mouseDelta.x);
             UpdateUI();
         }
 
@@ -166,47 +165,21 @@ namespace door
             _uiManager.HideInteractPrompt();
         }
 
-        private bool CanStartOperating(IInteractor interactor)
-        {
-            return interactor.HeldObject is Key key && key.Keyholes.Contains(this) && _currentOperation == null;
-        }
+        private bool CanStartOperating(IInteractor interactor) => interactor.HeldObject is Key key && key.Keyholes.Contains(this) && _currentOperation == null;
 
         private bool CanStopOperating(out bool lockedState)
         {
             lockedState = _door.isLocked;
             if (!CurrentlyBeingOperated) return false;
-
-            float rot = _currentOperation.Key.Rotation;
-
-            if (unlockDirection == UnlockDirection.TurnRightIsUnlock)
+            switch (_currentOperation.Key.Rotation)
             {
-                if (rot <= -180f)
-                {
-                    lockedState = false;
-                    return true;
-                }
-
-                if (rot >= 180f)
-                {
+                case >= 180f:
                     lockedState = true;
                     return true;
-                }
-            }
-            else
-            {
-                if (rot >= 180f)
-                {
+                case <= -180f:
                     lockedState = false;
                     return true;
-                }
-
-                if (rot <= -180f)
-                {
-                    lockedState = true;
-                    return true;
-                }
             }
-
             return false;
         }
 
@@ -218,12 +191,14 @@ namespace door
             if (_door != null || transform.parent == null) return;
             _door = parent.GetComponentInChildren<DoorInteractable>();
         }
+        
+        #endregion
 
         private class Operation
         {
             public readonly Key Key;
             public readonly IInteractor Interactor;
-
+            
             public Operation(Key key, IInteractor interactor)
             {
                 Key = key;

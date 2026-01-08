@@ -13,11 +13,11 @@ namespace door
         [Header("References")]
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private List<Keyhole> keyholes;
+        [SerializeField] private Keyhole keyhole;
 
         [SerializeField] public bool isLocked;
         [SerializeField] public bool isOpen;
-
+        
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
@@ -53,7 +53,6 @@ namespace door
             doorPivot.localRotation = Quaternion.Lerp(doorPivot.localRotation, target, Time.deltaTime * (config?.openSpeed ?? 2f));
             
         }
-
         public override void Interact(IInteractor interactor)
         {
             if (isLocked)
@@ -61,7 +60,6 @@ namespace door
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
-
             isOpen = !isOpen;
 
             if (audioSource)
@@ -71,22 +69,10 @@ namespace door
             }
         }
 
-        public override bool IsInteractableBy(IInteractor interactor) => true;
-
-        public override bool IsDetectableBy(IInteractor interactor)
-        {
-            if (keyholes != null)
-            {
-                for (int i = 0; i < keyholes.Count; i++)
-                {
-                    if (keyholes[i] != null && keyholes[i].CurrentlyBeingOperated)
-                        return false;
-                }
-            }
-
-            return base.IsDetectableBy(interactor);
-        }
-
+        public override bool IsInteractableBy(IInteractor interactor) => !isLocked;
+        
+        public override bool IsDetectableBy(IInteractor interactor) => !keyhole?.CurrentlyBeingOperated ?? base.IsDetectableBy(interactor);
+        
         public override string InteractionText(IInteractor interactor)
         {
             return string.Empty;
