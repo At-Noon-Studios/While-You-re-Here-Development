@@ -24,11 +24,13 @@ namespace Fishing {
         private Vector2 _mouseDelta;
         private float _currentReelSpeed;
         private bool _allowReeling;
+        private float _fishEscapeCount;
+        private bool _isCounterSteering;
 
         public float castingForce;
         public float distanceFromShoreForCatch;
         public float minReelTime;
-
+        public float fishStruggleBeforeEscape;
         
         public GameObject line;
         public GameObject fishingRodTop;
@@ -70,6 +72,13 @@ namespace Fishing {
             {
                 if (_isCasting) UnChargeCast();
             }
+            if (_caughtFish == null) return;
+            if (!_isCounterSteering)
+            {
+                _fishEscapeCount++;
+                if (_fishEscapeCount >= fishStruggleBeforeEscape) FishEscape();
+            }
+            else _fishEscapeCount = Mathf.Max(0, _fishEscapeCount - 1);
         }
 
         private void StartCast()
@@ -131,6 +140,11 @@ namespace Fishing {
 
         private void ReelInFish()
         {
+            if (!_allowReeling)
+            {
+                _fishEscapeCount += 10;
+                return;
+            }
             var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, _reelTargetPosition, _currentReelSpeed);
             _spawnedFloater.transform.position = direction;
             if (Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) <= distanceFromShoreForCatch )
@@ -186,6 +200,19 @@ namespace Fishing {
             //make fish go back to middle
             yield return new WaitForSeconds(_caughtFish.fishCatchDifficulty.splashInterval);
             StartCoroutine(FishStruggle());
+        }
+
+        private void FishEscape()
+        {
+            _caughtFish = null;
+            OnFishCaught -= ListenForFishCaught;
+            ReturnLine();
+        }
+
+        public override void Drop()
+        {
+            if (_isLineCast) return;
+            base.Drop();
         }
     }
 }
