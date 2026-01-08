@@ -3,6 +3,7 @@ using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
 using player_controls;
+using PlayerControls;
 using ScriptableObjects.Events;
 using ScriptableObjects.Interactable;
 using UI;
@@ -200,7 +201,7 @@ namespace Interactable
             if (playerCamera == null || data == null)
                 return 0;
 
-            Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             return Physics.SphereCastNonAlloc(ray,
                 data.InteractionAssistRadius,
                 result,
