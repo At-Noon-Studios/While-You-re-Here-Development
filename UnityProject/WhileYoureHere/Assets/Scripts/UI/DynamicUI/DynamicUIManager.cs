@@ -14,12 +14,7 @@ namespace UI.DynamicUI
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
-
-        public enum KettleState
-        {
-            None,
-            Pouring
-        }
+        public enum KettleState { None, Pouring }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -30,15 +25,15 @@ namespace UI.DynamicUI
             [SerializeField] private Vector2 size = new Vector2(64, 64);
 
             [Header("Flip Options")]
-            [SerializeField] public bool flipX;
-            [SerializeField] public bool flipY;
+            public bool flipX;
+            public bool flipY;
 
             [Header("Activation")]
             [SerializeField] private ActivationMode activationMode = ActivationMode.Always;
-            [SerializeField] public InteractableBehaviour interactableBehaviour;
+            public InteractableBehaviour interactableBehaviour;
 
             [SerializeField] private HoldableObjectBehaviour requiredHeldObject;
-            
+
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
@@ -64,25 +59,31 @@ namespace UI.DynamicUI
             private bool CheckIsActive()
             {
                 if (activationMode == ActivationMode.InteractableHovered &&
-                    (interactableBehaviour == null || !interactableBehaviour.IsHovered || interactableBehaviour.blockInteraction))
+                    (interactableBehaviour == null ||
+                     !interactableBehaviour.IsHovered ||
+                     interactableBehaviour.blockInteraction))
                     return false;
 
-                if (interactableBehaviour == null) return false;
+                if (interactableBehaviour == null)
+                    return false;
 
-                if (interactableBehaviour is DoorInteractable door && requiredDoorState != DoorState.None)
+                if (interactableBehaviour is DoorInteractable door &&
+                    requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
 
-                if (interactableBehaviour is Stump stump && requiredStumpState != StumpState.None)
+                if (interactableBehaviour is Stump stump &&
+                    requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
-
-                if (requiredKettleState != KettleState.None)
-                    return CheckKettleState();
 
                 if (requiredHeldObject != null)
                 {
-                    var held = GameObject.FindWithTag("Player")?.GetComponent<PlayerInteractionController>()?.HeldObject;
+                    var held = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>()?.HeldObject;
 
-                    if (held != requiredHeldObject) 
+                    if (held == null)
+                        return false;
+
+                    if (held.GetType() != requiredHeldObject.GetType())
                         return false;
                 }
 
@@ -90,33 +91,34 @@ namespace UI.DynamicUI
                     return CheckKettleState();
 
                 return true;
-
             }
 
             private bool CheckKettleState()
             {
                 var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
-                if (kettlePour == null || kettlePour.kettle == null) return false;
+                if (kettlePour == null || kettlePour.kettle == null)
+                    return false;
 
                 if (requiredKettleState == KettleState.Pouring)
                 {
                     bool isFilled = kettlePour.kettle.fillAmount > 0f;
-                    bool isHeld = (kettlePour.TryGetComponent<Interactable.Holdable.HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld)
-                                  || (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+                    bool isHeld =
+                        (kettlePour.TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld) ||
+                        (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
 
                     return isFilled && isHeld;
                 }
 
                 return false;
             }
-            
+
             private bool CheckDoorState(DoorInteractable door)
             {
                 if (door.isLocked) return requiredDoorState == DoorState.Locked;
                 if (door.isOpen) return requiredDoorState == DoorState.Closed;
                 return requiredDoorState == DoorState.Open;
             }
-            
+
             private bool CheckStumpState(Stump stump)
             {
                 if (stump == null) return false;
@@ -126,19 +128,16 @@ namespace UI.DynamicUI
                     var held = GameObject.FindWithTag("Player")
                         ?.GetComponent<PlayerInteractionController>()?.HeldObject;
 
-                    if (requiredStumpState == StumpState.CutLog 
-                        && held is HoldableObjectBehaviour h 
-                        && h.GetComponentInChildren<AxeHitDetector>() != null
-                        && stump.HasLog)
+                    if (requiredStumpState == StumpState.CutLog &&
+                        held is HoldableObjectBehaviour h &&
+                        h.GetComponentInChildren<AxeHitDetector>() != null &&
+                        stump.HasLog)
                         return true;
 
-                    if (requiredStumpState == StumpState.PlaceLog 
-                        && held is HoldableObjectBehaviour log 
-                        && log.CompareTag("Log"))
+                    if (requiredStumpState == StumpState.PlaceLog &&
+                        held is HoldableObjectBehaviour log &&
+                        log.CompareTag("Log"))
                         return true;
-
-                    if (!interactableBehaviour.IsHovered)
-                        return false;
 
                     return false;
                 }
@@ -154,12 +153,15 @@ namespace UI.DynamicUI
 
                 return false;
             }
-            
         }
 
         [Header("World Space UI Settings")]
         [SerializeField] private List<WorldSpaceUIElement> worldSpaceElements;
         [SerializeField] private float canvasScale = 0.01f;
+
+        [Header("Stacking Settings")]
+        [Tooltip("If true, multiple UI elements can be active on the same interactable")]
+        [SerializeField] private bool allowMultipleOnSameInteractable = false;
 
         private Camera mainCamera;
         private Canvas worldCanvas;
@@ -184,8 +186,8 @@ namespace UI.DynamicUI
         {
             var canvasObj = new GameObject("WorldSpaceCanvas");
             canvasObj.transform.SetParent(transform);
-            canvasObj.transform.localRotation = Quaternion.identity;
             canvasObj.transform.localPosition = Vector3.zero;
+            canvasObj.transform.localRotation = Quaternion.identity;
 
             worldCanvas = canvasObj.AddComponent<Canvas>();
             worldCanvas.renderMode = RenderMode.WorldSpace;
@@ -193,6 +195,7 @@ namespace UI.DynamicUI
 
             var scaler = canvasObj.AddComponent<CanvasScaler>();
             scaler.dynamicPixelsPerUnit = 10;
+
             canvasObj.AddComponent<GraphicRaycaster>();
             canvasObj.transform.localScale = Vector3.one * canvasScale;
         }
@@ -200,17 +203,15 @@ namespace UI.DynamicUI
         private void InitializeElements()
         {
             foreach (var element in worldSpaceElements)
-            {
                 SetupUIElement(element);
-            }
         }
 
         private void SetupUIElement(WorldSpaceUIElement element)
         {
             var uiObj = new GameObject(element.GetHashCode().ToString());
             uiObj.transform.SetParent(worldCanvas.transform);
-            uiObj.transform.localRotation = Quaternion.identity;
             uiObj.transform.localPosition = Vector3.zero;
+            uiObj.transform.localRotation = Quaternion.identity;
 
             var img = uiObj.AddComponent<Image>();
             img.sprite = element.Sprite;
@@ -218,7 +219,10 @@ namespace UI.DynamicUI
             var rect = img.rectTransform;
             rect.sizeDelta = element.Size;
             rect.pivot = Vector2.one * 0.5f;
-            rect.localScale = new Vector3(element.flipX ? -1 : 1, element.flipY ? -1 : 1, 1);
+            rect.localScale = new Vector3(
+                element.flipX ? -1 : 1,
+                element.flipY ? -1 : 1,
+                1);
 
             element.uiObject = uiObj;
             element.image = img;
@@ -227,18 +231,48 @@ namespace UI.DynamicUI
 
         private void UpdateElements()
         {
+            Dictionary<InteractableBehaviour, bool> hasExclusiveActive =
+                new Dictionary<InteractableBehaviour, bool>();
+
             foreach (var element in worldSpaceElements)
             {
-                if (element.uiObject == null) continue;
+                if (element.uiObject == null)
+                    continue;
 
-                bool active = element.IsActive;
-                element.uiObject.SetActive(active);
-                element.image.enabled = active;
-                if (!active) continue;
+                bool active = false;
+                var interactable = element.interactableBehaviour;
 
-                UpdateUIElementSpriteAndSize(element);
-                UpdateUIElementPosition(element);
+                if (interactable != null)
+                {
+                    if (!hasExclusiveActive.ContainsKey(interactable))
+                        hasExclusiveActive.Add(interactable, false);
+
+                    if (element.IsActive)
+                    {
+                        if (allowMultipleOnSameInteractable || !hasExclusiveActive[interactable])
+                        {
+                            active = true;
+
+                            if (!allowMultipleOnSameInteractable)
+                                hasExclusiveActive[interactable] = true;
+                        }
+                    }
+                }
+
+                SetElementActive(element, active);
+
+                if (active)
+                {
+                    UpdateUIElementSpriteAndSize(element);
+                    UpdateUIElementPosition(element);
+                }
             }
+        }
+
+        private void SetElementActive(WorldSpaceUIElement element, bool active)
+        {
+            element.uiObject.SetActive(active);
+            element.image.enabled = active;
         }
 
         private void UpdateUIElementSpriteAndSize(WorldSpaceUIElement element)
@@ -250,10 +284,11 @@ namespace UI.DynamicUI
         private void UpdateUIElementPosition(WorldSpaceUIElement element)
         {
             Vector3 targetPos = element.Offset;
+
             if (element.interactableBehaviour != null)
                 targetPos += element.interactableBehaviour.transform.position;
 
-            if (element.interactableBehaviour is DoorInteractable && playerTransform != null)
+            if (element.interactableBehaviour is DoorInteractable)
                 targetPos = CalculateDoorUIPosition(element);
 
             element.uiObject.transform.position = targetPos;
@@ -264,8 +299,8 @@ namespace UI.DynamicUI
             Transform t = element.interactableBehaviour.transform;
 
             return t.position
-                   + t.right   * element.Offset.x
-                   + t.up      * element.Offset.y
+                   + t.right * element.Offset.x
+                   + t.up * element.Offset.y
                    + t.forward * element.Offset.z;
         }
 
@@ -275,17 +310,16 @@ namespace UI.DynamicUI
 
             foreach (var element in worldSpaceElements)
             {
-                if (element.uiObject == null || !element.uiObject.activeSelf) continue;
-                if (element.LookTarget == LookAtTarget.Camera)
-                    RotateUIElementTowardsCamera(element);
-            }
-        }
+                if (element.uiObject == null || !element.uiObject.activeSelf)
+                    continue;
 
-        private void RotateUIElementTowardsCamera(WorldSpaceUIElement element)
-        {
-            Vector3 direction = element.uiObject.transform.position - mainCamera.transform.position;
-            if (direction.sqrMagnitude > 0.001f)
-                element.uiObject.transform.rotation = Quaternion.LookRotation(direction);
+                if (element.LookTarget == LookAtTarget.Camera)
+                {
+                    Vector3 dir = element.uiObject.transform.position - mainCamera.transform.position;
+                    if (dir.sqrMagnitude > 0.001f)
+                        element.uiObject.transform.rotation = Quaternion.LookRotation(dir);
+                }
+            }
         }
 
         private void UpdateCanvasScale()
