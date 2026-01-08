@@ -59,8 +59,6 @@ namespace player_controls
         {
             _cameraController.OnRotate -= RotatePlayerBody;
             move.OnRaise -= OnMoveInput;
-            _moveX = 0;
-            _moveY = 0;
         }
 
         private void OnMoveInput(Vector2 movementVector)
@@ -104,6 +102,7 @@ namespace player_controls
         public void PauseMovement()
         {
             canMove = false;
+            IsInput = false;
         }
 
         public void ResumeMovement()
