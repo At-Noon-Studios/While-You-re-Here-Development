@@ -100,6 +100,7 @@ namespace player_controls
         public void PauseMovement()
         {
             canMove = false;
+            IsInput = false;
         }
 
         public void ResumeMovement()
