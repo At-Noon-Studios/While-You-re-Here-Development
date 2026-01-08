@@ -34,6 +34,8 @@ namespace Fishing {
         
         public static event Action<SoFish> OnFishCaught;
         public static void TriggerFishCaught(SoFish fish) => OnFishCaught?.Invoke(fish);
+        public static event Action<bool> OnFishSplashing;
+        public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
         
         private Action<Vector2> look;
 
@@ -112,15 +114,17 @@ namespace Fishing {
         {
             var camPosition = _playerCamera.transform.position;
             camPosition.y = _spawnedFloater.transform.position.y;
-            camPosition.z = _spawnedFloater.transform.position.z;
-            // needs work
-            _reelTargetPosition = new Vector3(camPosition.x, camPosition.y, camPosition.z);
-            
-            
-            
-            _caughtFish = fish;
-            _currentReelSpeed = Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) / minReelTime;
-            Debug.Log(_currentReelSpeed);
+            if (Physics.Raycast(_spawnedFloater.transform.position, camPosition - _spawnedFloater.transform.position,
+                    out var hit))
+            {
+                _reelTargetPosition = hit.point;
+                _caughtFish = fish;
+                _currentReelSpeed = Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) / minReelTime;
+            }
+            else
+            {
+                _caughtFish = null;
+            }
         }
 
         private void ReelInFish()
