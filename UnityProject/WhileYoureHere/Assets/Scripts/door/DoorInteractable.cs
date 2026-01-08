@@ -16,11 +16,11 @@ namespace door
         [Header("References")]
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private Keyhole keyhole;
+        [SerializeField] private List<Keyhole> keyholes;
 
         [SerializeField] public bool isLocked;
         [SerializeField] public bool isOpen;
-        
+
         private Quaternion _closeRotation;
         private Quaternion _openRotation;
         private Transform _playerCamera;
@@ -69,6 +69,7 @@ namespace door
                 });
             }
         }
+
         public override void Interact(IInteractor interactor)
         {
             if (isLocked)
@@ -76,6 +77,7 @@ namespace door
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
+
             isOpen = !isOpen;
 
             if (audioSource)
@@ -84,7 +86,6 @@ namespace door
                 else if (!isOpen && config.closeSound) audioSource.PlayOneShot(config.closeSound);
             }
         }
-        
 
         public override void OnHoverEnter(IInteractor interactor)
         {
@@ -106,14 +107,26 @@ namespace door
             interactionCanvases?.ForEach(c => c.gameObject.SetActive(false));
         }
 
-        public override bool IsInteractableBy(IInteractor interactor) => !isLocked;
-        
-        public override bool IsDetectableBy(IInteractor interactor) => !keyhole?.CurrentlyBeingOperated ?? base.IsDetectableBy(interactor);
-        
+        public override bool IsInteractableBy(IInteractor interactor) => true;
+
+        public override bool IsDetectableBy(IInteractor interactor)
+        {
+            if (keyholes != null)
+            {
+                for (int i = 0; i < keyholes.Count; i++)
+                {
+                    if (keyholes[i] != null && keyholes[i].CurrentlyBeingOperated)
+                        return false;
+                }
+            }
+
+            return base.IsDetectableBy(interactor);
+        }
+
         public override string InteractionText(IInteractor interactor)
         {
             if (isLocked)
-                return "Door is locked"; 
+                return "Door is locked";
 
             return isOpen ? "Press 'E' to Close Door" : "Press 'E' to Open Door";
         }
