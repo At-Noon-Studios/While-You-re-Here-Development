@@ -10,7 +10,9 @@ namespace PlayerControls
     [RequireComponent(typeof(MovementController))]
     public class FootstepsSound : MonoBehaviour
     {
-        [FormerlySerializedAs("_audioSource")] [SerializeField] AudioSource audioSource;
+        [FormerlySerializedAs("_audioSource")] [SerializeField]
+        AudioSource audioSource;
+
         [SerializeField] FootStepsData fs;
 
         private MovementController _movementController;
@@ -39,25 +41,26 @@ namespace PlayerControls
                         switch (hit.collider.tag)
                         {
                             case "GROUND/leaves":
-                                audioSource.PlayOneShot(fs.Leaves[Random.Range(0, fs.Leaves.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Leaves[Random.Range(0, fs.Leaves.Length - 1)], fs.FootstepVolume);
                                 break;
                             case "GROUND/snow":
-                                audioSource.PlayOneShot(fs.Snow[Random.Range(0, fs.Snow.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Snow[Random.Range(0, fs.Snow.Length - 1)], fs.FootstepVolume);
                                 break;
                             case "GROUND/grass":
-                                audioSource.PlayOneShot(fs.Grass[Random.Range(0, fs.Grass.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Grass[Random.Range(0, fs.Grass.Length - 1)], fs.FootstepVolume);
                                 break;
                             case "GROUND/path":
-                                audioSource.PlayOneShot(fs.Path[Random.Range(0, fs.Path.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Path[Random.Range(0, fs.Path.Length - 1)], fs.FootstepVolume);
                                 break;
                             case "GROUND/floor":
-                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)], fs.FootstepVolume);
                                 break;
                             default:
-                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)]);
+                                audioSource.PlayOneShot(fs.Floor[Random.Range(0, fs.Floor.Length - 1)], fs.FootstepVolume);
                                 break;
                         }
                     }
+
                     _time = fs.FootStepOffset;
                 }
             }

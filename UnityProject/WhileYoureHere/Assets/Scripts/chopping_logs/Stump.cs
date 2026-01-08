@@ -195,8 +195,10 @@ namespace chopping_logs
             {
                 return;
             }
-            
-            StartCoroutine(PlayCrackTwice(0.12f));
+
+            // Rens requested the wood crack sound to be removed, so I'm commenting it out for now in case we change our mind later
+            // I will surely remember to remove this at the end the project
+            // StartCoroutine(PlayCrackTwice(0.12f));
 
             var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
             ClearLog();
