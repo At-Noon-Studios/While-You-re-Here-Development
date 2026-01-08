@@ -1,3 +1,4 @@
+using chopping_logs;
 using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
