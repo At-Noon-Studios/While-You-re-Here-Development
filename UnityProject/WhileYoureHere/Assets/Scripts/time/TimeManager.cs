@@ -23,6 +23,8 @@ namespace time
         private static readonly int Texture2 = Shader.PropertyToID("_Texture2");
         private static readonly int Blend = Shader.PropertyToID("_Blend");
 
+        [SerializeField] private Light[] cabinLights;
+        
         private void Awake()
         {
             _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
@@ -52,6 +54,7 @@ namespace time
                 StartCoroutine(LerpSkybox(transition.fromSkybox, transition.toSkybox, transition.duration));
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));
                 StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation, transition.duration));
+                StartCoroutine(LerpCabinLights(transition.startLightIntensity, transition.endLightIntensity, transition.duration));
                 return;
             }
 
@@ -100,6 +103,15 @@ namespace time
             }
 
             _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
+        }
+
+        private IEnumerator LerpCabinLights(float startLightIntensity, float endLightIntensity, float time)
+        {
+            for (int i = 0; i < cabinLights.Length; i++)
+            {
+                cabinLights[i].intensity = Mathf.Lerp(startLightIntensity, endLightIntensity, i);
+                yield return null;
+            }
         }
     }
 }
