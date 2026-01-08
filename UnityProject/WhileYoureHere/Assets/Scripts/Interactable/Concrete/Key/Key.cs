@@ -1,5 +1,7 @@
 ﻿using door;
+using Interactable;
 using Interactable.Holdable;
+using ScriptableObjects.Gamestate;
 using UnityEngine;
 
 namespace Interactable.Concrete.Key
@@ -12,13 +14,28 @@ namespace Interactable.Concrete.Key
         [HideInInspector] public bool detectable = true;
 
         public float Rotation { get; private set; }
-
         private Quaternion _baseRotation = Quaternion.identity;
 
-        public void SetBaseRotation(Quaternion baseRotation)
+        [Header("Pickup Sound (play once)")]
+        [SerializeField] private AudioClip pickupClip;
+        [SerializeField] private SoGamestateFlag pickupSoundPlayedFlag;
+
+        public override void Interact(IInteractor interactor)
         {
-            _baseRotation = baseRotation;
+            PlayPickupSoundOnce();
+            base.Interact(interactor);
         }
+
+        private void PlayPickupSoundOnce()
+        {
+            if (pickupClip == null || pickupSoundPlayedFlag == null) return;
+            if (pickupSoundPlayedFlag.currentValue) return;
+
+            AudioSource.PlayClipAtPoint(pickupClip, transform.position);
+            pickupSoundPlayedFlag.currentValue = true;
+        }
+
+        public void SetBaseRotation(Quaternion baseRotation) => _baseRotation = baseRotation;
 
         public void RotateKey(float degrees)
         {
@@ -33,6 +50,7 @@ namespace Interactable.Concrete.Key
             transform.rotation = _baseRotation;
         }
 
-        public override bool IsDetectableBy(IInteractor interactor) => base.IsDetectableBy(interactor) && detectable;
+        public override bool IsDetectableBy(IInteractor interactor)
+            => base.IsDetectableBy(interactor) && detectable;
     }
 }
