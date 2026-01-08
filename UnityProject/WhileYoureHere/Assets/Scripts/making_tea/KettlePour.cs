@@ -1,4 +1,5 @@
-﻿using Interactable.Holdable;
+﻿using Interactable;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,7 @@ namespace making_tea
 
         private AudioSource _audio;
         private PlayerInput _playerInput;
+        private PlayerInteractionController _player;
 
         private Quaternion _uprightRot;
         private Quaternion _pourRot;
@@ -36,6 +38,7 @@ namespace making_tea
             if (player == null) return;
             
             _playerInput = player.GetComponent<PlayerInput>();
+            _player = player.GetComponent<PlayerInteractionController>();
 
             if (_playerInput == null) return;
             _playerInput.actions["Pour"].performed += ctx => _isPourPressed = true;
@@ -58,10 +61,13 @@ namespace making_tea
 
         private void Update()
         {
+            var isTableMode = _player != null && _player.IsTableMode;
+            
             var isHeld = TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld;
             var isTableHeld = TryGetComponent<KettleTablePickup>(out var t) && t.IsTableHeld;
 
             var canPour =
+                isTableMode &&
                 (isHeld || isTableHeld) &&
                 kettle != null &&
                 kettle.fillAmount > 0f &&
