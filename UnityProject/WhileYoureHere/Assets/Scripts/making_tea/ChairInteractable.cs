@@ -1,6 +1,7 @@
 using Interactable;
 using player_controls;
 using PlayerControls;
+using TaskList;
 using UnityEngine;
 
 namespace making_tea
@@ -13,6 +14,7 @@ namespace making_tea
         [Header("References")]
         [SerializeField] private Transform sitPoint;
         [SerializeField] private Transform lookTarget;
+        [SerializeField] private TaskListHintController taskListHintController;
 
         [Header("Camera Sitting Position Offset")]
         [SerializeField] private Vector3 cameraSitOffset = new Vector3(0f, 0f, 0f);
@@ -21,11 +23,10 @@ namespace making_tea
         [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
 
         [Header("Camera FOV Settings")]
-        [SerializeField] [Range(0,180)] private float sitFOV = 60f;
+        [SerializeField] [Range(0, 180)] private float sitFOV = 60f;
         [SerializeField] private bool changeFOV = true;
 
         private float _originalFOV;
-
         private bool _isSitting;
 
         private PlayerInteractionController _pic;
@@ -56,7 +57,7 @@ namespace making_tea
             if (interactionCanvas == null ||
                 !interactionCanvas.gameObject.activeSelf ||
                 _playerCamera == null) return;
-            
+
             interactionCanvas.transform.LookAt(_playerCamera);
             interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
@@ -76,7 +77,7 @@ namespace making_tea
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
-        
+
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
@@ -110,7 +111,6 @@ namespace making_tea
             {
                 _originalCameraLocalPos = _playerCam.transform.localPosition;
                 _originalCameraLocalRot = _playerCam.transform.localRotation;
-
                 _originalFOV = _playerCam.fieldOfView;
             }
 
@@ -135,6 +135,8 @@ namespace making_tea
             _pic.EnableTableMode(true);
             _pic.SetSittingChair(this);
 
+            taskListHintController?.SetHintsHidden(true);
+
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
@@ -158,6 +160,8 @@ namespace making_tea
             if (_pic == null) return;
             _pic.EnableTableMode(false);
             _pic.ClearSittingChair();
+
+            taskListHintController?.SetHintsHidden(false);
         }
 
         public void ForceStandUp()

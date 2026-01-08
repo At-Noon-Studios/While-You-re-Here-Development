@@ -10,10 +10,17 @@ namespace TaskList
 
         private bool _hasNotebook;
         private bool _notebookOpen;
+        private bool _hideHints;
 
         private void Awake()
         {
             HideAll();
+        }
+
+        public void SetHintsHidden(bool hidden)
+        {
+            _hideHints = hidden;
+            UpdateHint();
         }
 
         public void OnNotebookPickedUp()
@@ -26,7 +33,6 @@ namespace TaskList
         public void OnNotebookOpened()
         {
             if (!_hasNotebook) return;
-
             _notebookOpen = true;
             UpdateHint();
         }
@@ -34,7 +40,6 @@ namespace TaskList
         public void OnNotebookClosed()
         {
             if (!_hasNotebook) return;
-
             _notebookOpen = false;
             UpdateHint();
         }
@@ -43,7 +48,7 @@ namespace TaskList
         {
             HideAll();
 
-            if (!_hasNotebook)
+            if (_hideHints || !_hasNotebook)
                 return;
 
             if (_notebookOpen)
@@ -54,8 +59,8 @@ namespace TaskList
 
         private void HideAll()
         {
-            taskListHintTextOpen.SetActive(false);
-            taskListHintTextPutAway.SetActive(false);
+            if (taskListHintTextOpen != null) taskListHintTextOpen.SetActive(false);
+            if (taskListHintTextPutAway != null) taskListHintTextPutAway.SetActive(false);
         }
     }
 }
