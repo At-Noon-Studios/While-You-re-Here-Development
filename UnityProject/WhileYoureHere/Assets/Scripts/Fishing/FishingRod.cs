@@ -147,6 +147,7 @@ namespace Fishing {
             _isLineCast = false;
             line.SetActive(true);
             _lineController.SetUpLine(Array.Empty<Transform>());
+            StopAllCoroutines();
             Destroy(_spawnedFloater);
             _spawnedFloater = null;
             _cameraController.ResumeCameraMovement();

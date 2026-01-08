@@ -19,7 +19,16 @@ namespace Fishing
             _rigidbody = GetComponent<Rigidbody>();
             _ripple = transform.Find("Ripple").gameObject.GetComponent<ParticleSystem>();
             _splash = transform.Find("Splash").gameObject.GetComponent<ParticleSystem>();
+        }
+
+        private void OnEnable()
+        {
             OnFishSplashing += PlaySplashAnimation;
+        }
+
+        private void OnDisable()
+        {
+            OnFishSplashing -= PlaySplashAnimation;
         }
 
         private void OnTriggerEnter(Collider other)
