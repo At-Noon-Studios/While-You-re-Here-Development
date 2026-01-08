@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
@@ -22,6 +23,7 @@ namespace Fishing {
         private GameObject _spawnedFloater;
         private Vector2 _mouseDelta;
         private float _currentReelSpeed;
+        private bool _allowReeling;
 
         public float castingForce;
         public float distanceFromShoreForCatch;
@@ -34,8 +36,7 @@ namespace Fishing {
         
         public static event Action<SoFish> OnFishCaught;
         public static void TriggerFishCaught(SoFish fish) => OnFishCaught?.Invoke(fish);
-        public static event Action<bool> OnFishSplashing;
-        public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
+
         
         private Action<Vector2> look;
 
@@ -120,6 +121,7 @@ namespace Fishing {
                 _reelTargetPosition = hit.point;
                 _caughtFish = fish;
                 _currentReelSpeed = Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) / minReelTime;
+                StartCoroutine(FishRelax());
             }
             else
             {
@@ -165,6 +167,24 @@ namespace Fishing {
         private void OnThrowFishingRod(InputValue mousePosition)
         {
             look?.Invoke(mousePosition.Get<Vector2>());
+        }
+
+        private IEnumerator FishStruggle()
+        {
+            _allowReeling = false;
+            FloaterController.TriggerFishSplashing(true);
+            // let fish move a direction
+            yield return new WaitForSeconds(_caughtFish.fishCatchDifficulty.splashDuration);
+            StartCoroutine(FishRelax());
+        }
+
+        private IEnumerator FishRelax()
+        {
+            _allowReeling = true;
+            FloaterController.TriggerFishSplashing(false);
+            //make fish go back to middle
+            yield return new WaitForSeconds(_caughtFish.fishCatchDifficulty.splashInterval);
+            StartCoroutine(FishStruggle());
         }
     }
 }

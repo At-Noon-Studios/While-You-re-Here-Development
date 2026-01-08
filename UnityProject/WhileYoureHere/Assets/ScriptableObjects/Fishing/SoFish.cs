@@ -9,7 +9,7 @@ namespace ScriptableObjects.Fishing {
         [Header("Fish settings")]
         public string fishName;
         public GameObject fishPrefab;
-        public CatchDifficulty fishCatchDifficulty;
+        public SoCatchDifficulty fishCatchDifficulty;
         public int fishFindProbability;
     }
 }

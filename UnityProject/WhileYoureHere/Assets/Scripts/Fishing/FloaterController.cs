@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,13 +8,18 @@ namespace Fishing
     {
 
         private Rigidbody _rigidbody;
-        private ParticleSystem _particleSystem;
+        private ParticleSystem _ripple;
+        private ParticleSystem _splash;
         private bool _blockTrigger;
+        public static event Action<bool> OnFishSplashing;
+        public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _particleSystem = GetComponent<ParticleSystem>();
+            _ripple = transform.Find("Ripple").gameObject.GetComponent<ParticleSystem>();
+            _splash = transform.Find("Splash").gameObject.GetComponent<ParticleSystem>();
+            OnFishSplashing += PlaySplashAnimation;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -38,7 +44,13 @@ namespace Fishing
             yield return new WaitForSeconds(3);
             FishingRod.TriggerFishCaught(fishingArea.GetFish());
             _blockTrigger = false;
-            _particleSystem.Play();
+            _ripple.Play();
+        }
+
+        private void PlaySplashAnimation(bool splashing)
+        {
+            if (splashing) _splash.Play();
+            else _splash.Stop();
         }
     }
 }
