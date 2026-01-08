@@ -186,9 +186,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -221,7 +221,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -674,6 +674,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 5967348931968646010}
   audioSource: {fileID: 6220377719747024622}
+  notebookHintLine: {fileID: 8300000, guid: 312e79cceb1840f4fbf3db349ff60578, type: 3}
   keyholes:
   - {fileID: 1744434109215498810}
   - {fileID: 4441469521249051110}
