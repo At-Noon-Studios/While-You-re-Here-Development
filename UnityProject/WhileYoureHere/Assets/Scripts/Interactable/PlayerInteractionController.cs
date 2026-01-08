@@ -14,19 +14,20 @@ namespace Interactable
     [DisallowMultipleComponent]
     public class PlayerInteractionController : MonoBehaviour, IInteractor
     {
-        [Header("Interaction Settings")] [SerializeField]
-        private PlayerInteractionData data;
+        [Header("Interaction Settings")]
+        [SerializeField] private PlayerInteractionData data;
 
-        [Header("Camera")] [SerializeField] private Camera playerCamera;
+        [Header("Camera")]
+        [SerializeField] private Camera playerCamera;
 
-        [Header("Input Events")] [SerializeField]
-        private EventChannel interact;
-
+        [Header("Input Events")]
+        [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private EventChannel dropEvent;
 
 
-        [Header("Holding")] [SerializeField] private Transform holdPoint;
+        [Header("Holding")]
+        [SerializeField] private Transform holdPoint;
 
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
@@ -148,10 +149,10 @@ namespace Interactable
                 DropObject();
                 return;
             }
-
+            
             if (_currentTarget is IClickInteractable &&
-                clickInteractEvent.OnRaise != null)
-            {
+                clickInteractEvent.OnRaise != null)            
+                {
                 ClickInteractWithTarget();
             }
             else
@@ -160,10 +161,11 @@ namespace Interactable
             }
         }
 
-        private void DropObject()
+          private void DropObject()
         {
-            HeldObject?.Drop();
+            HeldObject?.Drop();        
         }
+
 
         #endregion
 
@@ -179,9 +181,12 @@ namespace Interactable
 
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
-                    HeldObject != null)
+                if (HeldObject != null &&
+                    hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
+                    !hits[i].collider.TryGetComponent<LogBasket>(out _))
+                {
                     continue;
+                }
 
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
@@ -218,7 +223,7 @@ namespace Interactable
             bestTarget = interactable;
             closestDistance = candidate.distance;
         }
-
+        
         private bool TryGetBestInteractable(
             Collider collider,
             bool tableMode,
@@ -284,12 +289,13 @@ namespace Interactable
         }
 
         private bool NoTarget => _currentTarget == null;
+        
         private bool TargetInteractable => _currentTarget != null && _currentTarget.IsInteractableBy(this);
-
+        
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
-            OnHoverEnter(_currentTarget); // Refresh  
+            OnHoverEnter(_currentTarget); // Refresh
         }
 
         private void ClickInteractWithTarget()
@@ -311,7 +317,7 @@ namespace Interactable
             var modifier = Mathf.Max(1f - weight, 0.4f);
             _movementController.SetMovementModifier(modifier);
         }
-
+        
         #endregion
 
         #region Tablemode
@@ -337,7 +343,7 @@ namespace Interactable
 
             return false;
         }
-
         #endregion
+        
     }
 }
