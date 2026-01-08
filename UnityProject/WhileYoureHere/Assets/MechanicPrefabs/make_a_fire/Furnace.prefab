@@ -413,8 +413,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.Stove
   requiredFill: 0.2
   heatTime: 3
-  boilingClip: {fileID: 8300000, guid: 0405d573d05d22f4ca0d97f17defa37b, type: 3}
-  whistleClip: {fileID: 8300000, guid: 1491c7d2717e8de498542d5426844e1c, type: 3}
+  boilingClip: {fileID: 8300000, guid: 95e098ad15d3d53459323b3b534fec6a, type: 3}
+  whistleClip: {fileID: 8300000, guid: f6f1e551e366a604cbf04f57a7aa4073, type: 3}
   steamStopDelay: 1
   isOn: 1
 --- !u!64 &3696635236112334514
@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
-  blockInteraction: 0
+  blockInteraction: 1
   placePoint: {fileID: 4442128774560773664}
   placedObjectRotation: {x: 180, y: 90, z: 90}
   interactionCanvas: {fileID: 7521264780372961695}
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
-  blockInteraction: 0
+  blockInteraction: 1
   placePoint: {fileID: 3828601367084624663}
   placedObjectRotation: {x: 0, y: 0, z: 0}
   placedObjects:
@@ -660,7 +660,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: -0.047326144, y: -0.39844197, z: 0.02462343}
-  m_LocalScale: {x: 0.4, y: 0.2, z: 0.4}
+  m_LocalScale: {x: 0.8, y: 0.25, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6519067279474043717}
@@ -691,7 +691,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a03d8303b594cf0419b2cfe901ca1467, type: 2}
+  - {fileID: 2100000, guid: ac38313d0200d4117a630609a63b3062, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -754,7 +754,7 @@ ParticleSystem:
   m_GameObject: {fileID: 5204705461564196372}
   serializedVersion: 8
   lengthInSec: 5
-  simulationSpeed: 1
+  simulationSpeed: 0.5
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -5577,8 +5577,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.Stove
   requiredFill: 0.2
   heatTime: 3
-  boilingClip: {fileID: 8300000, guid: 0405d573d05d22f4ca0d97f17defa37b, type: 3}
-  whistleClip: {fileID: 8300000, guid: 1491c7d2717e8de498542d5426844e1c, type: 3}
+  boilingClip: {fileID: 8300000, guid: 95e098ad15d3d53459323b3b534fec6a, type: 3}
+  whistleClip: {fileID: 8300000, guid: f6f1e551e366a604cbf04f57a7aa4073, type: 3}
   steamStopDelay: 1
   isOn: 1
 --- !u!64 &9180944478074211015
@@ -5712,7 +5712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
-  blockInteraction: 0
+  blockInteraction: 1
   placePoint: {fileID: 6012619735836619366}
   placedObjectRotation: {x: 180, y: 90, z: 90}
   interactionCanvas: {fileID: 5775981961805567436}
@@ -6008,9 +6008,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
   newspaper: {fileID: 0}
   fireParticle: {fileID: 5543437988942985895}
-  matchStrike: {fileID: 8300000, guid: 8146a1438a76b4b78960fa77f622a341, type: 3}
-  burningFire: {fileID: 8300000, guid: 77436473c5eaf407ea848d13ff9dab4e, type: 3}
-  chargedFire: {fileID: 8300000, guid: ad24756061a00404fa732ccf2af1b2d3, type: 3}
+  matchStrike: {fileID: 8300000, guid: 95c49fc713d11f14bbea7e300f191c7a, type: 3}
+  burningFire: {fileID: 8300000, guid: 602000590feee4442a4ebec89aef5242, type: 3}
+  chargedFire: {fileID: 8300000, guid: 765d1b10189f30a4ea460e5bd79e6bb6, type: 3}
   blowAllowedEvent: {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
 --- !u!1 &6466514370822893418
 GameObject:
@@ -6229,7 +6229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
   interactionCanvases: []
-  config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
+  config: {fileID: 11400000, guid: d855518431313974c9aeafc71360acc3, type: 2}
   doorPivot: {fileID: 6863649006352924747}
   audioSource: {fileID: 0}
   keyhole: {fileID: 0}
@@ -6493,7 +6493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
   interactionCanvases: []
-  config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
+  config: {fileID: 11400000, guid: 1bff4e4e23fe04b43b5f934e6e685871, type: 2}
   doorPivot: {fileID: 1209456510512186474}
   audioSource: {fileID: 0}
   keyhole: {fileID: 0}

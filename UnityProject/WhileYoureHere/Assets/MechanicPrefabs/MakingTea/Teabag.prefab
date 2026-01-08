@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 7656214457393906207}
   - component: {fileID: 4454036573687773216}
   - component: {fileID: 2835776839590602380}
+  - component: {fileID: 303804130628685849}
   m_Layer: 0
   m_Name: Teabag
   m_TagString: Teabag
@@ -409,6 +410,24 @@ MonoBehaviour:
   blockInteraction: 0
   interactionCanvasPrimary: {fileID: 6383551460153688128}
   interactionCanvasSecondary: {fileID: 6421081431713279659}
+  tableLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  liftHeight: 0.8
+--- !u!114 &303804130628685849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980112532137061730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
+  blockInteraction: 0
+  data: {fileID: 11400000, guid: 2829ca37ab1c1b248a8f7c03e5e4d447, type: 2}
 --- !u!1 &4847818052758396514
 GameObject:
   m_ObjectHideFlags: 0
