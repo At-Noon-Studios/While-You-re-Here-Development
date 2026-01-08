@@ -107,10 +107,20 @@ namespace time
 
         private IEnumerator LerpCabinLights(float startLightIntensity, float endLightIntensity, float time)
         {
-            for (int i = 0; i < cabinLights.Length; i++)
+            if (cabinLights == null || cabinLights.Length == 0) yield break;
+            for (float t = 0; t < time; t += Time.deltaTime)
             {
-                cabinLights[i].intensity = Mathf.Lerp(startLightIntensity, endLightIntensity, i);
+                float currentIntensity = Mathf.Lerp(startLightIntensity, endLightIntensity, t / time);
+                foreach (Light light in cabinLights)
+                {
+                    if (light != null) light.intensity = currentIntensity;
+                }
                 yield return null;
+            }
+            foreach (Light light in cabinLights)
+            {
+                if (light != null) 
+                    light.intensity = endLightIntensity;
             }
         }
     }
