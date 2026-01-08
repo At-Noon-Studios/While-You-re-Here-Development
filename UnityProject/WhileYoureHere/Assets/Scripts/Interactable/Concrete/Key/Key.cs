@@ -16,7 +16,7 @@ namespace Interactable.Concrete.Key
         public float Rotation { get; private set; }
         private Quaternion _baseRotation = Quaternion.identity;
 
-        [Header("Pickup Sound (play once)")]
+        [Header("Pickup Sound (Voiceline)")]
         [SerializeField] private AudioClip pickupClip;
         [SerializeField] private SoGamestateFlag pickupSoundPlayedFlag;
 

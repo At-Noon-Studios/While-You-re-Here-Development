@@ -7842,17 +7842,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: ecb3352b76054433f9eda2ead0ff9eae, type: 3}
---- !u!114 &982883429632727190 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 533920237295486597, guid: 8848acf6956064836a828fd4e710b22d, type: 3}
-  m_PrefabInstance: {fileID: 6122696683396574781}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
 --- !u!4 &987201070682831068
 Transform:
   m_ObjectHideFlags: 0
@@ -8325,7 +8314,6 @@ GameObject:
   - component: {fileID: 6409098690469089770}
   - component: {fileID: 238079259638232047}
   - component: {fileID: 7140730037582379669}
-  - component: {fileID: 4666847058669042283}
   m_Layer: 0
   m_Name: KeyUV2
   m_TagString: Untagged
@@ -9278,7 +9266,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 7618025540315792563}
   audioSource: {fileID: 5787746468103025456}
-  keyhole: {fileID: 7988173867583454351}
+  keyholes: []
   isLocked: 0
   isOpen: 0
 --- !u!54 &1538380826067064480
@@ -10459,17 +10447,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7315414513428850194}
   m_Mesh: {fileID: -3844683235145767064, guid: 638bd658e97e6b34ca8729e3f942e8e8, type: 3}
---- !u!114 &1964963715060256721 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7261816807959466121, guid: 172aa8ada75cf4d1db94d23bd3fce0ae, type: 3}
-  m_PrefabInstance: {fileID: 6263687123172647562}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
 --- !u!4 &1976608444569538622
 Transform:
   m_ObjectHideFlags: 0
@@ -15532,24 +15509,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1430898653904328440}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4666847058669042283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108821255812049301}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61352d8bfc6b4b7e8aa59c3bf6902d73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.Key.Key
-  blockInteraction: 1
-  data: {fileID: 11400000, guid: 9e4bb462cfbc67541b1bb6bd365017aa, type: 2}
-  keyholes:
-  - {fileID: 0}
-  - {fileID: 0}
-  detectable: 1
 --- !u!1 &4684168411434918271
 GameObject:
   m_ObjectHideFlags: 0
@@ -19217,10 +19176,9 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 9e4bb462cfbc67541b1bb6bd365017aa, type: 2}
   keyholes:
   - {fileID: 0}
-  - {fileID: 1964963715060256721}
-  - {fileID: 982883429632727190}
-  - {fileID: 7988173867583454351}
   detectable: 1
+  pickupClip: {fileID: 0}
+  pickupSoundPlayedFlag: {fileID: 11400000, guid: be548abd3c4f7804699e3bb90c5f3516, type: 2}
 --- !u!1 &6427396784206842475
 GameObject:
   m_ObjectHideFlags: 0
@@ -22162,6 +22120,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!54 &8001246492247646062
 Rigidbody:
   m_ObjectHideFlags: 0
