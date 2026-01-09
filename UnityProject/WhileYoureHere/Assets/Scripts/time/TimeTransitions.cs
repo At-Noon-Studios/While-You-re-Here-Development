@@ -26,10 +26,18 @@ namespace time
         [Tooltip("Ending rotation angle for the Global Light (in degrees)")]
         public float endSunRotation = 360f;
 
-        [Header("Light Intensity")] [Tooltip("Starting intensity for the lights around the cabin.")]
-        public float startLightIntensity = 5.0f;
-
-        [Tooltip("Ending intensity for the lights around the cabin.")]
-        public float endLightIntensity;
+        // [Tooltip("Starting intensity for the spot-lights around the cabin.")]
+        // public float startSpotLightIntensity = 30.0f;
+        
+        [Header("Spot Light Intensity")]
+        [Tooltip("Ending intensity for the spot-lights around the cabin.")]
+        public float endSpotLightIntensity;
+        
+        // [Tooltip("Starting intensity for the point-lights around the cabin.")]
+        // public float startPointLightIntensity = 3.0f;
+        
+        [Header("Point Intensity")] 
+        [Tooltip("Ending intensity for the point-lights around the cabin.")]
+        public float endPointLightIntensity;
     }
 }

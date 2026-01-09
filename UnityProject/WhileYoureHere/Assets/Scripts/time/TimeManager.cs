@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace time
@@ -9,22 +10,24 @@ namespace time
     {
         private Light _sunLight;
 
-        [Header("Current Time")]
-        [Range(1, 8)] [SerializeField] private int days;
+        [Header("Current Time")] [Range(1, 8)] [SerializeField]
+        private int days;
+
         [Range(0, 23)] [SerializeField] private int hours;
 
-        [Header("Transitions")]
-        [SerializeField] private List<TimeTransition> transitions = new List<TimeTransition>();
+        [Header("Transitions")] [SerializeField]
+        private List<TimeTransition> transitions = new List<TimeTransition>();
 
         private int _lastDay;
         private int _lastHour;
-        
+
         private static readonly int Texture1 = Shader.PropertyToID("_Texture1");
         private static readonly int Texture2 = Shader.PropertyToID("_Texture2");
         private static readonly int Blend = Shader.PropertyToID("_Blend");
 
-        [SerializeField] private Light[] cabinLights;
-        
+        [SerializeField] private Light[] cabinPointLights;
+        [SerializeField] private Light[] cabinSpotLights;
+
         private void Awake()
         {
             _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
@@ -37,7 +40,7 @@ namespace time
             hours = hour;
             Validate();
         }
-        
+
         private void Validate()
         {
             if (days == _lastDay && hours == _lastHour) return;
@@ -45,16 +48,24 @@ namespace time
             _lastHour = hours;
             TryStartTransition(days, hours);
         }
-        
+
         private void TryStartTransition(int day, int hour)
         {
-            foreach (var transition in transitions.Where(transition => transition.day == day && transition.hour == hour))
+            foreach (var transition in
+                     transitions.Where(transition => transition.day == day && transition.hour == hour))
             {
                 Debug.Log($"Starting transition for Day {day}, Hour {hour}");
                 StartCoroutine(LerpSkybox(transition.fromSkybox, transition.toSkybox, transition.duration));
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));
-                StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation, transition.duration));
-                StartCoroutine(LerpCabinLights(transition.startLightIntensity, transition.endLightIntensity, transition.duration));
+                StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation,
+                    transition.duration));
+                // StartCoroutine(LerpCabinSpotLights(transition.endSpotLightIntensity, transition.duration));
+                // StartCoroutine(LerpCabinPointLights(transition.endPointLightIntensity, transition.duration));
+                StartCoroutine(LerpCabinLights(transition.endSpotLightIntensity, transition.endPointLightIntensity, transition.duration));
+                // transition.startPointLightIntensity, transition.endPointLightIntensity, transition.duration));
+                // ChangeLightsIntensity();
+                // ChangeSpotLightsIntensity();
+                // ChangePointLightsIntensity();
                 return;
             }
 
@@ -105,23 +116,97 @@ namespace time
             _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
         }
 
-        private IEnumerator LerpCabinLights(float startLightIntensity, float endLightIntensity, float time)
+        // private void ChangeSpotLightsIntensity()
+        // {
+        //     foreach (var spotLight in cabinSpotLights)
+        //     {
+        //         if (days == 1)
+        //         {
+        //             if (hours >= 6)
+        //             {
+        //                 spotLight.intensity = 30;
+        //             }
+        //
+        //             if (hours >= 16)
+        //             {
+        //                 spotLight.intensity = 10;
+        //             }
+        //
+        //             if (hours == 0)
+        //             {
+        //                 spotLight.intensity = 0;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // private void ChangePointLightsIntensity()
+        // {
+        //     foreach (var pointLight in cabinPointLights)
+        //     {
+        //         if (days == 1)
+        //         {
+        //             if (hours >= 6)
+        //             {
+        //                 pointLight.intensity = 3;
+        //             }
+        //
+        //             if (hours >= 16)
+        //             {
+        //                 pointLight.intensity = 1;
+        //             }
+        //
+        //             if (hours == 0)
+        //             {
+        //                 pointLight.intensity = 0;
+        //             }
+        //         }
+        //     }
+        // }
+
+        private IEnumerator LerpCabinLights(float endSpotLightIntensity, float endPointLightIntensity, float time)
         {
-            if (cabinLights == null || cabinLights.Length == 0) yield break;
-            for (float t = 0; t < time; t += Time.deltaTime)
+            for (float t = 0; t < time; t += Time.deltaTime) 
             {
-                float currentIntensity = Mathf.Lerp(startLightIntensity, endLightIntensity, t / time);
-                foreach (Light light in cabinLights)
+                foreach (var cabinSpotLight in cabinSpotLights)
                 {
-                    if (light != null) light.intensity = currentIntensity;
+                    var intensity = cabinSpotLight.intensity;
+                    cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, Time.deltaTime);
+                    yield return null;
                 }
-                yield return null;
-            }
-            foreach (Light light in cabinLights)
-            {
-                if (light != null) 
-                    light.intensity = endLightIntensity;
+                foreach(var cabinPointLight in cabinPointLights)
+                {
+                    var intensity = cabinPointLight.intensity;
+                    cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, Time.deltaTime);
+                    yield return null;
+                }
             }
         }
+        
+        // private IEnumerator LerpCabinSpotLights(float endSpotLightIntensity, float time)
+        // {
+        //     for (float t = 0; t < time; t += Time.deltaTime) 
+        //     {
+        //         foreach (var cabinSpotLight in cabinSpotLights)
+        //         {
+        //             var intensity = cabinSpotLight.intensity;
+        //             cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, Time.deltaTime);
+        //             yield return null;
+        //         }
+        //     }
+        // }
+        //
+        // private IEnumerator LerpCabinPointLights(float endPointLightIntensity, float time)
+        // {
+        //     for (float t = 0; t < time; t += Time.deltaTime)
+        //     {
+        //         foreach(var cabinPointLight in cabinPointLights)
+        //         {
+        //             var intensity = cabinPointLight.intensity;
+        //             cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, Time.deltaTime);
+        //             yield return null;
+        //         }
+        //     }
+        // }
     }
 }
