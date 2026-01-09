@@ -242,6 +242,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredPlantState: 0
     offset: {x: 0, y: 0.8, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -664,6 +665,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredPlantState: 0
     offset: {x: 0, y: 0.8, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5756,6 +5758,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+      propertyPath: activities.Array.data[1].events.Array.data[0]._expanded
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[2].events.Array.data[0]._expanded
       value: 1
       objectReference: {fileID: 0}
@@ -6406,17 +6412,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6103487082249334298, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
   m_PrefabInstance: {fileID: 2693211097570937498}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1842439033 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4505594006979983052, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
-  m_PrefabInstance: {fileID: 2693211097570937498}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842439032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 535e9201604ac9243a97776f3b192f89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::gardening.PlantWateringIndicator
 --- !u!114 &1842439039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6436,11 +6431,12 @@ MonoBehaviour:
     flipX: 0
     flipY: 0
     activationMode: 1
-    interactableBehaviour: {fileID: 1842439033}
+    interactableBehaviour: {fileID: 1842439041}
     requiredHeldObject: {fileID: 476931011}
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredPlantState: 1
     offset: {x: 0.5, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6452,11 +6448,12 @@ MonoBehaviour:
     flipX: 0
     flipY: 0
     activationMode: 1
-    interactableBehaviour: {fileID: 1842439033}
+    interactableBehaviour: {fileID: 1842439041}
     requiredHeldObject: {fileID: 476931011}
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredPlantState: 2
     offset: {x: 0.5, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6468,11 +6465,12 @@ MonoBehaviour:
     flipX: 0
     flipY: 0
     activationMode: 1
-    interactableBehaviour: {fileID: 1842439033}
+    interactableBehaviour: {fileID: 1842439041}
     requiredHeldObject: {fileID: 476931011}
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredPlantState: 3
     offset: {x: 0.5, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6480,6 +6478,17 @@ MonoBehaviour:
     rectTransform: {fileID: 0}
   canvasScale: 1
   allowMultipleOnSameInteractable: 1
+--- !u!114 &1842439041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 339108606551652105, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+  m_PrefabInstance: {fileID: 2693211097570937498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842439032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d51404dd01e29945b997b247eeb6e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Plant
 --- !u!1 &1883092480 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3450149010530102322, guid: 116a8763f9c34bc4da0d4f5f96040543, type: 3}
@@ -6792,6 +6801,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4505594006979983052, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505594006979983052, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+      propertyPath: blockInteraction
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4631114712342678275, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.001
@@ -6836,7 +6853,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlantSpawnPoint
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4505594006979983052, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

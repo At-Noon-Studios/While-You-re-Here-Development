@@ -1,10 +1,11 @@
 using chore;
+using Interactable;
 using ScriptableObjects;
 using UnityEngine;
 
 namespace entity
 {
-    public class PlantObject : MonoBehaviour
+    public class PlantObject : InteractableBehaviour
     {
         [Header("Plant settings")]
         [SerializeField] private SoPlant plant;
@@ -13,6 +14,7 @@ namespace entity
         
         public SoPlant PlantData => plant;
         public int CurrentStage => _currentStage;
+        public bool IsTriggered => _isTriggered;
         
         private GameObject _currentPlant;
         private int _currentStage;
@@ -94,6 +96,10 @@ namespace entity
             
             _currentPlant = Instantiate(nextPrefab, transform.position, transform.rotation);
             Debug.Log(_currentPlant);
+        }
+
+        public override void Interact(IInteractor interactor)
+        {
         }
     }
 }
