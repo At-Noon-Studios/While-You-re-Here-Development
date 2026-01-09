@@ -28,15 +28,9 @@ namespace time
 
         [Header("Spot Light Intensity")]
         [Tooltip("Ending intensity for the spot-lights around the cabin.")]
-        public float startSpotLightIntensity;
-        
-        [Tooltip("Ending intensity for the spot-lights around the cabin.")]
         public float endSpotLightIntensity;
         
-        [Header("Point Intensity")] 
-        [Tooltip("Ending intensity for the point-lights around the cabin.")]
-        public float startPointLightIntensity;
-        
+        [Header("Point Light Intensity")] 
         [Tooltip("Ending intensity for the point-lights around the cabin.")]
         public float endPointLightIntensity;
     }

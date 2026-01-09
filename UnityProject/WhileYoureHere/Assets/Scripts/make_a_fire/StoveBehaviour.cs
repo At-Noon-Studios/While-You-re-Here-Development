@@ -4,7 +4,6 @@ using chore;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace make_a_fire
 {
@@ -12,7 +11,7 @@ namespace make_a_fire
     {
         [Header("Burning Objects")] 
         [SerializeField] private HoldableObjectBehaviour newspaper;
-        private List<GameObject> logs;
+        private List<GameObject> _logs;
         
         [Header("Fire Behaviour")] 
         [SerializeField] private ParticleSystem fireParticle;
@@ -24,6 +23,8 @@ namespace make_a_fire
         [SerializeField] private EventChannel blowAllowedEvent;
         
         private Light _fireLight;
+        private float  _smallFireIntensity = 2.0f;
+        private float _bigFireIntensity = 4.0f;
         
         private int _placedLogsCount;
         private bool _fireStarted;
@@ -40,7 +41,7 @@ namespace make_a_fire
         private void Update()
         {
             if (!newspaper.IsPlaced) return;
-            logs = GameObject.FindGameObjectsWithTag("HalfLog").ToList();
+            _logs = GameObject.FindGameObjectsWithTag("HalfLog").ToList();
             var currentPlacedLogs = CountPlacedLogs();
             if (currentPlacedLogs > _placedLogsCount)
             {
@@ -56,9 +57,10 @@ namespace make_a_fire
                 }
             }
         }
+        
         private int CountPlacedLogs()
         {
-            return logs.Count(log => log.GetComponent<FurnacePlaceable>().IsPlaced);
+            return _logs.Count(log => log.GetComponent<FurnacePlaceable>().IsPlaced);
         }
 
         private void StartSmallFire()
@@ -72,7 +74,7 @@ namespace make_a_fire
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
             
-            _fireLight.intensity = 2.0f;
+            _fireLight.intensity = _smallFireIntensity;
         }
 
         public void StartBigFire()
@@ -82,7 +84,7 @@ namespace make_a_fire
            
             ChoreEvents.TriggerPaperPlacement();
             
-            _fireLight.intensity = 4.0f;
+            _fireLight.intensity = _bigFireIntensity;
         }
 
         private void MakeFireSound()
@@ -103,6 +105,5 @@ namespace make_a_fire
             var main = fireParticle.main;
             main.startLifetime = lifetime;
         }
-
     }
 }
