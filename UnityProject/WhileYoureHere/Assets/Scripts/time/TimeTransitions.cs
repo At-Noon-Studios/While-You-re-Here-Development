@@ -18,7 +18,7 @@ namespace time
 
         [Tooltip("How long the transition lasts in seconds")]
         public float duration = 20f;
-
+        
         [Header("Sun Rotation")]
         [Tooltip("Starting rotation angle for the Global Light (in degrees)")]
         public float startSunRotation = 270f;
@@ -26,15 +26,9 @@ namespace time
         [Tooltip("Ending rotation angle for the Global Light (in degrees)")]
         public float endSunRotation = 360f;
 
-        // [Tooltip("Starting intensity for the spot-lights around the cabin.")]
-        // public float startSpotLightIntensity = 30.0f;
-        
         [Header("Spot Light Intensity")]
         [Tooltip("Ending intensity for the spot-lights around the cabin.")]
         public float endSpotLightIntensity;
-        
-        // [Tooltip("Starting intensity for the point-lights around the cabin.")]
-        // public float startPointLightIntensity = 3.0f;
         
         [Header("Point Intensity")] 
         [Tooltip("Ending intensity for the point-lights around the cabin.")]

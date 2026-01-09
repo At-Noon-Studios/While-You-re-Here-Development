@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace time
 {
@@ -59,16 +60,9 @@ namespace time
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));
                 StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation,
                     transition.duration));
-                // StartCoroutine(LerpCabinSpotLights(transition.endSpotLightIntensity, transition.duration));
-                // StartCoroutine(LerpCabinPointLights(transition.endPointLightIntensity, transition.duration));
                 StartCoroutine(LerpCabinLights(transition.endSpotLightIntensity, transition.endPointLightIntensity, transition.duration));
-                // transition.startPointLightIntensity, transition.endPointLightIntensity, transition.duration));
-                // ChangeLightsIntensity();
-                // ChangeSpotLightsIntensity();
-                // ChangePointLightsIntensity();
                 return;
             }
-
             Debug.Log($"No transition defined for Day {day}, Hour {hour}");
         }
 
@@ -115,98 +109,42 @@ namespace time
 
             _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
         }
-
-        // private void ChangeSpotLightsIntensity()
-        // {
-        //     foreach (var spotLight in cabinSpotLights)
-        //     {
-        //         if (days == 1)
-        //         {
-        //             if (hours >= 6)
-        //             {
-        //                 spotLight.intensity = 30;
-        //             }
-        //
-        //             if (hours >= 16)
-        //             {
-        //                 spotLight.intensity = 10;
-        //             }
-        //
-        //             if (hours == 0)
-        //             {
-        //                 spotLight.intensity = 0;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // private void ChangePointLightsIntensity()
-        // {
-        //     foreach (var pointLight in cabinPointLights)
-        //     {
-        //         if (days == 1)
-        //         {
-        //             if (hours >= 6)
-        //             {
-        //                 pointLight.intensity = 3;
-        //             }
-        //
-        //             if (hours >= 16)
-        //             {
-        //                 pointLight.intensity = 1;
-        //             }
-        //
-        //             if (hours == 0)
-        //             {
-        //                 pointLight.intensity = 0;
-        //             }
-        //         }
-        //     }
-        // }
-
-        private IEnumerator LerpCabinLights(float endSpotLightIntensity, float endPointLightIntensity, float time)
+        
+        private IEnumerator LerpCabinLights(float endSpotLightIntensity, float endPointLightIntensity, float transitionDuration)
         {
-            for (float t = 0; t < time; t += Time.deltaTime) 
+            Debug.Log("Time is: " + transitionDuration);
+            for (float t = 0; t < transitionDuration; t += Time.deltaTime) 
             {
                 foreach (var cabinSpotLight in cabinSpotLights)
                 {
                     var intensity = cabinSpotLight.intensity;
-                    cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, Time.deltaTime);
+                    cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, t / transitionDuration);
                     yield return null;
                 }
                 foreach(var cabinPointLight in cabinPointLights)
                 {
                     var intensity = cabinPointLight.intensity;
-                    cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, Time.deltaTime);
+                    cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, t / transitionDuration);
                     yield return null;
                 }
             }
         }
-        
-        // private IEnumerator LerpCabinSpotLights(float endSpotLightIntensity, float time)
-        // {
-        //     for (float t = 0; t < time; t += Time.deltaTime) 
-        //     {
-        //         foreach (var cabinSpotLight in cabinSpotLights)
-        //         {
-        //             var intensity = cabinSpotLight.intensity;
-        //             cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, Time.deltaTime);
-        //             yield return null;
-        //         }
-        //     }
-        // }
-        //
-        // private IEnumerator LerpCabinPointLights(float endPointLightIntensity, float time)
-        // {
-        //     for (float t = 0; t < time; t += Time.deltaTime)
-        //     {
-        //         foreach(var cabinPointLight in cabinPointLights)
-        //         {
-        //             var intensity = cabinPointLight.intensity;
-        //             cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, Time.deltaTime);
-        //             yield return null;
-        //         }
-        //     }
-        // }
+
+        public void Update()
+        {
+            StupidTestFunction();
+        }
+        private void StupidTestFunction()
+        {
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                TryStartTransition(1, 16);
+            }
+
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+            {
+                TryStartTransition(1, 6);
+            }
+        }
     }
 }
