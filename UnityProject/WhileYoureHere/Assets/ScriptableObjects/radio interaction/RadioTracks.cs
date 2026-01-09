@@ -6,8 +6,7 @@ namespace radio_interaction
     [CreateAssetMenu(fileName = "RadioTracks", menuName = "ScriptableObjects/RadioTracks")]
     public class RadioTracks : ScriptableObject
     {
-        [Header("Radio clip")] public AudioClip audioClip;
-
+        [Header("Radio nodes")] 
         public string nodeName;
         public DialogueNode dialogueNode;
     }

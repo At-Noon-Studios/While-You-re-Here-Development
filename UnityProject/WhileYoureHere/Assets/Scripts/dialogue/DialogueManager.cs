@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace dialogue
         [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
+        public event Action OnLastSentenceFinished;
+
         private AudioSource _audioSource;
         private UIManager _ui;
         private MovementController _movement;
@@ -34,7 +37,6 @@ namespace dialogue
         private Coroutine _sentenceRoutine;
         private float _currentResumeAudioTime;
         private bool _isTyping;
-
         private bool _cameraStopped;
         private bool _movementStopped;
 
@@ -75,7 +77,6 @@ namespace dialogue
             }
             else
             {
-                if (_sentenceIndex < nrSentences)
                     ProceedToNextSentence();
             }
         }
@@ -245,10 +246,12 @@ namespace dialogue
 
             if (_sentenceIndex < _activeSentences.Length)
                 _sentenceIndex += 1;
+            
             if (_activeSentences == null ||
                 _sentenceIndex >= _activeSentences.Length)
             {
                 EndDialogue();
+                OnLastSentenceFinished?.Invoke();
                 _sentenceIndex = 0;
                 return;
             }
@@ -359,7 +362,8 @@ namespace dialogue
         {
             if (_audioSource == null || !_audioSource.isPlaying)
                 return 0f;
-            return _audioSource.time;
+            _currentResumeAudioTime = _audioSource.time;
+            return _currentResumeAudioTime;
         }
 
         public float GetSentenceAudioTime(int sentenceIndex)
@@ -374,5 +378,6 @@ namespace dialogue
             var clip = sentence != null ? sentence.audio : null;
             return clip != null ? clip.length : 0f;
         }
+        
     }
 }

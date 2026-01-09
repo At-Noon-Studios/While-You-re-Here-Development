@@ -7,7 +7,7 @@ namespace radio_interaction
         private readonly RadioController _radioController;
         public RadioOnState(RadioController radioController) => _radioController = radioController;
         private bool _wasDonePlayingCorrectChannel;
-
+        private float timer;
         public void Enter()
         {
             _radioController.ShowOnCanvas();
@@ -20,16 +20,19 @@ namespace radio_interaction
 
         public void Update()
         {
-            if (_wasDonePlayingCorrectChannel) return;
 
-            if (_radioController.DonePlayingCorrectChannel())
+            if (_radioController.IsPlayingClassicRadio())
             {
-                _wasDonePlayingCorrectChannel = true;
+                if (!_radioController.IsAudioSourcePlaying())
+                {
+                    _radioController.RadioStateMachine.ChangeState(new RadioOffState(_radioController));
+                }
             }
-            else _wasDonePlayingCorrectChannel = false;
+            else if (_radioController.DonePlayingCorrectChannel())
+            {
+                _radioController.PlayClassicRadio();
+            }
 
-            if (!_wasDonePlayingCorrectChannel) return;
-            _radioController.PlayClassicRadio();
         }
     }
 }

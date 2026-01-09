@@ -39,9 +39,13 @@ namespace radio_interaction
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
         private DialogueNode _lastPlayedNode;
-        private readonly Dictionary<DialogueNode, RadioChannelProgress> _nodeSentenceProgress = new();
+
+        private readonly Dictionary<DialogueNode, RadioChannelProgress>
+            _nodeSentenceProgress = new();
+
         private AudioSource _audioSource;
         private bool _isPlayingClassicRadio;
+        private bool _finishedLastSentence;
 
         private readonly struct RadioChannelProgress
         {
@@ -59,15 +63,27 @@ namespace radio_interaction
         {
             _audioSource = GetComponent<AudioSource>();
             _movementController = player.GetComponent<MovementController>();
-            _cameraController = player.GetComponentInChildren<CameraController>();
+            _cameraController =
+                player.GetComponentInChildren<CameraController>();
 
-            _stationSpacing = (radioTracks != null && radioTracks.Length > 0) ? 1f / radioTracks.Length : 0f;
+            _stationSpacing = (radioTracks != null && radioTracks.Length > 0)
+                ? 1f / radioTracks.Length
+                : 0f;
             _tuningNormalized = _stationSpacing;
 
             RadioStateMachine = new RadioStateMachine();
             RadioStateMachine.ChangeState(new RadioOffState(this));
 
             _currentStationIndex = 0;
+            if (dialogueManager != null)
+            {
+                dialogueManager.OnLastSentenceFinished += LastSentenceFinished;
+            }
+        }
+
+        private void OnDisable()
+        {
+            dialogueManager.OnLastSentenceFinished -= LastSentenceFinished;
         }
 
         private void Update()
@@ -115,8 +131,10 @@ namespace radio_interaction
                 Time.deltaTime * rotateSpeed
             );
 
-            var positionDone = Vector3.Distance(cam.position, _currentCameraPosition) < 1f;
-            var rotationDone = Quaternion.Angle(cam.rotation, _currentCameraRotation) < 1f;
+            var positionDone =
+                Vector3.Distance(cam.position, _currentCameraPosition) < 1f;
+            var rotationDone =
+                Quaternion.Angle(cam.rotation, _currentCameraRotation) < 1f;
             return positionDone && rotationDone;
         }
 
@@ -125,7 +143,9 @@ namespace radio_interaction
             var current = Mouse.current.position.ReadValue();
             var deltaX = current.x - _lastMousePos.x;
 
-            _tuningNormalized = Mathf.Clamp01(_tuningNormalized + deltaX * radioData.sensitivity);
+            _tuningNormalized =
+                Mathf.Clamp01(
+                    _tuningNormalized + deltaX * radioData.sensitivity);
 
             MoveSlider(deltaX);
             _lastMousePos = current;
@@ -200,12 +220,6 @@ namespace radio_interaction
             slideCanvas.gameObject.SetActive(value);
         }
 
-        public void ShowOffCanvas()
-        {
-            offStateCanvas.gameObject.SetActive(true);
-            onStateCanvas.gameObject.SetActive(false);
-            slideCanvas.gameObject.SetActive(false);
-        }
 
         public void ShowOnCanvas()
         {
@@ -227,7 +241,9 @@ namespace radio_interaction
                 var staticNode = radioTracks[_currentStationIndex].dialogueNode;
                 if (staticNode == null)
                 {
-                    Debug.LogWarning("TurnRadioOn: Static channel has no dialogueNode assigned.", this);
+                    Debug.LogWarning(
+                        "TurnRadioOn: Static channel has no dialogueNode assigned.",
+                        this);
                     return;
                 }
 
@@ -236,10 +252,13 @@ namespace radio_interaction
                 return;
             }
 
-            var nodeToPlay = _lastPlayedNode != null ? _lastPlayedNode : radioTracks[_currentStationIndex].dialogueNode;
+            var nodeToPlay = _lastPlayedNode != null
+                ? _lastPlayedNode
+                : radioTracks[_currentStationIndex].dialogueNode;
             if (nodeToPlay == null)
             {
-                Debug.LogWarning("TurnRadioOn: No dialogue node available to play.", this);
+                Debug.LogWarning(
+                    "TurnRadioOn: No dialogue node available to play.", this);
                 return;
             }
 
@@ -251,7 +270,8 @@ namespace radio_interaction
                 resumeTime = saved.AudioTime;
             }
 
-            dialogueManager.StartRadioDialogue(nodeToPlay, resumeTime, resumeIndex);
+            dialogueManager.StartRadioDialogue(nodeToPlay, resumeTime,
+                resumeIndex);
             _lastPlayedNode = nodeToPlay;
         }
 
@@ -260,7 +280,9 @@ namespace radio_interaction
             _isPlayingClassicRadio = false;
 
             // Save progress for the node that was actually playing (if any)
-            var nodeToSave = dialogueManager != null ? dialogueManager.CurrentNode : null;
+            var nodeToSave = dialogueManager != null
+                ? dialogueManager.CurrentNode
+                : null;
 
             if (nodeToSave == null)
             {
@@ -287,7 +309,9 @@ namespace radio_interaction
             if (radioTracks == null || radioTracks.Length == 0)
                 return;
 
-            var spacing = _stationSpacing > 0f ? _stationSpacing : (1f / radioTracks.Length);
+            var spacing = _stationSpacing > 0f
+                ? _stationSpacing
+                : (1f / radioTracks.Length);
 
             var newIndex = Mathf.FloorToInt(_tuningNormalized / spacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
@@ -298,7 +322,13 @@ namespace radio_interaction
             OnStationChanged(newIndex);
         }
 
-        public bool OnCorrectChannel() => radioTracks[_currentStationIndex].nodeName == ClearChannelNodeName;
+        public bool OnCorrectChannel() =>
+            radioTracks[_currentStationIndex].nodeName == ClearChannelNodeName;
+
+        private void LastSentenceFinished()
+        {
+            _finishedLastSentence = true;
+        }
 
         public bool DonePlayingCorrectChannel()
         {
@@ -311,24 +341,25 @@ namespace radio_interaction
             if (!OnCorrectChannel())
                 return false;
 
-            var lastSentenceIndex = _lastPlayedNode.sentences.Count - 1;
-            var currentSentenceIndex = dialogueManager.GetCurrentSentenceIndex();
-
-            if (currentSentenceIndex != lastSentenceIndex) return false;
-
-            var currentAudioTime = dialogueManager.GetCurrentResumeAudioTime();
-            var totalClipLength = dialogueManager.GetSentenceAudioTime(lastSentenceIndex);
-
-            var audioFinished = currentAudioTime >= (totalClipLength - 0.1f);
-
-            if (!audioFinished || _lastPlayedNode == null) return audioFinished;
+            if (!_finishedLastSentence) return false;
+            _finishedLastSentence=false;
+            if (_lastPlayedNode == null) return true;
             _nodeSentenceProgress.Remove(_lastPlayedNode);
             _lastPlayedNode = null;
-
-            return audioFinished;
+            return true;
         }
+        public bool IsPlayingClassicRadio() => _isPlayingClassicRadio;
 
+        public bool IsAudioSourcePlaying() => _audioSource.isPlaying;
 
+        public void ResetLastSentenceFinished(){_finishedLastSentence = false;}
+
+        public void ShowOffCanvas()
+        {
+            offStateCanvas.gameObject.SetActive(false);
+            onStateCanvas.gameObject.SetActive(false);
+            slideCanvas.gameObject.SetActive(false);
+        }
         public void PlayClassicRadio()
         {
             if (_isPlayingClassicRadio) return;
@@ -340,19 +371,11 @@ namespace radio_interaction
             if (_isPlayingClassicRadio) return;
             _audioSource.Stop();
             _audioSource.clip = classicRadioClip;
-            _audioSource.loop = true;
+            _audioSource.loop = false;
             _audioSource.Play();
             _isPlayingClassicRadio = true;
         }
 
-        public float GetCorrectChannelSentenceLenght()
-        {
-            if (!OnCorrectChannel()) return 0f;
-            var lastSentence = _lastPlayedNode.sentences.Count - 1;
-            return dialogueManager.GetSentenceAudioTime(lastSentence);
-        }
-
-        
         #endregion
 
         #region private methods
@@ -371,9 +394,11 @@ namespace radio_interaction
                 return false;
             }
 
-            if (_currentStationIndex < 0 || _currentStationIndex >= radioTracks.Length)
+            if (_currentStationIndex < 0 ||
+                _currentStationIndex >= radioTracks.Length)
             {
-                error = $"TurnRadioOn: _currentStationIndex out of range: {_currentStationIndex}";
+                error =
+                    $"TurnRadioOn: _currentStationIndex out of range: {_currentStationIndex}";
                 return false;
             }
 
@@ -386,13 +411,15 @@ namespace radio_interaction
             var move = deltaX * radioData.SliderSensitivity();
             var pos = slider.localPosition;
             pos.z -= move;
-            pos.z = Mathf.Clamp(pos.z, radioData.MinSliderPos(), radioData.MaxSliderPos());
+            pos.z = Mathf.Clamp(pos.z, radioData.MinSliderPos(),
+                radioData.MaxSliderPos());
             slider.localPosition = pos;
         }
 
         private bool IsStaticChannel(int index)
         {
-            return radioTracks[index].nodeName == StaticChannelNodeName || radioTracks[index].dialogueNode == null;
+            return radioTracks[index].nodeName == StaticChannelNodeName ||
+                   radioTracks[index].dialogueNode == null;
         }
 
         private void SaveCurrentDialogueProgress(DialogueNode node)
@@ -419,13 +446,15 @@ namespace radio_interaction
             var resumeIndex = 0;
             var resumeTime = 0f;
 
-            if (newNode != null && _nodeSentenceProgress.TryGetValue(newNode, out var saved))
+            if (newNode != null &&
+                _nodeSentenceProgress.TryGetValue(newNode, out var saved))
             {
                 resumeIndex = saved.SentenceIndex;
                 resumeTime = saved.AudioTime;
             }
 
-            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
+            dialogueManager.StartRadioDialogue(newNode, resumeTime,
+                resumeIndex);
             dialogueManager.CurrentNode = newNode;
         }
 
