@@ -160,7 +160,7 @@ namespace Fishing {
                 _mouseDelta = new Vector2();
                 look += UpdateMouseForCounterSteer;
                 _audioSource.PlayOneShot(success[Random.Range(0, success.Count)]);
-                StartCoroutine(FishRelax());
+                StartCoroutine(FishStruggle());
             }
             else
             {
@@ -194,6 +194,7 @@ namespace Fishing {
             _lineController.SetUpLine(Array.Empty<Transform>());
             StopAllCoroutines();
             Destroy(_spawnedFloater);
+            _fishEscapeCount = 0;
             _spawnedFloater = null;
             look -= UpdateMouseForCounterSteer;
             _cameraController.ResumeCameraMovement();
