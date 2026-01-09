@@ -127,6 +127,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: startSitting
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.z
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: notebookPickedUpFlag
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4392465861473634035, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.9582
@@ -220,13 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound:
-  - {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
-  - {fileID: 8300000, guid: 345c693cfd2d20a49b1b80071301cea3, type: 3}
-  - {fileID: 8300000, guid: 96314a40dca9bdf4babf2e1c05f4951c, type: 3}
-  mouseUpImage: {fileID: 5876956780588192833}
-  mouseDownImage: {fileID: 4799603342762445536}
-  guideLineImage: {fileID: 6196135674866492545}
+  axeImpactSound: {fileID: 0}
 --- !u!1001 &460742613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -324,6 +334,14 @@ PrefabInstance:
     - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: startSitting
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.z
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: notebookPickedUpFlag
@@ -1106,6 +1124,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: startSitting
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.z
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: notebookPickedUpFlag
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4392465861473634035, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.31988
@@ -10680,6 +10714,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!23 &983036691056904780
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16243,11 +16278,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 7618025540315792563}
   audioSource: {fileID: 5787746468103025456}
-  keyhole: {fileID: 7988173867583454351}
+  keyholes: []
   isLocked: 0
   isOpen: 0
 --- !u!54 &1538380826067064480
@@ -20194,15 +20228,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases:
-  - {fileID: 633917761998754250}
-  - {fileID: 8476776686664354714}
-  - {fileID: 5484490647759926948}
-  - {fileID: 3105798141165454077}
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 283422859061634025}
   audioSource: {fileID: 4180597145100162154}
-  keyhole: {fileID: 1964963715060256721}
+  keyholes: []
   isLocked: 1
   isOpen: 0
 --- !u!1 &1853681484354307659
@@ -21525,6 +21554,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!4 &1972391539125790139
 Transform:
   m_ObjectHideFlags: 0
@@ -49158,6 +49188,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: cameraSitOffset.z
+      value: -0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 4392465861473634035, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.47913
@@ -49663,6 +49701,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   detectable: 1
+  pickupClip: {fileID: 0}
+  pickupSoundPlayedFlag: {fileID: 0}
 --- !u!23 &4668291785047566141
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -50841,17 +50881,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6039486702215736798}
   m_Mesh: {fileID: -4147266318922990756, guid: b06e9a255ce15204d84536720e157378, type: 3}
---- !u!114 &4799603342762445536 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7023423994906553678, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!33 &4799795486095887418
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -62518,17 +62547,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5876956780588192833 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7802587681624723177, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &5877865400647711674
 Transform:
   m_ObjectHideFlags: 0
@@ -66098,17 +66116,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2711758112661956048}
   m_Mesh: {fileID: 7169490162621683060, guid: 1a0fa5c07dd2b458aa1d4eed08546356, type: 3}
---- !u!114 &6196135674866492545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4609289111648160669, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-  m_PrefabInstance: {fileID: 4920790915356153604}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &6202837775480378640
 Transform:
   m_ObjectHideFlags: 0
@@ -67610,11 +67617,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 6454157128192570853}
   audioSource: {fileID: 6952248121415172710}
-  keyhole: {fileID: 9075674018322300124}
+  keyholes: []
   isLocked: 1
   isOpen: 0
 --- !u!4 &6369601723060366974
@@ -68103,6 +68109,8 @@ MonoBehaviour:
   - {fileID: 982883429632727190}
   - {fileID: 7988173867583454351}
   detectable: 1
+  pickupClip: {fileID: 0}
+  pickupSoundPlayedFlag: {fileID: 0}
 --- !u!4 &6409856130102545559
 Transform:
   m_ObjectHideFlags: 0
@@ -83493,6 +83501,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!33 &7993101855361949266
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -87407,9 +87416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndDay.EndDayInteractable
   blockInteraction: 0
-  fadeDuration: 1
-  displayImageDuration: 1
-  endDayCanvasGroup: {fileID: 1872209176158572188}
 --- !u!33 &8351239036562256111
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -91954,11 +91960,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
   blockInteraction: 0
-  interactionCanvases: []
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 774899886509170858}
   audioSource: {fileID: 3686867227999704873}
-  keyhole: {fileID: 982883429632727190}
+  keyholes: []
   isLocked: 1
   isOpen: 0
 --- !u!114 &8516131524344341496
@@ -97385,6 +97390,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!1 &9078541974707233004
 GameObject:
   m_ObjectHideFlags: 0
