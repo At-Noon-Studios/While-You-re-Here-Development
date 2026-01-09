@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +10,8 @@ namespace time
     {
         private Light _sunLight;
 
-        [Header("Current Time")] [Range(1, 8)] [SerializeField]
-        private int days;
-
+        [Header("Current Time")] 
+        [Range(1, 8)] [SerializeField] private int days;
         [Range(0, 23)] [SerializeField] private int hours;
 
         [Header("Transitions")] [SerializeField]
@@ -60,7 +58,7 @@ namespace time
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));
                 StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation,
                     transition.duration));
-                StartCoroutine(LerpCabinLights(transition.endSpotLightIntensity, transition.endPointLightIntensity, transition.duration));
+                StartCoroutine(LerpCabinLights(transition.endPointLightIntensity, transition.endSpotLightIntensity, transition.duration));
                 return;
             }
             Debug.Log($"No transition defined for Day {day}, Hour {hour}");
@@ -110,40 +108,42 @@ namespace time
             _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
         }
         
-        private IEnumerator LerpCabinLights(float endSpotLightIntensity, float endPointLightIntensity, float transitionDuration)
+        //update en test zijn enkel voor pull-request doeleinden 
+        void Update()
         {
-            Debug.Log("Time is: " + transitionDuration);
-            for (float t = 0; t < transitionDuration; t += Time.deltaTime) 
-            {
-                foreach (var cabinSpotLight in cabinSpotLights)
-                {
-                    var intensity = cabinSpotLight.intensity;
-                    cabinSpotLight.intensity = Mathf.Lerp(intensity, endSpotLightIntensity, t / transitionDuration);
-                    yield return null;
-                }
-                foreach(var cabinPointLight in cabinPointLights)
-                {
-                    var intensity = cabinPointLight.intensity;
-                    cabinPointLight.intensity = Mathf.Lerp(intensity, endPointLightIntensity, t / transitionDuration);
-                    yield return null;
-                }
-            }
+            Test();
         }
-
-        public void Update()
-        {
-            StupidTestFunction();
-        }
-        private void StupidTestFunction()
+        void Test()
         {
             if (Keyboard.current.pKey.wasPressedThisFrame)
             {
                 TryStartTransition(1, 16);
             }
-
             if (Keyboard.current.oKey.wasPressedThisFrame)
             {
                 TryStartTransition(1, 6);
+            }
+        }
+        
+        private IEnumerator LerpCabinLights(float endPointLightIntensity, float endSpotLightIntensity,
+            float transitionDuration)
+        {
+            if (cabinPointLights == null || cabinPointLights.Length == 0 || cabinSpotLights == null || cabinSpotLights.Length == 0) yield break;
+            
+            float[] startPointIntensity = cabinPointLights.Select(pointLight => pointLight.intensity).ToArray();
+            float[] startSpotIntensity = cabinSpotLights.Select(spotLight => spotLight.intensity).ToArray();
+            
+            for (float t = 0; t < transitionDuration; t += Time.deltaTime) 
+            {
+                for (var i = 0; i < cabinPointLights.Length; i++)
+                {
+                    cabinPointLights[i].intensity = Mathf.Lerp(startPointIntensity[i], endPointLightIntensity, t / transitionDuration);
+                }
+                for (var i = 0; i < cabinSpotLights.Length; i++)
+                {
+                    cabinSpotLights[i].intensity = Mathf.Lerp(startSpotIntensity[i], endSpotLightIntensity, t / transitionDuration);
+                }
+                yield return null;
             }
         }
     }
