@@ -13,6 +13,8 @@ namespace Fishing
         private bool _blockTrigger;
         public static event Action<bool> OnFishSplashing;
         public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
+        public static event Action<Vector3> OnFloaterMove;
+        public static void TriggerFloaterMove(Vector3 moveTowards) => OnFloaterMove?.Invoke(moveTowards);
 
         private void Awake()
         {
@@ -24,11 +26,13 @@ namespace Fishing
         private void OnEnable()
         {
             OnFishSplashing += PlaySplashAnimation;
+            OnFloaterMove += MoveFloater;
         }
 
         private void OnDisable()
         {
             OnFishSplashing -= PlaySplashAnimation;
+            OnFloaterMove -= MoveFloater;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -60,6 +64,11 @@ namespace Fishing
         {
             if (splashing) _splash.Play();
             else _splash.Stop();
+        }
+
+        private void MoveFloater(Vector3 moveTowards)
+        {
+            _rigidbody.Move(transform.position + moveTowards, transform.rotation);
         }
     }
 }
