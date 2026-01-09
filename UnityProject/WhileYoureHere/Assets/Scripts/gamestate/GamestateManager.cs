@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using chore;
-using making_tea;
+using player_controls;
+using PlayerControls;
 using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Video;
 
 namespace gamestate
 {
@@ -27,6 +29,9 @@ namespace gamestate
         private ChoreManager _choreManager;
         private GameObject _player;
         private AudioSource _playerAudioSource;
+        private VideoPlayer _videoPlayer;
+        private MovementController _movementController;
+        private CameraController _cameraController;
         
         public int currentDay;
         
@@ -35,6 +40,7 @@ namespace gamestate
             _instance = this;
             _timeManager = GetComponent<TimeManager>();
             _choreManager = GetComponent<ChoreManager>();
+            _videoPlayer = GetComponent<VideoPlayer>();
             SetFlagsToDefault();
         }
 
@@ -55,6 +61,8 @@ namespace gamestate
         {
             _player = GameObject.FindWithTag("Player");
             _playerAudioSource = _player.GetComponent<AudioSource>();
+            _movementController = _player.GetComponent<MovementController>();
+            _cameraController = _player.GetComponentInChildren<CameraController>();
             _currentActivity = activities[0];
             HandleStartActivity();
         }
@@ -112,16 +120,14 @@ namespace gamestate
 
         private void HandleStartActivity()
         {
-            Debug.Log("[GameState] HandleStartActivity called for Activity[0]");
-
-            foreach (var gameplayEvent in _currentActivity.events)
+            foreach (var gameplayEvent in _currentActivity.events )
             {
-                Debug.Log($"[GameState] Event Trigger: {gameplayEvent.triggeredBy}, Type: {gameplayEvent.type}");
-        
                 if (gameplayEvent.triggeredBy is TriggeredBy.StartOfActivity)
                 {
-                    Debug.Log("[GameState] StartOfActivity event found, calling HandleTrigger");
                     HandleTrigger(gameplayEvent);
+                } else if (gameplayEvent.triggeredBy is TriggeredBy.AfterSetTime)
+                {
+                    StartCoroutine(ScheduleTrigger(gameplayEvent));
                 }
             }
         }
@@ -136,9 +142,21 @@ namespace gamestate
             _timeManager.ChangeTime(currentDay, hourOfDay);
         }
 
-        private void PlayCutscene()
+        private void PlayCutscene(VideoClip clip)
         {
-            // wont be implemented yet
+            _videoPlayer.clip = clip;
+            _videoPlayer.Play();
+            _movementController.PauseMovement();
+            _cameraController.PauseCameraMovement();
+            StartCoroutine(StopCutscene((float)clip.length));
+        }
+
+        private IEnumerator StopCutscene(float stopAfterSeconds)
+        {
+            yield return new WaitForSeconds(stopAfterSeconds);
+            _videoPlayer.Stop();
+            _movementController.ResumeMovement();
+            _cameraController.ResumeCameraMovement();
         }
 
         private void PlayDialogue(AudioClip clip)
@@ -177,7 +195,7 @@ namespace gamestate
                     SkyboxChange(gameplayEvent.hourOfDay);
                     break;
                 case GameplayEventType.Cutscene:
-                    PlayCutscene();
+                    PlayCutscene(gameplayEvent.cutsceneToPlay);
                     break;
                 case GameplayEventType.Dialogue:
                     PlayDialogue(gameplayEvent.audioToPlay);
