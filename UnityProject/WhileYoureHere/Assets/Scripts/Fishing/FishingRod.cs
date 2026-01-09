@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
@@ -14,6 +15,7 @@ namespace Fishing {
         private PlayerInput _playerInput;
         private MovementController _movementController;
         private CameraController _cameraController;
+        private AudioSource _audioSource;
         private LineController _lineController;
         private GameObject _spawnedFloater;
         private SoFish _caughtFish;
@@ -36,6 +38,7 @@ namespace Fishing {
         public float distanceFromShoreForCatch;
         public float minReelTime;
         public float fishStruggleBeforeEscape;
+        public int reelWhileStrugglePunishment;
 
         [Header("Mouse settings")] 
         public int minMouseToRightForCast;
@@ -46,6 +49,10 @@ namespace Fishing {
         public GameObject line;
         public GameObject fishingRodTop;
         public GameObject floaterPrefab;
+        
+        [Header("Caught fish voicelines")]
+        public List<AudioClip> success;
+        public List<AudioClip> fail;
         
         public static event Action<SoFish> OnFishCaught;
         public static void TriggerFishCaught(SoFish fish) => OnFishCaught?.Invoke(fish);
@@ -59,8 +66,8 @@ namespace Fishing {
             _playerInput = player.GetComponent<PlayerInput>();
             _movementController = player.GetComponent<MovementController>();
             _cameraController = player.GetComponentInChildren<CameraController>();
+            _audioSource = player.GetComponent<AudioSource>();
 
-            if (_playerInput == null) return;
             _playerInput.actions["CastPullFishingRod"].performed += ctx => _isCastPullPressed = true;
             _playerInput.actions["CastPullFishingRod"].canceled += ctx => _isCastPullPressed = false;
             _lineController = GetComponent<LineController>();
@@ -152,6 +159,7 @@ namespace Fishing {
                 _currentReelSpeed = Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) / minReelTime;
                 _mouseDelta = new Vector2();
                 look += UpdateMouseForCounterSteer;
+                _audioSource.PlayOneShot(success[Random.Range(0, success.Count)]);
                 StartCoroutine(FishRelax());
             }
             else
@@ -164,7 +172,7 @@ namespace Fishing {
         {
             if (!_allowReeling)
             {
-                _fishEscapeCount += 10;
+                _fishEscapeCount += reelWhileStrugglePunishment;
                 return;
             }
             var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, _reelTargetPosition, _currentReelSpeed);
@@ -174,6 +182,7 @@ namespace Fishing {
                 //do catch animation here
                 ReturnLine();
                 Instantiate(_caughtFish.fishPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
+                _audioSource.PlayOneShot(success[Random.Range(0, success.Count)]);
                 _caughtFish = null;
             }
         }
@@ -231,6 +240,7 @@ namespace Fishing {
         {
             _caughtFish = null;
             OnFishCaught -= ListenForFishCaught;
+            _audioSource.PlayOneShot(fail[Random.Range(0, fail.Count)]);
             ReturnLine();
         }
 

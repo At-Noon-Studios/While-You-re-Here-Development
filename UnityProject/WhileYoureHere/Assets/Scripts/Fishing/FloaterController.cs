@@ -52,6 +52,11 @@ namespace Fishing
             }
         }
 
+        private void Update()
+        {
+            
+        }
+
         private IEnumerator CatchFish(FishingArea fishingArea)
         {
             yield return new WaitForSeconds(3);

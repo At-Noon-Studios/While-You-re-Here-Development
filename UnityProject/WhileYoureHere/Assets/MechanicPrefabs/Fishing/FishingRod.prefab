@@ -343,13 +343,27 @@ MonoBehaviour:
   castingForce: 10
   distanceFromShoreForCatch: 1
   minReelTime: 100
-  fishStruggleBeforeEscape: 10000
+  fishStruggleBeforeEscape: 500
+  reelWhileStrugglePunishment: 20
   minMouseToRightForCast: -800
   minMouseUpForCast: 600
   mouseMoveToCounterSteer: 300
   line: {fileID: 2934692068184434534}
   fishingRodTop: {fileID: 3285110073232115756}
   floaterPrefab: {fileID: 8973423918605776283, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
+  success:
+  - {fileID: 8300000, guid: 9a96a067f6f491446be88feb2b7cf856, type: 3}
+  - {fileID: 8300000, guid: 440eca71e801afb4fb315264e171cca1, type: 3}
+  - {fileID: 8300000, guid: 951343314981f2448afd6d358505ed77, type: 3}
+  - {fileID: 8300000, guid: 64fbcf294a0145a4895a4782a558a027, type: 3}
+  - {fileID: 8300000, guid: ae2f8e46520f75c40b40291cc3c63fde, type: 3}
+  fail:
+  - {fileID: 8300000, guid: 924cafd0246d2354fa1ac54ef57e4909, type: 3}
+  - {fileID: 8300000, guid: 1b1106b0b49dfe74dbac1307bbb1e7dd, type: 3}
+  - {fileID: 8300000, guid: db63683a56b194243a288d6f1db815ad, type: 3}
+  - {fileID: 8300000, guid: f157eb6e0498be9469787219997fa45a, type: 3}
+  - {fileID: 8300000, guid: 037162d10e6ead5469893ca7df578734, type: 3}
+  - {fileID: 8300000, guid: c755f2e7a271b7142970e0972f17d845, type: 3}
 --- !u!54 &2413603468183159642
 Rigidbody:
   m_ObjectHideFlags: 0
