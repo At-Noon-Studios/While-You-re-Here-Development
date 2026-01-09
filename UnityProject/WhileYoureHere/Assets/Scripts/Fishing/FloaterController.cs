@@ -52,11 +52,6 @@ namespace Fishing
             }
         }
 
-        private void Update()
-        {
-            
-        }
-
         private IEnumerator CatchFish(FishingArea fishingArea)
         {
             yield return new WaitForSeconds(3);
@@ -71,9 +66,10 @@ namespace Fishing
             else _splash.Stop();
         }
 
-        private void MoveFloater(Vector3 moveTowards)
+        private void MoveFloater(Vector3 newPosition)
         {
-            _rigidbody.Move(transform.position + moveTowards, transform.rotation);
+            Debug.Log(newPosition);
+            _rigidbody.MovePosition(newPosition);
         }
     }
 }

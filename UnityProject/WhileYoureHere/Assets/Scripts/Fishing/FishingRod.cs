@@ -27,6 +27,8 @@ namespace Fishing {
         private bool _allowReeling;
         
         private Vector3 _reelTargetPosition;
+        private Vector3 _currentFloaterMovement;
+        private Vector3 _sidewaysMovementToDo;
         private Vector2 _mouseDelta;
         private float _currentReelSpeed;
         private float _fishEscapeCount;
@@ -37,6 +39,7 @@ namespace Fishing {
         public float castingForce;
         public float distanceFromShoreForCatch;
         public float minReelTime;
+        public float floaterSpeed;
         public float fishStruggleBeforeEscape;
         public int reelWhileStrugglePunishment;
 
@@ -73,7 +76,7 @@ namespace Fishing {
             _lineController = GetComponent<LineController>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_holder == null) return;
             if (_isCastPullPressed)
@@ -87,6 +90,8 @@ namespace Fishing {
                 if (_caughtFish != null) look -= UpdateMouseForCounterSteer;
             }
             if (_caughtFish == null) return;
+            _currentFloaterMovement = _spawnedFloater.transform.position;
+            MoveFloater();
             Debug.Log(IsCounterSteering() +" : " +_mouseDelta.x + " : " + _directionOfFloater.x);
              if (!IsCounterSteering())
              {
@@ -151,8 +156,7 @@ namespace Fishing {
         {
             var camPosition = _playerCamera.transform.position;
             camPosition.y = _spawnedFloater.transform.position.y;
-            if (Physics.Raycast(_spawnedFloater.transform.position, camPosition - _spawnedFloater.transform.position,
-                    out var hit))
+            if (Physics.Raycast(_spawnedFloater.transform.position, camPosition - _spawnedFloater.transform.position, out var hit))
             {
                 _reelTargetPosition = hit.point;
                 _caughtFish = fish;
@@ -175,9 +179,19 @@ namespace Fishing {
                 _fishEscapeCount += reelWhileStrugglePunishment;
                 return;
             }
+
+            //_currentFloaterMovement += (_reelTargetPosition - _spawnedFloater.transform.position) * _currentReelSpeed;
             var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, _reelTargetPosition, _currentReelSpeed);
             _spawnedFloater.transform.position = direction;
-            if (Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) <= distanceFromShoreForCatch )
+        }
+
+        private void MoveFloater()
+        {
+            var mvm = floaterSpeed * Time.deltaTime * _sidewaysMovementToDo;
+            _currentFloaterMovement += mvm;
+            _sidewaysMovementToDo -= mvm;
+            FloaterController.TriggerFloaterMove(_currentFloaterMovement);
+            if (Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) <= distanceFromShoreForCatch)
             {
                 //do catch animation here
                 ReturnLine();
@@ -222,7 +236,7 @@ namespace Fishing {
             _allowReeling = false;
             FloaterController.TriggerFishSplashing(true);
             _directionOfFloater = new Vector3(_directions[Random.Range(0, _directions.Length)] * _caughtFish.fishCatchDifficulty.sidewaysMovement, 0, 0);
-            FloaterController.TriggerFloaterMove(_directionOfFloater);
+            _sidewaysMovementToDo = _directionOfFloater;
             yield return new WaitForSeconds(_caughtFish.fishCatchDifficulty.splashDuration);
             StartCoroutine(FishRelax());
         }
@@ -231,7 +245,7 @@ namespace Fishing {
         {
             _allowReeling = true;
             FloaterController.TriggerFishSplashing(false);
-            FloaterController.TriggerFloaterMove(_directionOfFloater * -1);
+            _sidewaysMovementToDo = _directionOfFloater * -1;
             _directionOfFloater = new Vector3();
             yield return new WaitForSeconds(_caughtFish.fishCatchDifficulty.splashInterval);
             StartCoroutine(FishStruggle());
