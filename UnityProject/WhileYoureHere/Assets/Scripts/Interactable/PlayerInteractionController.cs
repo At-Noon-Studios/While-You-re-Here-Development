@@ -1,5 +1,4 @@
-﻿using chopping_logs;
-using Interactable.Concrete.ObjectHolder;
+﻿using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
@@ -182,12 +181,9 @@ namespace Interactable
 
             for (var i = 0; i < hitCount; i++)
             {
-                if (HeldObject != null &&
-                    hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
-                    !hits[i].collider.TryGetComponent<LogBasket>(out _))
-                {
+                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
+                    HeldObject != null)
                     continue;
-                }
 
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
@@ -344,6 +340,7 @@ namespace Interactable
 
             return false;
         }
+        
         #endregion
         
     }

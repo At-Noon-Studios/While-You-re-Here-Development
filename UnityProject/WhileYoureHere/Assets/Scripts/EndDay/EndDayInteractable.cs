@@ -3,7 +3,6 @@ using Interactable;
 using player_controls;
 using PlayerControls;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 namespace EndDay
@@ -35,10 +34,9 @@ namespace EndDay
 
         private IEnumerator GoToNextScene()
         {
+            //prepare new scene?
             yield return new WaitForSeconds((float)_videoPlayer.clip.length);
-            _videoPlayer.Stop();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            Destroy(GameObject.FindGameObjectWithTag("Player"));
+            //go to new scene
         }
         
         public override string InteractionText(IInteractor interactor)

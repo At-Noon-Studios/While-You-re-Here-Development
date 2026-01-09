@@ -14,7 +14,6 @@ namespace Interactable
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
         public bool blockInteraction = false;
-        public bool IsHovered { get; private set; } = false;
 
         #region Unity event functions
         
@@ -53,13 +52,11 @@ namespace Interactable
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             if (blockInteraction) return;
-            IsHovered = true;
             AddOutlineMaterialToRenderers();
         }
         
         public virtual void OnHoverExit(IInteractor interactor)
         {
-            IsHovered = false;
             RemoveOutlineMaterialFromRenderers();
         }
         

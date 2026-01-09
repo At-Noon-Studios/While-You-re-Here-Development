@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 2368139024285850732}
   - component: {fileID: 4895297855320410542}
   - component: {fileID: 4756631552153516065}
-  - component: {fileID: 5251659340628673614}
-  - component: {fileID: 8863132055336753406}
   m_Layer: 0
   m_Name: KeyholeFront.005
   m_TagString: Untagged
@@ -28,9 +26,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725911476846723277}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5000001}
-  m_LocalPosition: {x: 0.10999489, y: 6.7399983, z: -3.8199482}
-  m_LocalScale: {x: 27.567596, y: 27.567598, z: 27.567596}
+  m_LocalRotation: {x: 0.49999994, y: 0.4999999, z: 0.50000006, w: 0.5000001}
+  m_LocalPosition: {x: 0.11, y: 6.74, z: -3.82}
+  m_LocalScale: {x: 27.5676, y: 27.5676, z: 27.5676}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9018695547824744673}
@@ -91,44 +89,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5251659340628673614
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725911476846723277}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.020000001, z: 0.02}
-  m_Center: {x: -0.041133635, y: 0.26134652, z: 0.0022171605}
---- !u!114 &8863132055336753406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725911476846723277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a56af108e34833a310224678911f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::door.Keyhole
-  blockInteraction: 0
-  keyHolePosition: {fileID: 2368139024285850732}
-  keyRotation: {x: 0, y: 0, z: 0}
-  look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
-  interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
 --- !u!1 &2571309338666352691
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,9 +117,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2571309338666352691}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5000001, y: 0.5000002, z: -0.49999982, w: -0.49999988}
-  m_LocalPosition: {x: 0.107450485, y: 6.7399983, z: -3.7200184}
-  m_LocalScale: {x: 27.5676, y: 27.567606, z: 27.5676}
+  m_LocalRotation: {x: 0.5000002, y: 0.5000002, z: -0.49999982, w: -0.49999988}
+  m_LocalPosition: {x: 0.10745543, y: 7.056685, z: -3.7212734}
+  m_LocalScale: {x: 27.5676, y: 27.5676, z: 27.5676}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9018695547824744673}
@@ -256,8 +216,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.019498568, y: 0.019999996, z: 0.02}
-  m_Center: {x: -0.041131694, y: -0.26136172, z: 0.009289594}
+  m_Size: {x: 0.01949857, y: 0.020000001, z: 0.04187199}
+  m_Center: {x: -0.04113168, y: -0.26135415, z: 0.009293393}
 --- !u!1 &3807163518813673188
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,8 +378,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8286797607616252581}
-  - {fileID: 2368139024285850732}
   - {fileID: 1773336863437175728}
+  - {fileID: 2368139024285850732}
   m_Father: {fileID: 133918298815247035}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &9029519488033054239
