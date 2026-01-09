@@ -218,7 +218,37 @@ MonoBehaviour:
   blockInteraction: 0
   placePoint: {fileID: 1000285171}
   placedObjectRotation: {x: 0, y: 0, z: 0}
-  interactionCanvas: {fileID: 846383106}
+--- !u!114 &74059019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74059008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Place Watering Can
+    sprite: {fileID: 21300000, guid: 0444297a9f3c16a4c8b4d74082020388, type: 3}
+    size: {x: 4, y: 4}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 74059014}
+    requiredHeldObject: {fileID: 476931011}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0, y: 0.8, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 1
+  allowMultipleOnSameInteractable: 0
 --- !u!114 &165530907 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
@@ -599,6 +629,48 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3463385640011971873, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
   m_PrefabInstance: {fileID: 5486325357266368759}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &476931011 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4661958142661196966, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+  m_PrefabInstance: {fileID: 5486325357266368759}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476931008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
+--- !u!114 &476931018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476931008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Watering Can
+    sprite: {fileID: 21300000, guid: afea12ea76f410045bad308c15dceec5, type: 3}
+    size: {x: 2, y: 1}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 476931011}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0, y: 0.8, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 1
+  allowMultipleOnSameInteractable: 0
 --- !u!4 &519965111
 Transform:
   m_ObjectHideFlags: 0
@@ -5876,11 +5948,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
---- !u!223 &846383106 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 4020678669525610553, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
-  m_PrefabInstance: {fileID: 3183906711204308804}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1000285171 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1617123918225928407, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
@@ -6012,7 +6079,6 @@ MonoBehaviour:
   blockInteraction: 0
   placePoint: {fileID: 470933051}
   placedObjectRotation: {x: 0, y: 0, z: 0}
-  interactionCanvas: {fileID: 419940362}
 --- !u!1 &1371430996 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8620263758391487001, guid: 116a8763f9c34bc4da0d4f5f96040543, type: 3}
@@ -6036,7 +6102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterTap
   waterStream: {fileID: 519965113}
-  waterLoopClip: {fileID: 0}
+  waterLoopClip: {fileID: 8300000, guid: 582b0bf374cd88c4283f0bc0001b47b0, type: 3}
   isRunning: 0
 --- !u!1001 &1406034731
 PrefabInstance:
@@ -6335,6 +6401,85 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1371431000}
   m_SourcePrefab: {fileID: 100100000, guid: 116a8763f9c34bc4da0d4f5f96040543, type: 3}
+--- !u!1 &1842439032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6103487082249334298, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+  m_PrefabInstance: {fileID: 2693211097570937498}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1842439033 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4505594006979983052, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+  m_PrefabInstance: {fileID: 2693211097570937498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842439032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 535e9201604ac9243a97776f3b192f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::gardening.PlantWateringIndicator
+--- !u!114 &1842439039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842439032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: plant dry
+    sprite: {fileID: 21300000, guid: 8bd6bcd9b78c8a34992fea476004b6a3, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 1842439033}
+    requiredHeldObject: {fileID: 476931011}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0.5, y: 1.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: plant healthy
+    sprite: {fileID: 21300000, guid: e2efb019c4e98d6448ff1df8aae7c1f2, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 1842439033}
+    requiredHeldObject: {fileID: 476931011}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0.5, y: 1.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: plant failed
+    sprite: {fileID: 21300000, guid: ceedcd186dfddcc41bd6fe818610a912, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 1842439033}
+    requiredHeldObject: {fileID: 476931011}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0.5, y: 1.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 1
+  allowMultipleOnSameInteractable: 1
 --- !u!1 &1883092480 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3450149010530102322, guid: 116a8763f9c34bc4da0d4f5f96040543, type: 3}
@@ -6358,8 +6503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::making_tea.WaterTapInteractable
   blockInteraction: 0
-  tapOnImage: {fileID: 214175272}
-  tapOffImage: {fileID: 1912876046}
   tap: {fileID: 1371431000}
 --- !u!65 &1883092485
 BoxCollider:
@@ -6645,6 +6788,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2970922153989052716, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4631114712342678275, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.001
@@ -6692,7 +6839,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6103487082249334298, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1842439039}
   m_SourcePrefab: {fileID: 100100000, guid: 07b0fe1fbf8e01646a5f7c459c69c35d, type: 3}
 --- !u!1001 &3183906711204308804
 PrefabInstance:
@@ -6760,12 +6910,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5727850879589728733, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1825841512390250435, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7846133979101521775, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 74059014}
+    - targetCorrespondingSourceObject: {fileID: 7846133979101521775, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 74059019}
   m_SourcePrefab: {fileID: 100100000, guid: d901ee5b78ea91d4fb1e61834235a5a5, type: 3}
 --- !u!1001 &5486325357266368759
 PrefabInstance:
@@ -6834,7 +6988,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3463385640011971873, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 476931018}
   m_SourcePrefab: {fileID: 100100000, guid: 32dc59526dd52ac4595398eabdceb05a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
