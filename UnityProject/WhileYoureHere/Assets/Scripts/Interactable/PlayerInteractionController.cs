@@ -126,11 +126,7 @@ namespace Interactable
                 return;
             }
 
-            if (NoTarget)
-            {
-                HeldObject?.Drop();
-                return;
-            }
+            if (NoTarget) return;
 
             if (TargetInteractable)
             {
@@ -145,15 +141,9 @@ namespace Interactable
 
         private void ClickInteract()
         {
-            if (NoTarget)
+            if (NoTarget) return;
+            if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
             {
-                DropObject();
-                return;
-            }
-            
-            if (_currentTarget is IClickInteractable &&
-                clickInteractEvent.OnRaise != null)            
-                {
                 ClickInteractWithTarget();
             }
             else
