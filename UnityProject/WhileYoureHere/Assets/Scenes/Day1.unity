@@ -419,6 +419,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
   axeImpactSound: {fileID: 0}
+--- !u!114 &273177103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273177093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f88d99bd92b6094f8680639715e75f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.ScreenSpaceUIManager
+  screenSpaceElements:
+  - elementName: Drop
+    sprite: {fileID: 21300000, guid: d8abea6c134c069479c97dcd657aa4eb, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 1
+    requiredHeldObject: {fileID: 0}
+    offset: {x: -1, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Pour
+    sprite: {fileID: 21300000, guid: 53c60da51b21a14478dbde2d7e86eef8, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 1
+    requiredHeldObject: {fileID: 0}
+    offset: {x: -0.6, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Open To-Do List
+    sprite: {fileID: 21300000, guid: b0e02ffe6cce6da478d250bf47a3ac18, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 2
+    requiredHeldObject: {fileID: 0}
+    offset: {x: -0.6, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Close To-Do List
+    sprite: {fileID: 21300000, guid: 25ad9331b2ba6e44e96eab52524cf897, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 2
+    requiredHeldObject: {fileID: 0}
+    offset: {x: -0.6, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  elementSpacing: {x: 0, y: 1.2}
+  screenScale: 50
 --- !u!4 &273835533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 551744758403541543, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
@@ -2178,7 +2229,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -2522,7 +2572,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.4, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3000,7 +3049,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3615,7 +3663,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3631,7 +3678,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3647,7 +3693,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -4221,12 +4266,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5203664925177866247, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 273177102}
+    - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 273177103}
   m_SourcePrefab: {fileID: 100100000, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
 --- !u!1 &1250201552
 GameObject:
@@ -4683,11 +4732,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9146189475809288371, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
   m_PrefabInstance: {fileID: 5753182728334919537}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1480937962 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 286276147600278783, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-  m_PrefabInstance: {fileID: 1242199016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1488804303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4952,11 +4996,6 @@ MonoBehaviour:
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
---- !u!1 &1624958819 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2079437540494798435, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-  m_PrefabInstance: {fileID: 1242199016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1650622288
 GameObject:
   m_ObjectHideFlags: 0
@@ -5238,7 +5277,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5254,7 +5292,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5366,7 +5403,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5695,7 +5731,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5711,7 +5746,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5763,7 +5797,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.4, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -7147,23 +7180,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &366950946437732118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 775487030199409557}
-  - component: {fileID: 557438291755138832}
-  m_Layer: 5
-  m_Name: TaskListHintController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!64 &371294016840706399
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7517,20 +7533,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3410313486938738827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &557438291755138832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366950946437732118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 535c92744f86de04792038e94c803ad8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListHintController
-  taskListHintTextOpen: {fileID: 1480937962}
-  taskListHintTextPutAway: {fileID: 1624958819}
 --- !u!1 &558584080358002060
 GameObject:
   m_ObjectHideFlags: 0
@@ -7928,25 +7930,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 133918298815247035, guid: 8848acf6956064836a828fd4e710b22d, type: 3}
   m_PrefabInstance: {fileID: 6122696683396574781}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &775487030199409557
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366950946437732118}
-  m_LocalRotation: {x: -0.86602545, y: -0, z: -0.49999994, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 1.1363052}
-  m_LocalScale: {x: 0.0027333682, y: 0.046378233, z: 0.0032515072}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 837147085659931908}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &777988886290911030
 Transform:
   m_ObjectHideFlags: 0
@@ -8070,7 +8053,6 @@ Transform:
   - {fileID: 11049870207436298}
   - {fileID: 447805499405966384}
   - {fileID: 3058996620568921976}
-  - {fileID: 775487030199409557}
   m_Father: {fileID: 4199048515343272442}
   m_LocalEulerAnglesHint: {x: -179.081, y: -62.322998, z: -0.8739929}
 --- !u!23 &849703226065039475
@@ -9091,7 +9073,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10656,7 +10637,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10672,7 +10652,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10688,7 +10667,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -11429,7 +11407,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -11514,7 +11491,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -14234,7 +14210,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 8547345819753504239}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 1.3, z: 0.3}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -16094,7 +16069,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -17253,7 +17227,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.45, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19456,7 +19429,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 2
-    requiredKettleState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19472,7 +19444,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 1
-    requiredKettleState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19488,7 +19459,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 3
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19504,7 +19474,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 4
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19520,7 +19489,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 5
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: 0.1}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20273,7 +20241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListUI
   taskListCanvas: {fileID: 419845988414007831}
   handPosition: {fileID: 2078565998}
-  hintController: {fileID: 557438291755138832}
   spawnOffset: {x: 1, y: -0.3, z: -0.5}
   spawnRotation: {x: -10, y: -70, z: 0}
   spawnDuration: 0.5
@@ -20845,7 +20812,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20861,7 +20827,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20877,7 +20842,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20960,7 +20924,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -21894,7 +21857,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23073,7 +23035,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: -6755572252276641950, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23089,7 +23050,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23218,7 +23178,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23234,7 +23193,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23250,7 +23208,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25678,7 +25635,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25694,7 +25650,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25710,7 +25665,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25862,23 +25816,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
-    offset: {x: 0, y: 0.45, z: 0}
-    lookAtTarget: 0
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  - elementName: Pour
-    sprite: {fileID: 21300000, guid: 53c60da51b21a14478dbde2d7e86eef8, type: 3}
-    size: {x: 3, y: 1}
-    flipX: 0
-    flipY: 0
-    activationMode: 0
-    interactableBehaviour: {fileID: 8547345819753504239}
-    requiredHeldObject: {fileID: 0}
-    requiredDoorState: 0
-    requiredStumpState: 0
-    requiredKettleState: 1
     offset: {x: 0, y: 0.45, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26196,7 +26133,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26447,7 +26383,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26603,7 +26538,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26710,7 +26644,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26947,7 +26880,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -27158,7 +27090,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -27268,7 +27199,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}

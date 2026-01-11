@@ -8,8 +8,6 @@ namespace TaskList
         [Header("References")]
         [SerializeField] private Canvas taskListCanvas;
         [SerializeField] private Transform handPosition;
-        [SerializeField] private TaskListHintController hintController;
-
         [Header("Animation Settings")]
         [SerializeField] private Vector3 spawnOffset = new Vector3(0, -0.3f, -0.5f);
         [SerializeField] private Vector3 spawnRotation = new Vector3(45f, 0f, 0f);
@@ -36,8 +34,6 @@ namespace TaskList
 
             taskListCanvas.gameObject.SetActive(false);
             _taskListObject.SetActive(false);
-
-            hintController?.OnNotebookPickedUp();
         }
 
         public void ToggleTaskList()
@@ -58,8 +54,6 @@ namespace TaskList
             _isOpen = true;
             taskListCanvas.gameObject.SetActive(true);
 
-            hintController?.OnNotebookOpened();
-
             if (_taskListObject == null || handPosition == null)
                 return;
 
@@ -79,8 +73,6 @@ namespace TaskList
         {
             _isOpen = false;
             taskListCanvas.gameObject.SetActive(false);
-
-            hintController?.OnNotebookClosed();
 
             if (_taskListObject != null)
                 _taskListObject.SetActive(false);
