@@ -1,6 +1,8 @@
+using System.Collections;
 using Interactable;
 using player_controls;
 using PlayerControls;
+using ScriptableObjects.Gamestate;
 using UnityEngine;
 
 namespace making_tea
@@ -21,8 +23,16 @@ namespace making_tea
         [SerializeField, Range(0, 180)] private float sitFOV = 60f;
         [SerializeField] private bool changeFOV = true;
 
+        [Header("Start Setting")]
+        [SerializeField] private SoGamestateFlag notebookPickedUpFlag;
+        [SerializeField] private bool startSitting;
+        
         private float _originalFOV;
+
+        private static bool _playerAlreadySeatedAtStart;
+        private bool _standUpLocked;
         private bool _isSitting;
+        private static ChairInteractable _activeChair;
 
         private PlayerInteractionController _pic;
         private MovementController _movement;
@@ -37,19 +47,80 @@ namespace making_tea
         {
             base.Awake();
         }
+        
+        private void Start()
+        {
+            if (!startSitting) return;
+            StartCoroutine(StartSittingRoutine());
+        }
+
+        private IEnumerator StartSittingRoutine()
+        {
+            Debug.Log($"[Chair] StartSittingRoutine started on {gameObject.name}");
+            
+            if (_playerAlreadySeatedAtStart) yield break;
+            
+            GameObject player = null;
+            PlayerInteractionController playerController = null;
+
+            while (player == null || playerController == null)
+            {
+                player = GameObject.FindWithTag("Player");
+                if (player != null)
+                    playerController = player.GetComponent<PlayerInteractionController>();
+                
+                Debug.Log($"[Chair] Waiting for Player... player={player}, pic={playerController}");
+                yield return null;
+            }
+            
+            player.SetActive(false);
+            
+            yield return null;
+
+            if (_playerAlreadySeatedAtStart) yield break;
+            
+            _playerAlreadySeatedAtStart = true;
+            Sit(playerController);
+            player.SetActive(true);
+            _standUpLocked = true;
+        }
+
+        private void Update()
+        {
+            if (_standUpLocked &&
+                notebookPickedUpFlag != null &&
+                notebookPickedUpFlag.currentValue)
+            {
+                Debug.Log("[Chair] StandUp unlocked");
+                _standUpLocked = false;
+            }
+        }
 
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
         {
+            if (_activeChair != null && _activeChair != this) return;
+            
             if (!_isSitting)
+            {
                 Sit(interactor);
-            else
-                StandUp();
+                return;
+            }
+
+            if (_standUpLocked)
+            {
+                Debug.Log($"[Chair] StandUp blocked (locked)");
+                return;
+            }
+            
+            StandUp();
         }
 
         private void Sit(IInteractor interactor)
         {
+            _activeChair = this;
+            
             if (interactor is not PlayerInteractionController p)
             {
                 Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
@@ -98,6 +169,14 @@ namespace making_tea
 
         private void StandUp()
         {
+            if (_standUpLocked)
+            {
+                Debug.Log($"[Chair] StandUp blocked (locked)");
+                return;
+            }
+            
+            _activeChair = null;
+            
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 
@@ -119,7 +198,7 @@ namespace making_tea
 
         public void ForceStandUp()
         {
-            if (_isSitting)
+            if (_isSitting && !_standUpLocked)
                 StandUp();
         }
     }

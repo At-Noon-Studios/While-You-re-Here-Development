@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 
 namespace Interactable
@@ -40,10 +40,7 @@ namespace Interactable
 
         public abstract void Interact(IInteractor interactor);
 
-        public virtual void ClickInteract(IInteractor interactor)
-        {
-            
-        }
+        public virtual void ClickInteract(IInteractor interactor){}
 
         public virtual void BlockInteraction(bool value)
         {
