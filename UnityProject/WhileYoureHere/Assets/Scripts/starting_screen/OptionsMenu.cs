@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,77 +8,176 @@ namespace starting_screen
 {
     public class OptionsMenu : MonoBehaviour
     {
-        [SerializeField] private TMP_Dropdown resolutionDropdown;
+        [Header("Screen Options")] [SerializeField]
+        private TMP_Dropdown resolutionDropdown;
+
         [SerializeField] private Toggle fullScreenToggle;
-        
-        [SerializeField] private AudioMixer mixer;
-        [SerializeField] private Slider masterVolumeSlider;
-        [SerializeField] private Slider musicVolumeSlider;
-        [SerializeField] private Slider sfxVolumeSlider;
-        [SerializeField] private Slider voiceVolumeSlider;
+
+        [Header("Audio Options")] [SerializeField]
+        private AudioMixer mixer;
+
+        [SerializeField] private Slider masterSlider;
+        [SerializeField] private Slider musicSlider;
+        [SerializeField] private Slider sfxSlider;
+        [SerializeField] private Slider voiceSlider;
         [SerializeField] private Button resetButton;
 
-        private Resolution[] _allResolutions;
-        private bool _isFullScreen;
-        private int _currentResolutionIndex;
+        [Header("Text Options")] [SerializeField]
+        private TextMeshProUGUI masterLabel;
 
-        private readonly List<Resolution> _selectedResolutionsList = new List<Resolution>();
+        [SerializeField] private TextMeshProUGUI musicLabel;
+        [SerializeField] private TextMeshProUGUI sfxLabel;
+        [SerializeField] private TextMeshProUGUI voiceLabel;
+
+        private Resolution[] allResolutions;
+        private bool isFullScreen;
+        private int currentResolutionIndex;
+
+        private readonly List<Resolution> selectedResolutions = new();
+
+        // =========================
+        // UNITY LIFECYCLE
+        // =========================
+
+        private void OnEnable()
+        {
+            RemoveSliderListeners();
+            LoadSavedVolumes();
+            ApplyInitialVolumes();
+            AddSliderListeners();
+        }
 
         private void Start()
         {
-            _allResolutions = Screen.resolutions;
-            var resolutionOptions = new List<string>();
+            SetupResolutionDropdown();
+            SetupFullscreenToggle();
+            resetButton.onClick.AddListener(ResetVolumes);
+        }
 
-            foreach (var res in _allResolutions)
+        // =========================
+        // AUDIO
+        // =========================
+
+        private void AddSliderListeners()
+        {
+            masterSlider.onValueChanged.AddListener(v => SetVolume("Master", v, masterLabel));
+            musicSlider.onValueChanged.AddListener(v => SetVolume("Music", v, musicLabel));
+            sfxSlider.onValueChanged.AddListener(v => SetVolume("SFX", v, sfxLabel));
+            voiceSlider.onValueChanged.AddListener(v => SetVolume("Voice", v, voiceLabel));
+        }
+
+        private void RemoveSliderListeners()
+        {
+            masterSlider.onValueChanged.RemoveAllListeners();
+            musicSlider.onValueChanged.RemoveAllListeners();
+            sfxSlider.onValueChanged.RemoveAllListeners();
+            voiceSlider.onValueChanged.RemoveAllListeners();
+        }
+
+        private void LoadSavedVolumes()
+        {
+            masterSlider.value = PlayerPrefs.GetFloat("Master", 1f);
+            musicSlider.value = PlayerPrefs.GetFloat("Music", 1f);
+            sfxSlider.value = PlayerPrefs.GetFloat("SFX", 1f);
+            voiceSlider.value = PlayerPrefs.GetFloat("Voice", 1f);
+        }
+
+        private void ApplyInitialVolumes()
+        {
+            SetVolume("Master", masterSlider.value, masterLabel);
+            SetVolume("Music", musicSlider.value, musicLabel);
+            SetVolume("SFX", sfxSlider.value, sfxLabel);
+            SetVolume("Voice", voiceSlider.value, voiceLabel);
+        }
+
+        private void SetVolume(string parameter, float sliderValue, TextMeshProUGUI label)
+        {
+            // Convert 0–100 slider to 0–1 normalized
+            var normalized = sliderValue / 100f;
+
+            // Full mute if 0
+            var volumeDb = normalized <= 0f
+                ? -80f
+                : Mathf.Log10(normalized) * 20f;
+
+            // Apply to AudioMixer
+            if (!mixer.SetFloat(parameter, volumeDb))
             {
-                var newRes = res.width + " x " + res.height;
-                if (!resolutionOptions.Contains(newRes))
+                Debug.LogWarning($"AudioMixer parameter '{parameter}' not found!");
+            }
+
+            // Update text
+            label.text = sliderValue + "%";
+
+            // Save
+            PlayerPrefs.SetFloat(parameter, normalized);
+        }
+
+
+        private void ResetVolumes()
+        {
+            masterSlider.value = 1f;
+            musicSlider.value = 1f;
+            sfxSlider.value = 1f;
+            voiceSlider.value = 1f;
+        }
+
+        // =========================
+        // SCREEN OPTIONS
+        // =========================
+
+        private void SetupResolutionDropdown()
+        {
+            allResolutions = Screen.resolutions;
+            var options = new List<string>();
+
+            foreach (var res in allResolutions)
+            {
+                var option = $"{res.width} x {res.height}";
+                if (!options.Contains(option))
                 {
-                    resolutionOptions.Add(newRes);
-                    _selectedResolutionsList.Add(res);
+                    options.Add(option);
+                    selectedResolutions.Add(res);
                 }
             }
 
-            resolutionOptions.Reverse();
-            _selectedResolutionsList.Reverse();
+            options.Reverse();
+            selectedResolutions.Reverse();
 
             resolutionDropdown.ClearOptions();
-            resolutionDropdown.AddOptions(resolutionOptions);
+            resolutionDropdown.AddOptions(options);
 
-            _currentResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
-            resolutionDropdown.value = _currentResolutionIndex;
+            currentResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
+            resolutionDropdown.value = currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
 
-            _isFullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1;
-            fullScreenToggle.isOn = _isFullScreen;
+            ApplyResolution();
+        }
 
-            Screen.SetResolution(
-                _selectedResolutionsList[_currentResolutionIndex].width,
-                _selectedResolutionsList[_currentResolutionIndex].height,
-                _isFullScreen
-            );
+        private void SetupFullscreenToggle()
+        {
+            isFullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1;
+            fullScreenToggle.isOn = isFullScreen;
         }
 
         public void ChangeResolution()
         {
-            _currentResolutionIndex = resolutionDropdown.value;
-            Screen.SetResolution(
-                _selectedResolutionsList[_currentResolutionIndex].width,
-                _selectedResolutionsList[_currentResolutionIndex].height,
-                _isFullScreen
-            );
-
-            PlayerPrefs.SetInt("ResolutionIndex", _currentResolutionIndex);
-            PlayerPrefs.Save();
+            currentResolutionIndex = resolutionDropdown.value;
+            ApplyResolution();
+            PlayerPrefs.SetInt("ResolutionIndex", currentResolutionIndex);
         }
 
         public void ChangeFullScreen()
         {
-            _isFullScreen = fullScreenToggle.isOn;
-            Screen.fullScreen = _isFullScreen;
+            isFullScreen = fullScreenToggle.isOn;
+            Screen.fullScreen = isFullScreen;
+            PlayerPrefs.SetInt("FullScreen", isFullScreen ? 1 : 0);
+        }
 
-            PlayerPrefs.SetInt("FullScreen", _isFullScreen ? 1 : 0);
-            PlayerPrefs.Save();
+        private void ApplyResolution()
+        {
+            var res = selectedResolutions[currentResolutionIndex];
+            Screen.SetResolution(res.width, res.height, isFullScreen);
         }
     }
 }
