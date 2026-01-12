@@ -362,17 +362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
---- !u!114 &133937855 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5046809806568546, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
-  m_PrefabInstance: {fileID: 8378086104622049488}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a1d7141a164dd41a9ec5a1c7950c23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueLoader
 --- !u!20 &148452577 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 671698812527810588, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -792,6 +781,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a59a67f4bf79d664cb986e84a895ce2c, type: 3}
+--- !u!114 &350830108 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1458482718375950863, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+  m_PrefabInstance: {fileID: 8378086104622049488}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dad5f49705e43947881759b3c896ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
 --- !u!1 &354172072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3125,7 +3125,7 @@ PrefabInstance:
     - target: {fileID: 1928872959811378579, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: dialogueManager
       value: 
-      objectReference: {fileID: 8378086104622049493}
+      objectReference: {fileID: 350830108}
     - target: {fileID: 4330681419341919229, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.421
@@ -12517,17 +12517,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3900519524478470381 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5506057091198144332, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
-  m_PrefabInstance: {fileID: 818781418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105116061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e586e15e20033c418b1874133e9f286, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueInteraction
 --- !u!33 &3945481411269246204
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20140,6 +20129,11 @@ MonoBehaviour:
   doorsToLock:
   - {fileID: 1853369214462094905}
   - {fileID: 0}
+--- !u!224 &8378086104622049492 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2208456945098543381, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+  m_PrefabInstance: {fileID: 8378086104622049488}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8384381215046697286
 RectTransform:
   m_ObjectHideFlags: 0
