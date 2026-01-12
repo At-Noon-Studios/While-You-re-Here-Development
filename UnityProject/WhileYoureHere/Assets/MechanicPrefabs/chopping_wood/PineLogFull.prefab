@@ -168,6 +168,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   logID: 0
+  audioSource: {fileID: 0}
+  chopSound: []
 --- !u!65 &7996437044054566703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -205,6 +207,7 @@ GameObject:
   - component: {fileID: -2916475332029505751}
   - component: {fileID: -32125335679554451}
   - component: {fileID: 1307443733674676105}
+  - component: {fileID: -2527476037747652059}
   m_Layer: 0
   m_Name: PineLogFull
   m_TagString: Log
@@ -442,7 +445,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  pickupSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
 --- !u!114 &1307443733674676105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,5 +460,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.HoldableObjectBehaviour
   blockInteraction: 0
-  interactionCanvas: {fileID: 5233859435976588483}
   data: {fileID: 11400000, guid: 8e030f2732954a745b8fcafcd5b94db0, type: 2}
+--- !u!114 &-2527476037747652059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4896110722311012467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Pick Up
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 0.6, y: 0.2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 0}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    offset: {x: 0, y: 0.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.01

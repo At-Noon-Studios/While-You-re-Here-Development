@@ -6,7 +6,6 @@ using player_controls;
 using PlayerControls;
 using ScriptableObjects.Events;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace chopping_logs
 {
@@ -17,21 +16,16 @@ namespace chopping_logs
         [SerializeField] private EventChannel cancelEvent;
         [SerializeField] private Transform minigameStartPoint;
 
-        [Header("UI References")]
-        [SerializeField] private ChopUIManager uiManager;
-
         [Header("Sound Settings")] 
         [SerializeField] private AudioClip logPlaceSound;
         [SerializeField] private AudioClip logCrackSound;
-        
-        [Header("Sprite settings")]
-        [SerializeField] private Image cutLogSprite;
-        [SerializeField] private Image placeLogSprite;
 
         public static bool IsCurrentMinigameActive { get; private set; }
         public bool IsMinigameActive { get; private set; }
 
         private GameObject _logObject;
+        public bool HasLog => _hasLog;
+        
         private bool _hasLog;
         private AudioSource _audioSource;
 
@@ -66,7 +60,7 @@ namespace chopping_logs
                 TakeLog(heldController);
                 return;
             }
-            
+
             if (!_hasLog)
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
@@ -79,14 +73,14 @@ namespace chopping_logs
                     return;
                 }
             }
-            
+
             if (_hasLog && held is HoldableObjectBehaviour h &&
                 h.GetComponentInChildren<AxeHitDetector>() != null)
             {
                 StartMinigame();
             }
         }
-        
+
         private void TakeLog(PlayerInteractionController player)
         {
             if (!_hasLog || _logObject == null) return;
@@ -99,7 +93,6 @@ namespace chopping_logs
             _logObject = null;
             _hasLog = false;
         }
-
 
         private void PlaceLog(HoldableObjectBehaviour pickableLog, PlayerInteractionController controller)
         {
@@ -114,7 +107,7 @@ namespace chopping_logs
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
-            
+
             _logObject = pickableLog.gameObject;
             _hasLog = true;
 
@@ -122,9 +115,7 @@ namespace chopping_logs
             foreach (var chopTarget in chopTargets)
             {
                 if (_audioSource != null && logPlaceSound != null)
-                {
                     _audioSource.PlayOneShot(logPlaceSound);
-                }
 
                 chopTarget.SetStump(this);
             }
@@ -135,14 +126,14 @@ namespace chopping_logs
         public void OnLogPickedUp(GameObject pickedLog)
         {
             if (_logObject != pickedLog) return;
-            
+
             var holdable = pickedLog.GetComponent<HoldableObjectBehaviour>();
             holdable?.SetInteractionLocked(false);
-            
+
             _logObject = null;
             _hasLog = false;
         }
-        
+
         private void StartMinigame()
         {
             if (!_hasLog) return;
@@ -162,14 +153,13 @@ namespace chopping_logs
 
                 player.GetComponent<MovementController>()?.PauseMovement();
             }
-            
+
             cameraController?.SetMinigameRotation(minigameStartPoint.rotation);
             cameraController?.PauseCameraMovement();
 
-            ChopUIManager.Instance?.ShowUI();
             player.GetComponentInChildren<AxeHitDetector>()?.SetBaseRotation();
         }
-        
+
         public void EndMinigame(bool wasCancelled)
         {
             IsMinigameActive = false;
@@ -179,26 +169,22 @@ namespace chopping_logs
             var cameraController = Camera.main?.GetComponent<CameraController>();
 
             player.GetComponent<MovementController>()?.ResumeMovement();
-            
+
             cameraController?.SyncRotation(Camera.main.transform.rotation);
             cameraController?.ResumeCameraMovement();
-
-            ChopUIManager.Instance?.HideAllUI();
 
             var playerController = player.GetComponent<PlayerInteractionController>();
             var heldBehaviour = playerController?.HeldObject as HoldableObjectBehaviour;
             heldBehaviour?.ResetPose();
-            
+
             if (wasCancelled)
-            {
                 return;
-            }
-            
+
             StartCoroutine(PlayCrackTwice(0.12f));
 
             var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
             ClearLog();
-            
+
             if (chopTarget != null)
                 ChoreEvents.TriggerLogChopped(chopTarget.GetLog());
         }
@@ -209,7 +195,6 @@ namespace chopping_logs
             {
                 var holdable = _logObject.GetComponent<HoldableObjectBehaviour>();
                 holdable?.SetInteractionLocked(false);
-
                 Destroy(_logObject);
             }
 
@@ -219,43 +204,9 @@ namespace chopping_logs
 
         public override string InteractionText(IInteractor interactor)
         {
-            HideInteractionSprites();
-
-            if (IsMinigameActive)
-                return string.Empty;
-
-            var held = GameObject.FindWithTag("Player")
-                ?.GetComponent<PlayerInteractionController>()
-                ?.HeldObject;
-
-            if (!_hasLog)
-            {
-                if (!_hasLog && held is HoldableObjectBehaviour pickableLog && pickableLog != null)
-                {
-                    if (pickableLog.CompareTag("Log") && placeLogSprite != null)
-                        placeLogSprite.enabled = true;
-
-                    return string.Empty;
-                }
-            }
-
-            if (held is HoldableObjectBehaviour h && h.GetComponentInChildren<AxeHitDetector>() != null)
-            {
-                if (cutLogSprite != null)
-                    cutLogSprite.enabled = true;
-            }
-
             return string.Empty;
         }
 
-        public override void OnHoverExit(IInteractor interactor) => HideInteractionSprites();
-
-        private void HideInteractionSprites()
-        {
-            if (placeLogSprite != null) placeLogSprite.enabled = false;
-            if (cutLogSprite != null) cutLogSprite.enabled = false;
-        }
-        
         public bool IsReadyForChop() => IsMinigameActive && _hasLog;
 
         private IEnumerator PlayCrackTwice(float delayBetween)

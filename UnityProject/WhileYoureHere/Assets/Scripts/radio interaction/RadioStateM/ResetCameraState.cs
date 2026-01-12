@@ -1,4 +1,4 @@
-﻿namespace radio_interaction
+namespace radio_interaction
 {
     public class ResetCameraState : IRadioState
     {
@@ -7,10 +7,12 @@
 
         public void Enter()
         {
+            _radioController.EnterResetCam();
         }
 
         public void Exit()
         {
+            _radioController.ExitResetCam();
         }
 
         public void Update()
