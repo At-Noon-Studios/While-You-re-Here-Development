@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 
 namespace Interactable
@@ -14,6 +14,7 @@ namespace Interactable
         private Material _outlineMaterial;
         private const string OutlineMaterialResourcePath = "OutlineMaterial";
         public bool blockInteraction = false;
+        public bool IsHovered { get; private set; } = false;
 
         #region Unity event functions
         
@@ -39,10 +40,7 @@ namespace Interactable
 
         public abstract void Interact(IInteractor interactor);
 
-        public virtual void ClickInteract(IInteractor interactor)
-        {
-            
-        }
+        public virtual void ClickInteract(IInteractor interactor){}
 
         public virtual void BlockInteraction(bool value)
         {
@@ -52,11 +50,13 @@ namespace Interactable
         public virtual void OnHoverEnter(IInteractor interactor)
         {
             if (blockInteraction) return;
+            IsHovered = true;
             AddOutlineMaterialToRenderers();
         }
         
         public virtual void OnHoverExit(IInteractor interactor)
         {
+            IsHovered = false;
             RemoveOutlineMaterialFromRenderers();
         }
         
