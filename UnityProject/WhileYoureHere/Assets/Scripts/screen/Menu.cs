@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace starting_screen
+namespace screen
 {
     public class Menu : MonoBehaviour
     {
