@@ -3,6 +3,7 @@ using chopping_logs;
 using door;
 using Interactable;
 using Interactable.Holdable;
+using radio_interaction;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ namespace UI.DynamicUI
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
         public enum KettleState { None, Pouring }
+        
+        public enum RadioState{ None,Off,On,Tuning }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -38,6 +41,7 @@ namespace UI.DynamicUI
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
             [SerializeField] private KettleState requiredKettleState = KettleState.None;
+            [SerializeField] private RadioState requiredRadioState = RadioState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
@@ -70,7 +74,11 @@ namespace UI.DynamicUI
                 if (interactableBehaviour is DoorInteractable door &&
                     requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
-
+                
+                if(interactableBehaviour is RadioPowerInteraction radioPowerInteraction &&
+                   requiredRadioState != RadioState.None)
+                    return CheckRadioState(radioPowerInteraction);
+                
                 if (interactableBehaviour is Stump stump &&
                     requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
@@ -110,6 +118,34 @@ namespace UI.DynamicUI
                 }
 
                 return false;
+            }
+
+            private bool CheckRadioState(
+                RadioPowerInteraction radioPowerInteraction)
+            {
+                var radioControllerState = radioPowerInteraction.GetRadioController().RadioStateMachine.CurrentState;
+                var currentState= RadioState.None;
+                Debug.Log("radioController state = "+radioControllerState);
+                if(requiredRadioState == RadioState.None) return false;
+                
+                switch (radioControllerState)
+                {
+                    case RadioOnState:
+                        currentState = RadioState.On;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                    case RadioOffState:
+                        currentState = RadioState.Off;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                    case TuningState:
+                        currentState = RadioState.Tuning;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                }
+
+                Debug.Log("requiredRadioState = " + requiredRadioState);
+                return currentState == requiredRadioState;
             }
 
             private bool CheckDoorState(DoorInteractable door)
@@ -154,6 +190,7 @@ namespace UI.DynamicUI
                 return false;
             }
         }
+        
 
         [Header("World Space UI Settings")]
         [SerializeField] private List<WorldSpaceUIElement> worldSpaceElements;

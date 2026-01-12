@@ -21,9 +21,9 @@ namespace radio_interaction
         [SerializeField] private Transform slider;
         [SerializeField] private RadioData radioData;
         [SerializeField] private Transform cam;
-        [SerializeField] private Canvas onStateCanvas;
-        [SerializeField] private Canvas offStateCanvas;
-        [SerializeField] private Canvas slideCanvas;
+        // [SerializeField] private Canvas onStateCanvas;
+        // [SerializeField] private Canvas offStateCanvas;
+        // [SerializeField] private Canvas slideCanvas;
         [SerializeField] private DialogueManager dialogueManager;
         [SerializeField] private AudioClip classicRadioClip;
         private const string ClearChannelNodeName = "radio_clear_node";
@@ -159,10 +159,10 @@ namespace radio_interaction
 
         public void EnterResetCam()
         {
-            if (slideCanvas.gameObject.activeSelf)
-            {
-                ShowSlideCanvas(false);
-            }
+            // if (slideCanvas.gameObject.activeSelf)
+            // {
+            //     ShowSlideCanvas(false);
+            // }
         }
 
         public void EnterTuningMode()
@@ -171,7 +171,7 @@ namespace radio_interaction
             _currentCameraPosition = cam.transform.position;
             _currentCameraRotation = cam.transform.rotation;
 
-            onStateCanvas.gameObject.SetActive(false);
+            // onStateCanvas.gameObject.SetActive(false);
             _movementController?.PauseMovement();
 
             _lastMousePos = Mouse.current.position.ReadValue();
@@ -183,7 +183,7 @@ namespace radio_interaction
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            onStateCanvas.gameObject.SetActive(true);
+            // onStateCanvas.gameObject.SetActive(true);
         }
 
         public void OnPowerPressed()
@@ -217,15 +217,15 @@ namespace radio_interaction
 
         public void ShowSlideCanvas(bool value)
         {
-            slideCanvas.gameObject.SetActive(value);
+            // slideCanvas.gameObject.SetActive(value);
         }
 
 
         public void ShowOnCanvas()
         {
-            onStateCanvas.gameObject.SetActive(true);
-            offStateCanvas.gameObject.SetActive(false);
-            slideCanvas.gameObject.SetActive(false);
+            // onStateCanvas.gameObject.SetActive(true);
+            // offStateCanvas.gameObject.SetActive(false);
+            // slideCanvas.gameObject.SetActive(false);
         }
 
         public void TurnRadioOn()
@@ -356,9 +356,9 @@ namespace radio_interaction
 
         public void ShowOffCanvas()
         {
-            offStateCanvas.gameObject.SetActive(false);
-            onStateCanvas.gameObject.SetActive(false);
-            slideCanvas.gameObject.SetActive(false);
+            //offStateCanvas.gameObject.SetActive(false);
+            // onStateCanvas.gameObject.SetActive(false);
+            // slideCanvas.gameObject.SetActive(false);
         }
         public void PlayClassicRadio()
         {

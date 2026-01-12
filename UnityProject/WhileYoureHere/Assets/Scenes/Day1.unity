@@ -375,6 +375,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4800738252462146939, guid: 8ff18d3c5fedcc84c877d6fc60423d9f, type: 3}
   m_PrefabInstance: {fileID: 877664050}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &242729103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8756248668001901288, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+  m_PrefabInstance: {fileID: 818781418}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &244452860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8233411102942291440, guid: 55d0c968049cd50448bf933165031995, type: 3}
@@ -2168,6 +2173,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -2512,6 +2518,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.4, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -2827,6 +2834,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1242199018}
     - target: {fileID: 1928872959811378579, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      propertyPath: offStateCanvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928872959811378579, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: dialogueManager
       value: 
       objectReference: {fileID: 8378086104622049493}
@@ -2872,7 +2883,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4514393900109746803, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: blockInteraction
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514393900109746803, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      propertyPath: InteractiveCanvas
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5124286670645286822, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: choicesContainer
@@ -2885,7 +2900,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8756248668001901288, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5067033201132926051}
   m_SourcePrefab: {fileID: 100100000, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
 --- !u!1 &843888778
 GameObject:
@@ -2982,6 +3000,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3597,6 +3616,7 @@ MonoBehaviour:
     requiredDoorState: 3
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3613,6 +3633,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -3629,6 +3650,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5225,6 +5247,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5241,6 +5264,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5353,6 +5377,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5682,6 +5707,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5698,6 +5724,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5750,6 +5777,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.4, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -9078,6 +9106,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10643,6 +10672,7 @@ MonoBehaviour:
     requiredDoorState: 3
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10659,6 +10689,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -10675,6 +10706,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0.9, y: 0.2, z: 0.5}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -11416,6 +11448,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -11501,6 +11534,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -14221,6 +14255,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.3, z: 0.3}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -16070,6 +16105,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -17210,12 +17246,78 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4514393900109746803, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
   m_PrefabInstance: {fileID: 818781418}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 242729103}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94d7daff59c4e9b4ab5068ce5b71ddf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::radio_interaction.RadioPowerInteraction
+--- !u!114 &5067033201132926051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242729103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Turn On
+    sprite: {fileID: 21300000, guid: 6fb5677cc0043284c985ee4b28e49367, type: 3}
+    size: {x: 0.5, y: 0.2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 5067033201132926046}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    requiredRadioState: 1
+    offset: {x: 0.58, y: -0.02, z: 0.25}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Turn off sprite
+    sprite: {fileID: 21300000, guid: 606628c2b2b5b6d44a01b854e06e9fdd, type: 3}
+    size: {x: 0.5, y: 0.2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 5067033201132926046}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    requiredRadioState: 2
+    offset: {x: 0, y: 0.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: 'Tuning '
+    sprite: {fileID: 21300000, guid: 44d764452a6565a40a272b416b52dcc2, type: 3}
+    size: {x: 0.5, y: 0.4}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 5067033201132926046}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    requiredRadioState: 3
+    offset: {x: 0, y: 0.5, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 2
+  allowMultipleOnSameInteractable: 1
 --- !u!23 &5072930229721800505
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19412,6 +19514,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 2
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19428,6 +19531,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 1
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19444,6 +19548,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 3
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19460,6 +19565,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 4
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -19476,6 +19582,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 5
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.4, z: 0.1}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20801,6 +20908,7 @@ MonoBehaviour:
     requiredDoorState: 3
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20817,6 +20925,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20833,6 +20942,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.6, y: 1, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -20916,6 +21026,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -21850,6 +21961,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23029,6 +23141,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23045,6 +23158,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23174,6 +23288,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23190,6 +23305,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -23206,6 +23322,7 @@ MonoBehaviour:
     requiredDoorState: 3
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25654,6 +25771,7 @@ MonoBehaviour:
     requiredDoorState: 1
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25670,6 +25788,7 @@ MonoBehaviour:
     requiredDoorState: 2
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25686,6 +25805,7 @@ MonoBehaviour:
     requiredDoorState: 3
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: -0.9, y: -0.5, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25838,6 +25958,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.45, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -25854,6 +25975,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 1
+    requiredRadioState: 0
     offset: {x: 0, y: 0.45, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26172,6 +26294,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26423,6 +26546,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26579,6 +26703,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26686,6 +26811,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -26923,6 +27049,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -27134,6 +27261,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -27244,6 +27372,7 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
+    requiredRadioState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
