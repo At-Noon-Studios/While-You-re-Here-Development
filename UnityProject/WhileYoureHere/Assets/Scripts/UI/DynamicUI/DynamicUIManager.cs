@@ -46,12 +46,16 @@ namespace UI.DynamicUI
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
 
+            [Header("Hide After Timer")] [SerializeField]
+            private float hideAfterTimer = 0f;
+
             [Header("Look At")]
             [SerializeField] private LookAtTarget lookAtTarget = LookAtTarget.Camera;
 
             [HideInInspector] public GameObject uiObject;
             [HideInInspector] public Image image;
             [HideInInspector] public RectTransform rectTransform;
+            [HideInInspector] public bool previouslyActive;
 
             public Vector3 Offset => offset;
             public Sprite Sprite => sprite;
@@ -59,6 +63,13 @@ namespace UI.DynamicUI
             public LookAtTarget LookTarget => lookAtTarget;
 
             public bool IsActive => CheckIsActive();
+            public float ElementHideTimer => hideAfterTimer;
+            private float activeTimer { get; set; }
+            public float ActiveTimer
+            {
+                get => activeTimer;
+                set => activeTimer = value;
+            }
 
             private bool CheckIsActive()
             {
@@ -278,20 +289,44 @@ namespace UI.DynamicUI
 
                 bool active = false;
                 var interactable = element.interactableBehaviour;
+                
+                bool isCurrentlyActive = element.IsActive;
+
+                if (isCurrentlyActive && !element.previouslyActive)
+                {
+                    element.ActiveTimer = 0f;
+                }
+
+                element.previouslyActive = isCurrentlyActive;
+
+                if (isCurrentlyActive)
+                {
+                    if (element.ElementHideTimer > 0f)
+                    {
+                        element.ActiveTimer += Time.deltaTime;
+                    }
+                }
 
                 if (interactable != null)
                 {
                     if (!hasExclusiveActive.ContainsKey(interactable))
                         hasExclusiveActive.Add(interactable, false);
 
-                    if (element.IsActive)
+                    if (isCurrentlyActive)
                     {
-                        if (allowMultipleOnSameInteractable || !hasExclusiveActive[interactable])
-                        {
-                            active = true;
+                        bool timerExpired = element.ElementHideTimer > 0f && element.ActiveTimer >= element.ElementHideTimer;
 
-                            if (!allowMultipleOnSameInteractable)
-                                hasExclusiveActive[interactable] = true;
+                        if (!timerExpired)
+                        {
+                            if (allowMultipleOnSameInteractable || !hasExclusiveActive[interactable])
+                            {
+                                active = true;
+
+                                if (!allowMultipleOnSameInteractable)
+                                {
+                                    hasExclusiveActive[interactable] = true;
+                                }
+                            }
                         }
                     }
                 }

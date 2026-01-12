@@ -175,7 +175,7 @@ namespace radio_interaction
             _movementController?.PauseMovement();
 
             _lastMousePos = Mouse.current.position.ReadValue();
-            Cursor.visible = true;
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.None;
         }
 

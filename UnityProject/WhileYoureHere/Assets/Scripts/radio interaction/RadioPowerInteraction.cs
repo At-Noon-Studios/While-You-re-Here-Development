@@ -9,6 +9,10 @@ namespace radio_interaction
         [SerializeField] private Canvas InteractiveCanvas;
         private RadioController _radioController;
 
+        public void Awake()
+        {
+            base.Awake();
+        }
         public void Start()
         {
             _radioController = GetComponentInParent<RadioController>();
@@ -24,18 +28,18 @@ namespace radio_interaction
             _radioController.OnTunePressed();
         }
 
-        // public override void OnHoverEnter(IInteractor interactor)
-        // {
-        //     bool interacted = _radioController.RadioStateMachine.CurrentState is RadioOffState;
-        //     base.OnHoverEnter(interactor);
-        //     if (interacted) InteractiveCanvas.gameObject.SetActive(true);
-        // }
-        //
-        // public override void OnHoverExit(IInteractor interactor)
-        // {
-        //     base.OnHoverEnter(interactor);
-        //     InteractiveCanvas.gameObject.SetActive(false);
-        // }
+        public override void OnHoverEnter(IInteractor interactor)
+        {
+            bool interacted = _radioController.RadioStateMachine.CurrentState is RadioOffState;
+            base.OnHoverEnter(interactor);
+            if (interacted) InteractiveCanvas.gameObject.SetActive(true);
+        }
+        
+        public override void OnHoverExit(IInteractor interactor)
+        {
+            // base.OnHoverEnter(interactor);
+            // InteractiveCanvas.gameObject.SetActive(false);
+        }
         
         public RadioController GetRadioController() => _radioController;
     }
