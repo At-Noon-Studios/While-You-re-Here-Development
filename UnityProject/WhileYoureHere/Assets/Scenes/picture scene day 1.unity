@@ -2071,6 +2071,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1321611160797483027, guid: 9eef93586e25acc4e8765be63ca07558, type: 2}
     - target: {fileID: 7077814252757473704, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
+      propertyPath: m_SceneBindings.Array.data[3].value
+      value: 
+      objectReference: {fileID: 1408853693}
+    - target: {fileID: 7077814252757473704, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
+      propertyPath: m_SceneBindings.Array.data[4].value
+      value: 
+      objectReference: {fileID: 1054415183}
+    - target: {fileID: 7077814252757473704, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
       propertyPath: m_SceneBindings.Array.data[5].value
       value: 
       objectReference: {fileID: 1408853693}
@@ -2097,13 +2105,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5173044182816646012, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1618031645}
   m_SourcePrefab: {fileID: 100100000, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
---- !u!320 &602443648 stripped
-PlayableDirector:
-  m_CorrespondingSourceObject: {fileID: 7077814252757473704, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
-  m_PrefabInstance: {fileID: 602443647}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &617655012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5349,6 +5355,35 @@ MonoBehaviour:
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
+--- !u!1 &1618031643 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5173044182816646012, guid: 8838bfeb83e9c5d4085f5756b9c30a10, type: 3}
+  m_PrefabInstance: {fileID: 602443647}
+  m_PrefabAsset: {fileID: 0}
+--- !u!320 &1618031645
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618031643}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 9eef93586e25acc4e8765be63ca07558, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -7026647753983791233, guid: 9eef93586e25acc4e8765be63ca07558, type: 2}
+    value: {fileID: 1408853693}
+  - key: {fileID: -1321611160797483027, guid: 9eef93586e25acc4e8765be63ca07558, type: 2}
+    value: {fileID: 1054415183}
+  m_ExposedReferences:
+    m_References:
+    - c4da9a2dfeef8a34788d9546c8007f77: {fileID: 1494057603}
+    - 3988aca63152f4c4aa61a1f8cc2f97a3: {fileID: 1494057603}
+    - 671e0de07ae8c3747993859dd9180da7: {fileID: 1131378980}
 --- !u!1 &1624958819 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2079437540494798435, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -18964,7 +18999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.Picture
   blockInteraction: 0
-  director: {fileID: 602443648}
+  director: {fileID: 1618031645}
 --- !u!82 &5787746468103025456
 AudioSource:
   m_ObjectHideFlags: 0
