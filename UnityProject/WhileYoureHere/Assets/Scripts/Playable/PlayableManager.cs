@@ -1,3 +1,4 @@
+using System;
 using Interactable;
 using PlayerControls;
 using UnityEngine;
@@ -30,13 +31,17 @@ namespace Playable
             _interactionController = player.GetComponent<PlayerInteractionController>();
         }
     
-        public void Play(PlayableDirector director)
+        public void Play(PlayableDirector director, Action onComplete = null)
         {
             director.Play();
             _cameraController.PauseCameraMovement();
             _movementController.PauseMovement();
             _interactionController.PausePlayerInteraction();
-            director.stopped += Resume;
+            director.stopped += (dir) =>
+            {
+                Resume(dir);
+                onComplete?.Invoke();
+            };
         }
 
         private void Resume(PlayableDirector director)

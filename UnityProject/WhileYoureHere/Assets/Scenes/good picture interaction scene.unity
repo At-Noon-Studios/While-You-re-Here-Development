@@ -4837,11 +4837,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3392040664700520542, guid: 5fd790e200b474b93b1b876913f102c5, type: 3}
---- !u!1 &919549233 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6690364339072079966, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
-  m_PrefabInstance: {fileID: 1873125293}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &936270114
 GameObject:
   m_ObjectHideFlags: 0
@@ -6921,7 +6916,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 138770857}
   audioSource: {fileID: 1418981348}
-  keyhole: {fileID: 0}
+  keyholes: []
   isLocked: 0
   isOpen: 0
 --- !u!64 &1418981350
@@ -7006,47 +7001,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 503356390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1439954605 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6310425194484024036, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
-  m_PrefabInstance: {fileID: 1873125293}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1439954608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919549233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 695d96ae22a5e57459ee0af0d6b91a5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.Picture
-  blockInteraction: 0
-  director: {fileID: 1002092574}
---- !u!64 &1439954609
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919549233}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3207093900454163971, guid: 590d82dbf3eb38e4da640e0c1cebfd12, type: 3}
 --- !u!1 &1480937962 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 286276147600278783, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -8688,14 +8642,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6690364339072079966, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1439954609}
-    - targetCorrespondingSourceObject: {fileID: 6690364339072079966, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1439954608}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
+--- !u!4 &1873125294 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9146189475809288371, guid: fba6560dc0fa61547b0b9fd4f3372643, type: 3}
+  m_PrefabInstance: {fileID: 1873125293}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1904441624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13867,7 +13820,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 7618025540315792563}
   audioSource: {fileID: 5787746468103025456}
-  keyhole: {fileID: 7988173867583454351}
+  keyholes: []
   isLocked: 0
   isOpen: 0
 --- !u!54 &1538380826067064480
@@ -19619,7 +19572,7 @@ Transform:
   - {fileID: 1488804304}
   - {fileID: 1156384686}
   - {fileID: 271347786}
-  - {fileID: 1439954605}
+  - {fileID: 1873125294}
   - {fileID: 1277466339}
   - {fileID: 741734132}
   - {fileID: 337857712}
@@ -20604,6 +20557,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   detectable: 1
+  pickupClip: {fileID: 0}
+  pickupSoundPlayedFlag: {fileID: 0}
 --- !u!1 &4684168411434918271
 GameObject:
   m_ObjectHideFlags: 0
@@ -24633,6 +24588,8 @@ MonoBehaviour:
   - {fileID: 982883429632727190}
   - {fileID: 7988173867583454351}
   detectable: 1
+  pickupClip: {fileID: 0}
+  pickupSoundPlayedFlag: {fileID: 0}
 --- !u!223 &6421081431532253566
 Canvas:
   m_ObjectHideFlags: 0
@@ -27711,6 +27668,7 @@ MonoBehaviour:
   keyRotation: {x: 0, y: 0, z: 0}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
   interact: {fileID: 11400000, guid: 184919f1caa9474428af7a4aea1a18ad, type: 2}
+  unlockDirection: 0
 --- !u!54 &8001246492247646062
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28378,9 +28336,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndDay.EndDayInteractable
   blockInteraction: 0
-  fadeDuration: 1
-  displayImageDuration: 1
-  endDayCanvasGroup: {fileID: 1872209176158572188}
 --- !u!4 &8368160751479130238
 Transform:
   m_ObjectHideFlags: 0
