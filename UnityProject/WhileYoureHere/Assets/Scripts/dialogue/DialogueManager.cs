@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
 using ScriptableObjects.Dialogue;
@@ -15,6 +14,8 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
+        public static DialogueManager Instance;
+        
         [Header("UI")] [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
@@ -45,6 +46,10 @@ namespace dialogue
 
         private void Awake()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
             _ui = UIManager.Instance;
         }
 

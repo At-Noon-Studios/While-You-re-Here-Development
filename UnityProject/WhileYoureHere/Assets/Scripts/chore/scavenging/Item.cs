@@ -23,7 +23,7 @@ namespace chore.scavenging
         public override void Interact(IInteractor interactor)
         {
             ChoreEvents.TriggerItemCollected(itemID);
-            AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
+            AudioManager.Instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
             Destroy(gameObject);
         }
 
