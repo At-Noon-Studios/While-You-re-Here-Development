@@ -1259,6 +1259,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: startSitting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676872791380911583, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
+      propertyPath: notebookPickedUpFlag
+      value: 
+      objectReference: {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
     - target: {fileID: 4392465861473634035, guid: 1ecacbae3f7c2e248bed4d2612cc1118, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.1159
@@ -3132,7 +3140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4330681419341919229, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.783
+      value: 1.647
       objectReference: {fileID: 0}
     - target: {fileID: 4330681419341919229, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3166,14 +3174,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.004
       objectReference: {fileID: 0}
-    - target: {fileID: 4514393900109746803, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
-      propertyPath: blockInteraction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5124286670645286822, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
-      propertyPath: choicesContainer
-      value: 
-      objectReference: {fileID: 8378086104622049492}
     - target: {fileID: 8756248668001901288, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
       propertyPath: m_Name
       value: RadioV2
@@ -3183,6 +3183,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c7c6830e18f6f14aba5d62ed622dc01, type: 3}
+--- !u!114 &819207517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4374982901901967584, guid: fc6be284d97996049ac0332aedacb1de, type: 3}
+  m_PrefabInstance: {fileID: 2157031572577918325}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30dfa076c79c87c4bb3ff2a53a42736d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
 --- !u!1 &843888778
 GameObject:
   m_ObjectHideFlags: 0
@@ -6388,7 +6399,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2970951931086196193, guid: 460d27f9bf9b8884085cb1b4cccaf4d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.103177
+      value: -12.985
       objectReference: {fileID: 0}
     - target: {fileID: 2970951931086196193, guid: 460d27f9bf9b8884085cb1b4cccaf4d6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6396,7 +6407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2970951931086196193, guid: 460d27f9bf9b8884085cb1b4cccaf4d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.12045097
+      value: -0.133
       objectReference: {fileID: 0}
     - target: {fileID: 2970951931086196193, guid: 460d27f9bf9b8884085cb1b4cccaf4d6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19433,7 +19444,7 @@ PrefabInstance:
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: 'listOfFlags.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: c77397b778057584fa3d5c96fd8094cb, type: 2}
+      objectReference: {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[0].events.Array.size
       value: 4
@@ -19540,7 +19551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[4].events.Array.data[2]._expanded
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[5].events.Array.data[0]._expanded
@@ -19693,7 +19704,7 @@ PrefabInstance:
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[0].events.Array.data[0].eventToInvoke.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 819207517}
     - target: {fileID: 5310077785391116394, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: activities.Array.data[0].events.Array.data[4].eventToInvoke.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -20129,11 +20140,6 @@ MonoBehaviour:
   doorsToLock:
   - {fileID: 1853369214462094905}
   - {fileID: 0}
---- !u!224 &8378086104622049492 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2208456945098543381, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
-  m_PrefabInstance: {fileID: 8378086104622049488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8384381215046697286
 RectTransform:
   m_ObjectHideFlags: 0
