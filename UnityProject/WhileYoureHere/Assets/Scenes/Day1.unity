@@ -407,10 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound: {fileID: 0}
-  mouseUpImage: {fileID: 5876956780588192833}
-  mouseDownImage: {fileID: 4799603342762445536}
-  guideLineImage: {fileID: 6196135674866492545}
+  axeImpactSound: {fileID: 8300000, guid: 345c693cfd2d20a49b1b80071301cea3, type: 3}
 --- !u!4 &273835533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 551744758403541543, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
@@ -2246,6 +2243,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: placedObjects.Array.data[0].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: ccde2bea4ef7fff479eafbb26560faab, type: 3}
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: placedObjects.Array.data[1].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bb69d43c2df5694498e9fcd665124215, type: 3}
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: placedObjects.Array.data[2].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0fde1b3bab158d74c8fcceee78c440f4, type: 3}
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: placedObjects.Array.data[3].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b1ff7c288290f704d89b70ffdb5e4918, type: 3}
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: placedObjects.Array.data[4].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 75a066d27ec08ae45acfc4faa5f40255, type: 3}
     - target: {fileID: 1182303385849737684, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: newspaper
       value: 
@@ -4328,9 +4345,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -4363,7 +4380,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -8955,7 +8972,7 @@ GameObject:
   - component: {fileID: 4885898563036980286}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: GROUND/grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -9900,6 +9917,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 894d6bcfdbff7294bbb05d3e173ce482, type: 2}
   doorPivot: {fileID: 7618025540315792563}
   audioSource: {fileID: 5787746468103025456}
+  notebookHintLine: {fileID: 0}
   keyholes: []
   isLocked: 0
   isOpen: 0
@@ -18549,9 +18567,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -18584,7 +18602,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -20777,6 +20795,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 9067226668200319900}
   audioSource: {fileID: 1250219291}
+  notebookHintLine: {fileID: 0}
   keyholes: []
   isLocked: 0
   isOpen: 0
@@ -26837,7 +26856,7 @@ GameObject:
   - component: {fileID: 31262633571941122}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: GROUND/floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
