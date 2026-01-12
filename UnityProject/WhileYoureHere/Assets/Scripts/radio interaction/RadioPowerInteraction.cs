@@ -1,18 +1,16 @@
 using Interactable;
-using UnityEngine;
-
 namespace radio_interaction
 {
     public class RadioPowerInteraction : InteractableBehaviour,
         IClickInteractable, IEInteractable
     {
-        [SerializeField] private Canvas InteractiveCanvas;
         private RadioController _radioController;
 
         public void Awake()
         {
             base.Awake();
         }
+
         public void Start()
         {
             _radioController = GetComponentInParent<RadioController>();
@@ -30,17 +28,20 @@ namespace radio_interaction
 
         public override void OnHoverEnter(IInteractor interactor)
         {
-            bool interacted = _radioController.RadioStateMachine.CurrentState is RadioOffState;
-            base.OnHoverEnter(interactor);
-            if (interacted) InteractiveCanvas.gameObject.SetActive(true);
+            bool interacted =
+                _radioController.RadioStateMachine.CurrentState is RadioOffState || _radioController.RadioStateMachine.CurrentState is RadioOnState ;
+            if (interacted)
+                base.OnHoverEnter(interactor);
         }
-        
+
         public override void OnHoverExit(IInteractor interactor)
         {
-            // base.OnHoverEnter(interactor);
-            // InteractiveCanvas.gameObject.SetActive(false);
+            bool interacted =
+                _radioController.RadioStateMachine.CurrentState is RadioOffState || _radioController.RadioStateMachine.CurrentState is RadioOnState ;
+            if (interacted)
+                base.OnHoverExit(interactor);
         }
-        
+
         public RadioController GetRadioController() => _radioController;
     }
 }
