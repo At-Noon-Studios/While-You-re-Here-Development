@@ -13,7 +13,7 @@ namespace player_controls
         [SerializeField] private EventChannel clickTune;
         [SerializeField] private EventChannel drop;
         [SerializeField] private EventChannel cancel;
-
+        [SerializeField] private EventChannel standUp;
         [SerializeField] private EventChannel blow;
         
         private void OnLook(InputValue inputValue)
@@ -44,6 +44,11 @@ namespace player_controls
         private void OnCancel()
         {
             cancel.Raise();
+        }
+        
+        private void OnStandUp()
+        {
+            standUp.Raise();
         }
 
         private void OnMouthBlow()

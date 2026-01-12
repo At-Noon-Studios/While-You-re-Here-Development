@@ -14,16 +14,15 @@ namespace making_tea
         [Header("References")]
         [SerializeField] private Transform sitPoint;
         [SerializeField] private Transform lookTarget;
-        [SerializeField] private TaskListHintController taskListHintController;
 
         [Header("Camera Sitting Position Offset")]
-        [SerializeField] private Vector3 cameraSitOffset = new Vector3(0f, 0f, 0f);
+        [SerializeField] private Vector3 cameraSitOffset = Vector3.zero;
 
         [Header("Camera Sitting Rotation Offset")]
-        [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
+        [SerializeField] private Vector3 cameraSitRotationOffset = Vector3.zero;
 
         [Header("Camera FOV Settings")]
-        [SerializeField] [Range(0, 180)] private float sitFOV = 60f;
+        [SerializeField, Range(0, 180)] private float sitFOV = 60f;
         [SerializeField] private bool changeFOV = true;
 
         private float _originalFOV;
@@ -40,6 +39,8 @@ namespace making_tea
         private Vector3 _originalCameraLocalPos;
         private Quaternion _originalCameraLocalRot;
 
+        private TaskListHintController _taskListHintController;
+
         protected override void Awake()
         {
             base.Awake();
@@ -50,6 +51,8 @@ namespace making_tea
             var player = GameObject.FindWithTag("Player");
             if (player != null)
                 _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
+
+            _taskListHintController = Object.FindFirstObjectByType<TaskListHintController>();
         }
 
         private void Update()
@@ -82,19 +85,14 @@ namespace making_tea
 
         public override void Interact(IInteractor interactor)
         {
-            if (!_isSitting)
-                Sit(interactor);
-            else
-                StandUp();
+            if (_isSitting) return;
+            Sit(interactor);
         }
 
         private void Sit(IInteractor interactor)
         {
             if (interactor is not PlayerInteractionController p)
-            {
-                Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
                 return;
-            }
 
             _player = p.transform;
             _movement = p.GetComponent<MovementController>();
@@ -135,14 +133,16 @@ namespace making_tea
             _pic.EnableTableMode(true);
             _pic.SetSittingChair(this);
 
-            taskListHintController?.SetHintsHidden(true);
+            _taskListHintController?.SetHintsHidden(true);
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
         }
 
-        private void StandUp()
+        public void StandUp()
         {
+            if (!_isSitting) return;
+
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 
@@ -157,17 +157,13 @@ namespace making_tea
 
             _isSitting = false;
 
-            if (_pic == null) return;
-            _pic.EnableTableMode(false);
-            _pic.ClearSittingChair();
+            if (_pic != null)
+            {
+                _pic.EnableTableMode(false);
+                _pic.ClearSittingChair();
+            }
 
-            taskListHintController?.SetHintsHidden(false);
-        }
-
-        public void ForceStandUp()
-        {
-            if (_isSitting)
-                StandUp();
+            _taskListHintController?.SetHintsHidden(false);
         }
     }
 }

@@ -29,7 +29,7 @@ Transform:
   m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -3.904844, y: -3.904844, z: -3.904844}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5778908147826102004}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -118,8 +118,8 @@ Transform:
   m_GameObject: {fileID: 3234660033670632990}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.001, y: -0.0448, z: -0.004}
-  m_LocalScale: {x: 0.07, y: 0.0009999999, z: 0.07}
+  m_LocalPosition: {x: 0.001, y: -0.0448, z: -0.0016}
+  m_LocalScale: {x: 0.075, y: 0.0009999999, z: 0.075}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5778908147826102004}
@@ -269,7 +269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4673774681871464591
 RectTransform:
   m_ObjectHideFlags: 0
@@ -396,7 +396,7 @@ Transform:
   m_GameObject: {fileID: 4740469153797461656}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.001, y: 0.015, z: -0.004}
+  m_LocalPosition: {x: 0.001, y: 0.028, z: -0.004}
   m_LocalScale: {x: 0.07, y: 0.0009999999, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -439,7 +439,6 @@ GameObject:
   - component: {fileID: 4754381783853895881}
   - component: {fileID: 5456284333040508408}
   - component: {fileID: 1502026949424111219}
-  - component: {fileID: 6134321879688414224}
   - component: {fileID: 5754747316032920314}
   - component: {fileID: 4727369835020723711}
   m_Layer: 0
@@ -459,8 +458,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.067, y: 1.0494, z: 0.15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5778908147826102004}
   - {fileID: 2177912108383106865}
@@ -487,8 +486,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.05, z: 0.1}
-  m_Center: {x: 0, y: -0.02, z: 0}
+  m_Size: {x: 0.09, y: 0.08, z: 0.09}
+  m_Center: {x: 0, y: -0.01, z: 0}
 --- !u!54 &8453231216505003232
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -573,19 +572,11 @@ MonoBehaviour:
   blockInteraction: 0
   interactionCanvasPrimary: {fileID: 6519382840296125990}
   interactionCanvasSecondary: {fileID: 8146971764228975010}
---- !u!114 &6134321879688414224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5378073326612441778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12b9e76e1f0e4e64bb6dff7858aa8670, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Holdable.PickUpSound
-  pickupSound: {fileID: 0}
+  liftHeight: 0.8
+  enableRailDrag: 1
+  railLeft: {fileID: 0}
+  railRight: {fileID: 0}
+  railSensitivity: 0.005
 --- !u!114 &5754747316032920314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3694514059077732805
 RectTransform:
   m_ObjectHideFlags: 0
@@ -749,7 +740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2177912108383106865
 RectTransform:
   m_ObjectHideFlags: 0
