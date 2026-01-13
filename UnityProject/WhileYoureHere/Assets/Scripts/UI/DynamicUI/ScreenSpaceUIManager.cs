@@ -3,11 +3,11 @@ using Interactable;
 using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.UI;
-using gamestate; // Voor GamestateManager
-using TaskList; // Voor TaskListUI
-using ScriptableObjects.Gamestate; // Voor SoGamestateFlag
-using ScriptableObjects.Events; // Voor EventChannel
-using UnityEngine.InputSystem; // Voor InputActionReference
+using gamestate;
+using TaskList;
+using ScriptableObjects.Gamestate;
+using ScriptableObjects.Events;
+using UnityEngine.InputSystem;
 
 namespace UI.DynamicUI
 {
@@ -17,10 +17,10 @@ namespace UI.DynamicUI
         {
             Always,
             HoldableObjectHeld,
-            NotebookOpen,     // notebook opgepakt én open
-            NotebookClosed,   // notebook opgepakt én gesloten
-            EventFlags,       // sprite zichtbaar wanneer alle geselecteerde events/flags true zijn
-            EventChannels     // sprite zichtbaar wanneer alle geselecteerde EventChannels zijn getriggerd
+            NotebookOpen,
+            NotebookClosed,
+            EventFlags,
+            EventChannels
         }
 
         [System.Serializable]
@@ -29,88 +29,56 @@ namespace UI.DynamicUI
             [Header("General")]
             [SerializeField] private string elementName;
             [SerializeField] private Sprite sprite;
-            [SerializeField] private Vector2 size = new Vector2(128, 128);
+            [SerializeField] private Vector2 size = new(128, 128);
             [SerializeField] private ActivationMode activationMode = ActivationMode.Always;
 
             [Header("Input Settings (optional)")]
-            [Tooltip("Koppel een Input Action (uit bijv. PlayerInput.inputactions) aan dit UI-element.")]
             [SerializeField] private InputActionReference inputAction;
-            [Tooltip("Hoe vaak de gekoppelde input geactiveerd moet worden voordat dit element verdwijnt. 0 of kleiner = negeren.")]
-            [SerializeField] private int requiredInputUses = 0;
+            [SerializeField] private int requiredInputUses;
 
             [Header("Holdable Object (optional)")]
-            [Tooltip("If set, this UI element will only show when the player holds this specific object.")]
             [SerializeField] private HoldableObjectBehaviour requiredHeldObject;
 
             [Header("Event Flags (optional)")]
-            [Tooltip("Selecteer events/flags die allemaal true moeten zijn om dit element te tonen. Alleen gebruikt wanneer ActivationMode = EventFlags.")]
-            [SerializeField] private List<SoGamestateFlag> requiredFlags = new List<SoGamestateFlag>();
+            [SerializeField] private List<SoGamestateFlag> requiredFlags = new();
 
             [Header("Event Channels (optional)")]
-            [Tooltip("Selecteer EventChannels die allemaal getriggerd moeten zijn om dit element te tonen. Alleen gebruikt wanneer ActivationMode = EventChannels.")]
-            [SerializeField] private List<EventChannel> requiredEventChannels = new List<EventChannel>();
+            [SerializeField] private List<EventChannel> requiredEventChannels = new();
 
             [Header("Base Offset (bottom-left)")]
-            [SerializeField] private Vector2 offset = Vector2.zero;
+            [SerializeField] private Vector2 offset;
 
             [HideInInspector] public GameObject uiObject;
             [HideInInspector] public Image image;
             [HideInInspector] public RectTransform rectTransform;
 
             public ActivationMode Activation => activationMode;
-            public Sprite Sprite => sprite;
-            public Vector2 Size => size;
-            public Vector2 Offset => offset;
             public HoldableObjectBehaviour RequiredHeldObject => requiredHeldObject;
             public List<SoGamestateFlag> RequiredFlags => requiredFlags;
             public List<EventChannel> RequiredEventChannels => requiredEventChannels;
             public InputActionReference InputAction => inputAction;
+            public Vector2 Offset => offset;
 
-            // Runtime state voor input-gebruik
             private int currentInputUses;
 
-            /// <summary>
-            /// Geeft aan of dit element verborgen moet blijven omdat het vereiste aantal inputs is gehaald.
-            /// </summary>
             public bool IsInputConditionSatisfied =>
                 inputAction != null &&
                 requiredInputUses > 0 &&
                 currentInputUses >= requiredInputUses;
 
-            /// <summary>
-            /// Aanroepen wanneer het gekoppelde InputAction een performed-callback krijgt.
-            /// </summary>
-            public void OnInputPerformed(InputAction.CallbackContext ctx)
+            public void OnInputPerformed(InputAction.CallbackContext _)
             {
-                // Alleen tellen als de sprite daadwerkelijk zichtbaar/actief is
-                if (uiObject == null || !uiObject.activeInHierarchy)
-                    return;
-
-                // Alleen tellen als dit element daadwerkelijk een limiet heeft
-                if (requiredInputUses <= 0)
+                if (uiObject == null || !uiObject.activeInHierarchy || requiredInputUses <= 0)
                     return;
 
                 currentInputUses++;
             }
 
-            /// <summary>
-            /// Optioneel te gebruiken om de teller te resetten, bijv. bij scene reload of expliciete reset.
-            /// </summary>
-            public void ResetInputUsage()
-            {
-                currentInputUses = 0;
-            }
-
             public void UpdateUI(Vector2 finalOffset)
             {
-                if (image != null)
-                    image.sprite = sprite;
-
-                if (rectTransform != null)
-                {
-                    rectTransform.sizeDelta = size;
-                    rectTransform.anchoredPosition = finalOffset;
-                }
+                image.sprite = sprite;
+                rectTransform.sizeDelta = size;
+                rectTransform.anchoredPosition = finalOffset;
             }
         }
 
@@ -118,85 +86,68 @@ namespace UI.DynamicUI
         [SerializeField] private List<ScreenSpaceUIElement> screenSpaceElements;
 
         [Header("Layout")]
-        [Tooltip("Spacing between active UI elements (X = horizontal, Y = vertical)")]
-        [SerializeField] private Vector2 elementSpacing = new Vector2(140f, 0f);
+        [SerializeField] private Vector2 elementSpacing = new(140f, 0f);
 
         [Header("UI Scale")]
         [SerializeField] private float screenScale = 1f;
 
         [Header("TaskList Reference")]
-        [SerializeField] private TaskListUI taskListUI; // zet deze in inspector
+        [SerializeField] private TaskListUI taskListUI;
 
         private Canvas screenCanvas;
-        private RectTransform screenContainerRect;
-        
-        // Tracking van getriggerde EventChannels
-        private HashSet<EventChannel> triggeredEventChannels = new HashSet<EventChannel>();
-        
-        // Dictionary om event handlers bij te houden voor correcte unsubscribe
-        private Dictionary<EventChannel, System.Action> eventChannelHandlers = new Dictionary<EventChannel, System.Action>();
+        private RectTransform container;
+        private readonly HashSet<EventChannel> triggeredEventChannels = new();
+        private readonly Dictionary<EventChannel, System.Action> eventHandlers = new();
 
         private void Awake()
         {
-            CreateScreenCanvasAndContainer();
-            InitializeScreenSpaceElements();
-            SubscribeToInputActions();
-            SubscribeToEventChannels();
+            CreateCanvas();
+            CreateElements();
+            SubscribeInput();
+            SubscribeEventChannels();
         }
 
         private void OnDestroy()
         {
-            UnsubscribeFromInputActions();
-            UnsubscribeFromEventChannels();
+            UnsubscribeInput();
+            UnsubscribeEventChannels();
         }
 
         private void LateUpdate()
         {
-            UpdateScreenSpaceElements();
-            UpdateCanvasScale();
+            UpdateElements();
+            container.localScale = Vector3.one * screenScale;
         }
 
-        #region Canvas & Container
+        #region Setup
 
-        private void CreateScreenCanvasAndContainer()
+        private void CreateCanvas()
         {
-            var canvasObj = new GameObject("ScreenSpaceCanvas");
-            canvasObj.transform.SetParent(transform, false);
+            screenCanvas = new GameObject("ScreenSpaceCanvas", typeof(Canvas), typeof(GraphicRaycaster))
+                .GetComponent<Canvas>();
 
-            screenCanvas = canvasObj.AddComponent<Canvas>();
             screenCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvasObj.AddComponent<GraphicRaycaster>();
+            screenCanvas.transform.SetParent(transform, false);
 
-            var containerObj = new GameObject("ScreenSpaceContainer");
-            containerObj.transform.SetParent(canvasObj.transform, false);
+            container = new GameObject("ScreenSpaceContainer", typeof(RectTransform))
+                .GetComponent<RectTransform>();
 
-            screenContainerRect = containerObj.AddComponent<RectTransform>();
-            screenContainerRect.anchorMin = Vector2.zero;
-            screenContainerRect.anchorMax = Vector2.zero;
-            screenContainerRect.pivot = Vector2.zero;
-            screenContainerRect.anchoredPosition = Vector2.zero;
-            screenContainerRect.localScale = Vector3.one * screenScale;
+            container.SetParent(screenCanvas.transform, false);
+            container.anchorMin = container.anchorMax = container.pivot = Vector2.zero;
         }
 
-        #endregion
-
-        #region Initialization
-
-        private void InitializeScreenSpaceElements()
+        private void CreateElements()
         {
             foreach (var e in screenSpaceElements)
             {
-                var obj = new GameObject("SSUI_" + e.GetHashCode());
-                obj.transform.SetParent(screenContainerRect, false);
+                var obj = new GameObject($"SSUI_{e.GetHashCode()}", typeof(Image));
+                obj.transform.SetParent(container, false);
 
-                var img = obj.AddComponent<Image>();
-                img.sprite = e.Sprite;
-
+                var img = obj.GetComponent<Image>();
                 var rect = img.rectTransform;
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.zero;
-                rect.pivot = Vector2.zero;
-                rect.sizeDelta = e.Size;
+
+                rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
+                rect.sizeDelta = e.RequiredHeldObject ? rect.sizeDelta : rect.sizeDelta;
 
                 e.uiObject = obj;
                 e.image = img;
@@ -208,229 +159,126 @@ namespace UI.DynamicUI
 
         #endregion
 
-        #region Update Logic
+        #region Update
 
-        private void UpdateScreenSpaceElements()
+        private void UpdateElements()
         {
-            int activeIndex = 0;
+            int index = 0;
 
             foreach (var e in screenSpaceElements)
             {
-                if (e.uiObject == null) continue;
+                bool active = ShouldBeActive(e);
+                e.uiObject.SetActive(active);
 
-                bool shouldBeActive = ShouldElementBeActive(e);
+                if (!active) continue;
 
-                e.uiObject.SetActive(shouldBeActive);
-
-                if (!shouldBeActive)
-                    continue;
-
-                Vector2 spacedOffset = e.Offset + elementSpacing * activeIndex;
-                e.UpdateUI(spacedOffset);
-                activeIndex++;
+                e.UpdateUI(e.Offset + elementSpacing * index);
+                index++;
             }
         }
 
-        private bool ShouldElementBeActive(ScreenSpaceUIElement e)
+        private bool ShouldBeActive(ScreenSpaceUIElement e)
         {
-            // Als de gekoppelde input genoeg gebruikt is, tonen we dit element nooit meer
             if (e.IsInputConditionSatisfied)
                 return false;
 
-            switch (e.Activation)
+            return e.Activation switch
             {
-                case ActivationMode.Always:
-                    return true;
+                ActivationMode.Always => true,
+                ActivationMode.HoldableObjectHeld => IsHolding(e.RequiredHeldObject),
+                ActivationMode.NotebookOpen => IsNotebookPickedUp() && !IsNotebookOpen(),
+                ActivationMode.NotebookClosed => IsNotebookPickedUp() && IsNotebookOpen(),
+                ActivationMode.EventFlags => AllFlagsTrue(e.RequiredFlags),
+                ActivationMode.EventChannels => AllChannelsTriggered(e.RequiredEventChannels),
+                _ => false
+            };
+        }
 
-                case ActivationMode.HoldableObjectHeld:
-                    return IsPlayerHolding(e.RequiredHeldObject);
+        #endregion
 
-                case ActivationMode.NotebookOpen:
-                    return IsTaskListPickedUp() && !IsTaskListOpen();
+        #region Conditions
 
-                case ActivationMode.NotebookClosed:
-                    return IsTaskListPickedUp() && IsTaskListOpen();
+        private bool IsHolding(HoldableObjectBehaviour required)
+        {
+            var controller = GameObject.FindWithTag("Player")
+                ?.GetComponent<PlayerInteractionController>();
 
-                case ActivationMode.EventFlags:
-                    return AreAllFlagsTrue(e.RequiredFlags);
+            var held = controller?.HeldObject as MonoBehaviour;
+            var heldObj = held?.GetComponent<HoldableObjectBehaviour>();
 
-                case ActivationMode.EventChannels:
-                    return AreAllEventChannelsTriggered(e.RequiredEventChannels);
+            return required == null ? heldObj != null : heldObj == required;
+        }
 
-                default:
+        private bool IsNotebookPickedUp() =>
+            GamestateManager.GetInstance()
+                ?.listOfFlags
+                .Find(f => f.name == "NotebookPickedUpFlag")?.currentValue ?? false;
+
+        private bool IsNotebookOpen() =>
+            taskListUI != null && taskListUI.isOpen;
+
+        private static bool AllFlagsTrue(List<SoGamestateFlag> flags)
+        {
+            if (flags == null || flags.Count == 0) return false;
+
+            var gsm = GamestateManager.GetInstance();
+            foreach (var f in flags)
+                if (!gsm.listOfFlags.Contains(f) || !f.currentValue)
                     return false;
-            }
+
+            return true;
+        }
+
+        private bool AllChannelsTriggered(List<EventChannel> channels)
+        {
+            if (channels == null || channels.Count == 0) return false;
+            foreach (var c in channels)
+                if (!triggeredEventChannels.Contains(c))
+                    return false;
+            return true;
         }
 
         #endregion
 
-        #region Helper Methods
+        #region Input & Events
 
-        private bool IsPlayerHolding(HoldableObjectBehaviour requiredObject)
+        private void SubscribeInput()
         {
-            var player = GameObject.FindWithTag("Player");
-            if (player == null) return false;
-
-            var controller = player.GetComponent<PlayerInteractionController>();
-            if (controller == null) return false;
-
-            var held = controller.HeldObject as MonoBehaviour;
-            if (held == null) return false;
-
-            var heldObj = held.GetComponent<HoldableObjectBehaviour>();
-
-            if (requiredObject == null)
-                return heldObj != null;
-
-            return heldObj == requiredObject;
+            foreach (var e in screenSpaceElements)
+                if (e.InputAction?.action != null)
+                    e.InputAction.action.performed += e.OnInputPerformed;
         }
 
-        private bool IsTaskListPickedUp()
+        private void UnsubscribeInput()
         {
-            var flag = GamestateManager.GetInstance()
-                .listOfFlags.Find(f => f.name == "NotebookPickedUpFlag");
-
-            return flag != null && flag.currentValue;
+            foreach (var e in screenSpaceElements)
+                if (e.InputAction?.action != null)
+                    e.InputAction.action.performed -= e.OnInputPerformed;
         }
 
-        private bool IsTaskListOpen()
+        private void SubscribeEventChannels()
         {
-            if (taskListUI == null) return false;
-            return taskListUI.isOpen; // public property in TaskListUI
-        }
-
-        private bool AreAllFlagsTrue(List<SoGamestateFlag> flags)
-        {
-            if (flags == null || flags.Count == 0)
-                return false; // Geen flags geselecteerd = niet actief
-
-            var gamestateManager = GamestateManager.GetInstance();
-            if (gamestateManager == null)
-                return false;
-
-            // Check of alle geselecteerde flags true zijn
-            foreach (var flag in flags)
+            foreach (var e in screenSpaceElements)
             {
-                if (flag == null) continue; // Skip null entries
+                if (e.Activation != ActivationMode.EventChannels) continue;
 
-                // Zoek de flag in de gamestate manager
-                var foundFlag = gamestateManager.listOfFlags.Find(f => f == flag);
-                if (foundFlag == null || !foundFlag.currentValue)
-                    return false; // Flag niet gevonden of niet true
-            }
-
-            return true; // Alle flags zijn true
-        }
-
-        private bool AreAllEventChannelsTriggered(List<EventChannel> eventChannels)
-        {
-            if (eventChannels == null || eventChannels.Count == 0)
-                return false; // Geen event channels geselecteerd = niet actief
-
-            // Check of alle geselecteerde event channels zijn getriggerd
-            foreach (var eventChannel in eventChannels)
-            {
-                if (eventChannel == null) continue; // Skip null entries
-
-                if (!triggeredEventChannels.Contains(eventChannel))
-                    return false; // Event channel nog niet getriggerd
-            }
-
-            return true; // Alle event channels zijn getriggerd
-        }
-
-        private void SubscribeToEventChannels()
-        {
-            // Verzamel alle unieke EventChannels van alle elementen
-            HashSet<EventChannel> allEventChannels = new HashSet<EventChannel>();
-            
-            foreach (var element in screenSpaceElements)
-            {
-                if (element.Activation == ActivationMode.EventChannels && element.RequiredEventChannels != null)
+                foreach (var channel in e.RequiredEventChannels)
                 {
-                    foreach (var eventChannel in element.RequiredEventChannels)
-                    {
-                        if (eventChannel != null)
-                            allEventChannels.Add(eventChannel);
-                    }
-                }
-            }
+                    if (channel == null || eventHandlers.ContainsKey(channel)) continue;
 
-            // Abonneer op alle EventChannels
-            foreach (var eventChannel in allEventChannels)
-            {
-                // Maak een handler en bewaar deze voor correcte unsubscribe
-                if (!eventChannelHandlers.ContainsKey(eventChannel))
-                {
-                    System.Action handler = () => OnEventChannelTriggered(eventChannel);
-                    eventChannelHandlers[eventChannel] = handler;
-                    eventChannel.OnRaise += handler;
+                    System.Action handler = () => triggeredEventChannels.Add(channel);
+                    eventHandlers[channel] = handler;
+                    channel.OnRaise += handler;
                 }
             }
         }
 
-        #region Input Action Subscriptions
-
-        private void SubscribeToInputActions()
+        private void UnsubscribeEventChannels()
         {
-            foreach (var element in screenSpaceElements)
-            {
-                var inputRef = element.InputAction;
-                if (inputRef == null)
-                    continue;
+            foreach (var kvp in eventHandlers)
+                kvp.Key.OnRaise -= kvp.Value;
 
-                var action = inputRef.action;
-                if (action == null)
-                    continue;
-
-                action.performed += element.OnInputPerformed;
-            }
-        }
-
-        private void UnsubscribeFromInputActions()
-        {
-            foreach (var element in screenSpaceElements)
-            {
-                var inputRef = element.InputAction;
-                if (inputRef == null)
-                    continue;
-
-                var action = inputRef.action;
-                if (action == null)
-                    continue;
-
-                action.performed -= element.OnInputPerformed;
-            }
-        }
-
-        #endregion
-
-        private void UnsubscribeFromEventChannels()
-        {
-            // Deabonneer van alle EventChannels met de opgeslagen handlers
-            foreach (var kvp in eventChannelHandlers)
-            {
-                if (kvp.Key != null)
-                {
-                    kvp.Key.OnRaise -= kvp.Value;
-                }
-            }
-            
-            eventChannelHandlers.Clear();
-        }
-
-        private void OnEventChannelTriggered(EventChannel eventChannel)
-        {
-            if (eventChannel == null) return;
-
-            // Markeer dit event channel als getriggerd
-            triggeredEventChannels.Add(eventChannel);
-        }
-
-        private void UpdateCanvasScale()
-        {
-            if (screenContainerRect != null)
-                screenContainerRect.localScale = Vector3.one * screenScale;
+            eventHandlers.Clear();
         }
 
         #endregion

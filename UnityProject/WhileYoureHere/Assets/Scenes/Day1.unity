@@ -130,6 +130,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c04dcc5ae70e74499833de46534efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolder
+--- !u!114 &177013458 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5643827916329306645, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 4725769759145442864}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
 --- !u!1 &273177093 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -164,11 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dad5f49705e43947881759b3c896ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
---- !u!1 &516244259 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 286276147600278783, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-  m_PrefabInstance: {fileID: 1242199016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &685335382 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8674867704491788772, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
@@ -180,11 +186,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b061b1a164e743b580e202f321e3fb38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.ObjectHolderSingle
---- !u!1 &721117247 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2079437540494798435, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-  m_PrefabInstance: {fileID: 1242199016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &752396885
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +444,7 @@ PrefabInstance:
       addedObject: {fileID: 273177102}
     - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 273177103}
+      addedObject: {fileID: 1242199019}
   m_SourcePrefab: {fileID: 100100000, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
 --- !u!4 &1242199017 stripped
 Transform:
@@ -455,6 +456,88 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4686765912313030553, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
   m_PrefabInstance: {fileID: 1242199016}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1242199019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273177093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f88d99bd92b6094f8680639715e75f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.ScreenSpaceUIManager
+  screenSpaceElements:
+  - elementName: Drop
+    sprite: {fileID: 21300000, guid: d8abea6c134c069479c97dcd657aa4eb, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 1
+    inputAction: {fileID: -3422945749306108544, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 3
+    requiredHeldObject: {fileID: 0}
+    requiredFlags: []
+    requiredEventChannels: []
+    offset: {x: -1.35, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Pour
+    sprite: {fileID: 21300000, guid: 53c60da51b21a14478dbde2d7e86eef8, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 1
+    inputAction: {fileID: -4685911128626818767, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 3
+    requiredHeldObject: {fileID: 177013458}
+    requiredFlags: []
+    requiredEventChannels: []
+    offset: {x: -0.93, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: To-Do List Open
+    sprite: {fileID: 21300000, guid: b0e02ffe6cce6da478d250bf47a3ac18, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 2
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 3
+    requiredHeldObject: {fileID: 0}
+    requiredFlags: []
+    requiredEventChannels: []
+    offset: {x: -0.6, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: To-Do List Close
+    sprite: {fileID: 21300000, guid: 25ad9331b2ba6e44e96eab52524cf897, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 3
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 3
+    requiredHeldObject: {fileID: 177013458}
+    requiredFlags: []
+    requiredEventChannels: []
+    offset: {x: -1, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Blow
+    sprite: {fileID: 21300000, guid: 1d9f996d5f9c36a4ca3ac6feae977c22, type: 3}
+    size: {x: 6, y: 2}
+    activationMode: 5
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 1
+    requiredHeldObject: {fileID: 0}
+    requiredFlags: []
+    requiredEventChannels:
+    - {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
+    offset: {x: -0.6, y: 0}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  elementSpacing: {x: 0, y: 1.2}
+  screenScale: 50
+  taskListUI: {fileID: 821772969}
 --- !u!114 &1278970025 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3793788086882228219, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
@@ -513,6 +596,10 @@ PrefabInstance:
       propertyPath: notebookPickedUpFlag
       value: 
       objectReference: {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
+    - target: {fileID: 3657548159658059687, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: worldSpaceElements.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5163653698103609685, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -556,11 +643,11 @@ PrefabInstance:
     - target: {fileID: 6168392555331487025, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: taskListHintTextOpen
       value: 
-      objectReference: {fileID: 516244259}
+      objectReference: {fileID: 0}
     - target: {fileID: 6168392555331487025, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: taskListHintTextPutAway
       value: 
-      objectReference: {fileID: 721117247}
+      objectReference: {fileID: 0}
     - target: {fileID: 6572088854631817610, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Name
       value: Map
@@ -578,7 +665,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 350830108}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 487459059992575187, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+    - {fileID: 1188386077770872257, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+    - {fileID: 715660815726019519, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+    - {fileID: 3727289111319809284, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
