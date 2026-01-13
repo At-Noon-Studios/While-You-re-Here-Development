@@ -147,7 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound: {fileID: 0}
+  axeImpactSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
+--- !u!4 &335232892 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+  m_PrefabInstance: {fileID: 1242199016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &350830108 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1458482718375950863, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
@@ -270,6 +275,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dfa076c79c87c4bb3ff2a53a42736d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::door.DoorInteractable
+--- !u!114 &821772969 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 378113134176095344, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 4725769759145442864}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbc23fc8bba508441acd1d7d92c9aec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListUI
 --- !u!114 &847862855 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1583145207858923953, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
@@ -292,7 +308,7 @@ PrefabInstance:
     - target: {fileID: 635460545059859215, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       propertyPath: taskListUI
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 821772969}
     - target: {fileID: 671698812527810588, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       propertyPath: field of view
       value: 60
@@ -435,6 +451,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4686765912313030553, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
   m_PrefabInstance: {fileID: 1242199016}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1278970025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3793788086882228219, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 4725769759145442864}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e63cc8574fd5c468b383133ad192a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListManager
 --- !u!108 &112480277093400875 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 4222807520271628449, guid: 0c21fee426bcddf4b91a514572eda541, type: 3}
@@ -470,6 +497,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 378113134176095344, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: handPosition
+      value: 
+      objectReference: {fileID: 335232892}
     - target: {fileID: 1574921191881643563, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: startSitting
       value: 1
@@ -2580,7 +2611,7 @@ PrefabInstance:
     - target: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: taskListManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1278970025}
     - target: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: choresToLoad.Array.size
       value: 4
@@ -2591,6 +2622,10 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
     - target: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: 'choresToLoad.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 30615f618d6f11a4ca262d2b98639670, type: 2}
+    - target: {fileID: 6910828530064231202, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+      propertyPath: 'choresToLoad.Array.data[4]'
       value: 
       objectReference: {fileID: 11400000, guid: 30615f618d6f11a4ca262d2b98639670, type: 2}
     m_RemovedComponents: []
