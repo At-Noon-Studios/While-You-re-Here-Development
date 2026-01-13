@@ -10,8 +10,7 @@ namespace PlayerControls
     [RequireComponent(typeof(MovementController))]
     public class FootstepsSound : MonoBehaviour
     {
-        [FormerlySerializedAs("_audioSource")] [SerializeField]
-        AudioSource audioSource;
+        [FormerlySerializedAs("_audioSource")] [SerializeField] AudioSource audioSource;
 
         [SerializeField] FootStepsData fs;
 

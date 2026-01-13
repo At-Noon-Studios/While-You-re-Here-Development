@@ -147,12 +147,9 @@ namespace chopping_logs
         private void StartMinigame()
         {
             if (!_hasLog) return;
-
-            Debug.Log("start minigame");
             
             if (!voicelinePlayed)
             {
-                Debug.Log("voicelinePlayed");
                 _audioSource.PlayOneShot(choppingStartVoiceline);
                 voicelinePlayed = true;
             }

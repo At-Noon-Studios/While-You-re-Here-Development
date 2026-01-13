@@ -5,19 +5,22 @@ namespace ScriptableObjects.FootSteps
     [CreateAssetMenu(fileName = "FootStepsSO", menuName = "ScriptableObjects/FootStepsSO")]
     public class FootStepsData : ScriptableObject
     {
-        [Header("Footstep Sound Effects")] [Space] [SerializeField]
-        private AudioClip[] leaves;
+        [Header("Footstep Sound Effects")]
+        [Space]
+        [SerializeField] private AudioClip[] leaves;
 
         [SerializeField] private AudioClip[] snow;
         [SerializeField] private AudioClip[] grass;
         [SerializeField] private AudioClip[] path;
         [SerializeField] private AudioClip[] floor;
 
-        [Header("Volume of footsteps")] [Space] [SerializeField]
-        float footstepVolume;
+        [Header("Volume of footsteps")]
+        [Space] 
+        [SerializeField] float footstepVolume;
 
-        [Header("Interval between each footstep sound")] [Space] [SerializeField]
-        float footstepOffset = 0.5f;
+        [Header("Interval between each footstep sound")]
+        [Space] 
+        [SerializeField] float footstepOffset = 0.5f;
 
         public AudioClip[] Leaves => leaves;
         public AudioClip[] Snow => snow;

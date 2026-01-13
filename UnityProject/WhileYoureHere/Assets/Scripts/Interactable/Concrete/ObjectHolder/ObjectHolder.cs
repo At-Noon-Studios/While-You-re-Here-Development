@@ -7,7 +7,8 @@ namespace Interactable.Concrete.ObjectHolder
 {
     public class ObjectHolder : InteractableBehaviour
     {
-        [Header("Placement")] [SerializeField] private Transform placePoint;
+        [Header("Placement")]
+        [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
         [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
         private readonly List<PlacedObjectData> _placedObjectsInHolders = new List<PlacedObjectData>();
