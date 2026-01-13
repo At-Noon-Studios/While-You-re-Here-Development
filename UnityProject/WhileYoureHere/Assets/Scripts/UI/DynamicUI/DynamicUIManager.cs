@@ -16,7 +16,7 @@ namespace UI.DynamicUI
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
         public enum KettleState { None, Pouring }
-
+        
         public enum RadioState{ None,Off,On,Tuning }
 
         [System.Serializable]
@@ -85,11 +85,11 @@ namespace UI.DynamicUI
                 if (interactableBehaviour is DoorInteractable door &&
                     requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
-
+                
                 if(interactableBehaviour is RadioPowerInteraction radioPowerInteraction &&
                    requiredRadioState != RadioState.None)
                     return CheckRadioState(radioPowerInteraction);
-
+                
                 if (interactableBehaviour is Stump stump &&
                     requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
@@ -105,6 +105,9 @@ namespace UI.DynamicUI
                     if (held.GetType() != requiredHeldObject.GetType())
                         return false;
                 }
+
+                if (requiredKettleState != KettleState.None)
+                    return CheckKettleState();
 
                 return true;
             }
@@ -135,7 +138,7 @@ namespace UI.DynamicUI
                 var currentState= RadioState.None;
                 Debug.Log("radioController state = "+radioControllerState);
                 if(requiredRadioState == RadioState.None) return false;
-
+                
                 switch (radioControllerState)
                 {
                     case RadioOnState:
@@ -198,7 +201,7 @@ namespace UI.DynamicUI
                 return false;
             }
         }
-
+        
 
         [Header("World Space UI Settings")]
         [SerializeField] private List<WorldSpaceUIElement> worldSpaceElements;
@@ -286,7 +289,7 @@ namespace UI.DynamicUI
 
                 bool active = false;
                 var interactable = element.interactableBehaviour;
-
+                
                 bool isCurrentlyActive = element.IsActive;
 
                 if (isCurrentlyActive && !element.previouslyActive)
