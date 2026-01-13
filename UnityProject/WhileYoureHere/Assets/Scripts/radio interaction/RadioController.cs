@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 
 namespace radio_interaction
 {
-    [RequireComponent(typeof(DialogueManager))]
     public class RadioController : MonoBehaviour
     {
         [Header("audio tracks")] [SerializeField]
