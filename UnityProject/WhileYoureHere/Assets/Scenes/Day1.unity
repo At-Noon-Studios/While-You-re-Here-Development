@@ -356,6 +356,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 87930903}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!95 &89126041 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 294642596715224950, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+  m_PrefabInstance: {fileID: 1242199016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &111384889 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
@@ -4963,6 +4968,11 @@ MonoBehaviour:
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
+--- !u!1 &1792522607 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1528299239874303812, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
+  m_PrefabInstance: {fileID: 3054127867118485110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1831338759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12052,9 +12062,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2327996090382794734, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
+    - {fileID: 771281727263935361, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1528299239874303812, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8159448832057146729}
   m_SourcePrefab: {fileID: 100100000, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
 --- !u!4 &3058996620568921976
 Transform:
@@ -20962,6 +20976,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1037642274559228370, guid: 2b43377d80981eb48b249cf740c3c608, type: 3}
   m_PrefabInstance: {fileID: 3054127867118485110}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8159448832057146729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792522607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6bae791df78cb4a975bcc7dbd81832, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  blockInteraction: 0
+  data: {fileID: 11400000, guid: d8d03b90b872dc94e8e2c2e64a9e143d, type: 2}
+  player: {fileID: 0}
+  animator: {fileID: 89126041}
 --- !u!33 &8181252369975753105
 MeshFilter:
   m_ObjectHideFlags: 0
