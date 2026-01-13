@@ -20,7 +20,8 @@ namespace chopping_logs
         [Header("Sound Settings")] 
         [SerializeField] private AudioClip[] logPlaceSound;
         [SerializeField] private AudioClip[] logCrackSound;
-        
+        [SerializeField] private AudioClip choppingStartVoiceline;
+
         [Header("Sprite settings")]
         [SerializeField] private Image cutLogSprite;
         [SerializeField] private Image placeLogSprite;
@@ -30,9 +31,11 @@ namespace chopping_logs
 
         private GameObject _logObject;
         public bool HasLog => _hasLog;
-        
+
         private bool _hasLog;
         private AudioSource _audioSource;
+
+        private bool voicelinePlayed;
 
         private void Start()
         {
@@ -53,13 +56,13 @@ namespace chopping_logs
             if (IsCurrentMinigameActive && IsMinigameActive)
                 EndMinigame(wasCancelled: true);
         }
-        
+
         public override void Interact(IInteractor interactor)
         {
             var player = GameObject.FindWithTag("Player");
             var heldController = player?.GetComponent<PlayerInteractionController>();
             var held = heldController?.HeldObject;
-            
+
             if (_hasLog && held == null)
             {
                 TakeLog(heldController);
@@ -144,6 +147,12 @@ namespace chopping_logs
         private void StartMinigame()
         {
             if (!_hasLog) return;
+
+            if (!voicelinePlayed)
+            {
+                _audioSource.PlayOneShot(choppingStartVoiceline);
+                voicelinePlayed = true;
+            }
 
             IsMinigameActive = true;
             IsCurrentMinigameActive = true;
