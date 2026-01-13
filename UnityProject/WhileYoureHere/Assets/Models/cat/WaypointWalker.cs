@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WaypointWalker : MonoBehaviour
 {
+    [Header("Waypoints")]
     public Transform[] waypoints;
     public float moveSpeed = 1f;
     public float turnSpeed = 5f;
@@ -19,16 +20,36 @@ public class WaypointWalker : MonoBehaviour
     public Transform player;
     public float fleeDistance = 5f;
     public float fleeSpeed = 4f;
+    public float fleeDuration = 3f;         // hoe lang de kat flee't
+    public float followPlayerDuration = 2f; // hoe lang de kat de speler volgt na flee
 
+    [Header("Gravity")]
+    public float gravity = -9.81f;
+
+    // =========================
+    // INTERN
+    // =========================
     int currentWaypoint = 0;
     Animator animator;
+    CharacterController controller;
+
     float sitTimer;
     float nextSitTime;
+    float verticalVelocity;
+
     bool isSitting;
+
+    // flee / follow
+    bool isFleeing = false;
+    float fleeTimer = 0f;
+    float followTimer = 0f;
+
+    Vector3 moveDirection;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
         ScheduleNextSit();
     }
 
@@ -36,17 +57,43 @@ public class WaypointWalker : MonoBehaviour
     {
         if (player == null || waypoints.Length == 0) return;
 
+        HandleGravity();
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // 🏃‍♂️ FLEE HEEFT ALTIJD PRIORITEIT
-        if (distanceToPlayer < fleeDistance)
+        // 🏃‍♂️ FLEE / FOLLOW PLAYER
+        if (distanceToPlayer < fleeDistance || isFleeing || followTimer > 0)
         {
             ForceStandUp();
-            FleeFromPlayer();
+
+            if (!isFleeing && distanceToPlayer < fleeDistance)
+            {
+                // Start flee
+                isFleeing = true;
+                fleeTimer = fleeDuration;
+            }
+
+            if (isFleeing)
+            {
+                FleeFromPlayer();
+                fleeTimer -= Time.deltaTime;
+                if (fleeTimer <= 0)
+                {
+                    isFleeing = false;
+                    followTimer = followPlayerDuration;
+                }
+            }
+            else if (followTimer > 0)
+            {
+                FollowPlayer();
+                followTimer -= Time.deltaTime;
+            }
+
+            ApplyMovement();
             return;
         }
 
-        // 🪑 ZITTEN
+        // 🪑 SITTING
         if (isSitting)
         {
             sitTimer -= Time.deltaTime;
@@ -54,19 +101,27 @@ public class WaypointWalker : MonoBehaviour
             {
                 StopSitting();
             }
+
+            ApplyMovement();
             return;
         }
 
-        // 🚶‍♂️ NORMAAL LOPEN
+        // 🚶‍♂️ NORMAL WALK
         FollowWaypoints();
 
-        // ⏱️ RANDOM ZIT MOMENT
+        // ⏱️ RANDOM SIT TIMER
         nextSitTime -= Time.deltaTime;
         if (nextSitTime <= 0)
         {
             StartSitting();
         }
+
+        ApplyMovement();
     }
+
+    // =========================
+    // MOVEMENT
+    // =========================
 
     void FollowWaypoints()
     {
@@ -75,8 +130,8 @@ public class WaypointWalker : MonoBehaviour
         direction.y = 0;
 
         SmoothRotate(direction);
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
+        moveDirection = transform.forward * moveSpeed;
         animator.speed = moveSpeed * animationSpeedMultiplier;
 
         if (direction.magnitude < reachDistance)
@@ -91,9 +146,28 @@ public class WaypointWalker : MonoBehaviour
         direction.y = 0;
 
         SmoothRotate(direction);
-        transform.position += transform.forward * fleeSpeed * Time.deltaTime;
 
+        moveDirection = transform.forward * fleeSpeed;
         animator.speed = fleeSpeed * animationSpeedMultiplier;
+    }
+
+    void FollowPlayer()
+    {
+        Vector3 direction = player.position - transform.position;
+        direction.y = 0;
+
+        SmoothRotate(direction);
+
+        moveDirection = transform.forward * moveSpeed;
+        animator.speed = moveSpeed * animationSpeedMultiplier;
+    }
+
+    void ApplyMovement()
+    {
+        Vector3 finalMove = moveDirection;
+        finalMove.y = verticalVelocity;
+
+        controller.Move(finalMove * Time.deltaTime);
     }
 
     void SmoothRotate(Vector3 direction)
@@ -108,12 +182,30 @@ public class WaypointWalker : MonoBehaviour
         );
     }
 
-    // 🪑 ZIT LOGICA
+    // =========================
+    // GRAVITY
+    // =========================
+
+    void HandleGravity()
+    {
+        if (controller.isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+    }
+
+    // =========================
+    // SITTING
+    // =========================
+
     void StartSitting()
     {
         isSitting = true;
         sitTimer = sitDuration;
         animator.SetBool("IsSitting", true);
+        moveDirection = Vector3.zero;
     }
 
     void StopSitting()
@@ -137,7 +229,7 @@ public class WaypointWalker : MonoBehaviour
         nextSitTime = Random.Range(minTimeBetweenSits, maxTimeBetweenSits);
     }
 
-    // 🔔 Animation Event (optioneel, maar mag blijven)
+    // 🔔 Animation Event (optional)
     public void OnSitFinished()
     {
         StopSitting();
