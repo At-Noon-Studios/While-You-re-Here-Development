@@ -1,35 +1,48 @@
-using System;
-using System.Collections;
+using making_tea;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace screen
 {
     public class Menu : MonoBehaviour
     {
+
         public void OnPlayButton()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Day1");
+            ChairInteractable.ResetChairState();
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene("Day1");
         }
-        
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name != "Day1") return;
+
+            var startingChair = FindObjectOfType<ChairInteractable>();
+            if (startingChair != null)
+                startingChair.SitAtStart();
+
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
         public void OnQuitButton()
         {
             Application.Quit();
         }
-        
+
         public void BackToMenu()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("StartScreen");
+            SceneManager.LoadScene("StartScreen");
         }
 
         public void OnSettingsButton()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("OptionsScreen");
+            SceneManager.LoadScene("OptionsScreen");
         }
-        
+
         public void OnLoadButton()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LoadScreen");
+            SceneManager.LoadScene("LoadScreen");
         }
-        
     }
 }

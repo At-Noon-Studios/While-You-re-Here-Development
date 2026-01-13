@@ -55,7 +55,6 @@ namespace player_controls
         private void OnPause()
         {
             pause.Raise();
-            Time.timeScale = 0;
         }
     }
 }

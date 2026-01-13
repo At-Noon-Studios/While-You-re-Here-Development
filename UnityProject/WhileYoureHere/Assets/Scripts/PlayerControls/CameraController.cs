@@ -60,7 +60,7 @@ namespace PlayerControls
         
         public void SyncRotation(Quaternion worldRotation)
         {
-            Vector3 euler = worldRotation.eulerAngles;
+            var euler = worldRotation.eulerAngles;
 
             _xRotation = NormalizeAngle(euler.x);
             _yRotation = NormalizeAngle(euler.y);
@@ -78,7 +78,7 @@ namespace PlayerControls
         {
             transform.rotation = rotation;
 
-            Vector3 euler = rotation.eulerAngles;
+            var euler = rotation.eulerAngles;
             _xRotation = NormalizeAngle(euler.x);
             _yRotation = NormalizeAngle(euler.y);
 

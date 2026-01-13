@@ -1,36 +1,53 @@
+using ScriptableObjects.Events;
+using PlayerControls;
 using UnityEngine;
 
 namespace screen
 {
     public class PauseMenu : MonoBehaviour
     {
+        [SerializeField] private PauseEventChannel pauseEventChannel;
+
+        [Header("References")]
+        [SerializeField] private GameObject pauseMenuUI;
+
         public void OnResumeButton()
         {
-            Time.timeScale = 1f;
-            gameObject.SetActive(false);
+            if (pauseEventChannel != null)
+                pauseEventChannel.Raise(); // This unpauses
         }
         
         public void OnLoadButton()
         {
-            Time.timeScale = 1f;
+            ResetPauseState();
             UnityEngine.SceneManagement.SceneManager.LoadScene("LoadScreen");
         }
         
         public void OnSettingsButton()
         {
-            Time.timeScale = 1f;
+            ResetPauseState();
             UnityEngine.SceneManagement.SceneManager.LoadScene("OptionsScreen");
         }
         
         public void OnQuitButton()
         {
-            Time.timeScale = 1f;
+            ResetPauseState();
             UnityEngine.SceneManagement.SceneManager.LoadScene("StartScreen");
         }
         
         public void OnQuitDesktopButton()
         {
             Application.Quit();
+        }
+
+        private void ResetPauseState()
+        {
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            Cursor.visible = true;
+
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(false);
         }
     }
 }
