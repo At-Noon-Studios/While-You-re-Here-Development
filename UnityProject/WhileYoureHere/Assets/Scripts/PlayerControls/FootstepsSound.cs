@@ -36,7 +36,7 @@ namespace PlayerControls
             {
                 if (_time < 0.0f)
                 {
-                    if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out var hit, 1f))
+                    if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out var hit, 2f))
                     {
                         switch (hit.collider.tag)
                         {
