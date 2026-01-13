@@ -1140,7 +1140,6 @@ GameObject:
   - component: {fileID: 6881381387519781037}
   - component: {fileID: 1928872959811378579}
   - component: {fileID: 4514393900109746803}
-  - component: {fileID: 5124286670645286822}
   m_Layer: 0
   m_Name: RadioV2
   m_TagString: RadioAudioSource
@@ -1193,7 +1192,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.13984606, y: 0.3, z: 0.47}
+  m_Size: {x: 0.1, y: 0.2, z: 0.3}
   m_Center: {x: -0.004919591, y: 0.01434966, z: -0.0010713239}
 --- !u!82 &6881381387519781037
 AudioSource:
@@ -1329,22 +1328,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d7daff59c4e9b4ab5068ce5b71ddf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::radio_interaction.RadioPowerInteraction
-  blockInteraction: 0
+  blockInteraction: 1
   InteractiveCanvas: {fileID: 2392791177462738755}
---- !u!114 &5124286670645286822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8756248668001901288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dad5f49705e43947881759b3c896ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueManager
-  choicesContainer: {fileID: 0}
-  choiceButtonPrefab: {fileID: 985864569380424678, guid: 91ce4b21817c87c41a60cc30da19b21b, type: 3}
-  letterDelay: 0.05
-  sentenceDelay: 1.5
-  volume: 1
