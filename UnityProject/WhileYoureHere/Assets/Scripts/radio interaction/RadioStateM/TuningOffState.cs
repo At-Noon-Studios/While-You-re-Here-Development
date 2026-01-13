@@ -3,11 +3,12 @@
     public class TuningOffState : IRadioState
     {
         private readonly RadioController _radioController;
-        public TuningOffState(RadioController radioController) => _radioController = radioController;
+
+        public TuningOffState(RadioController radioController) =>
+            _radioController = radioController;
 
         public void Enter()
         {
-            _radioController.EnterResetCam();
         }
 
         public void Exit()
@@ -19,7 +20,8 @@
         {
             if (_radioController.ResetCamera())
             {
-                _radioController.RadioStateMachine.ChangeState(new RadioOffState(_radioController));
+                _radioController.RadioStateMachine.ChangeState(
+                    new RadioOffState(_radioController));
             }
         }
     }

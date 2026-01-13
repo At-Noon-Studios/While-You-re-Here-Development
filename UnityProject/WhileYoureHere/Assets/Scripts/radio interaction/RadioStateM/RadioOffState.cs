@@ -7,7 +7,6 @@ namespace radio_interaction
 
         public void Enter()
         {
-            _radioController.ShowOffCanvas();
             _radioController.TurnRadioOff();
         }
 

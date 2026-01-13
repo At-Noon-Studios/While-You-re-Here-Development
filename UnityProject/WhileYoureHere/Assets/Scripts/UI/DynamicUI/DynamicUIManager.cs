@@ -3,6 +3,7 @@ using chopping_logs;
 using door;
 using Interactable;
 using Interactable.Holdable;
+using radio_interaction;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,9 @@ namespace UI.DynamicUI
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
+        public enum KettleState { None, Pouring }
+        
+        public enum RadioState{ None,Off,On,Tuning }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -36,9 +40,14 @@ namespace UI.DynamicUI
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
+            [SerializeField] private KettleState requiredKettleState = KettleState.None;
+            [SerializeField] private RadioState requiredRadioState = RadioState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
+
+            [Header("Hide After Timer")] [SerializeField]
+            private float hideAfterTimer = 0f;
 
             [Header("Look At")]
             [SerializeField] private LookAtTarget lookAtTarget = LookAtTarget.Camera;
@@ -46,6 +55,7 @@ namespace UI.DynamicUI
             [HideInInspector] public GameObject uiObject;
             [HideInInspector] public Image image;
             [HideInInspector] public RectTransform rectTransform;
+            [HideInInspector] public bool previouslyActive;
 
             public Vector3 Offset => offset;
             public Sprite Sprite => sprite;
@@ -53,6 +63,13 @@ namespace UI.DynamicUI
             public LookAtTarget LookTarget => lookAtTarget;
 
             public bool IsActive => CheckIsActive();
+            public float ElementHideTimer => hideAfterTimer;
+            private float activeTimer { get; set; }
+            public float ActiveTimer
+            {
+                get => activeTimer;
+                set => activeTimer = value;
+            }
 
             private bool CheckIsActive()
             {
@@ -68,7 +85,11 @@ namespace UI.DynamicUI
                 if (interactableBehaviour is DoorInteractable door &&
                     requiredDoorState != DoorState.None)
                     return CheckDoorState(door);
-
+                
+                if(interactableBehaviour is RadioPowerInteraction radioPowerInteraction &&
+                   requiredRadioState != RadioState.None)
+                    return CheckRadioState(radioPowerInteraction);
+                
                 if (interactableBehaviour is Stump stump &&
                     requiredStumpState != StumpState.None)
                     return CheckStumpState(stump);
@@ -85,7 +106,57 @@ namespace UI.DynamicUI
                         return false;
                 }
 
+                if (requiredKettleState != KettleState.None)
+                    return CheckKettleState();
+
                 return true;
+            }
+
+            private bool CheckKettleState()
+            {
+                var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
+                if (kettlePour == null || kettlePour.kettle == null)
+                    return false;
+
+                if (requiredKettleState == KettleState.Pouring)
+                {
+                    bool isFilled = kettlePour.kettle.fillAmount > 0f;
+                    bool isHeld =
+                        (kettlePour.TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld) ||
+                        (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+
+                    return isFilled && isHeld;
+                }
+
+                return false;
+            }
+
+            private bool CheckRadioState(
+                RadioPowerInteraction radioPowerInteraction)
+            {
+                var radioControllerState = radioPowerInteraction.GetRadioController().RadioStateMachine.CurrentState;
+                var currentState= RadioState.None;
+                Debug.Log("radioController state = "+radioControllerState);
+                if(requiredRadioState == RadioState.None) return false;
+                
+                switch (radioControllerState)
+                {
+                    case RadioOnState:
+                        currentState = RadioState.On;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                    case RadioOffState:
+                        currentState = RadioState.Off;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                    case TuningState:
+                        currentState = RadioState.Tuning;
+                        Debug.Log("requiredRadioState = " + requiredRadioState);
+                        break;
+                }
+
+                Debug.Log("requiredRadioState = " + requiredRadioState);
+                return currentState == requiredRadioState;
             }
 
             private bool CheckDoorState(DoorInteractable door)
@@ -130,6 +201,7 @@ namespace UI.DynamicUI
                 return false;
             }
         }
+        
 
         [Header("World Space UI Settings")]
         [SerializeField] private List<WorldSpaceUIElement> worldSpaceElements;
@@ -217,20 +289,44 @@ namespace UI.DynamicUI
 
                 bool active = false;
                 var interactable = element.interactableBehaviour;
+                
+                bool isCurrentlyActive = element.IsActive;
+
+                if (isCurrentlyActive && !element.previouslyActive)
+                {
+                    element.ActiveTimer = 0f;
+                }
+
+                element.previouslyActive = isCurrentlyActive;
+
+                if (isCurrentlyActive)
+                {
+                    if (element.ElementHideTimer > 0f)
+                    {
+                        element.ActiveTimer += Time.deltaTime;
+                    }
+                }
 
                 if (interactable != null)
                 {
                     if (!hasExclusiveActive.ContainsKey(interactable))
                         hasExclusiveActive.Add(interactable, false);
 
-                    if (element.IsActive)
+                    if (isCurrentlyActive)
                     {
-                        if (allowMultipleOnSameInteractable || !hasExclusiveActive[interactable])
-                        {
-                            active = true;
+                        bool timerExpired = element.ElementHideTimer > 0f && element.ActiveTimer >= element.ElementHideTimer;
 
-                            if (!allowMultipleOnSameInteractable)
-                                hasExclusiveActive[interactable] = true;
+                        if (!timerExpired)
+                        {
+                            if (allowMultipleOnSameInteractable || !hasExclusiveActive[interactable])
+                            {
+                                active = true;
+
+                                if (!allowMultipleOnSameInteractable)
+                                {
+                                    hasExclusiveActive[interactable] = true;
+                                }
+                            }
                         }
                     }
                 }
