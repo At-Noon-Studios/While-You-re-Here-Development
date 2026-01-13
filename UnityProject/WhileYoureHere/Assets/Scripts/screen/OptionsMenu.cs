@@ -30,7 +30,7 @@ namespace screen
         private bool _isFullScreen;
         private int _currentResolutionIndex;
         private readonly List<Resolution> _selectedResolutions = new();
-
+        
         private void OnEnable()
         {
             RemoveSliderListeners();

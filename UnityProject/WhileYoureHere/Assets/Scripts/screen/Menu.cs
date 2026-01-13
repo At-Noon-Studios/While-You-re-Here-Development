@@ -6,11 +6,12 @@ namespace screen
 {
     public class Menu : MonoBehaviour
     {
-
         public void OnPlayButton()
         {
+            ResetPauseState();
             ChairInteractable.ResetChairState();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneHandler.SetPreviousScene("Day1");
             SceneManager.LoadScene("Day1");
         }
 
@@ -25,24 +26,41 @@ namespace screen
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
+        public void OnSettingsButton()
+        {
+            var current = SceneManager.GetActiveScene().name;
+
+            if (System.Array.Exists(SceneHandler.GameplayScenes, s => s == current))
+            {
+                SceneHandler.SetPreviousScene(current);
+            }
+
+            SceneManager.LoadScene(SceneHandler.OptionsScreen);
+        }
+        
+        public void BackToMenu()
+        {
+            Debug.Log($"[Menu] BackToMenu → PreviousScene = {SceneHandler.PreviousScene}");
+            ResetPauseState();
+            SceneManager.LoadScene(SceneHandler.PreviousScene);
+        }
+
+        public void OnLoadButton()
+        {
+            SceneHandler.SetPreviousScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneHandler.LoadScreen);
+        }
+
         public void OnQuitButton()
         {
             Application.Quit();
         }
 
-        public void BackToMenu()
+        private void ResetPauseState()
         {
-            SceneManager.LoadScene("StartScreen");
-        }
-
-        public void OnSettingsButton()
-        {
-            SceneManager.LoadScene("OptionsScreen");
-        }
-
-        public void OnLoadButton()
-        {
-            SceneManager.LoadScene("LoadScreen");
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            Cursor.visible = true;
         }
     }
 }

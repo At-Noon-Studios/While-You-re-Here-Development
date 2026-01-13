@@ -168,8 +168,8 @@ GameObject:
   - component: {fileID: 3702020241699996778}
   - component: {fileID: 635460545059859215}
   - component: {fileID: 7461235706524234327}
-  - component: {fileID: 3214220025977222610}
   - component: {fileID: 1433123007566295977}
+  - component: {fileID: 4304926644677062743}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -443,7 +443,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls.FootstepsSound
   audioSource: {fileID: 5956156730005618975}
   fs: {fileID: 11400000, guid: f95f4b7ba546a479d8a6526933cb85a7, type: 2}
---- !u!114 &3214220025977222610
+--- !u!114 &1433123007566295977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701e06dfddce4baba5127061b82348d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PlayerSceneHandler
+--- !u!114 &4304926644677062743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,18 +470,6 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 0}
   pauseEventChannel: {fileID: 11400000, guid: fba1620c93d773a45bb100dbeb1865c8, type: 2}
   cameraController: {fileID: 5543653532837615559}
---- !u!114 &1433123007566295977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2977070723198052308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 701e06dfddce4baba5127061b82348d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::screen.PlayerSceneHandler
 --- !u!1 &4171835902495713361
 GameObject:
   m_ObjectHideFlags: 0
