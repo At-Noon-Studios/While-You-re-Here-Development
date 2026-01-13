@@ -1,9 +1,10 @@
 using System.Collections;
 using chore;
+using dialogue;
 using Interactable;
 using Interactable.Holdable;
-using player_controls;
 using PlayerControls;
+using ScriptableObjects.dialogue;
 using ScriptableObjects.Events;
 using UnityEngine;
 
@@ -60,7 +61,7 @@ namespace chopping_logs
                 TakeLog(heldController);
                 return;
             }
-
+            
             if (!_hasLog)
             {
                 if (held is HoldableObjectBehaviour pickableLog && pickableLog.CompareTag("Log"))
@@ -68,12 +69,12 @@ namespace chopping_logs
                     var chopTarget = pickableLog.GetComponentInChildren<LogChopTarget>();
                     if (chopTarget != null)
                         ChoreEvents.TriggerLogPlaced(chopTarget.GetLog());
-
+            
                     PlaceLog(pickableLog, heldController);
                     return;
                 }
             }
-
+            
             if (_hasLog && held is HoldableObjectBehaviour h &&
                 h.GetComponentInChildren<AxeHitDetector>() != null)
             {
