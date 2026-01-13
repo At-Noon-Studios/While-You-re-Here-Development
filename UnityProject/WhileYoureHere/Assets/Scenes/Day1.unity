@@ -141,24 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
---- !u!1 &273177093 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-  m_PrefabInstance: {fileID: 1242199016}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &273177102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273177093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7af6f520e79615c49800fe2248b6d436, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::chopping_logs.ChopUIManager
-  axeImpactSound: {fileID: 8300000, guid: 6abdf027d40c8214da97ec2237b5b295, type: 3}
 --- !u!4 &335232892 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
@@ -310,25 +292,9 @@ PrefabInstance:
       propertyPath: taskListUI
       value: 
       objectReference: {fileID: 821772969}
-    - target: {fileID: 671698812527810588, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: field of view
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 671698812527810588, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: far clip plane
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4171835902495713361, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190648910043707616, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4686765912313030553, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -374,77 +340,18 @@ PrefabInstance:
       propertyPath: furnace
       value: 
       objectReference: {fileID: 4467939654367623368}
-    - target: {fileID: 4709191410564867608, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: blowAudio
+    - target: {fileID: 7730936193259386632, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+      propertyPath: taskListUI
       value: 
-      objectReference: {fileID: 8300000, guid: cfd7f6972ae594d42b59ebc6d6291318, type: 3}
-    - target: {fileID: 5051764354188831803, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7936910077896098826, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.1253821
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.1112893
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.24734673
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.95431316
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 210
-      objectReference: {fileID: 0}
-    - target: {fileID: 8571363775998937495, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 170
-      objectReference: {fileID: 0}
-    - target: {fileID: 954108481944852147, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: furnace
+      objectReference: {fileID: 821772969}
+    - target: {fileID: 7730936193259386632, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+      propertyPath: screenSpaceElements.Array.data[1].requiredHeldObject
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: mouseUpImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: guideLineImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4860027892854068261, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: mouseDownImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6012344329808951788, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9001461804659304033, guid: c65755e988b0745f69524f7cfc1f4b90, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 177013458}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5203664925177866247, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 273177102}
-    - targetCorrespondingSourceObject: {fileID: 2977070723198052308, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1242199019}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
 --- !u!4 &1242199017 stripped
 Transform:
@@ -456,88 +363,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4686765912313030553, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
   m_PrefabInstance: {fileID: 1242199016}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1242199019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273177093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f88d99bd92b6094f8680639715e75f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.ScreenSpaceUIManager
-  screenSpaceElements:
-  - elementName: Drop
-    sprite: {fileID: 21300000, guid: d8abea6c134c069479c97dcd657aa4eb, type: 3}
-    size: {x: 6, y: 2}
-    activationMode: 1
-    inputAction: {fileID: -3422945749306108544, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
-    requiredInputUses: 3
-    requiredHeldObject: {fileID: 0}
-    requiredFlags: []
-    requiredEventChannels: []
-    offset: {x: -1.35, y: 0}
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  - elementName: Pour
-    sprite: {fileID: 21300000, guid: 53c60da51b21a14478dbde2d7e86eef8, type: 3}
-    size: {x: 6, y: 2}
-    activationMode: 1
-    inputAction: {fileID: -4685911128626818767, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
-    requiredInputUses: 3
-    requiredHeldObject: {fileID: 177013458}
-    requiredFlags: []
-    requiredEventChannels: []
-    offset: {x: -0.93, y: 0}
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  - elementName: To-Do List Open
-    sprite: {fileID: 21300000, guid: b0e02ffe6cce6da478d250bf47a3ac18, type: 3}
-    size: {x: 6, y: 2}
-    activationMode: 2
-    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
-    requiredInputUses: 3
-    requiredHeldObject: {fileID: 0}
-    requiredFlags: []
-    requiredEventChannels: []
-    offset: {x: -0.6, y: 0}
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  - elementName: To-Do List Close
-    sprite: {fileID: 21300000, guid: 25ad9331b2ba6e44e96eab52524cf897, type: 3}
-    size: {x: 6, y: 2}
-    activationMode: 3
-    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
-    requiredInputUses: 3
-    requiredHeldObject: {fileID: 177013458}
-    requiredFlags: []
-    requiredEventChannels: []
-    offset: {x: -1, y: 0}
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  - elementName: Blow
-    sprite: {fileID: 21300000, guid: 1d9f996d5f9c36a4ca3ac6feae977c22, type: 3}
-    size: {x: 6, y: 2}
-    activationMode: 5
-    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
-    requiredInputUses: 1
-    requiredHeldObject: {fileID: 0}
-    requiredFlags: []
-    requiredEventChannels:
-    - {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
-    offset: {x: -0.6, y: 0}
-    uiObject: {fileID: 0}
-    image: {fileID: 0}
-    rectTransform: {fileID: 0}
-  elementSpacing: {x: 0, y: 1.2}
-  screenScale: 50
-  taskListUI: {fileID: 821772969}
 --- !u!114 &1278970025 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3793788086882228219, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
