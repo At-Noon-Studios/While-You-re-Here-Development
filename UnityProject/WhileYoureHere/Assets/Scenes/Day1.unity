@@ -2244,6 +2244,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 4199048515343272442}
     m_Modifications:
     - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: _audioSource
+      value: 
+      objectReference: {fileID: 4467939654367623369}
+    - target: {fileID: 172894927182955405, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: placedObjects.Array.data[0].audioClip
       value: 
       objectReference: {fileID: 8300000, guid: ccde2bea4ef7fff479eafbb26560faab, type: 3}
@@ -2310,6 +2314,10 @@ PrefabInstance:
     - target: {fileID: 6519067279474043717, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668382047962201540, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+      propertyPath: MaxDistance
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -15946,6 +15954,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48118b82d9804a8084cc76836e59518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::make_a_fire.StoveBehaviour
+--- !u!82 &4467939654367623369 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8668382047962201540, guid: eba6491126d9248bdb33729e5a23b66a, type: 3}
+  m_PrefabInstance: {fileID: 703015327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &4473671114356612841
 MeshRenderer:
   m_ObjectHideFlags: 0
