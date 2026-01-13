@@ -1,6 +1,4 @@
 ﻿using Interactable;
-using Interactable.Concrete.ObjectHolder;
-using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,9 +6,6 @@ namespace making_tea
 {
     public abstract class TablePickup : InteractableBehaviour, ITablePickup
     {
-        [SerializeField] private Canvas interactionCanvasPrimary;
-        [SerializeField] private Canvas interactionCanvasSecondary;
-
         [Header("Table Settings")]
         [SerializeField] private float liftHeight = 0.8f;
 
@@ -24,7 +19,6 @@ namespace making_tea
         protected PlayerInteractionController Pic;
 
         private Rigidbody _rb;
-        private Transform _playerCamera;
 
         private float _railT;
         private bool _railInitialized;
@@ -42,14 +36,7 @@ namespace making_tea
         protected override void Awake()
         {
             base.Awake();
-
             _rb = GetComponent<Rigidbody>();
-
-            if (interactionCanvasPrimary != null)
-                interactionCanvasPrimary.gameObject.SetActive(false);
-
-            if (interactionCanvasSecondary != null)
-                interactionCanvasSecondary.gameObject.SetActive(false);
 
             _ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
             if (_ignoreRaycastLayer < 0) _ignoreRaycastLayer = 2;
@@ -95,25 +82,9 @@ namespace making_tea
 
         protected virtual void Update()
         {
-            RotateUI();
             HandleRailDrag();
         }
-
-        private void RotateUI()
-        {
-            if (_playerCamera == null) return;
-
-            if (interactionCanvasPrimary != null && interactionCanvasPrimary.gameObject.activeSelf)
-            {
-                interactionCanvasPrimary.transform.LookAt(_playerCamera);
-                interactionCanvasPrimary.transform.Rotate(0f, 180f, 0f);
-            }
-
-            if (interactionCanvasSecondary == null || !interactionCanvasSecondary.gameObject.activeSelf) return;
-            
-            interactionCanvasSecondary.transform.LookAt(_playerCamera);
-            interactionCanvasSecondary.transform.Rotate(0f, 180f, 0f);
-        }
+        
 
         private float ComputeRailTFromCurrentPosition()
         {
@@ -181,7 +152,7 @@ namespace making_tea
             }
 
             SetHeldPhysicsState(true);
-            ShowSecondaryUI();
+            EnableCollider(false);
 
             transform.position += Vector3.up * liftHeight;
             _liftedY = transform.position.y;
@@ -202,10 +173,20 @@ namespace making_tea
                 _rb.angularVelocity = Vector3.zero;
             }
 
-            ShowPrimaryUI();
+            EnableCollider(true);
         }
 
-        public virtual void ForceDropFromTableMode() => Drop();
+        public virtual void ForceDropFromTableMode()
+        {
+            Drop();
+        }
+
+        public override string InteractionText(IInteractor interactor) => string.Empty;
+
+        public bool InteractableBy(IInteractor interactor)
+        {
+            return (interactor as PlayerInteractionController)?.IsTableMode ?? false;
+        }
 
         public override void Interact(IInteractor interactor)
         {
@@ -213,48 +194,6 @@ namespace making_tea
 
             if (!IsLifted) Pickup(p);
             else Drop();
-        }
-
-        public override void OnHoverEnter(IInteractor interactor)
-        {
-            base.OnHoverEnter(interactor);
-
-            if (interactor is not PlayerInteractionController { IsTableMode: true }) return;
-            if (!IsLifted) ShowPrimaryUI();
-            else ShowSecondaryUI();
-        }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-            if (!IsLifted) HideAllUI();
-        }
-
-        private void ShowPrimaryUI()
-        {
-            if (interactionCanvasPrimary != null)
-                interactionCanvasPrimary.gameObject.SetActive(true);
-
-            if (interactionCanvasSecondary != null)
-                interactionCanvasSecondary.gameObject.SetActive(false);
-        }
-
-        private void ShowSecondaryUI()
-        {
-            if (interactionCanvasPrimary != null)
-                interactionCanvasPrimary.gameObject.SetActive(false);
-
-            if (interactionCanvasSecondary != null)
-                interactionCanvasSecondary.gameObject.SetActive(true);
-        }
-
-        private void HideAllUI()
-        {
-            if (interactionCanvasPrimary != null)
-                interactionCanvasPrimary.gameObject.SetActive(false);
-
-            if (interactionCanvasSecondary != null)
-                interactionCanvasSecondary.gameObject.SetActive(false);
         }
 
         public new abstract void EnableCollider(bool state);

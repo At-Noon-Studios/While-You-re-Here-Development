@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Interactable.Holdable;
 using JetBrains.Annotations;
@@ -10,11 +9,9 @@ namespace Interactable.Concrete.ObjectHolder
 {
     public class ObjectHolderSingle : InteractableBehaviour
     {
-        [Header("Placement")] [SerializeField] private Transform placePoint;
+        [Header("Placement")]
+        [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
-
-        [Header("Interaction UI")] [SerializeField]
-        private Canvas interactionCanvas;
 
         [Header("Tablemode")] 
         [SerializeField] private bool allowTableMode = true;
@@ -23,7 +20,6 @@ namespace Interactable.Concrete.ObjectHolder
         [SerializeField] private LayerMask tableDetectMask = ~0;
 
         [CanBeNull] private IHoldableObject _heldObject;
-        private Transform _playerCamera;
 
         private ITablePickup _tableCandidate;
         private bool _showCanvasNormalMode;
@@ -42,46 +38,16 @@ namespace Interactable.Concrete.ObjectHolder
         private void OnDisable()
         {
             All.Remove(this);
-
-            _showCanvasNormalMode = false;
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
         }
 
         protected override void Awake()
         {
             base.Awake();
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-
-            if (placePoint == null)
-                placePoint = transform;
-
-            var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
-
-            var cam = player.GetComponentInChildren<Camera>();
-            if (cam != null)
-                _playerCamera = cam.transform;
         }
 
         private void Update()
         {
             UpdateTableCandidate();
-
-            var showForTableMode = (_heldObject == null && _tableCandidate != null && _tableCandidate.IsTableHeld);
-            var showForNormalMode = (_heldObject == null && _showCanvasNormalMode);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(showForTableMode || showForNormalMode);
-
-            if (interactionCanvas == null ||
-                !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
         }
 
         private void UpdateTableCandidate()
@@ -198,12 +164,19 @@ namespace Interactable.Concrete.ObjectHolder
                 return;
             }
 
-            if (_heldObject != null) return;
-            if (interactor.HeldObject == null) return;
+            if (_heldObject != null)
+                return;
+
+            if (interactor.HeldObject == null)
+                return;
 
             _heldObject = interactor.HeldObject;
 
-            _heldObject.Place(placePoint.position, Quaternion.Euler(placedObjectRotation), this);
+            _heldObject.Place(
+                placePoint.position,
+                Quaternion.Euler(placedObjectRotation),
+                this
+            );
 
             var go = ((MonoBehaviour)_heldObject).gameObject;
             go.transform.SetParent(placePoint);
@@ -211,11 +184,6 @@ namespace Interactable.Concrete.ObjectHolder
             go.transform.localRotation = Quaternion.Euler(placedObjectRotation);
 
             OnPlaced?.Invoke(_heldObject);
-
-            _showCanvasNormalMode = false;
-            
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
         }
 
         public void ClearHeldObject(IHoldableObject obj)
@@ -245,31 +213,7 @@ namespace Interactable.Concrete.ObjectHolder
             
             if (!allowTableMode) return false;
             return _heldObject == null && _tableCandidate is { IsTableHeld: true };
-
         }
-
-        public override void OnHoverEnter(IInteractor interactor)
-        {
-            base.OnHoverEnter(interactor);
-
-            _showCanvasNormalMode = false;
-
-            if (_heldObject != null) return;
-
-            if (interactor is PlayerInteractionController { IsTableMode: false })
-            {
-                _showCanvasNormalMode = interactor.HeldObject is IPlaceable;
-            }
-        }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            _showCanvasNormalMode = false;
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
+        
     }
 }
