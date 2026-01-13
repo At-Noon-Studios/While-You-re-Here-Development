@@ -260,7 +260,7 @@ MonoBehaviour:
     events:
     - type: 5
       triggeredBy: 0
-      _expanded: 0
+      _expanded: 1
       booleanToChange: {fileID: 0}
       newValue: 0
       hourOfDay: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
       eventToInvoke:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 0}
+          - m_Target: {fileID: 6910828530064231202}
             m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
             m_MethodName: StartChoreWithSo
             m_Mode: 2
@@ -282,7 +282,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-          - m_Target: {fileID: 0}
+          - m_Target: {fileID: 6910828530064231202}
             m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
             m_MethodName: StartChoreWithSo
             m_Mode: 2
@@ -341,7 +341,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
     - type: 3
       triggeredBy: 2
-      _expanded: 0
+      _expanded: 1
       booleanToChange: {fileID: 0}
       newValue: 0
       hourOfDay: 0
@@ -436,7 +436,7 @@ MonoBehaviour:
       choresToComplete: []
       booleansToBeTrue: []
     - type: 4
-      triggeredBy: 0
+      triggeredBy: 3
       _expanded: 0
       booleanToChange: {fileID: 0}
       newValue: 0
@@ -447,7 +447,49 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       triggerAfterSeconds: 0
-      choresToComplete: []
+      choresToComplete:
+      - {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
+      booleansToBeTrue: []
+    - type: 5
+      triggeredBy: 0
+      _expanded: 1
+      booleanToChange: {fileID: 0}
+      newValue: 0
+      hourOfDay: 16
+      audioToPlay: {fileID: 8300000, guid: bd86a48f3db042c4a81df64268f215a0, type: 3}
+      cutsceneToPlay: {fileID: 0}
+      eventToInvoke:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: Interactable.Concrete.ObjectHolder.ObjectHolder,
+              Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 6910828530064231202}
+            m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
+            m_MethodName: StartChoreWithSo
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
+              m_ObjectArgumentAssemblyTypeName: ScriptableObjects.chores.SoChore,
+                Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      triggerAfterSeconds: 0
+      choresToComplete:
+      - {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
       booleansToBeTrue: []
     - type: 3
       triggeredBy: 2
@@ -459,9 +501,36 @@ MonoBehaviour:
       cutsceneToPlay: {fileID: 0}
       eventToInvoke:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: Interactable.Concrete.ObjectHolder.ObjectHolder,
+              Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 6910828530064231202}
+            m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
+            m_MethodName: StartChoreWithSo
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
+              m_ObjectArgumentAssemblyTypeName: ScriptableObjects.chores.SoChore,
+                Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       triggerAfterSeconds: 0
-      choresToComplete: []
+      choresToComplete:
+      - {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
       booleansToBeTrue: []
     - type: 3
       triggeredBy: 2
@@ -473,13 +542,55 @@ MonoBehaviour:
       cutsceneToPlay: {fileID: 0}
       eventToInvoke:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: Interactable.Concrete.ObjectHolder.ObjectHolder,
+              Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 6910828530064231202}
+            m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
+            m_MethodName: StartChoreWithSo
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
+              m_ObjectArgumentAssemblyTypeName: ScriptableObjects.chores.SoChore,
+                Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       triggerAfterSeconds: 0
-      choresToComplete: []
+      choresToComplete:
+      - {fileID: 11400000, guid: 1cd9d5bafb20f431ba9125bd52ebc523, type: 2}
       booleansToBeTrue: []
   - description: Making tea
     events:
     - type: 4
+      triggeredBy: 1
+      _expanded: 1
+      booleanToChange: {fileID: 0}
+      newValue: 0
+      hourOfDay: 0
+      audioToPlay: {fileID: 0}
+      cutsceneToPlay: {fileID: 0}
+      eventToInvoke:
+        m_PersistentCalls:
+          m_Calls: []
+      triggerAfterSeconds: 10
+      choresToComplete:
+      - {fileID: 11400000, guid: 30615f618d6f11a4ca262d2b98639670, type: 2}
+      booleansToBeTrue: []
+    - type: 5
       triggeredBy: 0
       _expanded: 0
       booleanToChange: {fileID: 0}
@@ -489,7 +600,46 @@ MonoBehaviour:
       cutsceneToPlay: {fileID: 0}
       eventToInvoke:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: Interactable.Concrete.ObjectHolder.ObjectHolderSingle,
+              Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: Interactable.Concrete.ObjectHolder.ObjectHolderSingle,
+              Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 6910828530064231202}
+            m_TargetAssemblyTypeName: chore.ChoreManager, Assembly-CSharp
+            m_MethodName: StartChoreWithSo
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: 30615f618d6f11a4ca262d2b98639670, type: 2}
+              m_ObjectArgumentAssemblyTypeName: ScriptableObjects.chores.SoChore,
+                Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       triggerAfterSeconds: 0
       choresToComplete: []
       booleansToBeTrue: []
@@ -511,7 +661,7 @@ MonoBehaviour:
       booleansToBeTrue: []
     - type: 4
       triggeredBy: 4
-      _expanded: 0
+      _expanded: 1
       booleanToChange: {fileID: 0}
       newValue: 0
       hourOfDay: 0
@@ -526,11 +676,38 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 184fb5c543011d84dacea3b92a014dbd, type: 2}
     - type: 5
       triggeredBy: 0
-      _expanded: 0
+      _expanded: 1
       booleanToChange: {fileID: 0}
       newValue: 0
       hourOfDay: 0
       audioToPlay: {fileID: 0}
+      cutsceneToPlay: {fileID: 0}
+      eventToInvoke:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: radio_interaction.RadioPowerInteraction, Assembly-CSharp
+            m_MethodName: BlockInteraction
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      triggerAfterSeconds: 0
+      choresToComplete: []
+      booleansToBeTrue:
+      - {fileID: 11400000, guid: 184fb5c543011d84dacea3b92a014dbd, type: 2}
+    - type: 3
+      triggeredBy: 2
+      _expanded: 1
+      booleanToChange: {fileID: 0}
+      newValue: 0
+      hourOfDay: 0
+      audioToPlay: {fileID: 8300000, guid: fc47c1a6569c0fb4ea91d542119ee178, type: 3}
       cutsceneToPlay: {fileID: 0}
       eventToInvoke:
         m_PersistentCalls:
@@ -553,11 +730,11 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 184fb5c543011d84dacea3b92a014dbd, type: 2}
     - type: 3
       triggeredBy: 2
-      _expanded: 0
+      _expanded: 1
       booleanToChange: {fileID: 0}
       newValue: 0
       hourOfDay: 0
-      audioToPlay: {fileID: 8300000, guid: fc47c1a6569c0fb4ea91d542119ee178, type: 3}
+      audioToPlay: {fileID: 8300000, guid: 2fa380d69d50c7b4899c7173ed5c9827, type: 3}
       cutsceneToPlay: {fileID: 0}
       eventToInvoke:
         m_PersistentCalls:
@@ -591,6 +768,32 @@ MonoBehaviour:
       eventToInvoke:
         m_PersistentCalls:
           m_Calls: []
+      triggerAfterSeconds: 1
+      choresToComplete: []
+      booleansToBeTrue: []
+    - type: 5
+      triggeredBy: 0
+      _expanded: 0
+      booleanToChange: {fileID: 0}
+      newValue: 0
+      hourOfDay: 0
+      audioToPlay: {fileID: 0}
+      cutsceneToPlay: {fileID: 0}
+      eventToInvoke:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: TaskList.TaskListManager, Assembly-CSharp
+            m_MethodName: TriggerCheckmark
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 4
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       triggerAfterSeconds: 1
       choresToComplete: []
       booleansToBeTrue: []
