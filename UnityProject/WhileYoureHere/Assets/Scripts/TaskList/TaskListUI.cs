@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Serialization;
 
 namespace TaskList
 {
@@ -17,13 +18,13 @@ namespace TaskList
         private Rigidbody _rigidbody;
 
         private bool _available;
-        private bool _isOpen;
+        public bool isOpen;
 
         public void RegisterTaskList(GameObject taskListObject)
         {
             _taskListObject = taskListObject;
             _available = true;
-            _isOpen = false;
+            isOpen = false;
 
             _rigidbody = _taskListObject.GetComponent<Rigidbody>();
             if (_rigidbody != null)
@@ -43,7 +44,7 @@ namespace TaskList
                 return;
             }
 
-            if (_isOpen)
+            if (isOpen)
                 CloseNotebook();
             else
                 OpenNotebook();
@@ -51,7 +52,7 @@ namespace TaskList
 
         private void OpenNotebook()
         {
-            _isOpen = true;
+            isOpen = true;
             taskListCanvas.gameObject.SetActive(true);
 
             if (_taskListObject == null || handPosition == null)
@@ -71,7 +72,7 @@ namespace TaskList
 
         private void CloseNotebook()
         {
-            _isOpen = false;
+            isOpen = false;
             taskListCanvas.gameObject.SetActive(false);
 
             if (_taskListObject != null)
