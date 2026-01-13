@@ -5,6 +5,7 @@ using ScriptableObjects.Dialogue;
 using PlayerControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Playables;
 
 namespace radio_interaction
 {
@@ -16,6 +17,9 @@ namespace radio_interaction
 
         [Header("radio data")] [HideInInspector]
         public RadioStateMachine RadioStateMachine;
+        
+        [Header("Radio Cutscene")] 
+        [SerializeField] private PlayableDirector radioTimeline;
 
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
@@ -59,6 +63,16 @@ namespace radio_interaction
             }
         }
 
+        private void Awake()
+        {
+            if (radioTimeline != null)
+            {
+                radioTimeline.Stop();
+                radioTimeline.time = 0;
+                radioTimeline.Evaluate();
+            }
+        }
+
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
@@ -95,6 +109,8 @@ namespace radio_interaction
 
         public float GetTuningTimer() => radioData.tuningWaitTime;
 
+        public PlayableDirector GetRadioTimeline() => radioTimeline;
+        
         public void PositionTuningCamera()
         {
             var position = Vector3.Lerp(
@@ -247,6 +263,8 @@ namespace radio_interaction
                     return;
                 }
 
+                if (OnCorrectChannel()) return;
+                
                 dialogueManager.StartRadioDialogue(staticNode, 0f);
                 _lastPlayedNode = staticNode;
                 return;
@@ -316,10 +334,18 @@ namespace radio_interaction
             var newIndex = Mathf.FloorToInt(_tuningNormalized / spacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
 
+            if (newIndex != 2)
+            {
+                OnStationChanged(newIndex);
+            }
+            else
+            {
+                _currentStationIndex = newIndex;
+                dialogueManager.GetUIManager().ShowDialogue("", "", "");
+            }
+
             if (_currentStationIndex == newIndex)
                 return;
-
-            OnStationChanged(newIndex);
         }
 
         public bool OnCorrectChannel() =>
@@ -453,8 +479,8 @@ namespace radio_interaction
                 resumeTime = saved.AudioTime;
             }
 
-            dialogueManager.StartRadioDialogue(newNode, resumeTime,
-                resumeIndex);
+            if (dialogueManager.CurrentNode == radioTracks[2].dialogueNode) return;
+            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
             dialogueManager.CurrentNode = newNode;
         }
 

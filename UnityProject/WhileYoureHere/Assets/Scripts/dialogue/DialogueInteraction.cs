@@ -17,21 +17,13 @@ namespace dialogue
         [SerializeField] private DialogueLoader dialogueLoader;
         [SerializeField] private DialogueInteractionConfig config;
 
-        [Header("Radio Cutscene")] 
-        [SerializeField] private PlayableDirector radioTimeline;
+        
         
         private Transform _playerCamera;
 
         protected override void Awake()
         {
             base.Awake();
-            
-            if (radioTimeline != null)
-            {
-                radioTimeline.Stop();
-                radioTimeline.time = 0;
-                radioTimeline.Evaluate();
-            }
             
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
@@ -56,8 +48,6 @@ namespace dialogue
 
         public override void Interact(IInteractor interactor)
         {
-            radioTimeline.Play();
-            
             if (dialogueLoader.gameObject.activeSelf ||
                 config.dialogueNodes == null ||
                 config.dialogueNodes.Count == 0)

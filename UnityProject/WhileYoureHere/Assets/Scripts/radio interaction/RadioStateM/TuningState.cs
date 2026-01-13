@@ -25,33 +25,28 @@ namespace radio_interaction
             Debug.Log("Exited Tuning State");
             _radioController.ExitTuningMode();
         }
-
+        
         public void Update()
         {
-            Debug.Log("Updating Tuning State");
-            sliderTimer += Time.deltaTime;
             _radioController.PositionTuningCamera();
             _radioController.HandleMouseMovement();
             _radioController.TuneRadio();
-
-            if (sliderTimer >= SliderLifeTime)
-            {
-                _radioController.ShowSlideCanvas(false);
-            }
-
-            if (!_radioController.OnCorrectChannel())
-            {
-                return;
-            }
+     
 
             if (_radioController.OnCorrectChannel())
             {
                 timer += Time.deltaTime;
+                if (timer >= _radioController.GetTuningTimer())
+                {
+                    _radioController.RadioStateMachine.ChangeState(
+                        new ResetCameraState(_radioController));
+                    
+                    _radioController.GetRadioTimeline().Play();
+                }
             }
-            else timer = 0;
-            if (timer >= _radioController.GetTuningTimer())
+            else
             {
-                _radioController.RadioStateMachine.ChangeState(new ResetCameraState(_radioController));
+                timer = 0;
             }
         }
     }
