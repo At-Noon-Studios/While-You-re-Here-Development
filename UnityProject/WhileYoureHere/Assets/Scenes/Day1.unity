@@ -3405,6 +3405,53 @@ MonoBehaviour:
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
+--- !u!1 &958848759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 958848761}
+  - component: {fileID: 958848760}
+  m_Layer: 0
+  m_Name: TaskListSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &958848760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958848759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa50001d0464414092eb8bfd2f011c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TaskListSound
+  _audioSource: {fileID: 1242199025}
+  taskListGrabSound: {fileID: 8300000, guid: 81f06c9e7668e214eb5a464622e84534, type: 3}
+  taskListCloseSound: {fileID: 8300000, guid: 5488599eb668dad4e906d55d20765551, type: 3}
+--- !u!4 &958848761
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958848759}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 837147085659931908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &965354491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6823175075118751902, guid: a59a67f4bf79d664cb986e84a895ce2c, type: 3}
@@ -4242,6 +4289,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4686765912313030553, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
   m_PrefabInstance: {fileID: 1242199016}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1242199025 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5956156730005618975, guid: fc5e43b477b3b8c45a828f1767b61dd5, type: 3}
+  m_PrefabInstance: {fileID: 1242199016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1250201552
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,7 +4405,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 5
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0
@@ -8085,6 +8137,7 @@ Transform:
   - {fileID: 447805499405966384}
   - {fileID: 3058996620568921976}
   - {fileID: 775487030199409557}
+  - {fileID: 958848761}
   m_Father: {fileID: 4199048515343272442}
   m_LocalEulerAnglesHint: {x: -179.081, y: -62.322998, z: -0.8739929}
 --- !u!23 &849703226065039475
@@ -18580,7 +18633,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 5
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0
@@ -20263,6 +20316,7 @@ MonoBehaviour:
   taskListCanvas: {fileID: 419845988414007831}
   handPosition: {fileID: 2078565998}
   hintController: {fileID: 557438291755138832}
+  taskListSound: {fileID: 958848760}
   spawnOffset: {x: 1, y: -0.3, z: -0.5}
   spawnRotation: {x: -10, y: -70, z: 0}
   spawnDuration: 0.5
