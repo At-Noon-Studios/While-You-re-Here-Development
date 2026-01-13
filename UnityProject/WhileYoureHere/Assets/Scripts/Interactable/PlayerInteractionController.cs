@@ -1,4 +1,5 @@
-﻿using Interactable.Concrete.ObjectHolder;
+using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using JetBrains.Annotations;
 using making_tea;
@@ -125,11 +126,7 @@ namespace Interactable
                 return;
             }
 
-            if (NoTarget)
-            {
-                HeldObject?.Drop();
-                return;
-            }
+            if (NoTarget) return;
 
             if (TargetInteractable)
             {
@@ -144,15 +141,9 @@ namespace Interactable
 
         private void ClickInteract()
         {
-            if (NoTarget)
+            if (NoTarget) return;
+            if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
             {
-                DropObject();
-                return;
-            }
-            
-            if (_currentTarget is IClickInteractable &&
-                clickInteractEvent.OnRaise != null)            
-                {
                 ClickInteractWithTarget();
             }
             else
@@ -181,9 +172,12 @@ namespace Interactable
 
             for (var i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
-                    HeldObject != null)
+                if (HeldObject != null &&
+                    hits[i].collider.TryGetComponent<IHoldableObject>(out _) &&
+                    !hits[i].collider.TryGetComponent<LogBasket>(out _))
+                {
                     continue;
+                }
 
                 UpdateBestTarget(hits[i], ref closestDistance, ref bestTarget, IsTableMode);
             }
@@ -340,7 +334,6 @@ namespace Interactable
 
             return false;
         }
-        
         #endregion
         
     }
