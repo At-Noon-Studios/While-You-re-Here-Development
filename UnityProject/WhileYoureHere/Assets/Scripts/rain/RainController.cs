@@ -16,6 +16,12 @@ namespace rain
             set => isRaining = value;
         }
 
+        private void Start()
+        {
+            if (isRaining) TriggerStartRain();
+            else TriggerStopRain();
+        }
+
         public void TriggerStartRain()
         {
             foreach (var rain in rainParticles)
