@@ -17,6 +17,7 @@ namespace Fishing {
         private CameraController _cameraController;
         private AudioSource _audioSource;
         private LineController _lineController;
+        private Animator _animator;
         private GameObject _spawnedFloater;
         private SoFish _caughtFish;
         private Action<Vector2> look;
@@ -70,6 +71,7 @@ namespace Fishing {
             _movementController = player.GetComponent<MovementController>();
             _cameraController = player.GetComponentInChildren<CameraController>();
             _audioSource = player.GetComponent<AudioSource>();
+            _animator = GetComponentInChildren<Animator>();
 
             _playerInput.actions["CastPullFishingRod"].performed += ctx => _isCastPullPressed = true;
             _playerInput.actions["CastPullFishingRod"].canceled += ctx => _isCastPullPressed = false;
@@ -193,12 +195,19 @@ namespace Fishing {
             FloaterController.TriggerFloaterMove(_currentFloaterMovement);
             if (Vector3.Distance(_reelTargetPosition, _spawnedFloater.transform.position) <= distanceFromShoreForCatch)
             {
-                //do catch animation here
-                ReturnLine();
+                _animator.Play("Catch");
                 Instantiate(_caughtFish.fishPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
                 _audioSource.PlayOneShot(success[Random.Range(0, success.Count)]);
                 _caughtFish = null;
+                Debug.Log(_animator.GetCurrentAnimatorClipInfo(0));
+                StartCoroutine(ReturnLineAfterDelay(_animator.GetCurrentAnimatorClipInfo(0).Length));
             }
+        }
+
+        private IEnumerator ReturnLineAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ReturnLine();
         }
 
         private void ReturnLine()
@@ -206,6 +215,7 @@ namespace Fishing {
             _isLineCast = false;
             line.SetActive(true);
             _lineController.SetUpLine(Array.Empty<Transform>());
+            ResetPose();
             StopAllCoroutines();
             Destroy(_spawnedFloater);
             _fishEscapeCount = 0;
