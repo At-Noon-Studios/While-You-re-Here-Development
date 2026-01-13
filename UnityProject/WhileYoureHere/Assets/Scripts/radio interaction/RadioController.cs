@@ -3,13 +3,13 @@ using dialogue;
 using player_controls;
 using ScriptableObjects.Dialogue;
 using PlayerControls;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 namespace radio_interaction
 {
-    [RequireComponent(typeof(DialogueManager))]
     public class RadioController : MonoBehaviour
     {
         [Header("audio tracks")] [SerializeField]
@@ -43,13 +43,14 @@ namespace radio_interaction
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
         private DialogueNode _lastPlayedNode;
-
+        private UIManager _uiManager;
         private readonly Dictionary<DialogueNode, RadioChannelProgress>
             _nodeSentenceProgress = new();
 
         private AudioSource _audioSource;
         private bool _isPlayingClassicRadio;
         private bool _finishedLastSentence;
+        private bool _isPlayingCutscene= true;
 
         private readonly struct RadioChannelProgress
         {
@@ -75,6 +76,8 @@ namespace radio_interaction
 
         private void Start()
         {
+            _uiManager = UIManager.Instance;
+
             _audioSource = GetComponent<AudioSource>();
             _movementController = player.GetComponent<MovementController>();
             _cameraController =
@@ -246,12 +249,20 @@ namespace radio_interaction
 
         public void TurnRadioOn()
         {
+      
             if (!TryValidateRadioSetup(out var error))
             {
                 Debug.LogError(error, this);
                 return;
             }
 
+            if (_isPlayingCutscene)
+            {
+                _isPlayingCutscene = false;
+                // _uiManager.ShowDialogue("","","");
+                radioTimeline.Play();
+                return;
+            }
             if (IsStaticChannel(_currentStationIndex))
             {
                 var staticNode = radioTracks[_currentStationIndex].dialogueNode;
@@ -322,6 +333,7 @@ namespace radio_interaction
             dialogueManager.EndDialogue();
         }
 
+       
         public void TuneRadio()
         {
             if (radioTracks == null || radioTracks.Length == 0)
@@ -333,19 +345,13 @@ namespace radio_interaction
 
             var newIndex = Mathf.FloorToInt(_tuningNormalized / spacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
-
-            if (newIndex != 2)
-            {
-                OnStationChanged(newIndex);
-            }
-            else
-            {
-                _currentStationIndex = newIndex;
-                dialogueManager.GetUIManager().ShowDialogue("", "", "");
-            }
+            
 
             if (_currentStationIndex == newIndex)
                 return;
+            
+            OnStationChanged(newIndex);
+
         }
 
         public bool OnCorrectChannel() =>

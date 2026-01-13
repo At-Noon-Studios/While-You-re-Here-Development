@@ -40,8 +40,6 @@ namespace radio_interaction
                 {
                     _radioController.RadioStateMachine.ChangeState(
                         new ResetCameraState(_radioController));
-                    
-                    _radioController.GetRadioTimeline().Play();
                 }
             }
             else

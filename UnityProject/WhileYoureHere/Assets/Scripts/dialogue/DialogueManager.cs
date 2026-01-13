@@ -116,7 +116,7 @@ namespace dialogue
                 return;
             }
 
-            _sentenceRoutine = StartCoroutine(TypeSentence(_activeSentences[_sentenceIndex]));
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex],resumeTime));
         }
 
         private void DisplayNode(string id)
