@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using chopping_logs;
 using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
@@ -25,10 +27,14 @@ namespace Interactable
         [SerializeField] private EventChannel interact;
         [SerializeField] private EventChannel clickInteractEvent;
         [SerializeField] private EventChannel dropEvent;
-
+        [SerializeField] private EventChannel standUpEvent;
 
         [Header("Holding")]
         [SerializeField] private Transform holdPoint;
+
+        [Header("Table Selection Filter")]
+        [SerializeField] private float tableSelectionMaxDistance = 2.5f;
+        [SerializeField] private float tableSelectionScreenMargin = 80f;
 
         [CanBeNull] private IInteractable _currentTarget;
         private UIManager _uiManager;
@@ -36,9 +42,15 @@ namespace Interactable
         private ChairInteractable _sittingChair;
 
         public bool IsTableMode { get; private set; }
+        public ITablePickup CurrentTableSelection { get; private set; }
+
         public Camera PlayerCamera => playerCamera;
 
         private const int InteractableRaycastAllocation = 16;
+        
+        private readonly List<ITablePickup> _tablePickupsAll = new();
+        private readonly List<ITablePickup> _tablePickupsSelectable = new();
+        private int _tablePickupIndex;
 
         #region Unity
 
@@ -54,7 +66,25 @@ namespace Interactable
 
         private void Update()
         {
-            RefreshCurrentTarget();
+            if (IsTableMode)
+            {
+                if (IsAnyTablePickupHeld())
+                {
+                    RefreshCurrentTarget();
+                }
+                else
+                {
+                    if (_currentTarget != null)
+                        SetCurrentTarget(null);
+
+                    RebuildSelectableTablePickups(true);
+                    HandleTableSelection();
+                }
+            }
+            else
+            {
+                RefreshCurrentTarget();
+            }
         }
 
         private void OnEnable()
@@ -62,6 +92,7 @@ namespace Interactable
             interact.OnRaise += Interact;
             clickInteractEvent.OnRaise += ClickInteract;
             dropEvent.OnRaise += DropObject;
+            standUpEvent.OnRaise += StandUp;
         }
 
         private void OnDisable()
@@ -69,6 +100,7 @@ namespace Interactable
             interact.OnRaise -= Interact;
             clickInteractEvent.OnRaise -= ClickInteract;
             dropEvent.OnRaise -= DropObject;
+            standUpEvent.OnRaise -= StandUp;
         }
 
         #endregion
@@ -86,11 +118,283 @@ namespace Interactable
         }
 
         #endregion
+        
+        #region Tablemode
+        
+        public void RegisterTablePickup(ITablePickup pickup)
+        {
+            if (pickup == null) return;
+            if (!_tablePickupsAll.Contains(pickup))
+                _tablePickupsAll.Add(pickup);
+        }
+
+        private static bool IsUnityDestroyed(ITablePickup p)
+        {
+            return p is Object uo && uo == null;
+        }
+
+        private void CleanupDestroyedTablePickups()
+        {
+            for (var i = _tablePickupsAll.Count - 1; i >= 0; i--)
+            {
+                var p = _tablePickupsAll[i];
+                if (p == null || IsUnityDestroyed(p))
+                    _tablePickupsAll.RemoveAt(i);
+            }
+
+            for (var i = _tablePickupsSelectable.Count - 1; i >= 0; i--)
+            {
+                var p = _tablePickupsSelectable[i];
+                if (p == null || IsUnityDestroyed(p))
+                    _tablePickupsSelectable.RemoveAt(i);
+            }
+
+            _tablePickupIndex = _tablePickupsSelectable.Count == 0 ? 0 : Mathf.Clamp(_tablePickupIndex, 0, _tablePickupsSelectable.Count - 1);
+        }
+
+        public void UnregisterTablePickup(ITablePickup pickup)
+        {
+            if (pickup == null) return;
+
+            bool wasSelected =
+                IsTableMode &&
+                _tablePickupsSelectable.Count > 0 &&
+                _tablePickupIndex >= 0 &&
+                _tablePickupIndex < _tablePickupsSelectable.Count &&
+                ReferenceEquals(_tablePickupsSelectable[_tablePickupIndex], pickup);
+
+            for (int i = _tablePickupsAll.Count - 1; i >= 0; i--)
+                if (ReferenceEquals(_tablePickupsAll[i], pickup))
+                    _tablePickupsAll.RemoveAt(i);
+
+            for (int i = _tablePickupsSelectable.Count - 1; i >= 0; i--)
+                if (ReferenceEquals(_tablePickupsSelectable[i], pickup))
+                    _tablePickupsSelectable.RemoveAt(i);
+
+            if (!IsTableMode) return;
+            if (IsAnyTablePickupHeld()) return;
+
+            if (_tablePickupsSelectable.Count == 0)
+            {
+                _tablePickupIndex = 0;
+                return;
+            }
+
+            if (_tablePickupIndex >= _tablePickupsSelectable.Count)
+                _tablePickupIndex = _tablePickupsSelectable.Count - 1;
+
+            if (wasSelected)
+            {
+                ClearTableSelection();
+                HighlightCurrentTablePickup();
+            }
+        }
+
+        private bool IsAnyTablePickupHeld()
+        {
+            CleanupDestroyedTablePickups();
+
+            return _tablePickupsAll.Where(p => p != null && !IsUnityDestroyed(p)).Any(p => p.IsTableHeld);
+        }
+
+        public bool HasAnyTablePickupHeld() => IsAnyTablePickupHeld();
+
+        public TablePickup GetHeldTablePickup()
+        {
+            CleanupDestroyedTablePickups();
+
+            foreach (var p in _tablePickupsAll.Where(p => p != null && !IsUnityDestroyed(p)))
+            {
+                if (p is TablePickup tp && tp != null && tp.IsTableHeld)
+                    return tp;
+            }
+
+            return null;
+        }
+        
+        private void HandleTableSelection()
+        {
+            if (_tablePickupsSelectable.Count == 0)
+                return;
+
+            if (Keyboard.current == null)
+                return;
+
+            if (Keyboard.current.aKey.wasPressedThisFrame)
+                ChangeTableSelection(-1);
+
+            if (Keyboard.current.dKey.wasPressedThisFrame)
+                ChangeTableSelection(1);
+        }
+
+        private void ChangeTableSelection(int dir)
+        {
+            RebuildSelectableTablePickups(true);
+
+            ClearTableSelection();
+
+            if (_tablePickupsSelectable.Count == 0)
+                return;
+
+            _tablePickupIndex =
+                (_tablePickupIndex + dir + _tablePickupsSelectable.Count) % _tablePickupsSelectable.Count;
+
+            HighlightCurrentTablePickup();
+        }
+
+        private void HighlightCurrentTablePickup()
+        {
+            if (_tablePickupsSelectable.Count == 0) return;
+
+            var selected = _tablePickupsSelectable[_tablePickupIndex];
+            CurrentTableSelection = selected;
+
+            if (selected is InteractableBehaviour ib)
+                ib.OnHoverEnter(this);
+        }
+
+        private void ClearTableSelection()
+        {
+            foreach (var t in _tablePickupsSelectable)
+                if (t is InteractableBehaviour ib)
+                    ib.OnHoverExit(this);
+
+            CurrentTableSelection = null;
+        }
+
+        private void RebuildSelectableTablePickups(bool preserveSelection)
+        {
+            CleanupDestroyedTablePickups();
+
+            ITablePickup previous = null;
+            if (preserveSelection &&
+                _tablePickupsSelectable.Count > 0 &&
+                _tablePickupIndex >= 0 &&
+                _tablePickupIndex < _tablePickupsSelectable.Count)
+            {
+                previous = _tablePickupsSelectable[_tablePickupIndex];
+                if (previous == null || IsUnityDestroyed(previous))
+                    previous = null;
+            }
+
+            _tablePickupsSelectable.Clear();
+            
+            foreach (var p in _tablePickupsAll)
+            {
+                if (p == null || IsUnityDestroyed(p)) continue;
+                if (!IsSelectableTablePickup(p)) continue;
+                _tablePickupsSelectable.Add(p);
+            }
+
+            if (_tablePickupsSelectable.Count is 0 or 1)
+            {
+                _tablePickupIndex = 0;
+                return;
+            }
+
+            _tablePickupsSelectable.Sort((a, b) => GetPickupScreenX(a).CompareTo(GetPickupScreenX(b)));
+
+            if (previous != null)
+            {
+                int idx = _tablePickupsSelectable.IndexOf(previous);
+                _tablePickupIndex = idx >= 0 ? idx : FindClosestToScreenCenterIndex();
+            }
+            else
+            {
+                _tablePickupIndex = FindClosestToScreenCenterIndex();
+            }
+
+            _tablePickupIndex = Mathf.Clamp(_tablePickupIndex, 0, _tablePickupsSelectable.Count - 1);
+        }
+
+        private bool IsSelectableTablePickup(ITablePickup pickup)
+        {
+            if (pickup == null || IsUnityDestroyed(pickup)) return false;
+            if (pickup is not MonoBehaviour mb || mb == null) return false;
+            if (playerCamera == null) return false;
+
+            var anchor = _sittingChair != null ? _sittingChair.transform.position : transform.position;
+            if (tableSelectionMaxDistance > 0f && Vector3.Distance(mb.transform.position, anchor) > tableSelectionMaxDistance)
+                return false;
+
+            var sp = playerCamera.WorldToScreenPoint(mb.transform.position);
+            if (sp.z < 0.01f) return false;
+
+            float m = Mathf.Max(0f, tableSelectionScreenMargin);
+            if (sp.x < -m || sp.x > Screen.width + m) return false;
+            if (sp.y < -m || sp.y > Screen.height + m) return false;
+
+            return true;
+        }
+
+        private float GetPickupScreenX(ITablePickup pickup)
+        {
+            if (pickup == null || IsUnityDestroyed(pickup) || playerCamera == null)
+                return float.MaxValue;
+
+            if (pickup is not MonoBehaviour mb || mb == null)
+                return float.MaxValue;
+
+            var sp = playerCamera.WorldToScreenPoint(mb.transform.position);
+            if (sp.z < 0.01f)
+                return float.MaxValue;
+
+            return sp.x;
+        }
+
+        private int FindClosestToScreenCenterIndex()
+        {
+            if (_tablePickupsSelectable.Count == 0 || playerCamera == null)
+                return 0;
+
+            float center = Screen.width * 0.5f;
+            int bestIndex = 0;
+            float bestDist = float.MaxValue;
+
+            for (int i = 0; i < _tablePickupsSelectable.Count; i++)
+            {
+                float x = GetPickupScreenX(_tablePickupsSelectable[i]);
+                float d = Mathf.Abs(x - center);
+                if (d < bestDist)
+                {
+                    bestDist = d;
+                    bestIndex = i;
+                }
+            }
+
+            return bestIndex;
+        }
+        
+        public void EnableTableMode(bool enable)
+        {
+            IsTableMode = enable;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            if (enable)
+            {
+                RebuildSelectableTablePickups(false);
+                ClearTableSelection();
+                HighlightCurrentTablePickup();
+            }
+            else
+            {
+                foreach (var p in _tablePickupsAll)
+                    p?.ForceDropFromTableMode();
+
+                ClearTableSelection();
+
+                if (_currentTarget != null)
+                    SetCurrentTarget(null);
+            }
+        }
+
+        #endregion
 
         #region Chair helpers
 
         public void SetSittingChair(ChairInteractable chair) => _sittingChair = chair;
-
         public void ClearSittingChair() => _sittingChair = null;
 
         #endregion
@@ -101,32 +405,32 @@ namespace Interactable
         {
             if (IsTableMode)
             {
-                if (HeldObject == null &&
-                    _currentTarget is not ObjectHolderSingle &&
-                    CanDropTablePickup())
+                if (IsAnyTablePickupHeld())
+                {
+                    if (ObjectHolderSingle.TryPlaceHeldTablePickup(this))
+                        return;
+
+                    if (TargetInteractable && _currentTarget is ObjectHolderSingle)
+                    {
+                        InteractWithTarget();
+                        return;
+                    }
+
+                    GetHeldTablePickup()?.Drop();
                     return;
-
-                if (NoTarget)
-                {
-                    if (_sittingChair != null)
-                        _sittingChair.ForceStandUp();
-
-                    return;
                 }
 
-                if (TargetInteractable)
-                {
-                    InteractWithTarget();
-                }
-                else
-                {
-                    _uiManager?.PulseInteractPrompt();
-                }
-
+                if (_tablePickupsSelectable.Count <= 0) return;
+                var selected = _tablePickupsSelectable[_tablePickupIndex];
+                selected?.Interact(this);
                 return;
             }
 
-            if (NoTarget) return;
+            if (NoTarget)
+            {
+                DropObject();
+                return;
+            }
 
             if (TargetInteractable)
             {
@@ -138,25 +442,47 @@ namespace Interactable
             }
         }
 
-
         private void ClickInteract()
         {
-            if (NoTarget) return;
+            if (IsTableMode)
+                return;
+
+            if (NoTarget)
+            {
+                DropObject();
+                return;
+            }
+
             if (_currentTarget is IClickInteractable && clickInteractEvent.OnRaise != null)
             {
                 ClickInteractWithTarget();
             }
             else
             {
-                _uiManager.PulseInteractPrompt();
+                _uiManager?.PulseInteractPrompt();
             }
         }
 
-          private void DropObject()
+        private void DropObject()
         {
-            HeldObject?.Drop();        
+            if (IsTableMode)
+            {
+                if (IsAnyTablePickupHeld())
+                {
+                    GetHeldTablePickup()?.Drop();
+                }
+
+                return;
+            }
+
+            HeldObject?.Drop();
         }
 
+        private void StandUp()
+        {
+            _sittingChair?.StandUp();
+        }
+        
 
         #endregion
 
@@ -286,7 +612,7 @@ namespace Interactable
         private void InteractWithTarget()
         {
             _currentTarget?.Interact(this);
-            OnHoverEnter(_currentTarget); // Refresh
+            OnHoverEnter(_currentTarget);
         }
 
         private void ClickInteractWithTarget()
@@ -309,31 +635,6 @@ namespace Interactable
             _movementController.SetMovementModifier(modifier);
         }
         
-        #endregion
-
-        #region Tablemode
-
-        public void EnableTableMode(bool enable)
-        {
-            IsTableMode = enable;
-            Cursor.lockState = enable ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = enable;
-        }
-
-        private static bool CanDropTablePickup()
-        {
-            var pickups = FindObjectsByType<TablePickup>(FindObjectsSortMode.None);
-
-            foreach (var p in pickups)
-            {
-                if (!p.IsTableHeld) continue;
-
-                p.Drop();
-                return true;
-            }
-
-            return false;
-        }
         #endregion
         
     }

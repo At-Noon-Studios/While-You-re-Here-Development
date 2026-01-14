@@ -8,6 +8,8 @@ namespace making_tea
         [Header("Water Tap Reference")]
         [SerializeField] private WaterTap tap;
 
+        public WaterTap Tap => tap;
+
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)

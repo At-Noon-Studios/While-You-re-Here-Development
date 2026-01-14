@@ -113,6 +113,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "StandUp",
+                    "type": "Button",
+                    "id": "50a14642-ce29-481e-8c7c-77b3ff30c29a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -289,6 +298,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "TaskList",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aee038e0-78f3-4bf4-b767-7eeb4c1f033b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "StandUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

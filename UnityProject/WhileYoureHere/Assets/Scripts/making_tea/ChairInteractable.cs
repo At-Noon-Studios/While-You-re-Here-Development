@@ -3,6 +3,7 @@ using Interactable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.Gamestate;
+using TaskList;
 using UnityEngine;
 
 namespace making_tea
@@ -42,7 +43,7 @@ namespace making_tea
 
         private Vector3 _originalCameraLocalPos;
         private Quaternion _originalCameraLocalRot;
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -57,28 +58,27 @@ namespace making_tea
         private IEnumerator StartSittingRoutine()
         {
             Debug.Log($"[Chair] StartSittingRoutine started on {gameObject.name}");
-            
+
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             GameObject player = null;
             PlayerInteractionController playerController = null;
-
             while (player == null || playerController == null)
             {
                 player = GameObject.FindWithTag("Player");
                 if (player != null)
                     playerController = player.GetComponent<PlayerInteractionController>();
-                
+
                 Debug.Log($"[Chair] Waiting for Player... player={player}, pic={playerController}");
                 yield return null;
             }
-            
+
             player.SetActive(false);
-            
+
             yield return null;
 
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             _playerAlreadySeatedAtStart = true;
             Sit(playerController);
             player.SetActive(true);
@@ -167,16 +167,18 @@ namespace making_tea
             _pic.SetSittingChair(this);
         }
 
-        private void StandUp()
+        public void StandUp()
         {
             if (_standUpLocked)
             {
                 Debug.Log($"[Chair] StandUp blocked (locked)");
                 return;
             }
-            
+
             _activeChair = null;
-            
+
+            if (!_isSitting) return;
+
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 
@@ -191,9 +193,11 @@ namespace making_tea
 
             _isSitting = false;
 
-            if (_pic == null) return;
-            _pic.EnableTableMode(false);
-            _pic.ClearSittingChair();
+            if (_pic != null)
+            {
+                _pic.EnableTableMode(false);
+                _pic.ClearSittingChair();
+            }
         }
 
         public void ForceStandUp()

@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3827762607675187527}
+  - component: {fileID: 7345426271302214823}
+  - component: {fileID: 7681004582534968949}
   - component: {fileID: 4044951224988346698}
   - component: {fileID: 7656214457393906207}
-  - component: {fileID: 4454036573687773216}
-  - component: {fileID: 2835776839590602380}
   - component: {fileID: 303804130628685849}
-  - component: {fileID: 8514650286695220610}
+  - component: {fileID: 2835776839590602380}
+  - component: {fileID: 3971713934193457026}
   m_Layer: 0
   m_Name: Teabag
   m_TagString: Teabag
@@ -32,12 +33,67 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.875, y: 1.008, z: 0.311}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8809792837903387}
+  m_LocalScale: {x: 0.08, y: 0.020000001, z: 0.08}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7345426271302214823
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980112532137061730}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &7681004582534968949
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980112532137061730}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8999d551dad546541b4a3f2d0e9fc2fa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &4044951224988346698
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -57,8 +113,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.2, z: 0.1}
-  m_Center: {x: 0, y: 0.1, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7656214457393906207
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -86,7 +142,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &4454036573687773216
+--- !u!114 &303804130628685849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,9 +151,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3980112532137061730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6553cc284f49a483e9f412a96641b2f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::picking_up_objects.Pickable
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
   blockInteraction: 0
   data: {fileID: 11400000, guid: 2829ca37ab1c1b248a8f7c03e5e4d447, type: 2}
 --- !u!114 &2835776839590602380
@@ -113,25 +169,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeabagTablePickup
   blockInteraction: 0
-  tableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   liftHeight: 0.8
---- !u!114 &303804130628685849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3980112532137061730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fcbca46d4b44bc42abd01b211487153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable.Concrete.ObjectHolder.Placeable
-  blockInteraction: 0
-  data: {fileID: 11400000, guid: 2829ca37ab1c1b248a8f7c03e5e4d447, type: 2}
---- !u!114 &8514650286695220610
+  enableRailDrag: 1
+  railLeft: {fileID: 0}
+  railRight: {fileID: 0}
+  railSensitivity: 0.005
+--- !u!114 &3971713934193457026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,81 +189,69 @@ MonoBehaviour:
   worldSpaceElements:
   - elementName: Pick Up
     sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
-    size: {x: 3, y: 1}
+    size: {x: 1, y: 0.5}
     flipX: 0
     flipY: 0
     activationMode: 1
-    interactableBehaviour: {fileID: 4454036573687773216}
+    interactableBehaviour: {fileID: 303804130628685849}
     requiredHeldObject: {fileID: 0}
+    requireAnyHeldObject: 0
+    requireHolderEmpty: 0
+    hideWhileTableHeld: 0
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
-    offset: {x: 0, y: 0.4, z: 0}
+    requiredTeabagState: 0
+    requiredSinkState: 0
+    requiredLidState: 0
+    offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
-  canvasScale: 0.1
+  - elementName: Pick Up Tablemode
+    sprite: {fileID: 21300000, guid: 448c20c25d3359148841863d3488b6d2, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 2
+    interactableBehaviour: {fileID: 2835776839590602380}
+    requiredHeldObject: {fileID: 0}
+    requireAnyHeldObject: 0
+    requireHolderEmpty: 0
+    hideWhileTableHeld: 0
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    requiredTeabagState: 1
+    requiredSinkState: 0
+    requiredLidState: 0
+    offset: {x: 0, y: 0.45, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Drop
+    sprite: {fileID: 21300000, guid: 489dd4549b58e224ebbd31c2995c55cc, type: 3}
+    size: {x: 1, y: 0.5}
+    flipX: 0
+    flipY: 0
+    activationMode: 2
+    interactableBehaviour: {fileID: 2835776839590602380}
+    requiredHeldObject: {fileID: 0}
+    requireAnyHeldObject: 0
+    requireHolderEmpty: 0
+    hideWhileTableHeld: 0
+    requiredDoorState: 0
+    requiredStumpState: 0
+    requiredKettleState: 0
+    requiredTeabagState: 2
+    requiredSinkState: 0
+    requiredLidState: 0
+    offset: {x: 0, y: 0.45, z: 0}
+    lookAtTarget: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 10
   allowMultipleOnSameInteractable: 0
---- !u!1001 &8996864018789239785
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 3827762607675187527}
-    m_Modifications:
-    - target: {fileID: 8615338745789986120, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_Name
-      value: Mint
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
---- !u!4 &8809792837903387 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8990315557388087282, guid: 7273706c01464a94486fa16ad6a0206c, type: 3}
-  m_PrefabInstance: {fileID: 8996864018789239785}
-  m_PrefabAsset: {fileID: 0}
