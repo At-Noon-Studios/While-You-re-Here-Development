@@ -3,6 +3,7 @@ using Interactable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.dialogue;
+using UnityEngine.Playables;
 
 namespace dialogue
 {
@@ -16,11 +17,14 @@ namespace dialogue
         [SerializeField] private DialogueLoader dialogueLoader;
         [SerializeField] private DialogueInteractionConfig config;
 
+        
+        
         private Transform _playerCamera;
 
         protected override void Awake()
         {
             base.Awake();
+            
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);
 
@@ -75,7 +79,7 @@ namespace dialogue
                 Cursor.visible = false;
             }
 
-            dialogueLoader.StartDialogue(config);
+            //dialogueLoader.StartDialogue(config);
 
             if (interactionUI != null)
                 interactionUI.SetActive(false);

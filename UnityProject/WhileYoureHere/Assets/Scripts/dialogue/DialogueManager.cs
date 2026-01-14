@@ -46,6 +46,7 @@ namespace dialogue
         private void Awake()
         {
             _ui = UIManager.Instance;
+            gameObject.SetActive(true);
         }
 
         private void Start()
@@ -88,7 +89,6 @@ namespace dialogue
             _nodes.Clear();
             foreach (var n in interactionConfig.dialogueNodes)
                 _nodes[n.nodeID] = n;
-
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
@@ -116,9 +116,7 @@ namespace dialogue
                 return;
             }
 
-            _sentenceRoutine = StartCoroutine(
-                TypeSentenceWithResume(_activeSentences[_sentenceIndex],
-                    resumeTime));
+            _sentenceRoutine = StartCoroutine(TypeSentenceWithResume(_activeSentences[_sentenceIndex],resumeTime));
         }
 
         private void DisplayNode(string id)
@@ -166,7 +164,6 @@ namespace dialogue
                     HandleNextNodeOrEnd();
                 return;
             }
-
             DialogueSentence sentence = _activeSentences[_sentenceIndex++];
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
@@ -292,19 +289,19 @@ namespace dialogue
             _isTyping = true;
             _currentFullSentence = sentence.text;
 
-            if (sentence.audio != null)
-            {
-                if (_audioSource == null)
-                    _audioSource = GameObject
-                        .FindWithTag(sentence.tagOfAudioSource)
-                        .GetComponent<AudioSource>();
-                _audioSource.Stop();
-                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
-                    .GetComponent<AudioSource>();
-                _audioSource.volume = volume;
-                _audioSource.clip = sentence.audio;
-                _audioSource.Play();
-            }
+            // if (sentence.audio != null)
+            // {
+            //     if (_audioSource == null)
+            //         _audioSource = GameObject
+            //             .FindWithTag(sentence.tagOfAudioSource)
+            //             .GetComponent<AudioSource>();
+            //     _audioSource.Stop();
+            //     _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
+            //         .GetComponent<AudioSource>();
+            //     _audioSource.volume = volume;
+            //     _audioSource.clip = sentence.audio;
+            //     _audioSource.Play();
+            // }
 
             string output = "";
             foreach (char c in sentence.text)
@@ -383,6 +380,12 @@ namespace dialogue
             var clip = sentence != null ? sentence.audio : null;
             return clip != null ? clip.length : 0f;
         }
-        
+
+
+        public UIManager GetUIManager()
+        {
+            return _ui;
+        }
+
     }
 }

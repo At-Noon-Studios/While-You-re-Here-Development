@@ -3,8 +3,10 @@ using dialogue;
 using player_controls;
 using ScriptableObjects.Dialogue;
 using PlayerControls;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Playables;
 
 namespace radio_interaction
 {
@@ -15,6 +17,9 @@ namespace radio_interaction
 
         [Header("radio data")] [HideInInspector]
         public RadioStateMachine RadioStateMachine;
+        
+        [Header("Radio Cutscene")] 
+        [SerializeField] private PlayableDirector radioTimeline;
 
         [SerializeField] private Transform player;
         [SerializeField] private Transform slider;
@@ -38,13 +43,14 @@ namespace radio_interaction
         private Vector3 _currentCameraPosition;
         private Quaternion _currentCameraRotation;
         private DialogueNode _lastPlayedNode;
-
+        private UIManager _uiManager;
         private readonly Dictionary<DialogueNode, RadioChannelProgress>
             _nodeSentenceProgress = new();
 
         private AudioSource _audioSource;
         private bool _isPlayingClassicRadio;
         private bool _finishedLastSentence;
+        private bool _isPlayingCutscene= true;
 
         private readonly struct RadioChannelProgress
         {
@@ -58,8 +64,22 @@ namespace radio_interaction
             }
         }
 
+        private void Awake()
+        {
+            if (radioTimeline != null)
+            {
+                radioTimeline.stopped += OnTimelineFinished;
+                radioTimeline.Stop();
+                radioTimeline.time = 0;
+                radioTimeline.Evaluate();
+            }
+
+        }
+
         private void Start()
         {
+            _uiManager = UIManager.Instance;
+
             _audioSource = GetComponent<AudioSource>();
             _movementController = player.GetComponent<MovementController>();
             _cameraController =
@@ -83,6 +103,11 @@ namespace radio_interaction
         private void OnDisable()
         {
             dialogueManager.OnLastSentenceFinished -= LastSentenceFinished;
+            if (radioTimeline != null)
+            {
+                radioTimeline.stopped -= OnTimelineFinished;
+            }
+
         }
 
         private void Update()
@@ -94,6 +119,8 @@ namespace radio_interaction
 
         public float GetTuningTimer() => radioData.tuningWaitTime;
 
+        public PlayableDirector GetRadioTimeline() => radioTimeline;
+        
         public void PositionTuningCamera()
         {
             var position = Vector3.Lerp(
@@ -226,15 +253,29 @@ namespace radio_interaction
             offStateCanvas.gameObject.SetActive(false);
             slideCanvas.gameObject.SetActive(false);
         }
+        private void OnTimelineFinished(PlayableDirector director)
+        {
+            if (director == radioTimeline)
+            {
+                _isPlayingCutscene = false;
+            }
+        }
+
 
         public void TurnRadioOn()
         {
+      
             if (!TryValidateRadioSetup(out var error))
             {
                 Debug.LogError(error, this);
                 return;
             }
 
+            if (_isPlayingCutscene)
+            {
+                radioTimeline.Play();
+                return;
+            }
             if (IsStaticChannel(_currentStationIndex))
             {
                 var staticNode = radioTracks[_currentStationIndex].dialogueNode;
@@ -246,6 +287,8 @@ namespace radio_interaction
                     return;
                 }
 
+                if (OnCorrectChannel()) return;
+                
                 dialogueManager.StartRadioDialogue(staticNode, 0f);
                 _lastPlayedNode = staticNode;
                 return;
@@ -303,6 +346,7 @@ namespace radio_interaction
             dialogueManager.EndDialogue();
         }
 
+       
         public void TuneRadio()
         {
             if (radioTracks == null || radioTracks.Length == 0)
@@ -314,11 +358,13 @@ namespace radio_interaction
 
             var newIndex = Mathf.FloorToInt(_tuningNormalized / spacing);
             newIndex = Mathf.Clamp(newIndex, 0, radioTracks.Length - 1);
+            
 
             if (_currentStationIndex == newIndex)
                 return;
-
+            
             OnStationChanged(newIndex);
+
         }
 
         public bool OnCorrectChannel() =>
@@ -374,6 +420,7 @@ namespace radio_interaction
             _audioSource.Play();
             _isPlayingClassicRadio = true;
         }
+        public bool GetIsPlayingCutscene() => _isPlayingCutscene;
 
         #endregion
 
@@ -452,8 +499,8 @@ namespace radio_interaction
                 resumeTime = saved.AudioTime;
             }
 
-            dialogueManager.StartRadioDialogue(newNode, resumeTime,
-                resumeIndex);
+            if (dialogueManager.CurrentNode == radioTracks[2].dialogueNode) return;
+            dialogueManager.StartRadioDialogue(newNode, resumeTime, resumeIndex);
             dialogueManager.CurrentNode = newNode;
         }
 

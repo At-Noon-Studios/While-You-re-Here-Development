@@ -10,11 +10,12 @@ namespace dialogue
     {
         [SerializeField] private DialogueManager dialogueManager;
         private DialogueInteractionConfig _config;
-
+        [SerializeField] private GameObject dialogueUI;
         public void StartDialogue(DialogueInteractionConfig config)
         {
             if (config.dialogueNodes.Count == 0 || dialogueManager == null) return;
             _config = config;
+            dialogueUI.SetActive(true); 
             StartCoroutine(StartDialogueNextFrame());
         }
 
