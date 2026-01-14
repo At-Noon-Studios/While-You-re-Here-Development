@@ -14,7 +14,6 @@ namespace radio_interaction
 
         public void Enter()
         {
-            Debug.Log("Entered Tuning State");
             _radioController.EnterTuningMode();
             _radioController.ShowSlideCanvas(true);
             timer = 0;
@@ -22,13 +21,11 @@ namespace radio_interaction
 
         public void Exit()
         {
-            Debug.Log("Exited Tuning State");
             _radioController.ExitTuningMode();
         }
 
         public void Update()
         {
-            Debug.Log("Updating Tuning State");
             sliderTimer += Time.deltaTime;
             _radioController.PositionTuningCamera();
             _radioController.HandleMouseMovement();

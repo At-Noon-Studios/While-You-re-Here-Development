@@ -53,14 +53,14 @@ namespace chopping_logs
             }
             else if (yDelta < DeltaThresholdDown)
             {
-                IsAxeDown = true;
                 PlayAxeImpact();
+                IsAxeDown = true;
             }
         }
 
         private void PlayAxeImpact()
         {
-            if (axeImpactSound != null)
+            if (axeImpactSound != null && !IsAxeDown)
                 _audioSource.PlayOneShot(axeImpactSound);
         }
 
