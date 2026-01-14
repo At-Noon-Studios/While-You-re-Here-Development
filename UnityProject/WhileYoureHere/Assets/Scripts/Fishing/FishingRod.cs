@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Interactable;
 using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.Fishing;
+using ScriptableObjects.Gamestate;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -56,6 +58,12 @@ namespace Fishing {
         [Header("Caught fish voicelines")]
         public List<AudioClip> success;
         public List<AudioClip> fail;
+
+        [Header("UI event channels")]
+        public SoGamestateFlag scrollUiFlag;
+        public SoGamestateFlag castUiFlag;
+        public SoGamestateFlag countersteerLeftUiFlag;
+        public SoGamestateFlag countersteerRightUiFlag;
         
         public static event Action<SoFish> OnFishCaught;
         public static void TriggerFishCaught(SoFish fish) => OnFishCaught?.Invoke(fish);
@@ -76,7 +84,7 @@ namespace Fishing {
             _lineController = GetComponent<LineController>();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (_holder == null) return;
             if (_isCastPullPressed)
@@ -144,6 +152,7 @@ namespace Fishing {
         {
             _isCasting = false;
             _isLineCast = true;
+            castUiFlag.currentValue = false;
             _spawnedFloater = Instantiate(floaterPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
             _spawnedFloater.gameObject.GetComponent<Rigidbody>().AddForce(castingForce * _playerCamera.forward, ForceMode.Impulse);
             _lineController.SetUpLine(new []{fishingRodTop.transform, _spawnedFloater.transform});
@@ -180,7 +189,6 @@ namespace Fishing {
                 return;
             }
 
-            //_currentFloaterMovement += (_reelTargetPosition - _spawnedFloater.transform.position) * _currentReelSpeed;
             var direction = Vector3.MoveTowards(_spawnedFloater.transform.position, _reelTargetPosition, _currentReelSpeed);
             _spawnedFloater.transform.position = direction;
         }
@@ -213,6 +221,10 @@ namespace Fishing {
             look -= UpdateMouseForCounterSteer;
             _cameraController.ResumeCameraMovement();
             _movementController.ResumeMovement();
+            scrollUiFlag.currentValue = false;
+            castUiFlag.currentValue = true;
+            countersteerLeftUiFlag.currentValue = false;
+            countersteerRightUiFlag.currentValue = false;
         }
 
         private void OnReelFishingRod()
@@ -234,6 +246,7 @@ namespace Fishing {
         private IEnumerator FishStruggle()
         {
             _allowReeling = false;
+            scrollUiFlag.currentValue = false;
             FloaterController.TriggerFishSplashing(true);
             _directionOfFloater = new Vector3(_directions[Random.Range(0, _directions.Length)] * _caughtFish.fishCatchDifficulty.sidewaysMovement, 0, 0);
             _sidewaysMovementToDo = _directionOfFloater;
@@ -244,6 +257,7 @@ namespace Fishing {
         private IEnumerator FishRelax()
         {
             _allowReeling = true;
+            scrollUiFlag.currentValue = true;
             FloaterController.TriggerFishSplashing(false);
             _sidewaysMovementToDo = _directionOfFloater * -1;
             _directionOfFloater = new Vector3();
@@ -259,9 +273,16 @@ namespace Fishing {
             ReturnLine();
         }
 
+        public override void Interact(IInteractor interactor)
+        {
+            base.Interact(interactor);
+            castUiFlag.currentValue = true;
+        }
+        
         public override void Drop()
         {
             if (_isLineCast) return;
+            castUiFlag.currentValue = false;
             base.Drop();
         }
     }

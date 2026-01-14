@@ -141,6 +141,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f157eb6e0498be9469787219997fa45a, type: 3}
   - {fileID: 8300000, guid: 037162d10e6ead5469893ca7df578734, type: 3}
   - {fileID: 8300000, guid: c755f2e7a271b7142970e0972f17d845, type: 3}
+  scrollUiFlag: {fileID: 11400000, guid: b0e9ecd17be7b384abba7a89cc371e03, type: 2}
+  castUiFlag: {fileID: 11400000, guid: 8572e20015b34a6459bfdcf24f45921f, type: 2}
+  countersteerLeftUiFlag: {fileID: 11400000, guid: a2d0f951849d29446a26f84751f89b3d, type: 2}
+  countersteerRightUiFlag: {fileID: 11400000, guid: 4902d98c606d9f64f8683736c10558b7, type: 2}
 --- !u!54 &2413603468183159642
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -459,15 +463,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.98999995
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.98999995
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.50505054
       objectReference: {fileID: 0}
     - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_LocalPosition.x
@@ -508,6 +512,10 @@ PrefabInstance:
     - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8779057436012718672, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8936236822478820096, guid: 8efbe45b7b1c6f54f9d3183a95439c13, type: 3}
       propertyPath: m_IsKinematic
