@@ -1,5 +1,6 @@
 ﻿using Interactable;
 using ScriptableObjects.Gamestate;
+using TaskList;
 using UnityEngine;
 
 namespace making_tea
@@ -7,6 +8,7 @@ namespace making_tea
     public class NotebookTablePickup : InteractableBehaviour, ITablePickup
     {
         [SerializeField] private SoGamestateFlag notebookPickedUpFlag;
+        [SerializeField] private TaskListUI taskListUI;
 
         public bool IsTableHeld => false;
 
@@ -23,6 +25,9 @@ namespace making_tea
             BlockInteraction(true);
 
             pic.UnregisterTablePickup(this);
+
+            if (taskListUI != null)
+                taskListUI.RegisterTaskList(gameObject);
 
             gameObject.SetActive(false);
 

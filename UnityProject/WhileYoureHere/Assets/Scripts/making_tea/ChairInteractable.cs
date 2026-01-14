@@ -43,14 +43,10 @@ namespace making_tea
 
         private Vector3 _originalCameraLocalPos;
         private Quaternion _originalCameraLocalRot;
-
-        private TaskListHintController _taskListHintController;
-
+        
         protected override void Awake()
         {
             base.Awake();
-            _taskListHintController = Object.FindFirstObjectByType<TaskListHintController>();
-
         }
         
         private void Start()
@@ -169,9 +165,6 @@ namespace making_tea
             _pic = p;
             _pic.EnableTableMode(true);
             _pic.SetSittingChair(this);
-
-            _taskListHintController?.SetHintsHidden(true);
-            
         }
 
         public void StandUp()
@@ -205,8 +198,6 @@ namespace making_tea
                 _pic.EnableTableMode(false);
                 _pic.ClearSittingChair();
             }
-
-            _taskListHintController?.SetHintsHidden(false);
         }
 
         public void ForceStandUp()

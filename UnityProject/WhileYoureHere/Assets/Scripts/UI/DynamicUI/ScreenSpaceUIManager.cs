@@ -179,6 +179,12 @@ namespace UI.DynamicUI
 
         private bool ShouldBeActive(ScreenSpaceUIElement e)
         {
+            var pic = GameObject.FindWithTag("Player")
+                ?.GetComponent<PlayerInteractionController>();
+
+            if (pic != null && pic.IsTableMode)
+                return false;
+            
             if (e.IsInputConditionSatisfied)
                 return false;
 

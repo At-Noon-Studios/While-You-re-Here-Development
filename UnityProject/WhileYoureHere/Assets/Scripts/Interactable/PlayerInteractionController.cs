@@ -121,7 +121,7 @@ namespace Interactable
         
         #region Tablemode
         
-                public void RegisterTablePickup(ITablePickup pickup)
+        public void RegisterTablePickup(ITablePickup pickup)
         {
             if (pickup == null) return;
             if (!_tablePickupsAll.Contains(pickup))
@@ -380,12 +380,16 @@ namespace Interactable
             }
             else
             {
+                foreach (var p in _tablePickupsAll)
+                    p?.ForceDropFromTableMode();
+
                 ClearTableSelection();
+
                 if (_currentTarget != null)
                     SetCurrentTarget(null);
             }
         }
-        
+
         #endregion
 
         #region Chair helpers
@@ -466,11 +470,7 @@ namespace Interactable
                 if (IsAnyTablePickupHeld())
                 {
                     GetHeldTablePickup()?.Drop();
-                    return;
                 }
-
-                if (_sittingChair != null)
-                    _sittingChair.StandUp();
 
                 return;
             }
