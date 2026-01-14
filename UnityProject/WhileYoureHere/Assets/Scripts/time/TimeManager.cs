@@ -30,6 +30,10 @@ namespace time
         private void Awake()
         {
             _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+            for (int i = 0; i < cabinPointLights.Length; i++)
+            {
+                Debug.Log(cabinPointLights[i].intensity);
+            }
         }
 
         public void ChangeTime(int day, int hour)
