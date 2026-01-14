@@ -15,6 +15,8 @@ namespace Fishing
         public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
         public static event Action<Vector3> OnFloaterMove;
         public static void TriggerFloaterMove(Vector3 moveTowards) => OnFloaterMove?.Invoke(moveTowards);
+        public static event Action<bool> OnCastLine;
+        public static void TriggerCastLine(bool lineCast) => OnCastLine?.Invoke(lineCast);
 
         private void Awake()
         {
@@ -27,12 +29,14 @@ namespace Fishing
         {
             OnFishSplashing += PlaySplashAnimation;
             OnFloaterMove += MoveFloater;
+            OnCastLine += LineCast;
         }
 
         private void OnDisable()
         {
             OnFishSplashing -= PlaySplashAnimation;
             OnFloaterMove -= MoveFloater;
+            OnCastLine -= LineCast;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -69,6 +73,12 @@ namespace Fishing
         private void MoveFloater(Vector3 newPosition)
         {
             _rigidbody.MovePosition(newPosition);
+        }
+
+        private void LineCast(bool lineCast)
+        {
+            _blockTrigger = !lineCast;
+            if (!lineCast) StopAllCoroutines();
         }
     }
 }

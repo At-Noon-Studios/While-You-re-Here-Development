@@ -100,7 +100,7 @@ namespace Fishing {
         private void FixedUpdate()
         {
             if (_holder == null) return;
-            
+            FloaterController.TriggerCastLine(_isLineCast);
             if (_isCastPullPressed)
             {
                 if (!_isLineCast && !_isCasting) StartCast();
@@ -114,19 +114,18 @@ namespace Fishing {
             if (_caughtFish == null) return;
             _currentFloaterMovement = _spawnedFloater.transform.position;
             MoveFloater();
-            Debug.Log(IsCounterSteering() +" : " +_mouseDelta.x + " : " + _directionOfFloater.x);
-             if (!IsCounterSteering())
-             {
-                 SetCounterSteerUi();
-                 _fishEscapeCount++;
-                 if (_fishEscapeCount >= fishStruggleBeforeEscape) FishEscape();
-             }
-             else
-             {
-                 countersteerRightUiFlag.currentValue = false;
-                 countersteerLeftUiFlag.currentValue = false;
-                 _fishEscapeCount = Mathf.Max(0, _fishEscapeCount - 1);
-             }
+            if (!IsCounterSteering())
+            {
+                SetCounterSteerUi();
+                _fishEscapeCount++;
+                if (_fishEscapeCount >= fishStruggleBeforeEscape) FishEscape();
+            }
+            else
+            {
+                countersteerRightUiFlag.currentValue = false;
+                countersteerLeftUiFlag.currentValue = false;
+                _fishEscapeCount = Mathf.Max(0, _fishEscapeCount - 1);
+            }
         }
         
         private void Update()
@@ -215,7 +214,6 @@ namespace Fishing {
 
         private void CastLine()
         {
-            Debug.Log("Now casting line !");
             _animator.SetTrigger("Castbitch");
             _isCasting = false;
             _isLineCast = true;
@@ -275,8 +273,7 @@ namespace Fishing {
                     Instantiate(_caughtFish.fishPrefab, fishingRodTop.transform.position, fishingRodTop.transform.rotation);
                     _audioSource.PlayOneShot(success[Random.Range(0, success.Count)]);
                     _caughtFish = null;
-                    Debug.Log(_animator.GetCurrentAnimatorClipInfo(0));
-                    StartCoroutine(ReturnLineAfterDelay(_animator.GetCurrentAnimatorClipInfo(0).Length));
+                    ReturnLine();
                     _animator.ResetTrigger("CatchFish");
                 }
                 // if (_state.IsName("Catch") && _state.normalizedTime >= 1f) _animator.ResetTrigger("CatchFish");
@@ -284,18 +281,11 @@ namespace Fishing {
             }
         }
 
-        private IEnumerator ReturnLineAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            ReturnLine();
-        }
-
         private void ReturnLine()
         {
             _isLineCast = false;
             line.SetActive(true);
             _lineController.SetUpLine(Array.Empty<Transform>());
-            ResetPose();
             StopAllCoroutines();
             Destroy(_spawnedFloater);
             _fishEscapeCount = 0;
