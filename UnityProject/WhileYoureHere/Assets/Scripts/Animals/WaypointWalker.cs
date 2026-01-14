@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WaypointWalker : MonoBehaviour
@@ -26,12 +28,17 @@ public class WaypointWalker : MonoBehaviour
     [Header("Gravity")]
     public float gravity = -9.81f;
 
+    public List<AudioClip> miauws;
+    public AudioClip rareMiauw;
+    private bool blockMiauw;
+
     // =========================
     // INTERN
     // =========================
     int currentWaypoint = 0;
     Animator animator;
     CharacterController controller;
+    AudioSource _audioSource;
 
     float sitTimer;
     float nextSitTime;
@@ -50,6 +57,7 @@ public class WaypointWalker : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
+        _audioSource = GetComponent<AudioSource>();
         ScheduleNextSit();
     }
 
@@ -125,6 +133,7 @@ public class WaypointWalker : MonoBehaviour
 
     void FollowWaypoints()
     {
+        blockMiauw = false;
         Transform target = waypoints[currentWaypoint];
         Vector3 direction = target.position - transform.position;
         direction.y = 0;
@@ -139,16 +148,37 @@ public class WaypointWalker : MonoBehaviour
             currentWaypoint = (currentWaypoint + 1) % waypoints.Length;
         }
     }
-
+    
     void FleeFromPlayer()
     {
         Vector3 direction = transform.position - player.position;
         direction.y = 0;
 
         SmoothRotate(direction);
+        if (!blockMiauw)
+        {
+            blockMiauw = true;
+            StartCoroutine(PlayMiauw());
+        }
 
         moveDirection = transform.forward * fleeSpeed;
         animator.speed = fleeSpeed * animationSpeedMultiplier;
+    }
+
+    private IEnumerator PlayMiauw()
+    {
+        var rand = Random.Range(0, 100);
+        AudioClip audioToPlay;
+        if (rand <= 1)
+        {
+            audioToPlay = rareMiauw;
+        }
+        else
+        {
+            audioToPlay = miauws[Random.Range(0, miauws.Count)];
+        }
+        _audioSource.PlayOneShot(audioToPlay);
+        yield return new WaitForSeconds(audioToPlay.length);
     }
 
     void FollowPlayer()
