@@ -285,8 +285,8 @@ MonoBehaviour:
   button: {fileID: 5056260849206003521}
   buttonText: {fileID: 3323594914470657894}
   normalColor: {r: 0, g: 0.22745098, b: 0.2509804, a: 1}
-  highlightedColor: {r: 1, g: 0.5, b: 0, a: 1}
-  pressedColor: {r: 1, g: 0.5, b: 0, a: 1}
+  highlightedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
+  pressedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
 --- !u!1 &3002702330059899522
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,8 +708,8 @@ MonoBehaviour:
   button: {fileID: 3737241312399727763}
   buttonText: {fileID: 6100166214782895671}
   normalColor: {r: 0, g: 0.22745098, b: 0.2509804, a: 1}
-  highlightedColor: {r: 1, g: 0.5, b: 0, a: 1}
-  pressedColor: {r: 1, g: 0.5, b: 0, a: 1}
+  highlightedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
+  pressedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
 --- !u!1 &3699709356518314114
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,8 +934,8 @@ MonoBehaviour:
   button: {fileID: 3946928442952964439}
   buttonText: {fileID: 8829857753601523376}
   normalColor: {r: 0, g: 0.22745098, b: 0.2509804, a: 1}
-  highlightedColor: {r: 1, g: 0.5, b: 0, a: 1}
-  pressedColor: {r: 1, g: 0.5, b: 0, a: 1}
+  highlightedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
+  pressedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
 --- !u!1 &5155158580296339145
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,7 +955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5166188264942233826
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1053,6 +1053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::screen.PauseMenu
   pauseEventChannel: {fileID: 11400000, guid: fba1620c93d773a45bb100dbeb1865c8, type: 2}
   pauseMenuUI: {fileID: 5155158580296339145}
+  optionsMenuUI: {fileID: 0}
 --- !u!1 &5681057713471275561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1449,7 +1450,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1985195000361229870}
         m_TargetAssemblyTypeName: screen.PauseMenu, Assembly-CSharp
-        m_MethodName: OnSettingsButton
+        m_MethodName: OnOptionsButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1474,8 +1475,8 @@ MonoBehaviour:
   button: {fileID: 4499333770180739811}
   buttonText: {fileID: 3048602962114448619}
   normalColor: {r: 0, g: 0.22745098, b: 0.2509804, a: 1}
-  highlightedColor: {r: 1, g: 0.5, b: 0, a: 1}
-  pressedColor: {r: 1, g: 0.5, b: 0, a: 1}
+  highlightedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
+  pressedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
 --- !u!1 &7642752993229455883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1625,8 +1626,8 @@ MonoBehaviour:
   button: {fileID: 5079453675710361795}
   buttonText: {fileID: 7932833754857270851}
   normalColor: {r: 0, g: 0.22745098, b: 0.2509804, a: 1}
-  highlightedColor: {r: 1, g: 0.5, b: 0, a: 1}
-  pressedColor: {r: 1, g: 0.5, b: 0, a: 1}
+  highlightedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
+  pressedColor: {r: 0.13725491, g: 0.76862746, b: 0.84705883, a: 1}
 --- !u!1 &7702856827079933455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6452028736704890882}
   m_Layer: 5
-  m_Name: StartScreenMenu
+  m_Name: PauseMenuCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
