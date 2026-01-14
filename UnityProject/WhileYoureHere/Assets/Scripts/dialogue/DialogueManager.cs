@@ -294,16 +294,33 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                if (_audioSource == null)
-                    _audioSource = GameObject
-                        .FindWithTag(sentence.tagOfAudioSource)
-                        .GetComponent<AudioSource>();
-                _audioSource.Stop();
-                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
-                    .GetComponent<AudioSource>();
-                _audioSource.volume = volume;
-                _audioSource.clip = sentence.audio;
-                _audioSource.Play();
+                if (_audioSource == null ||
+                    _audioSource.gameObject.CompareTag(sentence.tagOfAudioSource) == false)
+                {
+                    var goWithTag = !string.IsNullOrEmpty(sentence.tagOfAudioSource)
+                        ? GameObject.FindWithTag(sentence.tagOfAudioSource)
+                        : null;
+
+                    if (goWithTag != null)
+                    {
+                        _audioSource = goWithTag.GetComponent<AudioSource>();
+                    }
+                    else
+                    {
+                        Debug.LogWarning(
+                            $"[DialogueManager] No GameObject with tag '{sentence.tagOfAudioSource}' found for dialogue audio.");
+                        _audioSource = null;
+                    }
+                }
+
+                if (_audioSource != null)
+                {
+                    _audioSource.Stop();
+                    _audioSource.volume = volume;
+                    _audioSource.clip = sentence.audio;
+                    _audioSource.loop = false;
+                    _audioSource.Play();
+                }
             }
 
             string output = "";
@@ -323,8 +340,18 @@ namespace dialogue
             }
 
             _isTyping = false;
-            yield return new WaitForSeconds(sentenceDelay);
 
+            if (sentence.audio != null && _audioSource != null)
+            {
+                while (_audioSource != null && _audioSource.isPlaying)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                yield return new WaitForSeconds(sentenceDelay);
+            }
             PlayNextSentence();
         }
 
