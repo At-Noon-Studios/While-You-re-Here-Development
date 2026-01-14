@@ -6,7 +6,6 @@ using player_controls;
 using PlayerControls;
 using ScriptableObjects.Events;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace chopping_logs
 {
@@ -18,24 +17,17 @@ namespace chopping_logs
         [SerializeField] private Transform minigameStartPoint;
 
         [Header("Sound Settings")] 
-        [SerializeField] private AudioClip[] logPlaceSound;
-        [SerializeField] private AudioClip[] logCrackSound;
-        [SerializeField] private AudioClip choppingStartVoiceline;
-
-        [Header("Sprite settings")]
-        [SerializeField] private Image cutLogSprite;
-        [SerializeField] private Image placeLogSprite;
+        [SerializeField] private AudioClip logPlaceSound;
+        [SerializeField] private AudioClip logCrackSound;
 
         public static bool IsCurrentMinigameActive { get; private set; }
         public bool IsMinigameActive { get; private set; }
 
         private GameObject _logObject;
         public bool HasLog => _hasLog;
-
+        
         private bool _hasLog;
         private AudioSource _audioSource;
-
-        private bool voicelinePlayed;
 
         private void Start()
         {
@@ -56,13 +48,13 @@ namespace chopping_logs
             if (IsCurrentMinigameActive && IsMinigameActive)
                 EndMinigame(wasCancelled: true);
         }
-
+        
         public override void Interact(IInteractor interactor)
         {
             var player = GameObject.FindWithTag("Player");
             var heldController = player?.GetComponent<PlayerInteractionController>();
             var held = heldController?.HeldObject;
-
+            
             if (_hasLog && held == null)
             {
                 TakeLog(heldController);
@@ -123,9 +115,7 @@ namespace chopping_logs
             foreach (var chopTarget in chopTargets)
             {
                 if (_audioSource != null && logPlaceSound != null)
-                {
-                    _audioSource.PlayOneShot(logPlaceSound[Random.Range(0, logPlaceSound.Length - 1)]);
-                }
+                    _audioSource.PlayOneShot(logPlaceSound);
 
                 chopTarget.SetStump(this);
             }
@@ -147,12 +137,6 @@ namespace chopping_logs
         private void StartMinigame()
         {
             if (!_hasLog) return;
-            
-            if (!voicelinePlayed)
-            {
-                _audioSource.PlayOneShot(choppingStartVoiceline);
-                voicelinePlayed = true;
-            }
 
             IsMinigameActive = true;
             IsCurrentMinigameActive = true;
@@ -196,9 +180,7 @@ namespace chopping_logs
             if (wasCancelled)
                 return;
 
-            // Rens requested the wood crack sound to be removed, so I'm commenting it out for now in case we change our mind later
-            // I will surely remember to remove this at the end the project
-            // StartCoroutine(PlayCrackTwice(0.12f));
+            StartCoroutine(PlayCrackTwice(0.12f));
 
             var chopTarget = _logObject?.GetComponentInChildren<LogChopTarget>();
             ClearLog();
@@ -231,9 +213,9 @@ namespace chopping_logs
         {
             if (_audioSource == null || logCrackSound == null) yield break;
 
-            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
+            _audioSource.PlayOneShot(logCrackSound);
             yield return new WaitForSeconds(delayBetween);
-            _audioSource.PlayOneShot(logCrackSound[Random.Range(0, logCrackSound.Length - 1)]);
+            _audioSource.PlayOneShot(logCrackSound);
         }
     }
 }

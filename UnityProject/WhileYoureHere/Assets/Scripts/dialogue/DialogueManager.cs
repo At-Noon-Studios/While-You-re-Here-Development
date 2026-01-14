@@ -250,11 +250,6 @@ namespace dialogue
             if (_activeSentences == null ||
                 _sentenceIndex >= _activeSentences.Length)
             {
-                if (_currentNode.flag != null)
-                {
-                    _currentNode.flag.currentValue = true;
-                }
-                
                 EndDialogue();
                 OnLastSentenceFinished?.Invoke();
                 _sentenceIndex = 0;

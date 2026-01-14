@@ -8,7 +8,8 @@ namespace TaskList
         [Header("References")]
         [SerializeField] private Canvas taskListCanvas;
         [SerializeField] private Transform handPosition;
-        [SerializeField] private TaskListSound taskListSound;
+        [SerializeField] private TaskListHintController hintController;
+
         [Header("Animation Settings")]
         [SerializeField] private Vector3 spawnOffset = new Vector3(0, -0.3f, -0.5f);
         [SerializeField] private Vector3 spawnRotation = new Vector3(45f, 0f, 0f);
@@ -18,13 +19,13 @@ namespace TaskList
         private Rigidbody _rigidbody;
 
         private bool _available;
-        public bool isOpen;
+        private bool _isOpen;
 
         public void RegisterTaskList(GameObject taskListObject)
         {
             _taskListObject = taskListObject;
             _available = true;
-            isOpen = false;
+            _isOpen = false;
 
             _rigidbody = _taskListObject.GetComponent<Rigidbody>();
             if (_rigidbody != null)
@@ -35,6 +36,8 @@ namespace TaskList
 
             taskListCanvas.gameObject.SetActive(false);
             _taskListObject.SetActive(false);
+
+            hintController?.OnNotebookPickedUp();
         }
 
         public void ToggleTaskList()
@@ -44,22 +47,18 @@ namespace TaskList
                 return;
             }
 
-            if (isOpen)
-            {
-                taskListSound.PlayTasklistGrabSound();
+            if (_isOpen)
                 CloseNotebook();
-            }
             else
-            {
-                taskListSound.PlayTasklistCloseSound();
                 OpenNotebook();
-            }
         }
 
         private void OpenNotebook()
         {
-            isOpen = true;
+            _isOpen = true;
             taskListCanvas.gameObject.SetActive(true);
+
+            hintController?.OnNotebookOpened();
 
             if (_taskListObject == null || handPosition == null)
                 return;
@@ -78,8 +77,10 @@ namespace TaskList
 
         private void CloseNotebook()
         {
-            isOpen = false;
+            _isOpen = false;
             taskListCanvas.gameObject.SetActive(false);
+
+            hintController?.OnNotebookClosed();
 
             if (_taskListObject != null)
                 _taskListObject.SetActive(false);
@@ -112,5 +113,6 @@ namespace TaskList
             objTransform.localPosition = targetPos;
             objTransform.localRotation = targetRot;
         }
+
     }
 }

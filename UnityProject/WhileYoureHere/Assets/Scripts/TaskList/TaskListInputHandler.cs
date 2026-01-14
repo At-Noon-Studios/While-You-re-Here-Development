@@ -8,7 +8,6 @@ namespace TaskList
     {
         [Header("References")]
         [SerializeField] private TaskListUI taskListUI;
-        [SerializeField] private TaskListSound taskListSound;
         [SerializeField] private EventChannel taskListEventChannel;
 
         public void OnTaskList()
