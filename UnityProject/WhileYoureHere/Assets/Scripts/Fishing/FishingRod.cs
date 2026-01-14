@@ -97,7 +97,7 @@ namespace Fishing {
             _lineController = GetComponent<LineController>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_holder == null) return;
             

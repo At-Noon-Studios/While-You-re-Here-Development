@@ -68,7 +68,6 @@ namespace Fishing
 
         private void MoveFloater(Vector3 newPosition)
         {
-            Debug.Log(newPosition);
             _rigidbody.MovePosition(newPosition);
         }
     }
