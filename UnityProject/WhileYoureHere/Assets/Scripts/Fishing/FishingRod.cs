@@ -157,9 +157,14 @@ namespace Fishing {
             _isCasting = true;
             _movementController.PauseMovement();
             _cameraController.PauseCameraMovement();
-            // start hand towards corner
+            _animator.SetTrigger("CastStart");
             _mouseDelta = new Vector2();
             look += UpdateMouseForCast;
+        }
+
+        public void OnStartingCast()
+        {
+            line.SetActive(false);
         }
 
         private void UpdateMouseForCast(Vector2 mousePosition)
@@ -210,11 +215,18 @@ namespace Fishing {
             _cameraController.ResumeCameraMovement();
             _movementController.ResumeMovement();
             look -= UpdateMouseForCast;
+            _animator.SetTrigger("Uncharge");
+            line.SetActive(true);
+
         }
 
         private void CastLine()
         {
-            _animator.SetTrigger("Castbitch");
+            _animator.SetTrigger("CastLine");
+        }
+
+        public void OnThrowFloat()
+        {
             _isCasting = false;
             _isLineCast = true;
             castUiFlag.currentValue = false;
@@ -222,9 +234,9 @@ namespace Fishing {
             _spawnedFloater.gameObject.GetComponent<Rigidbody>().AddForce(castingForce * _playerCamera.forward, ForceMode.Impulse);
             // _lineController.SetUpLine(new []{fishingRodTop.transform, _spawnedFloater.transform});
             OnFishCaught += ListenForFishCaught;
-            line.SetActive(false);
             ResetPose();
         }
+        
 
         private void ListenForFishCaught(SoFish fish)
         {
