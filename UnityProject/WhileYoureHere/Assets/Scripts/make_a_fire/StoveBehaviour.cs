@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using chore;
+using chopping_logs;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
@@ -54,7 +55,13 @@ namespace make_a_fire
         }
         private int CountPlacedLogs()
         {
-            return logs.Count(log => log.GetComponent<FurnacePlaceable>().IsPlaced);
+            return logs.Count(log =>
+            {
+                if (log.GetComponentInParent<LogBasket>() != null) return false;
+
+                var furnacePlaceable = log.GetComponent<FurnacePlaceable>();
+                return furnacePlaceable != null && furnacePlaceable.IsPlaced;
+            });
         }
 
         private void StartSmallFire()
