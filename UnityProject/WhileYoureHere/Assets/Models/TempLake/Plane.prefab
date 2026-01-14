@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8315209797863775599}
   - component: {fileID: 8293262697568413173}
   - component: {fileID: 202845060453186641}
+  - component: {fileID: 6743506502704188124}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 284.8, y: 50, z: 463.3}
-  m_LocalScale: {x: 26.812292, y: 60.44169, z: 47.625027}
+  m_LocalScale: {x: 26.812292, y: 0.1, z: 47.625027}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -105,10 +106,25 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6743506502704188124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64708717272917142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78106bb237ca2f944a47ed9f1319ef8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fishing.FishingArea
+  fishPrefabs:
+  - {fileID: 11400000, guid: a0f4773680acec94eb0bd5d0061c51a2, type: 2}
+  - {fileID: 11400000, guid: 1b1985e537a528e4d87fc54c4e4a501a, type: 2}
