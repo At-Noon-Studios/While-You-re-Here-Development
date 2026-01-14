@@ -885,6 +885,38 @@ MonoBehaviour:
   logID: 1
   audioSource: {fileID: 0}
   chopSound: []
+--- !u!1 &1653488593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3075533751249305906, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+  m_PrefabInstance: {fileID: 4725769759145442864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1653488603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653488593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f6ec941b6b4eb144a0bb2403896a201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueProximityTrigger
+  dialogueLoader: {fileID: 1858709858}
+  config: {fileID: 11400000, guid: 1b2801061b42e6c4394ca4baba6d4da5, type: 2}
+  triggerRange: 20
+  playerTransform: {fileID: 1242199018}
+--- !u!114 &1858709858 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5046809806568546, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
+  m_PrefabInstance: {fileID: 8378086104622049488}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a1d7141a164dd41a9ec5a1c7950c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueLoader
 --- !u!108 &112480277093400875 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 4222807520271628449, guid: 0c21fee426bcddf4b91a514572eda541, type: 3}
@@ -1043,6 +1075,7 @@ PrefabInstance:
     - target: {fileID: 4142382227070395433, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4717662478261982978, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: chargedFireVolume
       value: 1.5
@@ -1115,6 +1148,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.0149445515
       objectReference: {fileID: 0}
+    - target: {fileID: 5942921256516548295, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: _audioSource
+      value: 
+      objectReference: {fileID: 1242199019}
     - target: {fileID: 6001639647805837699, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17.202
@@ -1147,10 +1184,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 5942921256516548295, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-      propertyPath: _audioSource
-      value: 
-      objectReference: {fileID: 1242199019}
     - target: {fileID: 6168392555331487025, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: taskListHintTextOpen
       value: 
@@ -1162,6 +1195,14 @@ PrefabInstance:
     - target: {fileID: 6572088854631817610, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 6572088854631817610, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_TagString
+      value: GROUND/floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 6677863770334645721, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_TagString
+      value: GROUND/grass
       objectReference: {fileID: 0}
     - target: {fileID: 6816951719115328599, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Size.y
@@ -1230,13 +1271,6 @@ PrefabInstance:
     - target: {fileID: 7108103838273496222, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 458.418
-    - target: {fileID: 6572088854631817610, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-      propertyPath: m_TagString
-      value: GROUND/floor
-      objectReference: {fileID: 0}
-    - target: {fileID: 6677863770334645721, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-      propertyPath: m_TagString
-      value: GROUND/grass
       objectReference: {fileID: 0}
     - target: {fileID: 7119766673531472255, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: cam
@@ -1378,7 +1412,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2197086923270627961, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       insertIndex: 5
       addedObject: {fileID: 588040505}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3075533751249305906, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1653488603}
   m_SourcePrefab: {fileID: 100100000, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
 --- !u!114 &5067033201132926046 stripped
 MonoBehaviour:

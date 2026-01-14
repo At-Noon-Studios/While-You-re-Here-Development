@@ -39,6 +39,8 @@ namespace dialogue
         private bool _isTyping;
         private bool _cameraStopped;
         private bool _movementStopped;
+        private DialogueInteractionConfig _currentInteractionConfig;
+
 
         [SerializeField] private float volume = 1;
         private int _resumeCharIndex;
@@ -85,6 +87,8 @@ namespace dialogue
         {
             EventSystem.current?.SetSelectedGameObject(null);
 
+            _currentInteractionConfig = interactionConfig;
+
             _nodes.Clear();
             foreach (var n in interactionConfig.dialogueNodes)
                 _nodes[n.nodeID] = n;
@@ -92,8 +96,10 @@ namespace dialogue
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
+
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
+
 
         public void StartRadioDialogue(DialogueNode node, float resumeTime = 0,
             int startSentenceIndex = 0)
@@ -271,7 +277,8 @@ namespace dialogue
         {
             var startedClip = sentence.audio;
             _audioSource.clip = sentence.audio;
-            _audioSource.volume = volume;
+            _audioSource.volume = _currentInteractionConfig != null 
+                ? _currentInteractionConfig.dialogueVolume : 1f;
             resumeTime = Mathf.Clamp(resumeTime, 0f, startedClip.length);
             _audioSource.time = resumeTime;
             _audioSource.Play();
@@ -283,7 +290,8 @@ namespace dialogue
         {
             _audioSource.loop = true;
             _audioSource.clip = clip;
-            _audioSource.volume = volume;
+            _audioSource.volume = _currentInteractionConfig != null 
+                ? _currentInteractionConfig.dialogueVolume : 1f;
             _audioSource.Play();
         }
 
@@ -316,7 +324,8 @@ namespace dialogue
                 if (_audioSource != null)
                 {
                     _audioSource.Stop();
-                    _audioSource.volume = volume;
+                    _audioSource.volume = _currentInteractionConfig != null 
+                        ? _currentInteractionConfig.dialogueVolume : 1f;
                     _audioSource.clip = sentence.audio;
                     _audioSource.loop = false;
                     _audioSource.Play();
