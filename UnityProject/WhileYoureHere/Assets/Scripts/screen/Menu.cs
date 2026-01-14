@@ -6,10 +6,11 @@ namespace screen
 {
     public class Menu : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private GameObject optionsMenuUI;
+        [Header("References")] [SerializeField]
+        private GameObject optionsMenuUI;
+
         [SerializeField] private GameObject startMenuUI;
-        
+
         public void OnPlayButton()
         {
             ResetPauseState();

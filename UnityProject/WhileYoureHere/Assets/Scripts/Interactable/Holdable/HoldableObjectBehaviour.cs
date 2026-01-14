@@ -3,16 +3,18 @@ using System.Linq;
 using chopping_logs;
 using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
+using screen;
 using ScriptableObjects.Interactable;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Interactable.Holdable
 {
     [RequireComponent(typeof(Rigidbody))]
     public class HoldableObjectBehaviour : InteractableBehaviour, IHoldableObject
     {
-        [Header("Holdable Data")]
-        [SerializeField] private HoldableObjectData data;
+        [Header("Holdable Data")] [SerializeField]
+        private HoldableObjectData data;
 
         private Rigidbody _rigidbody;
         private int _originalLayer;
@@ -22,7 +24,7 @@ namespace Interactable.Holdable
         private Transform _playerCamera;
 
         private ObjectHolderSingle _currentHolder;
-                
+
         public bool IsPlaced { get; private set; }
         private bool _isLocked;
 
@@ -30,7 +32,7 @@ namespace Interactable.Holdable
 
         public bool IsCurrentlyHeld => _holder != null;
         public float Weight => data.Weight;
-        
+
         private GameObject player;
 
         protected override void Awake()
@@ -46,6 +48,13 @@ namespace Interactable.Holdable
                 if (cam != null)
                     _playerCamera = cam.transform;
             }
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         protected void Start()
@@ -58,18 +67,18 @@ namespace Interactable.Holdable
         {
             if (_isLocked)
                 return;
-            
+
             var chopTarget = GetComponentInChildren<LogChopTarget>();
             if (chopTarget != null && chopTarget.IsOnStump)
                 return;
-            
+
             if (interactor is PlayerInteractionController pic &&
                 (pic.IsTableMode || pic.HeldObject != null))
                 return;
 
             PickUp(interactor);
         }
-        
+
         private void PickUp(IInteractor interactor)
         {
             if (_heldVersion) SetHeldVisual(true, _heldVersion);
@@ -79,6 +88,7 @@ namespace Interactable.Holdable
                 _currentHolder.ClearHeldObject(this);
                 _currentHolder = null;
             }
+
             _holder = interactor;
             interactor.HeldObject?.Drop();
             interactor.SetHeldObject(this);
@@ -86,7 +96,7 @@ namespace Interactable.Holdable
             EnableCollider(false);
             IsPlaced = false;
         }
-        
+
         public void PickUpByInteractor(IInteractor interactor)
         {
             var chopTarget = GetComponentInChildren<LogChopTarget>();
@@ -98,15 +108,16 @@ namespace Interactable.Holdable
             PickUp(interactor);
         }
 
-        
-        private void SetHeldVisual(bool state, GameObject heldVisual) {
+
+        private void SetHeldVisual(bool state, GameObject heldVisual)
+        {
             heldVisual.SetActive(state);
             foreach (var r in Renderers)
             {
                 r.enabled = !state;
             }
         }
-        
+
         public virtual void Drop()
         {
             if (_holder == null) throw new Exception("Tried to drop an item that wasn't being held");
@@ -123,7 +134,7 @@ namespace Interactable.Holdable
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _currentHolder = holder;
             _holder?.SetHeldObject(null);
-            _holder = null; 
+            _holder = null;
             _rigidbody.isKinematic = true;
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
@@ -141,7 +152,7 @@ namespace Interactable.Holdable
             transform.localPosition = data.HoldingOffset;
             gameObject.layer = HoldLayer;
         }
-        
+
         public void ResetPose()
         {
             if (_holder == null) return;
@@ -163,7 +174,7 @@ namespace Interactable.Holdable
             transform.SetParent(null);
             gameObject.layer = _originalLayer;
         }
-        
+
         private void InitializeHeldVersion()
         {
             if (!data.HoldingPrefab) return;
@@ -177,27 +188,45 @@ namespace Interactable.Holdable
         {
             var heldVersionColliders = _heldVersion?.GetComponents<Collider>();
             heldVersionColliders?.ToList().ForEach((col) => col.enabled = false);
-            if (heldVersionColliders is { Length: > 0 }) Debug.LogError("Held prefab has colliders. They have been disabled.");
+            if (heldVersionColliders is { Length: > 0 })
+                Debug.LogError("Held prefab has colliders. They have been disabled.");
         }
 
         public void SetInteractionLocked(bool locked)
         {
             _isLocked = locked;
         }
-        
+
         public override void OnHoverEnter(IInteractor interactor)
         {
             if (_isLocked)
                 return;
-            
+
             base.OnHoverEnter(interactor);
 
             var canInteract = _holder == null;
         }
-        
+
         public override string InteractionText(IInteractor interactor)
         {
             return string.Empty;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (!IsGameplayScene(scene.name))
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private static bool IsGameplayScene(string sceneName)
+        {
+            foreach (var s in SceneHandler.GameplayScenes)
+                if (s == sceneName)
+                    return true;
+
+            return false;
         }
     }
 }

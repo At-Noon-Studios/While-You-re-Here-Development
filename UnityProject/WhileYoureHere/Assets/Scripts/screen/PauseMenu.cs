@@ -7,8 +7,9 @@ namespace screen
     {
         [SerializeField] private PauseEventChannel pauseEventChannel;
 
-        [Header("References")]
+        [Header("References")] 
         [SerializeField] private GameObject pauseMenuUI;
+
         [SerializeField] private GameObject optionsMenuUI;
 
         public void OnResumeButton()
@@ -16,13 +17,13 @@ namespace screen
             if (pauseEventChannel != null)
                 pauseEventChannel.Raise();
         }
-        
+
         public void OnLoadButton()
         {
             ResetPauseState();
             UnityEngine.SceneManagement.SceneManager.LoadScene("LoadScreen");
         }
-        
+
         public void OnOptionsButton()
         {
             pauseMenuUI.SetActive(false);
@@ -34,13 +35,13 @@ namespace screen
             optionsMenuUI.SetActive(false);
             pauseMenuUI.SetActive(true);
         }
-        
+
         public void OnQuitButton()
         {
-            ResetPauseState();
+            ResetPauseState();            
             UnityEngine.SceneManagement.SceneManager.LoadScene("StartScreen");
         }
-        
+
         public void OnQuitDesktopButton()
         {
             Application.Quit();
