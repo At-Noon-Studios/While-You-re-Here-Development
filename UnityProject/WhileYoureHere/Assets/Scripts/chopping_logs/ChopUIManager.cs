@@ -19,12 +19,6 @@ namespace chopping_logs
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
@@ -53,14 +47,14 @@ namespace chopping_logs
             }
             else if (yDelta < DeltaThresholdDown)
             {
-                IsAxeDown = true;
                 PlayAxeImpact();
+                IsAxeDown = true;
             }
         }
 
         private void PlayAxeImpact()
         {
-            if (axeImpactSound != null)
+            if (axeImpactSound != null && !IsAxeDown)
                 _audioSource.PlayOneShot(axeImpactSound);
         }
 

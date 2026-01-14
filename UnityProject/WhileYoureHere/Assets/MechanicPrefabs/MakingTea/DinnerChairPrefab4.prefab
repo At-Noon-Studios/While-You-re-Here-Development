@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 4392465861473634035}
   - component: {fileID: 1120905189080245947}
   - component: {fileID: 3676872791380911583}
-  - component: {fileID: 8604525937749566678}
+  - component: {fileID: 3406228557521889657}
   m_Layer: 0
   m_Name: DinnerChairPrefab4
   m_TagString: Untagged
@@ -198,9 +198,9 @@ MonoBehaviour:
   cameraSitRotationOffset: {x: 0, y: 0, z: 0}
   sitFOV: 60
   changeFOV: 1
-  notebookPickedUpFlag: {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
-  startSitting: 1
---- !u!114 &8604525937749566678
+  notebookPickedUpFlag: {fileID: 0}
+  startSitting: 0
+--- !u!114 &3406228557521889657
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,15 +221,9 @@ MonoBehaviour:
     activationMode: 1
     interactableBehaviour: {fileID: 3676872791380911583}
     requiredHeldObject: {fileID: 0}
-    requireAnyHeldObject: 0
-    requireHolderEmpty: 0
-    hideWhileTableHeld: 0
     requiredDoorState: 0
     requiredStumpState: 0
     requiredKettleState: 0
-    requiredTeabagState: 0
-    requiredSinkState: 0
-    requiredLidState: 0
     offset: {x: 0, y: 1.5, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}

@@ -8,6 +8,7 @@ namespace TaskList
     {
         [Header("References")]
         [SerializeField] private TaskListUI taskListUI;
+        [SerializeField] private TaskListSound taskListSound;
         [SerializeField] private EventChannel taskListEventChannel;
 
         private PlayerInteractionController _player;
