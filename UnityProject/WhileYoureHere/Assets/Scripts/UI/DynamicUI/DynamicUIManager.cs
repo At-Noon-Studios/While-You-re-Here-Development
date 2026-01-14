@@ -14,7 +14,6 @@ namespace UI.DynamicUI
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
-        public enum KettleState { None, Pouring }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -37,7 +36,6 @@ namespace UI.DynamicUI
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
-            [SerializeField] private KettleState requiredKettleState = KettleState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
@@ -87,29 +85,7 @@ namespace UI.DynamicUI
                         return false;
                 }
 
-                if (requiredKettleState != KettleState.None)
-                    return CheckKettleState();
-
                 return true;
-            }
-
-            private bool CheckKettleState()
-            {
-                var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
-                if (kettlePour == null || kettlePour.kettle == null)
-                    return false;
-
-                if (requiredKettleState == KettleState.Pouring)
-                {
-                    bool isFilled = kettlePour.kettle.fillAmount > 0f;
-                    bool isHeld =
-                        (kettlePour.TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld) ||
-                        (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
-
-                    return isFilled && isHeld;
-                }
-
-                return false;
             }
 
             private bool CheckDoorState(DoorInteractable door)
