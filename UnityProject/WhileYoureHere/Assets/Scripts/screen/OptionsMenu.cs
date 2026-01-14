@@ -33,6 +33,13 @@ namespace screen
         
         private void OnEnable()
         {
+            // Sync fullscreen toggle with actual screen mode
+            _isFullScreen = Screen.fullScreen;
+            fullScreenToggle.isOn = _isFullScreen;
+
+            // Optionally: sync resolution dropdown too
+            SetupResolutionDropdown();
+            
             RemoveSliderListeners();
             LoadSavedVolumes();
             ApplyInitialVolumes();
