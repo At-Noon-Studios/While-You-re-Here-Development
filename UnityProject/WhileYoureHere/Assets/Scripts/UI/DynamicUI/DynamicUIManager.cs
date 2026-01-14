@@ -3,6 +3,7 @@ using chopping_logs;
 using door;
 using Interactable;
 using Interactable.Holdable;
+using making_tea;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +12,14 @@ namespace UI.DynamicUI
     public class DynamicUIManager : MonoBehaviour
     {
         public enum LookAtTarget { Camera }
-        public enum ActivationMode { Always, InteractableHovered }
+        public enum ActivationMode { Always, InteractableHovered, TableModeSelected, TableModePlaceCandidate, TableModeHeld }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
-        public enum KettleState { None, Pouring }
-
+        public enum KettleState { None, Moving, Pouring }
+        public enum TeabagState { None, PickUp, Drop }
+        public enum SinkState { None, On, Off }
+        public enum LidState { None, PickUp, Place, Remove }
+        
         [System.Serializable]
         public class WorldSpaceUIElement
         {
@@ -33,11 +37,17 @@ namespace UI.DynamicUI
             public InteractableBehaviour interactableBehaviour;
 
             [SerializeField] private HoldableObjectBehaviour requiredHeldObject;
+            [SerializeField] private bool requireAnyHeldObject = false;
+            [SerializeField] private bool requireHolderEmpty = false;
+            [SerializeField] private bool hideWhileTableHeld = false;
 
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
             [SerializeField] private KettleState requiredKettleState = KettleState.None;
+            [SerializeField] private TeabagState requiredTeabagState = TeabagState.None;
+            [SerializeField] private SinkState requiredSinkState = SinkState.None;
+            [SerializeField] private LidState requiredLidState = LidState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
@@ -58,11 +68,89 @@ namespace UI.DynamicUI
 
             private bool CheckIsActive()
             {
-                if (activationMode == ActivationMode.InteractableHovered &&
-                    (interactableBehaviour == null ||
-                     !interactableBehaviour.IsHovered ||
-                     interactableBehaviour.blockInteraction))
-                    return false;
+                if (activationMode == ActivationMode.InteractableHovered)
+                {
+                    if (interactableBehaviour == null ||
+                        !interactableBehaviour.IsHovered ||
+                        interactableBehaviour.blockInteraction)
+                        return false;
+                }
+                else if (activationMode == ActivationMode.TableModeSelected)
+                {
+                    if (interactableBehaviour == null || interactableBehaviour.blockInteraction)
+                        return false;
+
+                    var pic = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>();
+
+                    if (pic == null || !pic.IsTableMode)
+                        return false;
+
+                    ITablePickup thisPickup = interactableBehaviour as ITablePickup;
+
+                    if (thisPickup == null)
+                        thisPickup = interactableBehaviour.GetComponent<ITablePickup>();
+
+                    if (thisPickup == null)
+                        thisPickup = interactableBehaviour.GetComponentInChildren<ITablePickup>();
+
+                    if (thisPickup == null)
+                        return false;
+
+                    if (!ReferenceEquals(pic.CurrentTableSelection, thisPickup))
+                        return false;
+                }
+                else if (activationMode == ActivationMode.TableModePlaceCandidate)
+                {
+                    if (interactableBehaviour == null || interactableBehaviour.blockInteraction)
+                        return false;
+
+                    var pic = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>();
+
+                    if (pic == null || !pic.IsTableMode)
+                        return false;
+
+                    if (!pic.HasAnyTablePickupHeld())
+                        return false;
+
+                    var holder = interactableBehaviour.GetComponent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>() ??
+                                 interactableBehaviour.GetComponentInParent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>();
+
+                    if (holder == null)
+                        return false;
+
+                    if (!holder.CanPlaceHeldTablePickup(pic))
+                        return false;
+                }
+                else if (activationMode == ActivationMode.TableModeHeld)
+                {
+                    if (interactableBehaviour == null || interactableBehaviour.blockInteraction)
+                        return false;
+
+                    var pic = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>();
+
+                    if (pic == null || !pic.IsTableMode)
+                        return false;
+
+                    var held = pic.GetHeldTablePickup();
+                    if (held == null || !held.IsTableHeld)
+                        return false;
+
+                    ITablePickup thisPickup = interactableBehaviour as ITablePickup;
+                    if (thisPickup == null)
+                        thisPickup = interactableBehaviour.GetComponent<ITablePickup>();
+                    if (thisPickup == null)
+                        thisPickup = interactableBehaviour.GetComponentInChildren<ITablePickup>();
+
+                    if (thisPickup == null)
+                        return false;
+
+                    if (!ReferenceEquals(thisPickup, held))
+                        return false;
+                }
+
 
                 if (interactableBehaviour == null)
                     return false;
@@ -86,10 +174,51 @@ namespace UI.DynamicUI
                     if (held.GetType() != requiredHeldObject.GetType())
                         return false;
                 }
+                
+                if (requireAnyHeldObject)
+                {
+                    var heldAny = GameObject.FindWithTag("Player")
+                        ?.GetComponent<PlayerInteractionController>()?.HeldObject;
+
+                    if (heldAny == null)
+                        return false;
+                }
+                
+                if (requireHolderEmpty)
+                {
+                    var holder =
+                        interactableBehaviour.GetComponent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>() ??
+                        interactableBehaviour.GetComponentInParent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>();
+
+                    if (holder == null)
+                        return false;
+
+                    if (holder.HasHeldObject)
+                        return false;
+                }
+                
+                if (hideWhileTableHeld)
+                {
+                    ITablePickup tp = interactableBehaviour as ITablePickup
+                                      ?? interactableBehaviour.GetComponent<ITablePickup>()
+                                      ?? interactableBehaviour.GetComponentInChildren<ITablePickup>();
+
+                    if (tp != null && tp.IsTableHeld)
+                        return false;
+                }
 
                 if (requiredKettleState != KettleState.None)
                     return CheckKettleState();
+                
+                if (requiredSinkState != SinkState.None)
+                    return CheckSinkState();
 
+                if (requiredTeabagState != TeabagState.None)
+                    return CheckTeabagState();
+
+                if (requiredLidState != LidState.None)
+                    return CheckLidState();
+                
                 return true;
             }
 
@@ -99,18 +228,30 @@ namespace UI.DynamicUI
                 if (kettlePour == null || kettlePour.kettle == null)
                     return false;
 
+                bool isHeld =
+                    (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+
+                if (requiredKettleState == KettleState.Moving)
+                {
+                    if (!isHeld) return false;
+
+                    bool isFilled = kettlePour.kettle.fillAmount > 0f;
+                    bool nearTarget = isFilled && kettlePour.IsNearPourTarget();
+
+                    return !nearTarget;
+                }
+                
                 if (requiredKettleState == KettleState.Pouring)
                 {
                     bool isFilled = kettlePour.kettle.fillAmount > 0f;
-                    bool isHeld =
-                        (kettlePour.TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld) ||
-                        (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+                    if (!isFilled || !isHeld) return false;
 
-                    return isFilled && isHeld;
+                    return kettlePour.IsNearPourTarget();
                 }
 
                 return false;
             }
+
 
             private bool CheckDoorState(DoorInteractable door)
             {
@@ -152,6 +293,82 @@ namespace UI.DynamicUI
                     return true;
 
                 return false;
+            }
+            
+            private bool CheckSinkState()
+            {
+                if (interactableBehaviour == null)
+                    return false;
+
+                var tapInteractable =
+                    interactableBehaviour.GetComponent<making_tea.WaterTapInteractable>() ??
+                    interactableBehaviour.GetComponentInChildren<making_tea.WaterTapInteractable>();
+
+                if (tapInteractable == null)
+                    return false;
+
+                var tap = tapInteractable.Tap;
+
+                if (tap == null)
+                    return false;
+
+                return requiredSinkState switch
+                {
+                    SinkState.On => tap.IsRunning,
+                    SinkState.Off => !tap.IsRunning,
+                    _ => true
+                };
+            }
+
+            private bool CheckTeabagState()
+            {
+                if (interactableBehaviour == null) return false;
+
+                var teabag = interactableBehaviour.GetComponent<making_tea.TeabagTablePickup>()
+                             ?? interactableBehaviour.GetComponentInChildren<making_tea.TeabagTablePickup>();
+
+                if (teabag == null) return false;
+
+                return requiredTeabagState switch
+                {
+                    TeabagState.PickUp => !teabag.IsTableHeld,
+                    TeabagState.Drop => teabag.IsTableHeld,
+                    _ => true
+                };
+            }
+            
+            private bool CheckLidState()
+            {
+                var pic = GameObject.FindWithTag("Player")
+                    ?.GetComponent<PlayerInteractionController>();
+
+                if (pic == null)
+                    return false;
+
+                bool holdingSomething = pic.HeldObject != null;
+
+                bool holdingLid = false;
+                if (holdingSomething)
+                {
+                    var heldMb = pic.HeldObject as MonoBehaviour;
+                    holdingLid = heldMb != null && heldMb.CompareTag("Lid");
+                }
+
+                var holder =
+                    interactableBehaviour.GetComponent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>() ??
+                    interactableBehaviour.GetComponentInParent<Interactable.Concrete.ObjectHolder.ObjectHolderSingle>();
+
+                bool holderHasObject = holder != null && holder.HasHeldObject;
+                
+                bool lidIsPlaced = holder != null && holder.HasHeldObject;
+                
+                return requiredLidState switch
+                {
+                    LidState.PickUp => !holdingSomething && !lidIsPlaced,
+                    LidState.Place  => holdingLid && !holderHasObject,
+                    LidState.Remove => !holdingSomething && lidIsPlaced,
+                    _ => true
+                };
             }
         }
 

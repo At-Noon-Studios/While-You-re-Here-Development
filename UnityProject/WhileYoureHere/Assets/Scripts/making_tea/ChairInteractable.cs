@@ -58,36 +58,36 @@ namespace making_tea
             if (!startSitting) return;
             StartCoroutine(StartSittingRoutine());
         }
-        
+
         private IEnumerator StartSittingRoutine()
         {
             Debug.Log($"[Chair] StartSittingRoutine started on {gameObject.name}");
-            
+
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             GameObject player = null;
             PlayerInteractionController playerController = null;
-        }
             while (player == null || playerController == null)
             {
                 player = GameObject.FindWithTag("Player");
                 if (player != null)
                     playerController = player.GetComponent<PlayerInteractionController>();
-                
+
                 Debug.Log($"[Chair] Waiting for Player... player={player}, pic={playerController}");
                 yield return null;
             }
-            
+
             player.SetActive(false);
-            
+
             yield return null;
 
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             _playerAlreadySeatedAtStart = true;
             Sit(playerController);
             player.SetActive(true);
             _standUpLocked = true;
+        }
 
         private void Update()
         {
@@ -174,7 +174,7 @@ namespace making_tea
             
         }
 
-        private void StandUp()
+        public void StandUp()
         {
             if (_standUpLocked)
             {

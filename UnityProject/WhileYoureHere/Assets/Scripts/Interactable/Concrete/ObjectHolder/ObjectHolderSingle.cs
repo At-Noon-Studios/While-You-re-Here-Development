@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interactable.Holdable;
 using JetBrains.Annotations;
@@ -22,14 +23,14 @@ namespace Interactable.Concrete.ObjectHolder
         [CanBeNull] private IHoldableObject _heldObject;
 
         private ITablePickup _tableCandidate;
-        private bool _showCanvasNormalMode;
-
+        
         private static readonly HashSet<ObjectHolderSingle> All = new();
         private static readonly RaycastHit[] Hits = new RaycastHit[12];
 
         public event Action<IHoldableObject> OnPlaced;
         public event Action<IHoldableObject> OnRemoved;
-
+        
+        public bool HasHeldObject => _heldObject != null;
         private void OnEnable()
         {
             All.Add(this);
@@ -143,11 +144,23 @@ namespace Interactable.Concrete.ObjectHolder
             _tableCandidate = null;
 
             OnPlaced?.Invoke(_heldObject);
-
-            _showCanvasNormalMode = false;
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
+            
         }
+        
+        public bool CanPlaceHeldTablePickup(PlayerInteractionController pic)
+        {
+            if (pic == null) return false;
+            if (!allowTableMode) return false;
+            if (_heldObject != null) return false;
+
+            var held = pic.GetHeldTablePickup();
+            if (held == null) return false;
+
+            return _tableCandidate != null &&
+                   ReferenceEquals(_tableCandidate, held) &&
+                   held.IsTableHeld;
+        }
+
 
         public override void Interact(IInteractor interactor)
         {

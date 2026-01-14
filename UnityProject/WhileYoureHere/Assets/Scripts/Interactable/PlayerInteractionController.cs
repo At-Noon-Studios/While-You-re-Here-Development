@@ -1,4 +1,4 @@
-using System.Collection.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using chopping_logs;
 using Interactable.Concrete.ObjectHolder;
@@ -42,6 +42,8 @@ namespace Interactable
         private ChairInteractable _sittingChair;
 
         public bool IsTableMode { get; private set; }
+        public ITablePickup CurrentTableSelection { get; private set; }
+
         public Camera PlayerCamera => playerCamera;
 
         private const int InteractableRaycastAllocation = 16;
@@ -245,6 +247,8 @@ namespace Interactable
             if (_tablePickupsSelectable.Count == 0) return;
 
             var selected = _tablePickupsSelectable[_tablePickupIndex];
+            CurrentTableSelection = selected;
+
             if (selected is InteractableBehaviour ib)
                 ib.OnHoverEnter(this);
         }
@@ -254,6 +258,8 @@ namespace Interactable
             foreach (var t in _tablePickupsSelectable)
                 if (t is InteractableBehaviour ib)
                     ib.OnHoverExit(this);
+
+            CurrentTableSelection = null;
         }
 
         private void RebuildSelectableTablePickups(bool preserveSelection)

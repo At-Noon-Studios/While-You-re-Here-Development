@@ -20,6 +20,13 @@ namespace making_tea
         public float rotateSpeed = 8f;
         public float pourSpeed = 0.25f;
 
+        [Header("Pour Target Proximity")]
+        [SerializeField] private LayerMask pourTargetMask = ~0;
+        [SerializeField] private float pourTargetRadius = 0.25f;
+        [SerializeField] private Vector3 pourTargetLocalOffset = new Vector3(-0.15f, 0.05f, 0.10f);
+
+        private readonly Collider[] _pourHits = new Collider[16];
+
         private AudioSource _audio;
         private PlayerInput _playerInput;
         private PlayerInteractionController _player;
@@ -30,13 +37,41 @@ namespace making_tea
         private bool _isPourPressed;
         private bool _wasPouring;
 
+        public bool IsNearPourTarget()
+        {
+            if (pourTargetRadius <= 0f) return false;
+
+            Vector3 checkPos = transform.TransformPoint(pourTargetLocalOffset);
+
+            int count = Physics.OverlapSphereNonAlloc(
+                checkPos,
+                pourTargetRadius,
+                _pourHits,
+                pourTargetMask,
+                QueryTriggerInteraction.Collide
+            );
+
+            for (int i = 0; i < count; i++)
+            {
+                var c = _pourHits[i];
+                if (c == null) continue;
+
+                if (c.transform == transform || c.transform.IsChildOf(transform))
+                    continue;
+
+                return true;
+            }
+
+            return false;
+        }
+
         private void Awake()
         {
             _audio = GetComponent<AudioSource>();
 
             var player = GameObject.FindWithTag("Player");
             if (player == null) return;
-            
+
             _playerInput = player.GetComponent<PlayerInput>();
             _player = player.GetComponent<PlayerInteractionController>();
 
@@ -62,7 +97,7 @@ namespace making_tea
         private void Update()
         {
             var isTableMode = _player != null && _player.IsTableMode;
-            
+
             var isHeld = TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld;
             var isTableHeld = TryGetComponent<KettleTablePickup>(out var t) && t.IsTableHeld;
 
@@ -71,7 +106,8 @@ namespace making_tea
                 (isHeld || isTableHeld) &&
                 kettle != null &&
                 kettle.fillAmount > 0f &&
-                _isPourPressed;
+                _isPourPressed &&
+                IsNearPourTarget();
 
             if (canPour)
             {

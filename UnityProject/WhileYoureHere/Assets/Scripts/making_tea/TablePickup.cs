@@ -1,4 +1,6 @@
 ﻿using Interactable;
+using Interactable.Concrete.ObjectHolder;
+using Interactable.Holdable;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,7 +48,6 @@ namespace making_tea
             var player = GameObject.FindWithTag("Player");
             if (player == null) return;
             
-            _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
             player.GetComponent<PlayerInteractionController>()?.RegisterTablePickup(this);
         }
 
