@@ -916,6 +916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndDay.EndDayInteractable
   blockInteraction: 0
+  endOfDaySound: {fileID: 8300000, guid: 7b4b8a8ebc94b2046ad7bccf6c2f3fae, type: 3}
 --- !u!1 &790366575193639419
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,7 +3426,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6094,7 +6094,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -7663,7 +7662,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -8226,7 +8224,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -8833,7 +8830,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.56, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -9484,7 +9480,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: defaecc391cbd6a4892f86bc7413233f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -14667,7 +14663,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.2, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -15696,7 +15691,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: -6755572252276641950, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -15712,7 +15706,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.6, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -16521,7 +16514,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 3
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -16537,7 +16529,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -16553,7 +16544,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.5, y: -0.7, z: 0.6}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -18283,12 +18273,16 @@ PrefabInstance:
       value: 150.469
       objectReference: {fileID: 0}
     - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-      propertyPath: logCrackSound.Array.size
-      value: 7
+      propertyPath: cutLogSprite
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-      propertyPath: logPlaceSound.Array.size
-      value: 6
+      propertyPath: placeLogSprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
+      propertyPath: logCrackSound.Array.size
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
       propertyPath: 'logCrackSound.Array.data[0]'
@@ -18318,10 +18312,6 @@ PrefabInstance:
       propertyPath: 'logCrackSound.Array.data[6]'
       value: 
       objectReference: {fileID: 8300000, guid: a5f5748108362834eaaaa4bb9b362187, type: 3}
-    - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
-      propertyPath: 'logPlaceSound.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: de7eef7cbc7496d4ab5ebbb26840c25c, type: 3}
     - target: {fileID: 6847553474599136021, guid: a0f301931e2a91e40a229fa8e0bb6dea, type: 3}
       propertyPath: 'logPlaceSound.Array.data[1]'
       value: 
@@ -18386,7 +18376,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 2
-    requiredKettleState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -18402,7 +18391,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 1
-    requiredKettleState: 0
     offset: {x: 0, y: 1.1, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -18418,7 +18406,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 3
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -18434,7 +18421,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 4
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: -0.05}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -18450,7 +18436,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 5
-    requiredKettleState: 0
     offset: {x: 0, y: 1.4, z: 0.1}
     lookAtTarget: 0
     uiObject: {fileID: 0}
