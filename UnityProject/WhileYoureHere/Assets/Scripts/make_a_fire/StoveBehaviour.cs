@@ -20,6 +20,7 @@ namespace make_a_fire
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
+        [SerializeField] private float chargedFireVolume;
         
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
@@ -79,7 +80,7 @@ namespace make_a_fire
         public void StartBigFire()
         {
             SetFireLifetime(0.5f);
-            _audioSource.PlayOneShot(chargedFire);
+            _audioSource.PlayOneShot(chargedFire, chargedFireVolume);
            
             ChoreEvents.TriggerPaperPlacement();
         }

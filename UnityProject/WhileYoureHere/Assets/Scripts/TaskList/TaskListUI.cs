@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Serialization;
 
 namespace TaskList
 {
@@ -9,6 +8,7 @@ namespace TaskList
         [Header("References")]
         [SerializeField] private Canvas taskListCanvas;
         [SerializeField] private Transform handPosition;
+        [SerializeField] private TaskListSound taskListSound;
         [Header("Animation Settings")]
         [SerializeField] private Vector3 spawnOffset = new Vector3(0, -0.3f, -0.5f);
         [SerializeField] private Vector3 spawnRotation = new Vector3(45f, 0f, 0f);
@@ -45,9 +45,15 @@ namespace TaskList
             }
 
             if (isOpen)
+            {
+                taskListSound.PlayTasklistGrabSound();
                 CloseNotebook();
+            }
             else
+            {
+                taskListSound.PlayTasklistCloseSound();
                 OpenNotebook();
+            }
         }
 
         private void OpenNotebook()
@@ -106,6 +112,5 @@ namespace TaskList
             objTransform.localPosition = targetPos;
             objTransform.localRotation = targetRot;
         }
-
     }
 }
