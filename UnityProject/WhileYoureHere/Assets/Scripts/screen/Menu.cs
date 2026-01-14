@@ -6,12 +6,15 @@ namespace screen
 {
     public class Menu : MonoBehaviour
     {
+        [Header("References")]
+        [SerializeField] private GameObject optionsMenuUI;
+        [SerializeField] private GameObject startMenuUI;
+        
         public void OnPlayButton()
         {
             ResetPauseState();
             ChairInteractable.ResetChairState();
             SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneHandler.SetPreviousScene("Day1");
             SceneManager.LoadScene("Day1");
         }
 
@@ -28,27 +31,20 @@ namespace screen
 
         public void OnSettingsButton()
         {
-            var current = SceneManager.GetActiveScene().name;
-
-            if (System.Array.Exists(SceneHandler.GameplayScenes, s => s == current))
-            {
-                SceneHandler.SetPreviousScene(current);
-            }
-
-            SceneManager.LoadScene(SceneHandler.OptionsScreen);
+            optionsMenuUI.SetActive(true);
+            startMenuUI.SetActive(false);
         }
-        
-        public void BackToMenu()
+
+        public void OnSettingsBack()
         {
-            Debug.Log($"[Menu] BackToMenu → PreviousScene = {SceneHandler.PreviousScene}");
-            ResetPauseState();
-            SceneManager.LoadScene(SceneHandler.PreviousScene);
+            optionsMenuUI.SetActive(false);
+            startMenuUI.SetActive(true);
         }
 
         public void OnLoadButton()
         {
-            SceneHandler.SetPreviousScene(SceneManager.GetActiveScene().name);
-            SceneManager.LoadScene(SceneHandler.LoadScreen);
+            ResetPauseState();
+            SceneManager.LoadScene("LoadScreen");
         }
 
         public void OnQuitButton()
@@ -56,7 +52,7 @@ namespace screen
             Application.Quit();
         }
 
-        private void ResetPauseState()
+        private static void ResetPauseState()
         {
             Time.timeScale = 1f;
             AudioListener.pause = false;

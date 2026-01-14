@@ -1,5 +1,4 @@
 using ScriptableObjects.Events;
-using PlayerControls;
 using UnityEngine;
 
 namespace screen
@@ -10,11 +9,12 @@ namespace screen
 
         [Header("References")]
         [SerializeField] private GameObject pauseMenuUI;
+        [SerializeField] private GameObject optionsMenuUI;
 
         public void OnResumeButton()
         {
             if (pauseEventChannel != null)
-                pauseEventChannel.Raise(); // This unpauses
+                pauseEventChannel.Raise();
         }
         
         public void OnLoadButton()
@@ -23,10 +23,16 @@ namespace screen
             UnityEngine.SceneManagement.SceneManager.LoadScene("LoadScreen");
         }
         
-        public void OnSettingsButton()
+        public void OnOptionsButton()
         {
-            ResetPauseState();
-            UnityEngine.SceneManagement.SceneManager.LoadScene("OptionsScreen");
+            pauseMenuUI.SetActive(false);
+            optionsMenuUI.SetActive(true);
+        }
+
+        public void OnOptionsBack()
+        {
+            optionsMenuUI.SetActive(false);
+            pauseMenuUI.SetActive(true);
         }
         
         public void OnQuitButton()
