@@ -654,6 +654,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: db9c443f35f2d5243ad7a9b3cec15cc7, type: 2}
   doorPivot: {fileID: 1878314274797415722}
   audioSource: {fileID: 770439770732204831}
+  notebookHintLine: {fileID: 8300000, guid: 312e79cceb1840f4fbf3db349ff60578, type: 3}
   keyholes:
   - {fileID: 4147044402577380365}
   - {fileID: 1902694572714029122}
@@ -859,7 +860,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -868,9 +869,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -903,7 +904,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
