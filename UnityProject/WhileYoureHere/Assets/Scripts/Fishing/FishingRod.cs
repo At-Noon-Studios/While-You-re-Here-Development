@@ -103,10 +103,16 @@ namespace Fishing {
             Debug.Log(IsCounterSteering() +" : " +_mouseDelta.x + " : " + _directionOfFloater.x);
              if (!IsCounterSteering())
              {
+                 SetCounterSteerUi();
                  _fishEscapeCount++;
                  if (_fishEscapeCount >= fishStruggleBeforeEscape) FishEscape();
              }
-             else _fishEscapeCount = Mathf.Max(0, _fishEscapeCount - 1);
+             else
+             {
+                 countersteerRightUiFlag.currentValue = false;
+                 countersteerLeftUiFlag.currentValue = false;
+                 _fishEscapeCount = Mathf.Max(0, _fishEscapeCount - 1);
+             }
         }
 
         private void StartCast()
@@ -130,6 +136,27 @@ namespace Fishing {
         private void UpdateMouseForCounterSteer(Vector2 mousePosition)
         {
             _mouseDelta.x = Mathf.Clamp(_mouseDelta.x + mousePosition.x, -mouseMoveToCounterSteer * 2, mouseMoveToCounterSteer * 2);
+        }
+
+        private void SetCounterSteerUi()
+        {
+            if (_directionOfFloater.x < 0)
+            {
+                countersteerRightUiFlag.currentValue = true;
+                countersteerLeftUiFlag.currentValue = false;
+            } else if (_directionOfFloater.x > 0)
+            {
+                countersteerRightUiFlag.currentValue = false;
+                countersteerLeftUiFlag.currentValue = true;
+            } else if (_mouseDelta.x < -mouseMoveToCounterSteer)
+            {
+                countersteerLeftUiFlag.currentValue = false;
+                countersteerRightUiFlag.currentValue = true;
+            } else if (_mouseDelta.x > mouseMoveToCounterSteer)
+            {
+                countersteerLeftUiFlag.currentValue = true;
+                countersteerRightUiFlag.currentValue = false;
+            }
         }
 
         private bool IsCounterSteering()
