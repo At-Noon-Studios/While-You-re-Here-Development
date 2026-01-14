@@ -574,7 +574,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -654,14 +653,20 @@ MonoBehaviour:
   placedObjects:
   - objectPrefab: {fileID: 4332810610412071041, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     placedObjectRotation: {x: 0, y: 0, z: 0}
+    audioClip: {fileID: 8300000, guid: cc652a1f7c32f054f9e49a7f98843ea6, type: 3}
   - objectPrefab: {fileID: 9080065551056185978, guid: 460d27f9bf9b8884085cb1b4cccaf4d6, type: 3}
     placedObjectRotation: {x: -90, y: 0, z: 0}
+    audioClip: {fileID: 8300000, guid: 501366a47cdccd84d85dd88d375f3b6a, type: 3}
   - objectPrefab: {fileID: 4332810610412071041, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     placedObjectRotation: {x: 0, y: -70, z: 0}
+    audioClip: {fileID: 8300000, guid: 743d17328530d2345bc9b5fd1c4e5815, type: 3}
   - objectPrefab: {fileID: 4332810610412071041, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     placedObjectRotation: {x: 0, y: 70, z: 0}
+    audioClip: {fileID: 8300000, guid: ec13ac2094bed6b43be73d0d7bd98451, type: 3}
   - objectPrefab: {fileID: 4332810610412071041, guid: e4f0a1f2b7790f44daf160e61d95cd34, type: 3}
     placedObjectRotation: {x: 0, y: 0, z: 0}
+    audioClip: {fileID: 8300000, guid: b0758f4fae5a79240841c3a06cf39262, type: 3}
+  _audioSource: {fileID: 8668382047962201540}
 --- !u!1 &5204705461564196372
 GameObject:
   m_ObjectHideFlags: 0
@@ -5768,7 +5773,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 0
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0, y: 0.3, z: 0}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -5861,9 +5865,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -5896,7 +5900,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -5953,6 +5957,7 @@ MonoBehaviour:
   matchStrike: {fileID: 8300000, guid: 95c49fc713d11f14bbea7e300f191c7a, type: 3}
   burningFire: {fileID: 8300000, guid: 602000590feee4442a4ebec89aef5242, type: 3}
   chargedFire: {fileID: 8300000, guid: 765d1b10189f30a4ea460e5bd79e6bb6, type: 3}
+  chargedFireVolume: 2
   blowAllowedEvent: {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
 --- !u!1 &6466514370822893418
 GameObject:
@@ -6174,6 +6179,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: d855518431313974c9aeafc71360acc3, type: 2}
   doorPivot: {fileID: 6863649006352924747}
   audioSource: {fileID: 0}
+  notebookHintLine: {fileID: 0}
   keyholes: []
   isLocked: 0
   isOpen: 0
@@ -6200,7 +6206,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6216,7 +6221,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6485,6 +6489,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 1bff4e4e23fe04b43b5f934e6e685871, type: 2}
   doorPivot: {fileID: 1209456510512186474}
   audioSource: {fileID: 0}
+  notebookHintLine: {fileID: 0}
   keyholes: []
   isLocked: 0
   isOpen: 0
@@ -6511,7 +6516,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 1
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
@@ -6527,7 +6531,6 @@ MonoBehaviour:
     requiredHeldObject: {fileID: 0}
     requiredDoorState: 2
     requiredStumpState: 0
-    requiredKettleState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
     uiObject: {fileID: 0}
