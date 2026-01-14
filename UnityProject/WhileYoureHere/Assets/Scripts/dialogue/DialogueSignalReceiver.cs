@@ -1,3 +1,4 @@
+using System;
 using ScriptableObjects.dialogue;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -16,10 +17,7 @@ namespace dialogue
     {
         [SerializeField] private DialogueLoader loader;
         [SerializeField] private DialogueSignalMapping[] dialogueSignals;
-        
-        public void Awake(){
-            loader.gameObject.SetActive(true);
-        }
+  
         public void OnNotify(
             UnityEngine.Playables.Playable origin,
             INotification notification,
@@ -31,7 +29,6 @@ namespace dialogue
                 {
                     if (map.signal == emitter.asset)
                     {
-                        Debug.Log("Dialogue started");
                         loader.StartDialogue(map.config);
                         return;
                     }

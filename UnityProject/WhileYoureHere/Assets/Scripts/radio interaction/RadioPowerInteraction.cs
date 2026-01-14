@@ -17,16 +17,28 @@ namespace radio_interaction
         public override void Interact(IInteractor interactor)
         {
             radioController.OnPowerPressed();
+            if (radioController.GetIsPlayingCutscene())
+            {
+                blockInteraction = true;
+            }
+            else blockInteraction = false;
         }
 
         public override void ClickInteract(IInteractor interactor)
         {
+            if (radioController.GetIsPlayingCutscene())
+            {
+                blockInteraction = true;
+                return;
+            }
+            blockInteraction = false;
             radioController.OnTunePressed();
         }
 
         public override void OnHoverEnter(IInteractor interactor)
         {
-            bool interacted = radioController.RadioStateMachine.CurrentState is RadioOffState;
+            bool interacted =
+                radioController.RadioStateMachine.CurrentState is RadioOffState;
             base.OnHoverEnter(interactor);
             if (interacted) InteractiveCanvas.gameObject.SetActive(true);
         }

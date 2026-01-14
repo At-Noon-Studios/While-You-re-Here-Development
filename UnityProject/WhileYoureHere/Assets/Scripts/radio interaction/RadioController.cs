@@ -68,10 +68,12 @@ namespace radio_interaction
         {
             if (radioTimeline != null)
             {
+                radioTimeline.stopped += OnTimelineFinished;
                 radioTimeline.Stop();
                 radioTimeline.time = 0;
                 radioTimeline.Evaluate();
             }
+
         }
 
         private void Start()
@@ -101,6 +103,11 @@ namespace radio_interaction
         private void OnDisable()
         {
             dialogueManager.OnLastSentenceFinished -= LastSentenceFinished;
+            if (radioTimeline != null)
+            {
+                radioTimeline.stopped -= OnTimelineFinished;
+            }
+
         }
 
         private void Update()
@@ -246,6 +253,14 @@ namespace radio_interaction
             offStateCanvas.gameObject.SetActive(false);
             slideCanvas.gameObject.SetActive(false);
         }
+        private void OnTimelineFinished(PlayableDirector director)
+        {
+            if (director == radioTimeline)
+            {
+                _isPlayingCutscene = false;
+            }
+        }
+
 
         public void TurnRadioOn()
         {
@@ -258,8 +273,6 @@ namespace radio_interaction
 
             if (_isPlayingCutscene)
             {
-                _isPlayingCutscene = false;
-                // _uiManager.ShowDialogue("","","");
                 radioTimeline.Play();
                 return;
             }
@@ -407,6 +420,7 @@ namespace radio_interaction
             _audioSource.Play();
             _isPlayingClassicRadio = true;
         }
+        public bool GetIsPlayingCutscene() => _isPlayingCutscene;
 
         #endregion
 

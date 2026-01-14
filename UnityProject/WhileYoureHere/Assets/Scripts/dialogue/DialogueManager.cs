@@ -46,6 +46,7 @@ namespace dialogue
         private void Awake()
         {
             _ui = UIManager.Instance;
+            gameObject.SetActive(true);
         }
 
         private void Start()
@@ -88,7 +89,6 @@ namespace dialogue
             _nodes.Clear();
             foreach (var n in interactionConfig.dialogueNodes)
                 _nodes[n.nodeID] = n;
-
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
@@ -164,7 +164,6 @@ namespace dialogue
                     HandleNextNodeOrEnd();
                 return;
             }
-
             DialogueSentence sentence = _activeSentences[_sentenceIndex++];
             _sentenceRoutine = StartCoroutine(TypeSentence(sentence));
         }
