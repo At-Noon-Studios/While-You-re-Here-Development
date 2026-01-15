@@ -28,8 +28,8 @@ public class WaypointWalker : MonoBehaviour
     [Header("Gravity")]
     public float gravity = -9.81f;
 
-    public List<AudioClip> miauws;
-    public AudioClip rareMiauw;
+    // public List<AudioClip> miauws;
+    // public AudioClip rareMiauw;
     private bool blockMiauw;
 
     // =========================
@@ -158,28 +158,28 @@ public class WaypointWalker : MonoBehaviour
         if (!blockMiauw)
         {
             blockMiauw = true;
-            StartCoroutine(PlayMiauw());
+            // StartCoroutine(PlayMiauw());
         }
 
         moveDirection = transform.forward * fleeSpeed;
         animator.speed = fleeSpeed * animationSpeedMultiplier;
     }
 
-    private IEnumerator PlayMiauw()
-    {
-        var rand = Random.Range(0, 100);
-        AudioClip audioToPlay;
-        if (rand <= 1)
-        {
-            audioToPlay = rareMiauw;
-        }
-        else
-        {
-            audioToPlay = miauws[Random.Range(0, miauws.Count)];
-        }
-        _audioSource.PlayOneShot(audioToPlay);
-        yield return new WaitForSeconds(audioToPlay.length);
-    }
+    // private IEnumerator PlayMiauw()
+    // {
+    //     var rand = Random.Range(0, 100);
+    //     AudioClip audioToPlay;
+    //     if (rand <= 1)
+    //     {
+    //         audioToPlay = rareMiauw;
+    //     }
+    //     else
+    //     {
+    //         audioToPlay = miauws[Random.Range(0, miauws.Count)];
+    //     }
+    //     _audioSource.PlayOneShot(audioToPlay);
+    //     yield return new WaitForSeconds(audioToPlay.length);
+    // }
 
     void FollowPlayer()
     {
