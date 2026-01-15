@@ -1,0 +1,84 @@
+using System;
+using System.Collections;
+using UnityEngine;
+
+namespace Fishing
+{
+    public class FloaterController : MonoBehaviour
+    {
+
+        private Rigidbody _rigidbody;
+        private ParticleSystem _ripple;
+        private ParticleSystem _splash;
+        private bool _blockTrigger;
+        public static event Action<bool> OnFishSplashing;
+        public static void TriggerFishSplashing(bool splashing) =>  OnFishSplashing?.Invoke(splashing);
+        public static event Action<Vector3> OnFloaterMove;
+        public static void TriggerFloaterMove(Vector3 moveTowards) => OnFloaterMove?.Invoke(moveTowards);
+        public static event Action<bool> OnCastLine;
+        public static void TriggerCastLine(bool lineCast) => OnCastLine?.Invoke(lineCast);
+
+        private void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody>();
+            _ripple = transform.Find("Ripple").gameObject.GetComponent<ParticleSystem>();
+            _splash = transform.Find("Splash").gameObject.GetComponent<ParticleSystem>();
+        }
+
+        private void OnEnable()
+        {
+            OnFishSplashing += PlaySplashAnimation;
+            OnFloaterMove += MoveFloater;
+            OnCastLine += LineCast;
+        }
+
+        private void OnDisable()
+        {
+            OnFishSplashing -= PlaySplashAnimation;
+            OnFloaterMove -= MoveFloater;
+            OnCastLine -= LineCast;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (_blockTrigger) return;
+            _blockTrigger = true;
+
+            _rigidbody.isKinematic = true;
+            if (other.TryGetComponent<FishingArea>(out var fishingArea))
+            {
+                StartCoroutine(CatchFish(fishingArea));
+            }
+            else
+            {
+                FishingRod.TriggerFishCaught(null);
+                _blockTrigger = false;
+            }
+        }
+
+        private IEnumerator CatchFish(FishingArea fishingArea)
+        {
+            yield return new WaitForSeconds(3);
+            FishingRod.TriggerFishCaught(fishingArea.GetFish());
+            _blockTrigger = false;
+            _ripple.Play();
+        }
+
+        private void PlaySplashAnimation(bool splashing)
+        {
+            if (splashing) _splash.Play();
+            else _splash.Stop();
+        }
+
+        private void MoveFloater(Vector3 newPosition)
+        {
+            _rigidbody.MovePosition(newPosition);
+        }
+
+        private void LineCast(bool lineCast)
+        {
+            _blockTrigger = !lineCast;
+            if (!lineCast) StopAllCoroutines();
+        }
+    }
+}

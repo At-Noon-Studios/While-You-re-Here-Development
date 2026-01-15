@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 7461235706524234327}
   - component: {fileID: 1276187562728954330}
   - component: {fileID: 7730936193259386632}
+  - component: {fileID: 1433123007566295977}
+  - component: {fileID: 4304926644677062743}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -133,6 +135,7 @@ MonoBehaviour:
   clickTune: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
   drop: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
   cancel: {fileID: 11400000, guid: 052682770d4bff846990332a14b7c326, type: 2}
+  pause: {fileID: 0}
   blow: {fileID: 11400000, guid: 79a0e3b3e2311422d9a945909ed6c1de, type: 2}
 --- !u!82 &5956156730005618975
 AudioSource:
@@ -276,6 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListInputHandler
   taskListUI: {fileID: 0}
+  taskListSound: {fileID: 0}
   taskListEventChannel: {fileID: 11400000, guid: de0175db2d6c60148aae10754b11a7b8, type: 2}
 --- !u!114 &7461235706524234327
 MonoBehaviour:
@@ -327,6 +331,7 @@ MonoBehaviour:
     requiredFlags: []
     requiredEventChannels: []
     offset: {x: -1.35, y: 0}
+    standalone: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -340,6 +345,7 @@ MonoBehaviour:
     requiredFlags: []
     requiredEventChannels: []
     offset: {x: -0.93, y: 0}
+    standalone: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -353,6 +359,7 @@ MonoBehaviour:
     requiredFlags: []
     requiredEventChannels: []
     offset: {x: -0.6, y: 0}
+    standalone: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -366,6 +373,7 @@ MonoBehaviour:
     requiredFlags: []
     requiredEventChannels: []
     offset: {x: -1, y: 0}
+    standalone: 0
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -380,12 +388,102 @@ MonoBehaviour:
     requiredEventChannels:
     - {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
     offset: {x: -0.6, y: 0}
+    standalone: 0
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Reel fishing rod
+    sprite: {fileID: 21300000, guid: 1dc15e04bee2e6640b2afd196f6bc325, type: 3}
+    size: {x: 4, y: 4}
+    activationMode: 4
+    inputAction: {fileID: 0}
+    requiredInputUses: 0
+    requiredHeldObject: {fileID: 0}
+    requiredFlags:
+    - {fileID: 11400000, guid: b0e9ecd17be7b384abba7a89cc371e03, type: 2}
+    requiredEventChannels: []
+    offset: {x: 8, y: 0}
+    standalone: 1
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Cast fishing rod
+    sprite: {fileID: 21300000, guid: 70d55d37c1cc98b4e82812734381c207, type: 3}
+    size: {x: 4, y: 4}
+    activationMode: 4
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 1
+    requiredHeldObject: {fileID: 0}
+    requiredFlags:
+    - {fileID: 11400000, guid: 8572e20015b34a6459bfdcf24f45921f, type: 2}
+    requiredEventChannels: []
+    offset: {x: 8, y: 0}
+    standalone: 1
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Countersteer left
+    sprite: {fileID: 21300000, guid: 99cdb7d1db6b4cd418efc89cd5b55047, type: 3}
+    size: {x: 4, y: 4}
+    activationMode: 4
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 1
+    requiredHeldObject: {fileID: 0}
+    requiredFlags:
+    - {fileID: 11400000, guid: a2d0f951849d29446a26f84751f89b3d, type: 2}
+    requiredEventChannels:
+    - {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
+    offset: {x: 8, y: 2.5}
+    standalone: 1
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Countersteer right
+    sprite: {fileID: 21300000, guid: e7fa7b565a702354190c3adefe6742f5, type: 3}
+    size: {x: 4, y: 4}
+    activationMode: 4
+    inputAction: {fileID: 4657057939639479183, guid: b1162a85433651a4696ca1c9ca5a9542, type: 3}
+    requiredInputUses: 1
+    requiredHeldObject: {fileID: 0}
+    requiredFlags:
+    - {fileID: 11400000, guid: 4902d98c606d9f64f8683736c10558b7, type: 2}
+    requiredEventChannels:
+    - {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
+    offset: {x: 13, y: 2.5}
+    standalone: 1
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
   elementSpacing: {x: 0, y: 1.2}
   screenScale: 50
   taskListUI: {fileID: 0}
+--- !u!114 &1433123007566295977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701e06dfddce4baba5127061b82348d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PlayerSceneHandler
+--- !u!114 &4304926644677062743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69412eb058164839b9bbe2c95143843d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PauseMenuController
+  pauseMenuUI: {fileID: 0}
+  pauseEventChannel: {fileID: 11400000, guid: fba1620c93d773a45bb100dbeb1865c8, type: 2}
+  cameraController: {fileID: 5543653532837615559}
 --- !u!1 &4171835902495713361
 GameObject:
   m_ObjectHideFlags: 0
