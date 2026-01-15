@@ -31,11 +31,9 @@ namespace screen
 
             // Create dummy data or pull from GameStateManager
             SaveData data = new SaveData
+                
             {
-                playerLevel = 1,
-                lastTaskCompleted = "Task X",
-                playTime = 100f,
-                timestamp = System.DateTime.Now.ToString()
+                lastTaskCompleted = "Task X"
             };
 
             SaveSystem.Save(data);
