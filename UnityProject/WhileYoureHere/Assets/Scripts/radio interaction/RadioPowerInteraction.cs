@@ -1,40 +1,47 @@
 using Interactable;
-using UnityEngine;
-
 namespace radio_interaction
 {
     public class RadioPowerInteraction : InteractableBehaviour,
         IClickInteractable, IEInteractable
     {
-        [SerializeField] private Canvas InteractiveCanvas;
-        private RadioController radioController;
+        private RadioController _radioController;
+
+        public void Awake()
+        {
+            base.Awake();
+        }
 
         public void Start()
         {
-            radioController = GetComponentInParent<RadioController>();
+            _radioController = GetComponentInParent<RadioController>();
         }
 
         public override void Interact(IInteractor interactor)
         {
-            radioController.OnPowerPressed();
+            _radioController.OnPowerPressed();
         }
 
         public override void ClickInteract(IInteractor interactor)
         {
-            radioController.OnTunePressed();
+            _radioController.OnTunePressed();
         }
 
         public override void OnHoverEnter(IInteractor interactor)
         {
-            bool interacted = radioController.RadioStateMachine.CurrentState is RadioOffState;
-            base.OnHoverEnter(interactor);
-            if (interacted) InteractiveCanvas.gameObject.SetActive(true);
+            bool interacted =
+                _radioController.RadioStateMachine.CurrentState is RadioOffState || _radioController.RadioStateMachine.CurrentState is RadioOnState ;
+            if (interacted)
+                base.OnHoverEnter(interactor);
         }
 
         public override void OnHoverExit(IInteractor interactor)
         {
-            base.OnHoverEnter(interactor);
-            InteractiveCanvas.gameObject.SetActive(false);
+            bool interacted =
+                _radioController.RadioStateMachine.CurrentState is RadioOffState || _radioController.RadioStateMachine.CurrentState is RadioOnState ;
+            if (interacted)
+                base.OnHoverExit(interactor);
         }
+
+        public RadioController GetRadioController() => _radioController;
     }
 }

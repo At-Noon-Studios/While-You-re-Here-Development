@@ -11,6 +11,6 @@
             CurrentState.Enter();
         }
 
-        public void Update() => CurrentState?.Update();
+        public void Update() => CurrentState.Update();
     }
 }
