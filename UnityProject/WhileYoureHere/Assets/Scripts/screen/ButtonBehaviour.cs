@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-namespace starting_screen
+namespace screen
 {
     public class ButtonBehaviour : MonoBehaviour
     {

@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 7461235706524234327}
   - component: {fileID: 1276187562728954330}
   - component: {fileID: 7730936193259386632}
+  - component: {fileID: 1433123007566295977}
+  - component: {fileID: 4304926644677062743}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -133,6 +135,7 @@ MonoBehaviour:
   clickTune: {fileID: 11400000, guid: b97d0197dcbbe374c92aaa29b5ebf34c, type: 2}
   drop: {fileID: 11400000, guid: d3ac316b8c92e964297d1c396aead909, type: 2}
   cancel: {fileID: 11400000, guid: 052682770d4bff846990332a14b7c326, type: 2}
+  pause: {fileID: 0}
   blow: {fileID: 11400000, guid: 79a0e3b3e2311422d9a945909ed6c1de, type: 2}
 --- !u!82 &5956156730005618975
 AudioSource:
@@ -454,6 +457,33 @@ MonoBehaviour:
   elementSpacing: {x: 0, y: 1.2}
   screenScale: 50
   taskListUI: {fileID: 0}
+--- !u!114 &1433123007566295977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701e06dfddce4baba5127061b82348d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PlayerSceneHandler
+--- !u!114 &4304926644677062743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977070723198052308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69412eb058164839b9bbe2c95143843d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PauseMenuController
+  pauseMenuUI: {fileID: 0}
+  pauseEventChannel: {fileID: 11400000, guid: fba1620c93d773a45bb100dbeb1865c8, type: 2}
+  cameraController: {fileID: 5543653532837615559}
 --- !u!1 &4171835902495713361
 GameObject:
   m_ObjectHideFlags: 0
