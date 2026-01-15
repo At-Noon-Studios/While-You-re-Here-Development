@@ -47,6 +47,7 @@ namespace UI.DynamicUI
 
             [Header("Base Offset (bottom-left)")]
             [SerializeField] private Vector2 offset;
+            [SerializeField] public bool standalone;
 
             [HideInInspector] public GameObject uiObject;
             [HideInInspector] public Image image;
@@ -172,8 +173,15 @@ namespace UI.DynamicUI
 
                 if (!active) continue;
 
-                e.UpdateUI(e.Offset + elementSpacing * index);
-                index++;
+                if (!e.standalone)
+                {
+                    e.UpdateUI(e.Offset + elementSpacing * index);
+                    index++;
+                }
+                else
+                {
+                    e.UpdateUI(e.Offset);
+                }
             }
         }
 
