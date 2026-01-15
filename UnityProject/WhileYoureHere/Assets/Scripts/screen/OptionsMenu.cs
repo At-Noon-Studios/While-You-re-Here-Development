@@ -8,9 +8,13 @@ namespace screen
 {
     public class OptionsMenu : MonoBehaviour
     {
+        // [Header("Subtitle Options")]
+        // [SerializeField] private GameObject subtitlesObject;
+        
         [Header("Screen Options")]
         [SerializeField] private TMP_Dropdown resolutionDropdown;
         [SerializeField] private Toggle fullScreenToggle;
+        [SerializeField] private Toggle subtitlesToggle;
 
         [Header("Audio Options")]
         [SerializeField] private AudioMixer mixer;
@@ -29,12 +33,14 @@ namespace screen
         private Resolution[] _allResolutions;
         private bool _isFullScreen;
         private int _currentResolutionIndex;
+        // private bool _isSubtitlesOn;
         private readonly List<Resolution> _selectedResolutions = new();
         
         private void OnEnable()
         {
             _isFullScreen = Screen.fullScreen;
             fullScreenToggle.isOn = _isFullScreen;
+            // subtitlesToggle.isOn = _isSubtitlesOn;
 
             SetupResolutionDropdown();
             
@@ -171,6 +177,10 @@ namespace screen
         }
         
         //SUBTITLES
-        // Future implementation for subtitle options can be added here
+        // public void ToggleSubtitles()
+        // {
+        //     subtitlesObject.SetActive(_isSubtitlesOn);
+        //     PlayerPrefs.SetInt("Subtitles", _isSubtitlesOn ? 1 : 0);
+        // }
     }
 }
