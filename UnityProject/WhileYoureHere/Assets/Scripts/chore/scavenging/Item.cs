@@ -11,8 +11,7 @@ namespace chore.scavenging
         [SerializeField] private ScavengingChore _scavengeChore;
         [SerializeField] private float _audioVolume = 1.0f;
 
-        [Header("Item")]
-        [SerializeField] private int itemID;
+        [Header("Item")] [SerializeField] private int itemID;
 
         private new void Awake()
         {
@@ -23,7 +22,9 @@ namespace chore.scavenging
         public override void Interact(IInteractor interactor)
         {
             ChoreEvents.TriggerItemCollected(itemID);
-            AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform, _audioVolume);
+            AudioManager.instance.SetAudioSource(_audioSource);
+            AudioManager.instance.PlaySound(_scavengeChore.PickupPlants, transform,
+                _audioVolume);
             Destroy(gameObject);
         }
 
