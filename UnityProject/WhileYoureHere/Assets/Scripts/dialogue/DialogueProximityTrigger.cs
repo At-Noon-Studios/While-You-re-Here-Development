@@ -18,7 +18,8 @@ namespace dialogue
         [SerializeField] private Transform playerTransform;
 
         private bool _wasInRange;
-
+        private bool _hasTriggered;
+        
         private void Awake()
         {
             FindPlayer();
@@ -46,6 +47,8 @@ namespace dialogue
 
         private void Update()
         {
+            if (_hasTriggered) return;
+
             if (playerTransform == null)
             {
                 FindPlayer();
@@ -54,7 +57,6 @@ namespace dialogue
 
             if (dialogueLoader == null || config == null) return;
             if (config.dialogueNodes == null || config.dialogueNodes.Count == 0) return;
-            if (dialogueLoader.gameObject.activeSelf) return;
 
             var inRange = IsPlayerInTriggerZone();
             var enteredThisFrame = inRange && !_wasInRange;
@@ -75,13 +77,12 @@ namespace dialogue
 
         private void TriggerDialogue()
         {
-            if (dialogueLoader.gameObject.activeSelf ||
-                config.dialogueNodes == null ||
-                config.dialogueNodes.Count == 0)
-                return;
+            if (_hasTriggered) return;
+
+            _hasTriggered = true;
 
             dialogueLoader.gameObject.SetActive(true);
-            
+
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {

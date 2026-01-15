@@ -833,11 +833,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e63cc8574fd5c468b383133ad192a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TaskList.TaskListManager
---- !u!1 &1885407927 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2175056283906919640, guid: aee7b99ff681cdc449c09b17a3525c79, type: 3}
-  m_PrefabInstance: {fileID: 6281185482886973727}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1504375617
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +938,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a1d7141a164dd41a9ec5a1c7950c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueLoader
+--- !u!1 &1885407927 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2175056283906919640, guid: aee7b99ff681cdc449c09b17a3525c79, type: 3}
+  m_PrefabInstance: {fileID: 6281185482886973727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!108 &112480277093400875 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 4222807520271628449, guid: 0c21fee426bcddf4b91a514572eda541, type: 3}
@@ -1083,6 +1083,10 @@ PrefabInstance:
       propertyPath: handPosition
       value: 
       objectReference: {fileID: 335232892}
+    - target: {fileID: 1440930159343409096, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: m_TargetCamera
+      value: 
+      objectReference: {fileID: 1242199020}
     - target: {fileID: 1504393460022190862, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: m_Size.x
       value: 0.9533437
@@ -1147,10 +1151,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -3.351
       objectReference: {fileID: 0}
-    - target: {fileID: 1440930159343409096, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-      propertyPath: m_TargetCamera
-      value: 
-      objectReference: {fileID: 1242199020}
     - target: {fileID: 1574921191881643563, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: startSitting
       value: 1
@@ -1159,6 +1159,14 @@ PrefabInstance:
       propertyPath: notebookPickedUpFlag
       value: 
       objectReference: {fileID: 11400000, guid: 3d30f9922ba15754999c2998c6e43244, type: 2}
+    - target: {fileID: 3266808829124499952, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1242199018}
+    - target: {fileID: 3512923719357818662, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 54a0ebfd41b99944eaacc911eaf5409d, type: 2}
     - target: {fileID: 3657548159658059687, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: worldSpaceElements.Array.size
       value: 1
@@ -1207,10 +1215,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3266808829124499952, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 1242199018}
     - target: {fileID: 4717662478261982978, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       propertyPath: chargedFireVolume
       value: 1.5
@@ -1555,12 +1559,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3075533751249305906, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1653488603}
-    m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 313215401268477327, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-    - {fileID: -711154239289015525, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ff93c754f3b6bc4cb997f3d9aa777b8, type: 3}
 --- !u!114 &5067033201132926046 stripped
 MonoBehaviour:
@@ -1747,7 +1745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1055564832496327209, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1029.485
+      value: 1254.3363
       objectReference: {fileID: 0}
     - target: {fileID: 1055564832496327209, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1759,7 +1757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1055564832496327209, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1275.7504
+      value: -1101.9856
       objectReference: {fileID: 0}
     - target: {fileID: 1262322677674275092, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: choresToLoad.Array.size
@@ -3091,15 +3089,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2208456945098543381, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 131.31018
+      value: 44.427795
       objectReference: {fileID: 0}
     - target: {fileID: 2208456945098543381, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 764.7425
+      value: 877.16815
       objectReference: {fileID: 0}
     - target: {fileID: 2208456945098543381, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1051.3102
+      value: -964.4278
       objectReference: {fileID: 0}
     - target: {fileID: 4516491931648755095, guid: 5987e9158a0317945b5ba78b406f6870, type: 3}
       propertyPath: tooFarFromCabinVoiceLine
