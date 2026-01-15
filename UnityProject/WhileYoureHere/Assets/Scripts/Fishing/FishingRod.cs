@@ -215,7 +215,8 @@ namespace Fishing {
             _cameraController.ResumeCameraMovement();
             _movementController.ResumeMovement();
             look -= UpdateMouseForCast;
-            _animator.SetTrigger("Uncharge");
+            _animator.SetTrigger("ResetRodPose");
+            _animator.ResetTrigger("CastStart");
             line.SetActive(true);
 
         }
@@ -223,6 +224,7 @@ namespace Fishing {
         private void CastLine()
         {
             _animator.SetTrigger("CastLine");
+            _animator.ResetTrigger("CastStart");
         }
 
         public void OnThrowFloat()
@@ -311,6 +313,7 @@ namespace Fishing {
             countersteerRightUiFlag.currentValue = false;
             _animator.Play("No Rod");
             _animator.ResetTrigger("CatchFish");
+            _animator.SetTrigger("ResetRodPose");
             // ResetBones();
         }
 
