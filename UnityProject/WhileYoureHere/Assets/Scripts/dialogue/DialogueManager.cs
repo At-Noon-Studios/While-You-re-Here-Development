@@ -364,7 +364,6 @@ namespace dialogue
             PlayNextSentence();
         }
 
-
         private void CreateChoices()
         {
             foreach (var choice in _currentNode.choices)
@@ -373,34 +372,42 @@ namespace dialogue
                 var btn = btnObj.GetComponent<Button>();
                 var img = btnObj.GetComponent<Image>() ?? btnObj.GetComponentInChildren<Image>();
 
-                if (img != null)
+                if (img != null && choice.normalSprite != null)
                     img.sprite = choice.normalSprite;
 
-                btn.onClick.AddListener(() => DisplayNode(choice.targetNodeID));
-
-                var trigger = btnObj.GetComponent<UnityEngine.EventSystems.EventTrigger>() 
-                              ?? btnObj.AddComponent<UnityEngine.EventSystems.EventTrigger>();
-
-                void SetSprite(Sprite s) { if (img != null) img.sprite = s; }
-
-                trigger.triggers.Add(new UnityEngine.EventSystems.EventTrigger.Entry
+                btn.onClick.AddListener(() =>
                 {
-                    eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter,
-                    callback = new UnityEngine.EventSystems.EventTrigger.TriggerEvent()
+                    DisplayNode(choice.targetNodeID);
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
                 });
-                trigger.triggers[^1].callback.AddListener(_ => SetSprite(choice.selectedSprite));
 
-                trigger.triggers.Add(new UnityEngine.EventSystems.EventTrigger.Entry
+                if (img != null)
                 {
-                    eventID = UnityEngine.EventSystems.EventTriggerType.PointerExit,
-                    callback = new UnityEngine.EventSystems.EventTrigger.TriggerEvent()
-                });
-                trigger.triggers[^1].callback.AddListener(_ => SetSprite(choice.normalSprite));
+                    var trigger = btnObj.GetComponent<UnityEngine.EventSystems.EventTrigger>() 
+                                  ?? btnObj.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+
+                    void SetSprite(Sprite s) { img.sprite = s; }
+
+                    var enter = new UnityEngine.EventSystems.EventTrigger.Entry
+                    {
+                        eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter
+                    };
+                    enter.callback.AddListener(_ => { if (choice.selectedSprite != null) SetSprite(choice.selectedSprite); });
+                    trigger.triggers.Add(enter);
+
+                    var exit = new UnityEngine.EventSystems.EventTrigger.Entry
+                    {
+                        eventID = UnityEngine.EventSystems.EventTriggerType.PointerExit
+                    };
+                    exit.callback.AddListener(_ => { if (choice.normalSprite != null) SetSprite(choice.normalSprite); });
+                    trigger.triggers.Add(exit);
+                }
             }
 
             EventSystem.current?.SetSelectedGameObject(null);
         }
-
+        
         private void HandleNextNodeOrEnd()
         {
             if (!string.IsNullOrEmpty(_currentNode.targetNodeID))
