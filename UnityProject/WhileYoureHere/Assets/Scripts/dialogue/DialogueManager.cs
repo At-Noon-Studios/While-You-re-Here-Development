@@ -369,11 +369,33 @@ namespace dialogue
         {
             foreach (var choice in _currentNode.choices)
             {
-                var btn = Instantiate(choiceButtonPrefab, choicesContainer);
-                btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text =
-                    choice.choiceText;
-                btn.GetComponent<Button>().onClick
-                    .AddListener(() => DisplayNode(choice.targetNodeID));
+                var btnObj = Instantiate(choiceButtonPrefab, choicesContainer);
+                var btn = btnObj.GetComponent<Button>();
+                var img = btnObj.GetComponent<Image>() ?? btnObj.GetComponentInChildren<Image>();
+
+                if (img != null)
+                    img.sprite = choice.normalSprite;
+
+                btn.onClick.AddListener(() => DisplayNode(choice.targetNodeID));
+
+                var trigger = btnObj.GetComponent<UnityEngine.EventSystems.EventTrigger>() 
+                              ?? btnObj.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+
+                void SetSprite(Sprite s) { if (img != null) img.sprite = s; }
+
+                trigger.triggers.Add(new UnityEngine.EventSystems.EventTrigger.Entry
+                {
+                    eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter,
+                    callback = new UnityEngine.EventSystems.EventTrigger.TriggerEvent()
+                });
+                trigger.triggers[^1].callback.AddListener(_ => SetSprite(choice.selectedSprite));
+
+                trigger.triggers.Add(new UnityEngine.EventSystems.EventTrigger.Entry
+                {
+                    eventID = UnityEngine.EventSystems.EventTriggerType.PointerExit,
+                    callback = new UnityEngine.EventSystems.EventTrigger.TriggerEvent()
+                });
+                trigger.triggers[^1].callback.AddListener(_ => SetSprite(choice.normalSprite));
             }
 
             EventSystem.current?.SetSelectedGameObject(null);
