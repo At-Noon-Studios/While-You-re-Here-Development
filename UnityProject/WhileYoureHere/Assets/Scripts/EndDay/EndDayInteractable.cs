@@ -1,7 +1,5 @@
 using System.Collections;
-using chopping_logs;
 using Interactable;
-using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
 using UnityEngine;
@@ -46,18 +44,6 @@ namespace EndDay
             _videoPlayer.Stop();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             Destroy(GameObject.FindGameObjectWithTag("Player"));
-            
-            var holdable = FindObjectsOfType<HoldableObjectBehaviour>();
-            foreach (var h in holdable)
-            {
-                Destroy(h.gameObject);
-            }
-            
-            var holdableLog = FindObjectsOfType<HalfLogInteractable>();
-            foreach (var h in holdableLog)
-            {
-                Destroy(h.gameObject);
-            }
         }
 
         public override string InteractionText(IInteractor interactor)

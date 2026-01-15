@@ -13,7 +13,6 @@ namespace player_controls
         [SerializeField] private EventChannel clickTune;
         [SerializeField] private EventChannel drop;
         [SerializeField] private EventChannel cancel;
-        [SerializeField] private EventChannel pause;
 
         [SerializeField] private EventChannel blow;
         
@@ -50,11 +49,6 @@ namespace player_controls
         private void OnMouthBlow()
         {
             blow.Raise();
-        }
-
-        private void OnPause()
-        {
-            pause.Raise();
         }
     }
 }

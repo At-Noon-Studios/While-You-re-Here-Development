@@ -18,8 +18,6 @@ namespace PlayerControls
         private float _xRotation;
         private float _yRotation;
 
-        private bool _isSubscribed;
-
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -30,20 +28,12 @@ namespace PlayerControls
 
         private void SubscribeLook()
         {
-            if (!_isSubscribed)
-            {
-                look.OnRaise += OnLookInput;
-                _isSubscribed = true;
-            }
+            look.OnRaise += OnLookInput;
         }
 
         private void UnsubscribeLook()
         {
-            if (_isSubscribed)
-            {
-                look.OnRaise -= OnLookInput;
-                _isSubscribed = false;
-            }
+            look.OnRaise -= OnLookInput;
         }
 
         private void OnLookInput(Vector2 mouseDelta)
@@ -70,7 +60,7 @@ namespace PlayerControls
         
         public void SyncRotation(Quaternion worldRotation)
         {
-            var euler = worldRotation.eulerAngles;
+            Vector3 euler = worldRotation.eulerAngles;
 
             _xRotation = NormalizeAngle(euler.x);
             _yRotation = NormalizeAngle(euler.y);
@@ -88,7 +78,7 @@ namespace PlayerControls
         {
             transform.rotation = rotation;
 
-            var euler = rotation.eulerAngles;
+            Vector3 euler = rotation.eulerAngles;
             _xRotation = NormalizeAngle(euler.x);
             _yRotation = NormalizeAngle(euler.y);
 
