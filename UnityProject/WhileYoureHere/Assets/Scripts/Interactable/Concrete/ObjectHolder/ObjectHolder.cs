@@ -10,9 +10,11 @@ namespace Interactable.Concrete.ObjectHolder
         [Header("Placement")]
         [SerializeField] private Transform placePoint;
         [SerializeField] private Vector3 placedObjectRotation;
-          [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
+        [SerializeField] private List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
         private readonly List<PlacedObjectData> _placedObjectsInHolders = new List<PlacedObjectData>();
-    
+
+        [SerializeField] private AudioSource _audioSource;
+
         public override void Interact(IInteractor interactor)
         {
             var heldObject = interactor.HeldObject;
@@ -20,18 +22,19 @@ namespace Interactable.Concrete.ObjectHolder
 
             var heldGameObject = (heldObject as Component)?.gameObject;
             if (!heldGameObject) return;
-            
+
             var placedData = placedObjects.FirstOrDefault(e => e.objectPrefab.GetType() == heldGameObject.GetType());
             if (placedData != null)
             {
+                _audioSource.PlayOneShot(placedData.audioClip);
                 placedObjects.Remove(placedData);
                 heldObject.Place(placePoint.position, Quaternion.Euler(placedData.placedObjectRotation));
                 _placedObjectsInHolders.Add(placedData);
             }
-            
+
             interactor.SetHeldObject(null);
         }
-        
+
         public override bool IsInteractableBy(IInteractor interactor)
         {
             if (blockInteraction) return false;
@@ -44,7 +47,7 @@ namespace Interactable.Concrete.ObjectHolder
 
             return placedObjects.Any(e => e.objectPrefab.GetType() == heldGameObject.GetType());
         }
-        
+
         public override string InteractionText(IInteractor interactor)
         {
             if (!IsInteractableBy(interactor))
@@ -52,7 +55,5 @@ namespace Interactable.Concrete.ObjectHolder
 
             return "Place " + interactor.HeldObject.InteractionText(interactor);
         }
-
-        
     }
 }

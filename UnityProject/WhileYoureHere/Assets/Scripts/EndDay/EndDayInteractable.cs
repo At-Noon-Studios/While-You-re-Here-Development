@@ -14,6 +14,9 @@ namespace EndDay
         private CameraController _cameraController;
         private MovementController _movementController;
         private VideoPlayer _videoPlayer;
+        private AudioSource _audioSource;
+
+        [SerializeField] private AudioClip endOfDaySound;
 
         protected override void Awake()
         {
@@ -22,14 +25,16 @@ namespace EndDay
             _cameraController = player.GetComponentInChildren<CameraController>();
             _movementController = player.GetComponentInChildren<MovementController>();
             _videoPlayer = GetComponent<VideoPlayer>();
+            _audioSource = GetComponent<AudioSource>();
         }
-        
+
         public override void Interact(IInteractor interactor)
         {
             _cameraController.PauseCameraMovement();
             _movementController.PauseMovement();
             blockInteraction = true;
             _videoPlayer.Play();
+            _audioSource.PlayOneShot(endOfDaySound);
             StartCoroutine(GoToNextScene());
         }
 
@@ -40,7 +45,7 @@ namespace EndDay
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             Destroy(GameObject.FindGameObjectWithTag("Player"));
         }
-        
+
         public override string InteractionText(IInteractor interactor)
         {
             return "End the day";
