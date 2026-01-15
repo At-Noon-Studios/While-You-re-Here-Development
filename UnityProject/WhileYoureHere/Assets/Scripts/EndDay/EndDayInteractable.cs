@@ -33,9 +33,9 @@ namespace EndDay
             _cameraController.PauseCameraMovement();
             _movementController.PauseMovement();
             blockInteraction = true;
-            // _videoPlayer.Play(); Not functional yet, commented to prevent error
+            _videoPlayer.Play();
             _audioSource.PlayOneShot(endOfDaySound);
-            // StartCoroutine(GoToNextScene()); Not functional yet, commented to prevent error
+            StartCoroutine(GoToNextScene());
         }
 
         private IEnumerator GoToNextScene()
