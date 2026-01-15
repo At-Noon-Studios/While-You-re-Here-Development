@@ -1,6 +1,7 @@
 using Interactable;
 using Interactable.Holdable;
-using UnityEngine;
+using screen;
+using UnityEngine.SceneManagement;
 
 namespace chopping_logs
 {
@@ -13,6 +14,12 @@ namespace chopping_logs
         {
             base.Awake();
             _holdable = GetComponent<HoldableObjectBehaviour>();
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void Update()
@@ -41,6 +48,22 @@ namespace chopping_logs
         public override string InteractionText(IInteractor interactor)
         {
             return string.Empty;
+        }
+        
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (!IsGameplayScene(scene.name))
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private static bool IsGameplayScene(string sceneName)
+        {
+            foreach (var s in SceneHandler.GameplayScenes)
+                if (s == sceneName) return true;
+
+            return false;
         }
     }
 }
