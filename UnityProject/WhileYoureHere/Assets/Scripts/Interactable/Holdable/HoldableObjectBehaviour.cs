@@ -18,10 +18,10 @@ namespace Interactable.Holdable
 
         private Rigidbody _rigidbody;
         private int _originalLayer;
-        [CanBeNull] private IInteractor _holder;
+        [CanBeNull] protected IInteractor _holder;
         [CanBeNull] private GameObject _heldVersion;
 
-        private Transform _playerCamera;
+        protected Transform _playerCamera;
 
         private ObjectHolderSingle _currentHolder;
 
