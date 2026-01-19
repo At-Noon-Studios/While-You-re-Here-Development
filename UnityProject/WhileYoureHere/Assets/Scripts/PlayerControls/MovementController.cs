@@ -10,11 +10,6 @@ namespace player_controls
     [RequireComponent(typeof(CharacterController))]
     public class MovementController : MonoBehaviour
     {
-        private static readonly int IsWalkingBackwards = Animator.StringToHash("isWalkingBackwards");
-        private static readonly int IsWalking = Animator.StringToHash("isWalking");
-        private static readonly int IsStrafingLeft = Animator.StringToHash("isStrafingLeft");
-        private static readonly int IsStrafingRight = Animator.StringToHash("isStrafingRight");
-
         [Header("Player SO for Movement")]
         [SerializeField] private PlayerData playerData;
 
@@ -26,36 +21,34 @@ namespace player_controls
         [SerializeField] private Vector2EventChannel move;
         [SerializeField] private float movementSpeed = 2.2f;
 
-        CharacterController _controller;
-        
+        private CharacterController _controller;
+
         private float _timer;
-        private Camera _mainCamera;
         private CameraController _cameraController;
         private float _defaultYPos;
         private float _speedModifier = 1f;
 
         public bool canMove = true;
-        
+
         public void SetMovementModifier(float modifier)
         {
             _speedModifier = modifier;
         }
 
-        void Awake()
+        private void Awake()
         {
             _controller = GetComponent<CharacterController>();
-            _mainCamera = GetComponentInChildren<Camera>();
-            _cameraController = _mainCamera.gameObject.GetComponent<CameraController>();
-            _defaultYPos = _mainCamera.transform.localPosition.y;
+            _cameraController = GetComponentInChildren<CameraController>();
+            _defaultYPos = _cameraController.transform.localPosition.y;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             _cameraController.OnRotate += RotatePlayerBody;
             move.OnRaise += OnMoveInput;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             _cameraController.OnRotate -= RotatePlayerBody;
             move.OnRaise -= OnMoveInput;
@@ -66,29 +59,27 @@ namespace player_controls
             _moveX = movementVector.x;
             _moveY = movementVector.y;
         }
-    
-        
-        void HeadBob()
+
+
+        private void HeadBob()
         {
-            if (IsInput)
-            {
-                _timer += Time.deltaTime * playerData.WalkBobSpeed;
-            
-                _mainCamera.transform.localPosition = new Vector3(
-                    _mainCamera.transform.localPosition.x, 
-                    _defaultYPos + Mathf.Sin(_timer) * playerData.WalkBobAmount, 
-                    _mainCamera.transform.localPosition.z);
-            }
+            if (!IsInput) return;
+            _timer += Time.deltaTime * playerData.WalkBobSpeed;
+
+            _cameraController.transform.localPosition = new Vector3(
+                _cameraController.transform.localPosition.x,
+                _defaultYPos + Mathf.Sin(_timer) * playerData.WalkBobAmount,
+                _cameraController.transform.localPosition.z);
         }
 
-        void Update()
+        private void Update()
         {
             if (!canMove) return;
 
             IsInput = _moveY != 0 || _moveX != 0;
             HeadBob();
 
-            float speed = movementSpeed * _speedModifier;
+            var speed = movementSpeed * _speedModifier;
             var movementFinal = transform.right * _moveX + transform.forward * _moveY + Physics.gravity;
             _controller.Move(speed * Time.deltaTime * movementFinal);
         }

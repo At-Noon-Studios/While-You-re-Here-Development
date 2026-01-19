@@ -290,6 +290,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b4213831e5e3fa349b34220a2185fd39, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5676299779000407443}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b4213831e5e3fa349b34220a2185fd39, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4325542143167215268}
   m_SourcePrefab: {fileID: 100100000, guid: b4213831e5e3fa349b34220a2185fd39, type: 3}
 --- !u!1 &5718733670533641317 stripped
 GameObject:
@@ -340,7 +343,44 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &4325542143167215268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5718733670533641317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46ac8d61dc065848bd5a1aa7cd8c006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineTriggerAction
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  WithTag: Player
+  WithoutTag: 
+  SkipFirst: 0
+  Repeating: 0
+  OnObjectEnter:
+    Action: 2
+    Target: {fileID: 11400000, guid: 701f4e4cc9310574a92503ebf2a829dc, type: 2}
+    BoostAmount: 0
+    StartTime: 0
+    Mode: 0
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnObjectExit:
+    Action: 0
+    Target: {fileID: 0}
+    BoostAmount: 0
+    StartTime: 0
+    Mode: 0
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
