@@ -9,24 +9,27 @@ namespace making_tea
 {
     public class ChairInteractable : InteractableBehaviour
     {
-        [Header("References")]
-        [SerializeField] private Transform sitPoint;
+        [Header("References")] [SerializeField]
+        private Transform sitPoint;
+
         [SerializeField] private Transform lookTarget;
 
-        [Header("Camera Sitting Position Offset")]
-        [SerializeField] private Vector3 cameraSitOffset = Vector3.zero;
+        [Header("Camera Sitting Position Offset")] [SerializeField]
+        private Vector3 cameraSitOffset = Vector3.zero;
 
-        [Header("Camera Sitting Rotation Offset")]
-        [SerializeField] private Vector3 cameraSitRotationOffset = Vector3.zero;
+        [Header("Camera Sitting Rotation Offset")] [SerializeField]
+        private Vector3 cameraSitRotationOffset = Vector3.zero;
 
-        [Header("Camera FOV Settings")]
-        [SerializeField, Range(0, 180)] private float sitFOV = 60f;
+        [Header("Camera FOV Settings")] [SerializeField, Range(0, 180)]
+        private float sitFOV = 60f;
+
         [SerializeField] private bool changeFOV = true;
 
-        [Header("Start Setting")]
-        [SerializeField] private SoGamestateFlag notebookPickedUpFlag;
+        [Header("Start Setting")] [SerializeField]
+        private SoGamestateFlag notebookPickedUpFlag;
+
         [SerializeField] private bool startSitting;
-        
+
         private float _originalFOV;
 
         private static bool _playerAlreadySeatedAtStart;
@@ -46,20 +49,30 @@ namespace making_tea
         protected override void Awake()
         {
             base.Awake();
-        }
-        
-        private void Start()
-        {
             if (!startSitting) return;
             StartCoroutine(StartSittingRoutine());
         }
 
+        public void SitAtStart()
+        {
+            if (startSitting)
+            {
+                StartCoroutine(StartSittingRoutine());
+            }
+        }
+        
+        public static void ResetChairState()
+        {
+            _playerAlreadySeatedAtStart = false;
+            _activeChair = null;
+        }
+        
         private IEnumerator StartSittingRoutine()
         {
             Debug.Log($"[Chair] StartSittingRoutine started on {gameObject.name}");
-            
+
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             GameObject player = null;
             PlayerInteractionController playerController = null;
 
@@ -68,17 +81,17 @@ namespace making_tea
                 player = GameObject.FindWithTag("Player");
                 if (player != null)
                     playerController = player.GetComponent<PlayerInteractionController>();
-                
+
                 Debug.Log($"[Chair] Waiting for Player... player={player}, pic={playerController}");
                 yield return null;
             }
-            
+
             player.SetActive(false);
-            
+
             yield return null;
 
             if (_playerAlreadySeatedAtStart) yield break;
-            
+
             _playerAlreadySeatedAtStart = true;
             Sit(playerController);
             player.SetActive(true);
@@ -101,7 +114,7 @@ namespace making_tea
         public override void Interact(IInteractor interactor)
         {
             if (_activeChair != null && _activeChair != this) return;
-            
+
             if (!_isSitting)
             {
                 Sit(interactor);
@@ -113,14 +126,14 @@ namespace making_tea
                 Debug.Log($"[Chair] StandUp blocked (locked)");
                 return;
             }
-            
+
             StandUp();
         }
 
         private void Sit(IInteractor interactor)
         {
             _activeChair = this;
-            
+
             if (interactor is not PlayerInteractionController p)
             {
                 Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
@@ -174,9 +187,9 @@ namespace making_tea
                 Debug.Log($"[Chair] StandUp blocked (locked)");
                 return;
             }
-            
+
             _activeChair = null;
-            
+
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 

@@ -14,6 +14,7 @@ namespace door
         [Header("References")]
         [SerializeField] private Transform doorPivot;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip notebookHintLine;
         [SerializeField] private List<Keyhole> keyholes;
 
         [SerializeField] public bool isLocked;
@@ -23,6 +24,8 @@ namespace door
         private Quaternion _openRotation;
         private Transform _playerCamera;
 
+        private bool playedNotebookHintLine;
+        
         public bool IsLocked
         {
             set => isLocked = value;
@@ -59,6 +62,12 @@ namespace door
         {
             if (isLocked)
             {
+                if (!playedNotebookHintLine)
+                {
+                    audioSource.PlayOneShot(notebookHintLine);
+                    playedNotebookHintLine = true;
+                    return;
+                }
                 if (audioSource && config.lockedSound) audioSource.PlayOneShot(config.lockedSound);
                 return;
             }
