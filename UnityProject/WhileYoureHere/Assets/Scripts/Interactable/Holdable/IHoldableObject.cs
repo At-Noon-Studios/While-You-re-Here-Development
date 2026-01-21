@@ -9,6 +9,6 @@ namespace Interactable.Holdable
 
         public void Drop();
 
-        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null);
+        public void Place(Vector3 position, Quaternion? rotation = null, IObjectHolder holder = null);
     }
 }
