@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using chopping_logs;
 using door;
+using entity;
 using Interactable;
 using Interactable.Holdable;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace UI.DynamicUI
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
+        public enum KettleState { None, Pouring }
+        public enum PlantState { None, Dry, Healthy, Wilt }
 
         [System.Serializable]
         public class WorldSpaceUIElement
@@ -36,6 +39,8 @@ namespace UI.DynamicUI
             [Header("Required States")]
             [SerializeField] private DoorState requiredDoorState = DoorState.None;
             [SerializeField] private StumpState requiredStumpState = StumpState.None;
+            [SerializeField] private KettleState requiredKettleState = KettleState.None;
+            [SerializeField] private PlantState requiredPlantState = PlantState.None;
 
             [Header("Offset")]
             [SerializeField] private Vector3 offset = Vector3.up;
@@ -85,7 +90,33 @@ namespace UI.DynamicUI
                         return false;
                 }
 
+                if (requiredKettleState != KettleState.None)
+                    return CheckKettleState();
+                
+                if (interactableBehaviour is PlantObject plant &&
+                    requiredPlantState != PlantState.None)
+                    return CheckPlantState(plant);
+
                 return true;
+            }
+
+            private bool CheckKettleState()
+            {
+                var kettlePour = GameObject.FindObjectOfType<making_tea.KettlePour>();
+                if (kettlePour == null || kettlePour.kettle == null)
+                    return false;
+
+                if (requiredKettleState == KettleState.Pouring)
+                {
+                    bool isFilled = kettlePour.kettle.fillAmount > 0f;
+                    bool isHeld =
+                        (kettlePour.TryGetComponent<HoldableObjectBehaviour>(out var h) && h.IsCurrentlyHeld) ||
+                        (kettlePour.TryGetComponent<making_tea.KettleTablePickup>(out var t) && t.IsTableHeld);
+
+                    return isFilled && isHeld;
+                }
+
+                return false;
             }
 
             private bool CheckDoorState(DoorInteractable door)
@@ -127,6 +158,27 @@ namespace UI.DynamicUI
                 if (requiredStumpState == StumpState.MouseDown && !ChopUIManager.IsAxeDown)
                     return true;
 
+                return false;
+            }
+            
+            private bool CheckPlantState(PlantObject plant)
+            {
+                var plantData = plant.PlantData;
+            
+                if (plant == null) return false;
+
+                if (plant.CurrentStage == 0 &&
+                    requiredPlantState == PlantState.Dry)
+                    return true;
+                
+                if (plant.CurrentStage > 0 && plant.CurrentStage < plantData.MaxStage &&
+                    requiredPlantState == PlantState.Healthy)
+                    return true;
+            
+                if (plant.CurrentStage >= plantData.MaxStage -1 &&
+                    requiredPlantState == PlantState.Wilt)
+                    return true;
+            
                 return false;
             }
         }

@@ -15,10 +15,12 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI")] [SerializeField] private Transform choicesContainer;
+        [Header("UI")]
+        [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
 
-        [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
+        [Header("Timing")]
+        [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
 
         public event Action OnLastSentenceFinished;
