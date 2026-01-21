@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using chore;
 using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
@@ -32,6 +33,7 @@ namespace make_a_fire
         private int _placedLogsCount;
         private bool _fireStarted;
         private AudioSource _audioSource;
+        private ObjectHolder _objectHolder;
 
         private void Awake()
         {
@@ -39,6 +41,7 @@ namespace make_a_fire
             _audioSource = GetComponent<AudioSource>();
             _fireLight = GetComponent<Light>();
             _fireLight.intensity = 0.0f;
+            _objectHolder = GetComponentInChildren<ObjectHolder>();
         }
 
         // private void Update()
@@ -63,13 +66,17 @@ namespace make_a_fire
 
         void Update()
         {
-            if (Keyboard.current.bKey.wasPressedThisFrame)
+            if (!_objectHolder.placedObjectsInHolders.Contains(newspaper.gameObject)) return;
+            
+            _placedLogsCount = CountPlacedLogs();
+            switch (_fireStarted)
             {
-                StartSmallFire();
-            }
-            if (Keyboard.current.vKey.wasPressedThisFrame)
-            {
-                StartBigFire();
+                case false when _placedLogsCount >= 1:
+                    StartSmallFire();
+                    break;
+                case true when _placedLogsCount >= 3:
+                    blowAllowedEvent?.Raise();
+                    break;
             }
         }
         
@@ -100,6 +107,8 @@ namespace make_a_fire
 
         public void StartBigFire()
         {
+            if (!_objectHolder.placedObjectsInHolders.Contains(newspaper.gameObject) || CountPlacedLogs() < 3) return;
+            
             SetFireLifetime(0.5f);
             _audioSource.PlayOneShot(chargedFire, chargedFireVolume);
            

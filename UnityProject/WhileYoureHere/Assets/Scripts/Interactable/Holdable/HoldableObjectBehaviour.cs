@@ -23,7 +23,7 @@ namespace Interactable.Holdable
 
         protected Transform _playerCamera;
 
-        private ObjectHolderSingle _currentHolder;
+        private IObjectHolder _currentHolder;
 
         public bool IsPlaced { get; private set; }
         private bool _isLocked;
@@ -85,7 +85,7 @@ namespace Interactable.Holdable
             if (TryGetComponent<PickUpSound>(out var sound)) sound.PlayPickUpSound();
             if (_currentHolder != null)
             {
-                _currentHolder.ClearHeldObject(this);
+                _currentHolder.ClearHeldObject(gameObject);
                 _currentHolder = null;
             }
 
@@ -129,7 +129,7 @@ namespace Interactable.Holdable
             IsPlaced = false;
         }
 
-        public void Place(Vector3 position, Quaternion? rotation = null, ObjectHolderSingle holder = null)
+        public void Place(Vector3 position, Quaternion? rotation = null, IObjectHolder holder = null)
         {
             if (_heldVersion) SetHeldVisual(false, _heldVersion);
             _currentHolder = holder;
