@@ -5457,7 +5457,6 @@ GameObject:
   - component: {fileID: 2337256331712291176}
   - component: {fileID: 1879447578910412257}
   - component: {fileID: 7907806488898172911}
-  - component: {fileID: 3730235776823916411}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: Untagged
@@ -5539,52 +5538,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   data: {fileID: 11400000, guid: 58657b2bab7b7bc4080f46936ec1ac17, type: 2}
   look: {fileID: 11400000, guid: f65e7427864c18d46a2b7dbf4b224fcc, type: 2}
---- !u!114 &3730235776823916411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8383659754681978595}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c657da9fbf87ac4caa9deae71bbb343, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCameraEvents
-  EventTarget: {fileID: 1879447578910412257}
-  CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7907806488898172911}
-        m_TargetAssemblyTypeName: PlayerControls.CameraController, Assembly-CSharp
-        m_MethodName: PausePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  CameraDeactivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  BlendCreatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  BlendFinishedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7907806488898172911}
-        m_TargetAssemblyTypeName: PlayerControls.CameraController, Assembly-CSharp
-        m_MethodName: ResumePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
