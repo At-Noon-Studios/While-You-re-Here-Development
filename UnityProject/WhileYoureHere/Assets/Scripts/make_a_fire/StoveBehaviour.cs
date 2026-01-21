@@ -75,7 +75,7 @@ namespace make_a_fire
         
         private int CountPlacedLogs()
         {
-            return logs.Count(log =>
+            return _logs.Count(log =>
             {
                 if (log.GetComponentInParent<LogBasket>() != null) return false;
 
