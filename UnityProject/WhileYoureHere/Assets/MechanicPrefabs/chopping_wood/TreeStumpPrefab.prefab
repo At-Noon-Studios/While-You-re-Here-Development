@@ -265,8 +265,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3479705629517489161}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.8727707, y: 0.0188413, z: -0.0009879684, w: 0.48776573}
-  m_LocalPosition: {x: -0.545, y: 4.5, z: -0.03}
+  m_LocalRotation: {x: 0.87277067, y: 0.018841289, z: -0.0009879764, w: 0.48776564}
+  m_LocalPosition: {x: -0.58000904, y: 6.249985, z: 2.2000034}
   m_LocalScale: {x: 3.30025, y: 4.641781, z: 3.5126898}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 4272528973865564040}
   - component: {fileID: 6027835565949667337}
   - component: {fileID: 538414739574720753}
+  - component: {fileID: 6433363804906441385}
   m_Layer: 0
   m_Name: TreeStumpPrefab
   m_TagString: Untagged
@@ -582,6 +583,22 @@ MonoBehaviour:
   dialogueLoader: {fileID: 0}
   config: {fileID: 11400000, guid: 1b2801061b42e6c4394ca4baba6d4da5, type: 2}
   triggerRange: 20
+  playerTransform: {fileID: 0}
+--- !u!114 &6433363804906441385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665210623557238785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f6ec941b6b4eb144a0bb2403896a201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueProximityTrigger
+  dialogueLoader: {fileID: 0}
+  config: {fileID: 11400000, guid: 1b2801061b42e6c4394ca4baba6d4da5, type: 2}
+  triggerRange: 10
   playerTransform: {fileID: 0}
 --- !u!1 &5430830738199162716
 GameObject:

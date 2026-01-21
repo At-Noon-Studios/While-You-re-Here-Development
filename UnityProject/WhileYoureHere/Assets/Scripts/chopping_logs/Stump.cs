@@ -158,7 +158,7 @@ namespace chopping_logs
             IsCurrentMinigameActive = true;
 
             var player = GameObject.FindWithTag("Player");
-            var cameraController = Camera.main?.GetComponent<CameraController>();
+            var cameraController = player.GetComponentInChildren<CameraController>();
 
             if (player != null)
             {
@@ -182,11 +182,11 @@ namespace chopping_logs
             IsCurrentMinigameActive = false;
 
             var player = GameObject.FindWithTag("Player");
-            var cameraController = Camera.main?.GetComponent<CameraController>();
+            var cameraController = player.GetComponentInChildren<CameraController>();
 
             player.GetComponent<MovementController>()?.ResumeMovement();
 
-            cameraController?.SyncRotation(Camera.main.transform.rotation);
+            //cameraController?.SyncRotation(player..main.transform.rotation);
             cameraController?.ResumeCameraMovement();
 
             var playerController = player.GetComponent<PlayerInteractionController>();
