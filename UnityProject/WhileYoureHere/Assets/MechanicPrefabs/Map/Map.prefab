@@ -1085,6 +1085,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9052953216240438951}
   - component: {fileID: 1545928868762839088}
+  - component: {fileID: 5791572502409243482}
   m_Layer: 0
   m_Name: TableWithKeys
   m_TagString: Untagged
@@ -1116,6 +1117,28 @@ Transform:
   m_Father: {fileID: 1047042704633183599}
   m_LocalEulerAnglesHint: {x: 0, y: 7.596, z: 0}
 --- !u!64 &1545928868762839088
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957818762296214025}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!64 &5791572502409243482
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6844,6 +6867,7 @@ GameObject:
   - component: {fileID: 6583331814019231768}
   - component: {fileID: 5033497860960066655}
   - component: {fileID: 8277575671295332676}
+  - component: {fileID: 1410595205949411993}
   m_Layer: 0
   m_Name: LittleTable
   m_TagString: Untagged
@@ -6923,6 +6947,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1410595205949411993
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5662662416248619556}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0032539112, y: 0.0032539112, z: 0.006092475}
+  m_Center: {x: -4.615347e-16, y: 0.00000011921685, z: -0.00025370155}
 --- !u!1 &5773866010524959996
 GameObject:
   m_ObjectHideFlags: 0
@@ -16739,11 +16784,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Armchair
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6211257201389352612, guid: 4c175afac51e948568455d71d5e0e392, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9130716141379834575, guid: 4c175afac51e948568455d71d5e0e392, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6967621616508473698}
   m_SourcePrefab: {fileID: 100100000, guid: 4c175afac51e948568455d71d5e0e392, type: 3}
+--- !u!1 &3628497742092464208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9130716141379834575, guid: 4c175afac51e948568455d71d5e0e392, type: 3}
+  m_PrefabInstance: {fileID: 5543318219368211103}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6967621616508473698
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3628497742092464208}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.115268, y: 1.6484525, z: 2.0406728}
+  m_Center: {x: -0.6569612, y: 0.32422614, z: 0.31633425}
 --- !u!4 &4112019368668965610 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8501953151923816565, guid: 4c175afac51e948568455d71d5e0e392, type: 3}
