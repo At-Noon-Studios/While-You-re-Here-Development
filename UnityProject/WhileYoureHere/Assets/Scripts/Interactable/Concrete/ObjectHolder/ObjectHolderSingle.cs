@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Interactable.Concrete.ObjectHolder
 {
-    public class ObjectHolderSingle : InteractableBehaviour
+    public class ObjectHolderSingle : InteractableBehaviour, IObjectHolder
     {
         [Header("Placement")]
         [SerializeField] private Transform placePoint;
@@ -55,11 +55,11 @@ namespace Interactable.Concrete.ObjectHolder
             OnPlaced?.Invoke(_heldObject);
         }
 
-        public void ClearHeldObject(IHoldableObject obj)
+        public void ClearHeldObject(GameObject obj)
         {
-            if (_heldObject != obj) return;
+            if ((_heldObject as Component)?.gameObject != obj) return;
 
-            OnRemoved?.Invoke(obj);
+            OnRemoved?.Invoke(_heldObject);
             _heldObject = null;
         }
 
