@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 5673969741412461936}
   - component: {fileID: 2192439184912002086}
   - component: {fileID: 6356931464881714546}
+  - component: {fileID: 1968010008417090974}
+  - component: {fileID: 6518203625529685784}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -457,6 +459,32 @@ MonoBehaviour:
   elementSpacing: {x: 0, y: 1.2}
   screenScale: 50
   taskListUI: {fileID: 0}
+--- !u!114 &1968010008417090974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383520951305611973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701e06dfddce4baba5127061b82348d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PlayerSceneHandler
+--- !u!114 &6518203625529685784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383520951305611973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69412eb058164839b9bbe2c95143843d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::screen.PauseMenuController
+  pauseMenuUI: {fileID: 2735496006221346041}
+  pauseEventChannel: {fileID: 11400000, guid: fba1620c93d773a45bb100dbeb1865c8, type: 2}
 --- !u!1 &883332275528589153
 GameObject:
   m_ObjectHideFlags: 0
@@ -5717,6 +5745,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2689606302497093172, guid: aee7b99ff681cdc449c09b17a3525c79, type: 3}
+      propertyPath: optionsMenuUI
+      value: 
+      objectReference: {fileID: 2735496006221346041}
     - target: {fileID: 2891075775303334984, guid: aee7b99ff681cdc449c09b17a3525c79, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5850,12 +5882,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5166188264942233826, guid: 0e7470af6d731cd4d8e6f6c738ea9394, type: 3}
   m_PrefabInstance: {fileID: 7096725739244649008}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2735496006221346041 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5155158580296339145, guid: 0e7470af6d731cd4d8e6f6c738ea9394, type: 3}
+  m_PrefabInstance: {fileID: 7096725739244649008}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8786652752851100702 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1985195000361229870, guid: 0e7470af6d731cd4d8e6f6c738ea9394, type: 3}
   m_PrefabInstance: {fileID: 7096725739244649008}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2735496006221346041}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cc5e18e82e92bb46853d1bc46c4eb82, type: 3}
