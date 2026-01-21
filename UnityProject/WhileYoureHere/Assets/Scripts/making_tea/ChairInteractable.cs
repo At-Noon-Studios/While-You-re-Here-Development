@@ -1,40 +1,48 @@
+using System.Collections;
 using Interactable;
 using player_controls;
 using PlayerControls;
+using ScriptableObjects.Gamestate;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace making_tea
 {
     public class ChairInteractable : InteractableBehaviour
     {
-        [Header("Interaction UI")]
-        [SerializeField] private Canvas interactionCanvas;
+        [Header("References")] [SerializeField]
+        private Transform sitPoint;
 
-        [Header("References")]
-        [SerializeField] private Transform sitPoint;
         [SerializeField] private Transform lookTarget;
 
-        [Header("Camera Sitting Position Offset")]
-        [SerializeField] private Vector3 cameraSitOffset = new Vector3(0f, 0f, 0f);
+        [Header("Camera Sitting Position Offset")] [SerializeField]
+        private Vector3 cameraSitOffset = Vector3.zero;
 
-        [Header("Camera Sitting Rotation Offset")]
-        [SerializeField] private Vector3 cameraSitRotationOffset = new Vector3(0f, 0f, 0f);
+        [Header("Camera Sitting Rotation Offset")] [SerializeField]
+        private Vector3 cameraSitRotationOffset = Vector3.zero;
 
-        [Header("Camera FOV Settings")]
-        [SerializeField] [Range(0,180)] private float sitFOV = 60f;
+        [Header("Camera FOV Settings")] [SerializeField, Range(0, 180)]
+        private float sitFOV = 60f;
+
         [SerializeField] private bool changeFOV = true;
+
+        [Header("Start Setting")] [SerializeField]
+        private SoGamestateFlag notebookPickedUpFlag;
+
+        [SerializeField] private bool startSitting;
 
         private float _originalFOV;
 
+        private static bool _playerAlreadySeatedAtStart;
+        private bool _standUpLocked;
         private bool _isSitting;
+        private static ChairInteractable _activeChair;
 
         private PlayerInteractionController _pic;
         private MovementController _movement;
         private CameraController _cameraController;
         private Transform _player;
-        private Camera _playerCam;
-
-        private Transform _playerCamera;
+        private CinemachineCamera _playerCam;
 
         private Vector3 _originalCameraLocalPos;
         private Quaternion _originalCameraLocalRot;
@@ -42,53 +50,91 @@ namespace making_tea
         protected override void Awake()
         {
             base.Awake();
+            if (!startSitting) return;
+            StartCoroutine(StartSittingRoutine());
+        }
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
+        public void SitAtStart()
+        {
+            if (startSitting)
+            {
+                StartCoroutine(StartSittingRoutine());
+            }
+        }
+        
+        public static void ResetChairState()
+        {
+            _playerAlreadySeatedAtStart = false;
+            _activeChair = null;
+        }
+        
+        private IEnumerator StartSittingRoutine()
+        {
+            Debug.Log($"[Chair] StartSittingRoutine started on {gameObject.name}");
 
-            var player = GameObject.FindWithTag("Player");
-            if (player != null)
-                _playerCamera = player.GetComponentInChildren<Camera>()?.transform;
+            if (_playerAlreadySeatedAtStart) yield break;
+
+            GameObject player = null;
+            PlayerInteractionController playerController = null;
+
+            while (player == null || playerController == null)
+            {
+                player = GameObject.FindWithTag("Player");
+                if (player != null)
+                    playerController = player.GetComponent<PlayerInteractionController>();
+
+                Debug.Log($"[Chair] Waiting for Player... player={player}, pic={playerController}");
+                yield return null;
+            }
+
+            player.SetActive(false);
+
+            yield return null;
+
+            if (_playerAlreadySeatedAtStart) yield break;
+
+            _playerAlreadySeatedAtStart = true;
+            Sit(playerController);
+            player.SetActive(true);
+            _standUpLocked = true;
         }
 
         private void Update()
         {
-            if (interactionCanvas == null ||
-                !interactionCanvas.gameObject.activeSelf ||
-                _playerCamera == null) return;
-            
-            interactionCanvas.transform.LookAt(_playerCamera);
-            interactionCanvas.transform.Rotate(0f, 180f, 0f);
+            if (_standUpLocked &&
+                notebookPickedUpFlag != null &&
+                notebookPickedUpFlag.currentValue)
+            {
+                Debug.Log("[Chair] StandUp unlocked");
+                _standUpLocked = false;
+            }
         }
 
-        public override void OnHoverEnter(IInteractor interactor)
-        {
-            base.OnHoverEnter(interactor);
-
-            if (!_isSitting && interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(true);
-        }
-
-        public override void OnHoverExit(IInteractor interactor)
-        {
-            base.OnHoverExit(interactor);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-        
         public override string InteractionText(IInteractor interactor) => string.Empty;
 
         public override void Interact(IInteractor interactor)
         {
+            if (_activeChair != null && _activeChair != this) return;
+
             if (!_isSitting)
+            {
                 Sit(interactor);
-            else
-                StandUp();
+                return;
+            }
+
+            if (_standUpLocked)
+            {
+                Debug.Log($"[Chair] StandUp blocked (locked)");
+                return;
+            }
+
+            StandUp();
         }
 
         private void Sit(IInteractor interactor)
         {
+            _activeChair = this;
+
             if (interactor is not PlayerInteractionController p)
             {
                 Debug.LogWarning("ChairInteractable: Interactor is not a PlayerInteractionController!");
@@ -97,7 +143,7 @@ namespace making_tea
 
             _player = p.transform;
             _movement = p.GetComponent<MovementController>();
-            _playerCam = p.GetComponentInChildren<Camera>();
+            _playerCam = p.GetComponentInChildren<CinemachineCamera>();
             _cameraController = p.GetComponentInChildren<CameraController>();
 
             if (_movement != null) _movement.enabled = false;
@@ -110,37 +156,41 @@ namespace making_tea
             {
                 _originalCameraLocalPos = _playerCam.transform.localPosition;
                 _originalCameraLocalRot = _playerCam.transform.localRotation;
-
-                _originalFOV = _playerCam.fieldOfView;
+                _originalFOV = _playerCam.Lens.FieldOfView;
             }
 
             if (lookTarget != null && _playerCam != null)
             {
-                var dir = lookTarget.position - _playerCam.transform.position;
+                Vector3 dir = lookTarget.position - _playerCam.transform.position;
                 _playerCam.transform.rotation = Quaternion.LookRotation(dir);
             }
 
             if (_playerCam != null)
+            {
                 _playerCam.transform.localPosition += cameraSitOffset;
-
-            if (_playerCam != null)
                 _playerCam.transform.localRotation *= Quaternion.Euler(cameraSitRotationOffset);
 
-            if (changeFOV && _playerCam != null)
-                _playerCam.fieldOfView = sitFOV;
+                if (changeFOV)
+                    _playerCam.Lens.FieldOfView = sitFOV;
+            }
 
             _isSitting = true;
 
             _pic = p;
             _pic.EnableTableMode(true);
             _pic.SetSittingChair(this);
-
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
         }
 
         private void StandUp()
         {
+            if (_standUpLocked)
+            {
+                Debug.Log($"[Chair] StandUp blocked (locked)");
+                return;
+            }
+
+            _activeChair = null;
+
             if (_movement != null) _movement.enabled = true;
             if (_cameraController != null) _cameraController.enabled = true;
 
@@ -150,7 +200,7 @@ namespace making_tea
                 _playerCam.transform.localRotation = _originalCameraLocalRot;
 
                 if (changeFOV)
-                    _playerCam.fieldOfView = _originalFOV;
+                    _playerCam.Lens.FieldOfView = _originalFOV;
             }
 
             _isSitting = false;
@@ -162,7 +212,7 @@ namespace making_tea
 
         public void ForceStandUp()
         {
-            if (_isSitting)
+            if (_isSitting && !_standUpLocked)
                 StandUp();
         }
     }

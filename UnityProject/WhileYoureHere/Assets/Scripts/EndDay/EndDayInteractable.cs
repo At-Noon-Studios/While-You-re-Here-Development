@@ -1,21 +1,24 @@
+using System.Collections;
+using chopping_logs;
 using Interactable;
+using Interactable.Holdable;
 using player_controls;
 using PlayerControls;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 namespace EndDay
 {
     public class EndDayInteractable : InteractableBehaviour
     {
-        [Header("End day screen settings")]
-        [SerializeField] private float fadeDuration = 1f;
-        [SerializeField] private float displayImageDuration = 1f;
-        [SerializeField] private CanvasGroup endDayCanvasGroup;
-        
         private float _timer;
-        private bool _isEndDay = false;
         private CameraController _cameraController;
         private MovementController _movementController;
+        private VideoPlayer _videoPlayer;
+        private AudioSource _audioSource;
+
+        [SerializeField] private AudioClip endOfDaySound;
 
         protected override void Awake()
         {
@@ -23,29 +26,37 @@ namespace EndDay
             var player = GameObject.FindGameObjectWithTag("Player");
             _cameraController = player.GetComponentInChildren<CameraController>();
             _movementController = player.GetComponentInChildren<MovementController>();
+            _videoPlayer = GetComponent<VideoPlayer>();
+            _audioSource = GetComponent<AudioSource>();
         }
-        
+
         public override void Interact(IInteractor interactor)
         {
-            _isEndDay = true;
             _cameraController.PauseCameraMovement();
             _movementController.PauseMovement();
             blockInteraction = true;
+            _videoPlayer.Play();
+            _audioSource.PlayOneShot(endOfDaySound);
+            StartCoroutine(GoToNextScene());
         }
 
-        private void Update()
+        private IEnumerator GoToNextScene()
         {
-            if (_isEndDay) EndDay();
-        }
-
-        private void EndDay()
-        {
-            endDayCanvasGroup.alpha = _timer / fadeDuration;
-            _timer += Time.deltaTime;
-
-            if (_timer > fadeDuration + displayImageDuration)
+            yield return new WaitForSeconds((float)_videoPlayer.clip.length);
+            _videoPlayer.Stop();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
+            
+            var holdable = FindObjectsOfType<HoldableObjectBehaviour>();
+            foreach (var h in holdable)
             {
-                // quit game (or maybe change scene) can be added here 
+                Destroy(h.gameObject);
+            }
+            
+            var holdableLog = FindObjectsOfType<HalfLogInteractable>();
+            foreach (var h in holdableLog)
+            {
+                Destroy(h.gameObject);
             }
         }
 

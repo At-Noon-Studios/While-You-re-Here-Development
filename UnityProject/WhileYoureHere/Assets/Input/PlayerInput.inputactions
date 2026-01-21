@@ -88,6 +88,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "4accb2a5-f4f1-46fb-b28e-751459d6a243",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MouthBlow",
                     "type": "Button",
                     "id": "5b86095c-3b83-4de4-ab85-41a24a81fa1c",
@@ -100,6 +109,60 @@
                     "name": "TaskList",
                     "type": "Button",
                     "id": "89a4e52f-0b9a-4524-a8a3-29e222d1183d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CastPullFishingRod",
+                    "type": "Button",
+                    "id": "1b8ccd5e-ee81-461d-8380-5b7c0ce7d84f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ReelFishingRod",
+                    "type": "Value",
+                    "id": "4f49e1ee-6bbf-4a76-b071-05736ae6ef5b",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ThrowFishingRod",
+                    "type": "Value",
+                    "id": "d094db7f-b0d9-4599-ad34-b3dae02e06e9",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "369457ae-9246-4588-a2c2-737519762781",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Navigate",
+                    "type": "Button",
+                    "id": "ccd44654-ba10-48fa-b82b-e7fb0f8018a0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "4939add0-b61f-4d0c-802e-f49f6feae82b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -252,6 +315,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6602fd45-408e-42b1-a40b-a4f66358cee3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "acd85ca4-dd68-4962-8a70-9512bccee5cd",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -269,6 +343,94 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "TaskList",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "96c346ce-25c7-49e7-b57f-3cf05bee565b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "CastPullFishingRod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9b7150e-ab23-4fe3-aca7-8924c9fc8636",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ReelFishingRod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eba256e7-ca40-464b-8e89-657f28012fcc",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ThrowFishingRod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3bb575cf-6d6f-4ddb-b168-0cb8f11badcf",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "00340bd4-052c-473f-845e-3119d239b68b",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "4c4c413e-b993-4d92-9009-223a7f3767cb",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Navigate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "3fe07eac-5d1b-4eba-9a7f-4cde1c032be9",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Navigate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "775a6c9a-5d3d-4b28-bd12-398b07f93266",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

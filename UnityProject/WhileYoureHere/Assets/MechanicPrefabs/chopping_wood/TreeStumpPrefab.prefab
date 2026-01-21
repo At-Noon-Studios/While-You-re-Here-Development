@@ -271,7 +271,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6203428372750504205}
-  m_LocalEulerAnglesHint: {x: 115, y: -6, z: -4.3}
+  m_LocalEulerAnglesHint: {x: 121.63, y: -1.82, z: -3.49}
 --- !u!1 &4665210623557238785
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 5680110940797044664}
   - component: {fileID: 4272528973865564040}
   - component: {fileID: 6027835565949667337}
+  - component: {fileID: 538414739574720753}
   m_Layer: 0
   m_Name: TreeStumpPrefab
   m_TagString: Untagged
@@ -410,9 +411,13 @@ MonoBehaviour:
   logPlaceholder: {fileID: 3714304030699972782}
   cancelEvent: {fileID: 11400000, guid: 052682770d4bff846990332a14b7c326, type: 2}
   minigameStartPoint: {fileID: 981243998688259249}
-  uiManager: {fileID: 0}
-  logPlaceSound: {fileID: 8300000, guid: de7eef7cbc7496d4ab5ebbb26840c25c, type: 3}
-  logCrackSound: {fileID: 8300000, guid: e266197fcd4c88e40bc8e1ac3229c231, type: 3}
+  logPlaceSound:
+  - {fileID: 8300000, guid: 34e758996e1a8f24c9cd11d13f229074, type: 3}
+  logCrackSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  choppingStartVoiceline: {fileID: 8300000, guid: b469e7bf7efd42c4fbfd368f847651d1, type: 3}
   cutLogSprite: {fileID: 5198710910571422799}
   placeLogSprite: {fileID: 2847340661944617451}
 --- !u!82 &5680110940797044664
@@ -562,6 +567,22 @@ CapsuleCollider:
   m_Height: 0
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &538414739574720753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665210623557238785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f6ec941b6b4eb144a0bb2403896a201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::dialogue.DialogueProximityTrigger
+  dialogueLoader: {fileID: 0}
+  config: {fileID: 11400000, guid: 1b2801061b42e6c4394ca4baba6d4da5, type: 2}
+  triggerRange: 10
+  playerTransform: {fileID: 0}
 --- !u!1 &5430830738199162716
 GameObject:
   m_ObjectHideFlags: 0
