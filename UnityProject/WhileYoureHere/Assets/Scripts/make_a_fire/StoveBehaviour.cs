@@ -6,7 +6,7 @@ using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
-using UnityEngine.VFX;
+using UnityEngine.InputSystem;
 
 namespace make_a_fire
 {
@@ -14,7 +14,7 @@ namespace make_a_fire
     {
         [Header("Burning Objects")] 
         [SerializeField] private HoldableObjectBehaviour newspaper;
-        private List<GameObject> logs;
+        private List<GameObject> _logs;
         
         [Header("Fire Behaviour")] 
         [SerializeField] private ParticleSystem fireParticle;
@@ -26,6 +26,10 @@ namespace make_a_fire
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
         
+        private Light _fireLight;
+        private float  _smallFireIntensity = 2.0f;
+        private float _bigFireIntensity = 4.0f;
+        
         private int _placedLogsCount;
         private bool _fireStarted;
         private AudioSource _audioSource;
@@ -35,10 +39,32 @@ namespace make_a_fire
         {
             PlayFireEffect(false);
             _audioSource = GetComponent<AudioSource>();
+            _fireLight = GetComponent<Light>();
+            _fireLight.intensity = 0.0f;
             _objectHolder = GetComponentInChildren<ObjectHolder>();
         }
 
-        private void Update()
+        // private void Update()
+        // {
+        //     if (!newspaper.IsPlaced) return;
+        //     _logs = GameObject.FindGameObjectsWithTag("HalfLog").ToList();
+        //     var currentPlacedLogs = CountPlacedLogs();
+        //     if (currentPlacedLogs > _placedLogsCount)
+        //     {
+        //         _placedLogsCount = currentPlacedLogs;
+        //         switch (_fireStarted)
+        //         {
+        //             case false when _placedLogsCount == 1:
+        //                 StartSmallFire();
+        //                 break;
+        //             case true when _placedLogsCount == 3:
+        //                 blowAllowedEvent?.Raise();
+        //                 break;
+        //         }
+        //     }
+        // }
+
+        void Update()
         {
             if (!_objectHolder.placedObjectsInHolders.Contains(newspaper.gameObject)) return;
             
@@ -53,9 +79,16 @@ namespace make_a_fire
                     break;
             }
         }
+        
         private int CountPlacedLogs()
         {
-            return _objectHolder.placedObjectsInHolders.Count - 1;
+            return _logs.Count(log =>
+            {
+                if (log.GetComponentInParent<LogBasket>() != null) return false;
+
+                var furnacePlaceable = log.GetComponent<FurnacePlaceable>();
+                return furnacePlaceable != null && furnacePlaceable.IsPlaced;
+            });
         }
 
         private void StartSmallFire()
@@ -68,6 +101,8 @@ namespace make_a_fire
             
             _audioSource.PlayOneShot(matchStrike);
             MakeFireSound();
+            
+            _fireLight.intensity = _smallFireIntensity;
         }
 
         public void StartBigFire()
@@ -78,6 +113,8 @@ namespace make_a_fire
             _audioSource.PlayOneShot(chargedFire, chargedFireVolume);
            
             ChoreEvents.TriggerPaperPlacement();
+            
+            _fireLight.intensity = _bigFireIntensity;
         }
 
         private void MakeFireSound()
@@ -98,6 +135,5 @@ namespace make_a_fire
             var main = fireParticle.main;
             main.startLifetime = lifetime;
         }
-
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace time
 {
@@ -9,23 +10,30 @@ namespace time
     {
         private Light _sunLight;
 
-        [Header("Current Time")]
+        [Header("Current Time")] 
         [Range(1, 8)] [SerializeField] private int days;
         [Range(0, 23)] [SerializeField] private int hours;
 
-        [Header("Transitions")]
-        [SerializeField] private List<TimeTransition> transitions = new List<TimeTransition>();
+        [Header("Transitions")] [SerializeField]
+        private List<TimeTransition> transitions = new List<TimeTransition>();
 
         private int _lastDay;
         private int _lastHour;
-        
+
         private static readonly int Texture1 = Shader.PropertyToID("_Texture1");
         private static readonly int Texture2 = Shader.PropertyToID("_Texture2");
         private static readonly int Blend = Shader.PropertyToID("_Blend");
 
+        [SerializeField] private Light[] cabinPointLights;
+        [SerializeField] private Light[] cabinSpotLights;
+
         private void Awake()
         {
             _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+            for (int i = 0; i < cabinPointLights.Length; i++)
+            {
+                Debug.Log(cabinPointLights[i].intensity);
+            }
         }
 
         public void ChangeTime(int day, int hour)
@@ -35,7 +43,7 @@ namespace time
             hours = hour;
             Validate();
         }
-        
+
         private void Validate()
         {
             if (days == _lastDay && hours == _lastHour) return;
@@ -43,18 +51,20 @@ namespace time
             _lastHour = hours;
             TryStartTransition(days, hours);
         }
-        
+
         private void TryStartTransition(int day, int hour)
         {
-            foreach (var transition in transitions.Where(transition => transition.day == day && transition.hour == hour))
+            foreach (var transition in
+                     transitions.Where(transition => transition.day == day && transition.hour == hour))
             {
                 Debug.Log($"Starting transition for Day {day}, Hour {hour}");
                 StartCoroutine(LerpSkybox(transition.fromSkybox, transition.toSkybox, transition.duration));
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));
-                StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation, transition.duration));
+                StartCoroutine(LerpSunRotation(transition.startSunRotation, transition.endSunRotation,
+                    transition.duration));
+                StartCoroutine(LerpCabinLights(transition.endPointLightIntensity, transition.endSpotLightIntensity, transition.duration));
                 return;
             }
-
             Debug.Log($"No transition defined for Day {day}, Hour {hour}");
         }
 
@@ -100,6 +110,45 @@ namespace time
             }
 
             _sunLight.transform.rotation = Quaternion.Euler(endAngle, initialRotation.y, initialRotation.z);
+        }
+        
+        //update en test zijn enkel voor pull-request doeleinden 
+        void Update()
+        {
+            Test();
+        }
+        void Test()
+        {
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                TryStartTransition(1, 16);
+            }
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+            {
+                TryStartTransition(1, 6);
+            }
+        }
+        
+        private IEnumerator LerpCabinLights(float endPointLightIntensity, float endSpotLightIntensity,
+            float transitionDuration)
+        {
+            if (cabinPointLights == null || cabinPointLights.Length == 0 || cabinSpotLights == null || cabinSpotLights.Length == 0) yield break;
+            
+            float[] startPointIntensity = cabinPointLights.Select(pointLight => pointLight.intensity).ToArray();
+            float[] startSpotIntensity = cabinSpotLights.Select(spotLight => spotLight.intensity).ToArray();
+            
+            for (float t = 0; t < transitionDuration; t += Time.deltaTime) 
+            {
+                for (var i = 0; i < cabinPointLights.Length; i++)
+                {
+                    cabinPointLights[i].intensity = Mathf.Lerp(startPointIntensity[i], endPointLightIntensity, t / transitionDuration);
+                }
+                for (var i = 0; i < cabinSpotLights.Length; i++)
+                {
+                    cabinSpotLights[i].intensity = Mathf.Lerp(startSpotIntensity[i], endSpotLightIntensity, t / transitionDuration);
+                }
+                yield return null;
+            }
         }
     }
 }
