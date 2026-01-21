@@ -186,7 +186,6 @@ namespace chopping_logs
 
             player.GetComponent<MovementController>()?.ResumeMovement();
 
-            //cameraController?.SyncRotation(player..main.transform.rotation);
             cameraController?.ResumeCameraMovement();
 
             var playerController = player.GetComponent<PlayerInteractionController>();

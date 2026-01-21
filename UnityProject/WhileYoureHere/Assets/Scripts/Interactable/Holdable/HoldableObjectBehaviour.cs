@@ -5,6 +5,7 @@ using Interactable.Concrete.ObjectHolder;
 using JetBrains.Annotations;
 using screen;
 using ScriptableObjects.Interactable;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,7 +45,7 @@ namespace Interactable.Holdable
             player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                var cam = player.GetComponentInChildren<Camera>();
+                var cam = player.GetComponentInChildren<CinemachineCamera>();
                 if (cam != null)
                     _playerCamera = cam.transform;
             }
