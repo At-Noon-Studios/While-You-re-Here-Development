@@ -16,6 +16,9 @@ namespace ScriptableObjects.dialogue
         public bool pausePlayerMovement = true;
         public bool pauseCameraMovement = true;
         public bool showCursor = true;
+        
+        [Header("Pause Timing")]
+        public bool pauseOnlyDuringChoices = false;
 
         [Header("Audio Settings")]
         [Range(0f, 1f)]

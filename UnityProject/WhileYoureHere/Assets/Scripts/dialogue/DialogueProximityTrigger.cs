@@ -83,21 +83,16 @@ namespace dialogue
 
             dialogueLoader.gameObject.SetActive(true);
 
-            var player = GameObject.FindWithTag("Player");
-            if (player != null)
+            if (config.showCursor)
             {
-                var movement = player.GetComponent<MovementController>();
-                var cameraCtrl = player.GetComponentInChildren<CameraController>();
-
-                if (config.pausePlayerMovement)
-                    movement?.PauseMovement();
-
-                if (config.pauseCameraMovement)
-                    cameraCtrl?.PauseCameraMovement();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
-
-            Cursor.lockState = config.showCursor ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = config.showCursor;
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             dialogueLoader.StartDialogue(config);
         }
