@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using chore;
 using chopping_logs;
+using Interactable.Concrete.ObjectHolder;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
@@ -28,41 +29,33 @@ namespace make_a_fire
         private int _placedLogsCount;
         private bool _fireStarted;
         private AudioSource _audioSource;
+        private ObjectHolder _objectHolder;
 
         private void Awake()
         {
             PlayFireEffect(false);
             _audioSource = GetComponent<AudioSource>();
+            _objectHolder = GetComponentInChildren<ObjectHolder>();
         }
 
         private void Update()
         {
-            if (!newspaper.IsPlaced) return;
-            logs = GameObject.FindGameObjectsWithTag("HalfLog").ToList();
-            var currentPlacedLogs = CountPlacedLogs();
-            if (currentPlacedLogs > _placedLogsCount)
+            if (!_objectHolder.placedObjectsInHolders.Contains(newspaper.gameObject)) return;
+            
+            _placedLogsCount = CountPlacedLogs();
+            switch (_fireStarted)
             {
-                _placedLogsCount = currentPlacedLogs;
-                switch (_fireStarted)
-                {
-                    case false when _placedLogsCount == 1:
-                        StartSmallFire();
-                        break;
-                    case true when _placedLogsCount == 3:
-                        blowAllowedEvent?.Raise();
-                        break;
-                }
+                case false when _placedLogsCount >= 1:
+                    StartSmallFire();
+                    break;
+                case true when _placedLogsCount >= 3:
+                    blowAllowedEvent?.Raise();
+                    break;
             }
         }
         private int CountPlacedLogs()
         {
-            return logs.Count(log =>
-            {
-                if (log.GetComponentInParent<LogBasket>() != null) return false;
-
-                var furnacePlaceable = log.GetComponent<FurnacePlaceable>();
-                return furnacePlaceable != null && furnacePlaceable.IsPlaced;
-            });
+            return _objectHolder.placedObjectsInHolders.Count - 1;
         }
 
         private void StartSmallFire()
@@ -79,6 +72,8 @@ namespace make_a_fire
 
         public void StartBigFire()
         {
+            if (!_objectHolder.placedObjectsInHolders.Contains(newspaper.gameObject) || CountPlacedLogs() < 3) return;
+            
             SetFireLifetime(0.5f);
             _audioSource.PlayOneShot(chargedFire, chargedFireVolume);
            
