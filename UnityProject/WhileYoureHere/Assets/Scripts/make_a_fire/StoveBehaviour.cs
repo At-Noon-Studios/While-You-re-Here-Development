@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using chore;
+using chopping_logs;
 using Interactable.Holdable;
 using ScriptableObjects.Events;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace make_a_fire
         [SerializeField] private AudioClip matchStrike;
         [SerializeField] private AudioClip burningFire;
         [SerializeField] private AudioClip chargedFire;
+        [SerializeField] private float chargedFireVolume;
         
         [Header("Blow Event")] 
         [SerializeField] private EventChannel blowAllowedEvent;
@@ -54,7 +56,13 @@ namespace make_a_fire
         }
         private int CountPlacedLogs()
         {
-            return logs.Count(log => log.GetComponent<FurnacePlaceable>().IsPlaced);
+            return logs.Count(log =>
+            {
+                if (log.GetComponentInParent<LogBasket>() != null) return false;
+
+                var furnacePlaceable = log.GetComponent<FurnacePlaceable>();
+                return furnacePlaceable != null && furnacePlaceable.IsPlaced;
+            });
         }
 
         private void StartSmallFire()
@@ -72,7 +80,7 @@ namespace make_a_fire
         public void StartBigFire()
         {
             SetFireLifetime(0.5f);
-            _audioSource.PlayOneShot(chargedFire);
+            _audioSource.PlayOneShot(chargedFire, chargedFireVolume);
            
             ChoreEvents.TriggerPaperPlacement();
         }
