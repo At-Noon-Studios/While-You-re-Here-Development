@@ -39,6 +39,8 @@ namespace dialogue
         private bool _isTyping;
         private bool _cameraStopped;
         private bool _movementStopped;
+        private DialogueInteractionConfig _currentInteractionConfig;
+
 
         [SerializeField] private float volume = 1;
         private int _resumeCharIndex;
@@ -85,6 +87,8 @@ namespace dialogue
         {
             EventSystem.current?.SetSelectedGameObject(null);
 
+            _currentInteractionConfig = interactionConfig;
+
             _nodes.Clear();
             foreach (var n in interactionConfig.dialogueNodes)
                 _nodes[n.nodeID] = n;
@@ -92,8 +96,10 @@ namespace dialogue
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
+
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
+
 
         public void StartRadioDialogue(DialogueNode node, float resumeTime = 0,
             int startSentenceIndex = 0)
@@ -250,6 +256,11 @@ namespace dialogue
             if (_activeSentences == null ||
                 _sentenceIndex >= _activeSentences.Length)
             {
+                if (_currentNode.flag != null)
+                {
+                    _currentNode.flag.currentValue = true;
+                }
+                
                 EndDialogue();
                 OnLastSentenceFinished?.Invoke();
                 _sentenceIndex = 0;
@@ -266,7 +277,8 @@ namespace dialogue
         {
             var startedClip = sentence.audio;
             _audioSource.clip = sentence.audio;
-            _audioSource.volume = volume;
+            _audioSource.volume = _currentInteractionConfig != null 
+                ? _currentInteractionConfig.dialogueVolume : 1f;
             resumeTime = Mathf.Clamp(resumeTime, 0f, startedClip.length);
             _audioSource.time = resumeTime;
             _audioSource.Play();
@@ -278,7 +290,8 @@ namespace dialogue
         {
             _audioSource.loop = true;
             _audioSource.clip = clip;
-            _audioSource.volume = volume;
+            _audioSource.volume = _currentInteractionConfig != null 
+                ? _currentInteractionConfig.dialogueVolume : 1f;
             _audioSource.Play();
         }
 
@@ -289,16 +302,34 @@ namespace dialogue
 
             if (sentence.audio != null)
             {
-                if (_audioSource == null)
-                    _audioSource = GameObject
-                        .FindWithTag(sentence.tagOfAudioSource)
-                        .GetComponent<AudioSource>();
-                _audioSource.Stop();
-                _audioSource = GameObject.FindWithTag(sentence.tagOfAudioSource)
-                    .GetComponent<AudioSource>();
-                _audioSource.volume = volume;
-                _audioSource.clip = sentence.audio;
-                _audioSource.Play();
+                if (_audioSource == null ||
+                    _audioSource.gameObject.CompareTag(sentence.tagOfAudioSource) == false)
+                {
+                    var goWithTag = !string.IsNullOrEmpty(sentence.tagOfAudioSource)
+                        ? GameObject.FindWithTag(sentence.tagOfAudioSource)
+                        : null;
+
+                    if (goWithTag != null)
+                    {
+                        _audioSource = goWithTag.GetComponent<AudioSource>();
+                    }
+                    else
+                    {
+                        Debug.LogWarning(
+                            $"[DialogueManager] No GameObject with tag '{sentence.tagOfAudioSource}' found for dialogue audio.");
+                        _audioSource = null;
+                    }
+                }
+
+                if (_audioSource != null)
+                {
+                    _audioSource.Stop();
+                    _audioSource.volume = _currentInteractionConfig != null 
+                        ? _currentInteractionConfig.dialogueVolume : 1f;
+                    _audioSource.clip = sentence.audio;
+                    _audioSource.loop = false;
+                    _audioSource.Play();
+                }
             }
 
             string output = "";
@@ -318,26 +349,65 @@ namespace dialogue
             }
 
             _isTyping = false;
-            yield return new WaitForSeconds(sentenceDelay);
 
+            if (sentence.audio != null && _audioSource != null)
+            {
+                while (_audioSource != null && _audioSource.isPlaying)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                yield return new WaitForSeconds(sentenceDelay);
+            }
             PlayNextSentence();
         }
-
 
         private void CreateChoices()
         {
             foreach (var choice in _currentNode.choices)
             {
-                var btn = Instantiate(choiceButtonPrefab, choicesContainer);
-                btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text =
-                    choice.choiceText;
-                btn.GetComponent<Button>().onClick
-                    .AddListener(() => DisplayNode(choice.targetNodeID));
+                var btnObj = Instantiate(choiceButtonPrefab, choicesContainer);
+                var btn = btnObj.GetComponent<Button>();
+                var img = btnObj.GetComponent<Image>() ?? btnObj.GetComponentInChildren<Image>();
+
+                if (img != null && choice.normalSprite != null)
+                    img.sprite = choice.normalSprite;
+
+                btn.onClick.AddListener(() =>
+                {
+                    DisplayNode(choice.targetNodeID);
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                });
+
+                if (img != null)
+                {
+                    var trigger = btnObj.GetComponent<UnityEngine.EventSystems.EventTrigger>() 
+                                  ?? btnObj.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+
+                    void SetSprite(Sprite s) { img.sprite = s; }
+
+                    var enter = new UnityEngine.EventSystems.EventTrigger.Entry
+                    {
+                        eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter
+                    };
+                    enter.callback.AddListener(_ => { if (choice.selectedSprite != null) SetSprite(choice.selectedSprite); });
+                    trigger.triggers.Add(enter);
+
+                    var exit = new UnityEngine.EventSystems.EventTrigger.Entry
+                    {
+                        eventID = UnityEngine.EventSystems.EventTriggerType.PointerExit
+                    };
+                    exit.callback.AddListener(_ => { if (choice.normalSprite != null) SetSprite(choice.normalSprite); });
+                    trigger.triggers.Add(exit);
+                }
             }
 
             EventSystem.current?.SetSelectedGameObject(null);
         }
-
+        
         private void HandleNextNodeOrEnd()
         {
             if (!string.IsNullOrEmpty(_currentNode.targetNodeID))

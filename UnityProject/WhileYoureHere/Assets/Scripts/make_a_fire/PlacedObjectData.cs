@@ -7,5 +7,6 @@ namespace make_a_fire
     {
         public GameObject objectPrefab;
         public Vector3 placedObjectRotation;
+        public AudioClip audioClip;
     }
 }
