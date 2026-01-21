@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 6773674318954306811}
   - component: {fileID: 2033362188839797899}
   - component: {fileID: 7836106157181643424}
-  - component: {fileID: 8261108379468655886}
   - component: {fileID: 6817150282050180681}
-  - component: {fileID: 6206332985606673952}
   - component: {fileID: 4714819447824358772}
+  - component: {fileID: 8224318181269690723}
   m_Layer: 0
   m_Name: KeyUV2
   m_TagString: Untagged
@@ -93,27 +92,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8261108379468655886
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2667689843496037394}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.051470965, y: 0.26923656, z: 0.75727254}
-  m_Center: {x: 0.0000631298, y: -0.0003778712, z: 0.053584006}
 --- !u!114 &6817150282050180681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,27 +118,6 @@ MonoBehaviour:
   detectable: 1
   pickupClip: {fileID: 8300000, guid: c5ce4cdae7e5e424295340519ee491cf, type: 3}
   pickupSoundPlayedFlag: {fileID: 11400000, guid: be548abd3c4f7804699e3bb90c5f3516, type: 2}
---- !u!65 &6206332985606673952
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2667689843496037394}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.051470965, y: 0.26923656, z: 0.75727254}
-  m_Center: {x: 0.0000631298, y: -0.0003778712, z: 0.053584006}
 --- !u!54 &4714819447824358772
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -188,3 +145,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &8224318181269690723
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2667689843496037394}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.08547464, y: 0.3003074, z: 0.7698711}
+  m_Center: {x: 0.005184686, y: -0.001368701, z: 0.047284592}
