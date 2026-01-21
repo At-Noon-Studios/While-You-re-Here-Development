@@ -763,10 +763,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 585088061}
-  - component: {fileID: 585088062}
-  - component: {fileID: 588040508}
-  - component: {fileID: 588040507}
   - component: {fileID: 1461242954}
+  - component: {fileID: 588040507}
   m_Layer: 0
   m_Name: SpotLightLivingRoom1
   m_TagString: Untagged
@@ -789,21 +787,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1726167007}
   m_LocalEulerAnglesHint: {x: 40, y: 90, z: 0}
---- !u!114 &585088062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585088060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldSpaceElements: []
-  canvasScale: 0.01
-  allowMultipleOnSameInteractable: 0
 --- !u!108 &585088063
 Light:
   m_ObjectHideFlags: 0
@@ -922,103 +905,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!82 &588040508
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585088060}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!65 &588040509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2533,7 +2419,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1424511971}
   - component: {fileID: 1424511973}
-  - component: {fileID: 1424511972}
   - component: {fileID: 1653488603}
   m_Layer: 0
   m_Name: PointLightLivingRoom2
@@ -2557,25 +2442,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1750107517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1424511972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424511970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc675471987517e4685ce345bd372130, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  choppedLogQuarterPrefab: {fileID: 0}
-  spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  logID: 0
-  audioSource: {fileID: 0}
-  chopSound: []
 --- !u!108 &1424511973
 Light:
   m_ObjectHideFlags: 0
