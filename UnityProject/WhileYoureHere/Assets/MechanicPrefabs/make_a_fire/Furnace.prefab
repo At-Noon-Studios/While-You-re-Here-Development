@@ -575,7 +575,8 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     offset: {x: 0, y: 0.3, z: 0}
-    lookAtTarget: 0
+    lookAtTarget: 1
+    localLookDirection: {x: 0, y: 0, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -5774,7 +5775,8 @@ MonoBehaviour:
     requiredDoorState: 0
     requiredStumpState: 0
     offset: {x: 0, y: 0.3, z: 0}
-    lookAtTarget: 0
+    lookAtTarget: 1
+    localLookDirection: {x: 0, y: 0, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -5957,7 +5959,7 @@ MonoBehaviour:
   matchStrike: {fileID: 8300000, guid: 95c49fc713d11f14bbea7e300f191c7a, type: 3}
   burningFire: {fileID: 8300000, guid: 602000590feee4442a4ebec89aef5242, type: 3}
   chargedFire: {fileID: 8300000, guid: 765d1b10189f30a4ea460e5bd79e6bb6, type: 3}
-  chargedFireVolume: 2
+  chargedFireVolume: 1.5
   blowAllowedEvent: {fileID: 11400000, guid: a3d0d7c5aef7743fda1fc4ccc4f3c67f, type: 2}
 --- !u!1 &6466514370822893418
 GameObject:
@@ -6208,6 +6210,7 @@ MonoBehaviour:
     requiredStumpState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
+    localLookDirection: {x: -300, y: 0, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -6223,6 +6226,7 @@ MonoBehaviour:
     requiredStumpState: 0
     offset: {x: 0.2, y: 0.3, z: -0.2}
     lookAtTarget: 0
+    localLookDirection: {x: -300, y: 0, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -6518,6 +6522,7 @@ MonoBehaviour:
     requiredStumpState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
+    localLookDirection: {x: -300, y: 180, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
@@ -6533,6 +6538,7 @@ MonoBehaviour:
     requiredStumpState: 0
     offset: {x: -0.2, y: -0.3, z: 0.2}
     lookAtTarget: 0
+    localLookDirection: {x: -300, y: 0, z: 0}
     uiObject: {fileID: 0}
     image: {fileID: 0}
     rectTransform: {fileID: 0}
