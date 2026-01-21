@@ -3,6 +3,7 @@ using Interactable;
 using player_controls;
 using PlayerControls;
 using ScriptableObjects.Gamestate;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace making_tea
@@ -41,7 +42,7 @@ namespace making_tea
         private MovementController _movement;
         private CameraController _cameraController;
         private Transform _player;
-        private Camera _playerCam;
+        private CinemachineCamera _playerCam;
 
         private Vector3 _originalCameraLocalPos;
         private Quaternion _originalCameraLocalRot;
@@ -142,7 +143,7 @@ namespace making_tea
 
             _player = p.transform;
             _movement = p.GetComponent<MovementController>();
-            _playerCam = p.GetComponentInChildren<Camera>();
+            _playerCam = p.GetComponentInChildren<CinemachineCamera>();
             _cameraController = p.GetComponentInChildren<CameraController>();
 
             if (_movement != null) _movement.enabled = false;
@@ -155,7 +156,7 @@ namespace making_tea
             {
                 _originalCameraLocalPos = _playerCam.transform.localPosition;
                 _originalCameraLocalRot = _playerCam.transform.localRotation;
-                _originalFOV = _playerCam.fieldOfView;
+                _originalFOV = _playerCam.Lens.FieldOfView;
             }
 
             if (lookTarget != null && _playerCam != null)
@@ -170,7 +171,7 @@ namespace making_tea
                 _playerCam.transform.localRotation *= Quaternion.Euler(cameraSitRotationOffset);
 
                 if (changeFOV)
-                    _playerCam.fieldOfView = sitFOV;
+                    _playerCam.Lens.FieldOfView = sitFOV;
             }
 
             _isSitting = true;
@@ -199,7 +200,7 @@ namespace making_tea
                 _playerCam.transform.localRotation = _originalCameraLocalRot;
 
                 if (changeFOV)
-                    _playerCam.fieldOfView = _originalFOV;
+                    _playerCam.Lens.FieldOfView = _originalFOV;
             }
 
             _isSitting = false;
