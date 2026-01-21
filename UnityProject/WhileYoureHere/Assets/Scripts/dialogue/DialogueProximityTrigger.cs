@@ -18,7 +18,8 @@ namespace dialogue
         [SerializeField] private Transform playerTransform;
 
         private bool _wasInRange;
-
+        private bool _hasTriggered;
+        
         private void Awake()
         {
             FindPlayer();
@@ -46,6 +47,8 @@ namespace dialogue
 
         private void Update()
         {
+            if (_hasTriggered) return;
+
             if (playerTransform == null)
             {
                 FindPlayer();
@@ -54,7 +57,6 @@ namespace dialogue
 
             if (dialogueLoader == null || config == null) return;
             if (config.dialogueNodes == null || config.dialogueNodes.Count == 0) return;
-            if (dialogueLoader.gameObject.activeSelf) return;
 
             var inRange = IsPlayerInTriggerZone();
             var enteredThisFrame = inRange && !_wasInRange;
@@ -75,28 +77,22 @@ namespace dialogue
 
         private void TriggerDialogue()
         {
-            if (dialogueLoader.gameObject.activeSelf ||
-                config.dialogueNodes == null ||
-                config.dialogueNodes.Count == 0)
-                return;
+            if (_hasTriggered) return;
+
+            _hasTriggered = true;
 
             dialogueLoader.gameObject.SetActive(true);
-            
-            var player = GameObject.FindWithTag("Player");
-            if (player != null)
+
+            if (config.showCursor)
             {
-                var movement = player.GetComponent<MovementController>();
-                var cameraCtrl = player.GetComponentInChildren<CameraController>();
-
-                if (config.pausePlayerMovement)
-                    movement?.PauseMovement();
-
-                if (config.pauseCameraMovement)
-                    cameraCtrl?.PauseCameraMovement();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
-
-            Cursor.lockState = config.showCursor ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = config.showCursor;
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             dialogueLoader.StartDialogue(config);
         }

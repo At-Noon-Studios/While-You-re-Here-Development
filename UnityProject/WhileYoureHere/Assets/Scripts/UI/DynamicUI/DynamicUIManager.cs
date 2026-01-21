@@ -10,7 +10,7 @@ namespace UI.DynamicUI
 {
     public class DynamicUIManager : MonoBehaviour
     {
-        public enum LookAtTarget { Camera }
+        public enum LookAtTarget { None, Camera }
         public enum ActivationMode { Always, InteractableHovered }
         public enum DoorState { None, Open, Closed, Locked }
         public enum StumpState { None, CutLog, PlaceLog, MouseUp, MouseDown, GuideLine }
@@ -42,6 +42,7 @@ namespace UI.DynamicUI
 
             [Header("Look At")]
             [SerializeField] private LookAtTarget lookAtTarget = LookAtTarget.Camera;
+            [SerializeField] private Vector3 localLookDirection = Vector3.forward; // richting relatief aan het object
 
             [HideInInspector] public GameObject uiObject;
             [HideInInspector] public Image image;
@@ -51,6 +52,8 @@ namespace UI.DynamicUI
             public Sprite Sprite => sprite;
             public Vector2 Size => size;
             public LookAtTarget LookTarget => lookAtTarget;
+            public Vector3 LocalLookDirection => localLookDirection;
+
 
             public bool IsActive => CheckIsActive();
 
@@ -289,14 +292,31 @@ namespace UI.DynamicUI
                 if (element.uiObject == null || !element.uiObject.activeSelf)
                     continue;
 
-                if (element.LookTarget == LookAtTarget.Camera)
+                switch (element.LookTarget)
                 {
-                    Vector3 dir = element.uiObject.transform.position - mainCamera.transform.position;
-                    if (dir.sqrMagnitude > 0.001f)
-                        element.uiObject.transform.rotation = Quaternion.LookRotation(dir);
+                    case LookAtTarget.Camera:
+                        Vector3 dir = element.uiObject.transform.position - mainCamera.transform.position;
+                        if (dir.sqrMagnitude > 0.001f)
+                            element.uiObject.transform.rotation = Quaternion.LookRotation(dir);
+                        break;
+
+                    case LookAtTarget.None:
+                        if (element.interactableBehaviour != null)
+                        {
+                            // Rotatie gebaseerd op het object + lokale kijkrichting
+                            Vector3 worldDir = element.interactableBehaviour.transform.rotation * element.LocalLookDirection.normalized;
+                            element.uiObject.transform.rotation = Quaternion.LookRotation(worldDir);
+                        }
+                        else
+                        {
+                            // fallback: wereldrichting
+                            element.uiObject.transform.rotation = Quaternion.LookRotation(element.LocalLookDirection.normalized);
+                        }
+                        break;
                 }
             }
         }
+
 
         private void UpdateCanvasScale()
         {

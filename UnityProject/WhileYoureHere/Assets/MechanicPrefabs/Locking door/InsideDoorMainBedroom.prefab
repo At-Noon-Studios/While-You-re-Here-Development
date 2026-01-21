@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 1241127234970271507}
   - component: {fileID: 4417844369978873375}
   - component: {fileID: 7069353940295632643}
+  - component: {fileID: 3492978252659817924}
   m_Layer: 0
   m_Name: bedroomdoorinteract
   m_TagString: Untagged
@@ -299,6 +300,117 @@ MonoBehaviour:
   - {fileID: 617449140687610711}
   isLocked: 1
   isOpen: 0
+--- !u!114 &3492978252659817924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023836818908427512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a7d1822e7e07b409973a0658533767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.DynamicUI.DynamicUIManager
+  worldSpaceElements:
+  - elementName: Locked Inside
+    sprite: {fileID: 21300000, guid: 5993d39fb16c7b3459285e535bcd85ea, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 3
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: -0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Open Inside
+    sprite: {fileID: 21300000, guid: 75db1db779aa3ab4bb5ffb405ff813df, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 1
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: -0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Closed Inside
+    sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 1
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 2
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: -0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Locked Outside
+    sprite: {fileID: 21300000, guid: 5993d39fb16c7b3459285e535bcd85ea, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 3
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: 0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Open Outside
+    sprite: {fileID: 21300000, guid: 75db1db779aa3ab4bb5ffb405ff813df, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 1
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: 0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  - elementName: Closed Outside
+    sprite: {fileID: 21300000, guid: 21b7af6fdfad1b449bb618ad551a9200, type: 3}
+    size: {x: 6, y: 2}
+    flipX: 0
+    flipY: 0
+    activationMode: 1
+    interactableBehaviour: {fileID: 7069353940295632643}
+    requiredHeldObject: {fileID: 0}
+    requiredDoorState: 2
+    requiredStumpState: 0
+    offset: {x: -0.95, y: -0.6, z: 0.1}
+    lookAtTarget: 0
+    localLookDirection: {x: 0, y: 0, z: -300}
+    uiObject: {fileID: 0}
+    image: {fileID: 0}
+    rectTransform: {fileID: 0}
+  canvasScale: 0.02
+  allowMultipleOnSameInteractable: 1
 --- !u!1 &3185260974140606328
 GameObject:
   m_ObjectHideFlags: 0

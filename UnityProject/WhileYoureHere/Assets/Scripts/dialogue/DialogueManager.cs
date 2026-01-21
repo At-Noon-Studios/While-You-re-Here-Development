@@ -15,12 +15,15 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
-        [Header("UI")] [SerializeField] private Transform choicesContainer;
+        [Header("UI")] 
+        [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
-
+        [SerializeField] private GameObject dialogueImage;
+        [SerializeField] private GameObject navigationObject;
+        
         [Header("Timing")] [SerializeField] private float letterDelay = 0.05f;
         [SerializeField] private float sentenceDelay = 1.5f;
-
+        
         public event Action OnLastSentenceFinished;
 
         private AudioSource _audioSource;
@@ -40,7 +43,12 @@ namespace dialogue
         private bool _cameraStopped;
         private bool _movementStopped;
         private DialogueInteractionConfig _currentInteractionConfig;
+        
+        private List<Button> _choiceButtons = new List<Button>();
+        private List<Image> _choiceImages = new List<Image>();
+        private int _currentSelectedChoice = 0;
 
+        private bool IsChoiceNavigationActive => _choiceButtons.Count > 0 && _choiceImages.Count > 0;
 
         [SerializeField] private float volume = 1;
         private int _resumeCharIndex;
@@ -61,9 +69,63 @@ namespace dialogue
                 _playerInput = player.GetComponent<PlayerInput>();
 
                 if (_playerInput != null)
-                    _playerInput.actions["SkipDialogue"].performed +=
-                        OnSkipDialogue;
+                {
+                    _playerInput.actions["SkipDialogue"].performed += OnSkipDialogue;
+                    _playerInput.actions["Navigate"].performed += OnNavigate;
+                    _playerInput.actions["Confirm"].performed += OnConfirm;
+                }
             }
+        }
+        
+        private void OnDestroy()
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.actions["SkipDialogue"].performed -= OnSkipDialogue;
+                _playerInput.actions["Navigate"].performed -= OnNavigate;
+                _playerInput.actions["Confirm"].performed -= OnConfirm;
+            }
+        }
+        
+        private void OnNavigate(InputAction.CallbackContext ctx)
+        {
+            if (!gameObject.activeSelf || _choiceButtons.Count == 0) return;
+            
+            float value = ctx.ReadValue<float>();
+            
+            if (_currentSelectedChoice >= 0 && _currentSelectedChoice < _choiceButtons.Count)
+            {
+                var currentImg = _choiceImages[_currentSelectedChoice];
+                if (currentImg != null && _currentNode.choices[_currentSelectedChoice].normalSprite != null)
+                    currentImg.sprite = _currentNode.choices[_currentSelectedChoice].normalSprite;
+            }
+            
+            if (value > 0)
+            {
+                _currentSelectedChoice = (_currentSelectedChoice + 1) % _choiceButtons.Count;
+            }
+            else if (value < 0)
+            {
+                _currentSelectedChoice--;
+                if (_currentSelectedChoice < 0)
+                    _currentSelectedChoice = _choiceButtons.Count - 1;
+            }
+            
+            
+            if (_currentSelectedChoice >= 0 && _currentSelectedChoice < _choiceButtons.Count)
+            {
+                var newImg = _choiceImages[_currentSelectedChoice];
+                if (newImg != null && _currentNode.choices[_currentSelectedChoice].selectedSprite != null)
+                    newImg.sprite = _currentNode.choices[_currentSelectedChoice].selectedSprite;
+            }
+        }
+        
+        private void OnConfirm(InputAction.CallbackContext ctx)
+        {
+            if (!gameObject.activeSelf || _choiceButtons.Count == 0) return;
+            if (_currentSelectedChoice < 0 || _currentSelectedChoice >= _choiceButtons.Count) return;
+            
+            _choiceButtons[_currentSelectedChoice].onClick.Invoke();
         }
 
         private void OnSkipDialogue(InputAction.CallbackContext ctx)
@@ -96,6 +158,26 @@ namespace dialogue
             gameObject.SetActive(true);
             _movementStopped = interactionConfig.pausePlayerMovement;
             _cameraStopped = interactionConfig.pauseCameraMovement;
+
+            if (!interactionConfig.pauseOnlyDuringChoices)
+            {
+                if (_movementStopped && _movement != null)
+                    _movement.PauseMovement();
+                
+                if (_cameraStopped && _cameraController != null)
+                    _cameraController.PauseCameraMovement();
+            }
+
+            if (interactionConfig.showCursor)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             DisplayNode(interactionConfig.dialogueNodes[0].nodeID);
         }
@@ -135,13 +217,33 @@ namespace dialogue
                 return;
             }
 
+            _choiceButtons.Clear();
+            _choiceImages.Clear();
+            _currentSelectedChoice = 0;
+
             foreach (Transform child in choicesContainer)
                 Destroy(child.gameObject);
 
             if (_sentenceRoutine != null)
                 StopCoroutine(_sentenceRoutine);
 
-            if (_currentNode.sentences?.Count > 0)
+            bool hasSentences = _currentNode.sentences != null && _currentNode.sentences.Count > 0;
+
+            if (dialogueImage != null)
+                dialogueImage.SetActive(hasSentences);
+            
+            if (_currentNode.choices == null || _currentNode.choices.Count == 0)
+            {
+                if (navigationObject != null)
+                    navigationObject.SetActive(false);
+            }
+            else
+            {
+                if (navigationObject != null)
+                    navigationObject.SetActive(true);
+            }
+            
+            if (hasSentences)
             {
                 _activeSentences = _currentNode.sentences.ToArray();
                 _sentenceIndex = 0;
@@ -157,11 +259,21 @@ namespace dialogue
             }
         }
 
+
         private void PlayNextSentence()
         {
             if (_currentNode.flag != null)
             {
                 _currentNode.flag.currentValue = true;
+            }
+            
+            if (_currentInteractionConfig != null && _currentInteractionConfig.pauseOnlyDuringChoices)
+            {
+                if (_movementStopped && _movement != null)
+                    _movement.ResumeMovement();
+                
+                if (_cameraStopped && _cameraController != null)
+                    _cameraController.ResumeCameraMovement();
             }
 
             if (_sentenceIndex >= _activeSentences.Length)
@@ -366,20 +478,37 @@ namespace dialogue
 
         private void CreateChoices()
         {
+            _choiceButtons.Clear();
+            _choiceImages.Clear();
+            _currentSelectedChoice = 0;
+            
+            if (_currentInteractionConfig != null && _currentInteractionConfig.pauseOnlyDuringChoices)
+            {
+                if (_movementStopped && _movement != null)
+                    _movement.PauseMovement();
+                
+                if (_cameraStopped && _cameraController != null)
+                    _cameraController.PauseCameraMovement();
+            }
+            
+            int index = 0;
             foreach (var choice in _currentNode.choices)
             {
                 var btnObj = Instantiate(choiceButtonPrefab, choicesContainer);
                 var btn = btnObj.GetComponent<Button>();
                 var img = btnObj.GetComponent<Image>() ?? btnObj.GetComponentInChildren<Image>();
 
+                _choiceButtons.Add(btn);
+                _choiceImages.Add(img);
+                
+                int capturedIndex = index;
+                
                 if (img != null && choice.normalSprite != null)
                     img.sprite = choice.normalSprite;
 
                 btn.onClick.AddListener(() =>
                 {
                     DisplayNode(choice.targetNodeID);
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
                 });
 
                 if (img != null)
@@ -393,18 +522,54 @@ namespace dialogue
                     {
                         eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter
                     };
-                    enter.callback.AddListener(_ => { if (choice.selectedSprite != null) SetSprite(choice.selectedSprite); });
+                    enter.callback.AddListener(_ => 
+                    { 
+                        if (choice.selectedSprite != null) 
+                        {
+                            if (_currentSelectedChoice >= 0 && _currentSelectedChoice < _choiceImages.Count)
+                            {
+                                var oldImg = _choiceImages[_currentSelectedChoice];
+                                if (oldImg != null && _currentNode.choices[_currentSelectedChoice].normalSprite != null)
+                                    oldImg.sprite = _currentNode.choices[_currentSelectedChoice].normalSprite;
+                            }
+                            _currentSelectedChoice = capturedIndex;
+                            SetSprite(choice.selectedSprite);
+                        }
+                    });
                     trigger.triggers.Add(enter);
 
                     var exit = new UnityEngine.EventSystems.EventTrigger.Entry
                     {
                         eventID = UnityEngine.EventSystems.EventTriggerType.PointerExit
                     };
-                    exit.callback.AddListener(_ => { if (choice.normalSprite != null) SetSprite(choice.normalSprite); });
+                    exit.callback.AddListener(_ => 
+                    { 
+                        if (capturedIndex != _currentSelectedChoice && choice.normalSprite != null) 
+                            SetSprite(choice.normalSprite); 
+                    });
                     trigger.triggers.Add(exit);
                 }
+                
+                index++;
             }
 
+            if (_choiceButtons.Count > 0 && _choiceImages[0] != null && 
+                _currentNode.choices[0].selectedSprite != null)
+            {
+                _choiceImages[0].sprite = _currentNode.choices[0].selectedSprite;
+            }
+            
+            if (_currentInteractionConfig != null && _currentInteractionConfig.showCursor)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            
             EventSystem.current?.SetSelectedGameObject(null);
         }
         
@@ -423,6 +588,15 @@ namespace dialogue
             _ui?.HideDialogue();
             gameObject.SetActive(false);
             _audioSource?.Stop();
+            
+            if (_movementStopped && _movement != null)
+                _movement.ResumeMovement();
+            
+            if (_cameraStopped && _cameraController != null)
+                _cameraController.ResumeCameraMovement();
+            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         public int GetCurrentSentenceIndex() => _sentenceIndex;
