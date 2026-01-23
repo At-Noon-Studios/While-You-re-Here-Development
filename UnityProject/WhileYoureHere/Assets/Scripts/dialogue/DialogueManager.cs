@@ -15,6 +15,8 @@ namespace dialogue
 {
     public class DialogueManager : MonoBehaviour
     {
+        public static DialogueManager Instance;
+        
         [Header("UI")] 
         [SerializeField] private Transform choicesContainer;
         [SerializeField] private GameObject choiceButtonPrefab;
@@ -55,6 +57,7 @@ namespace dialogue
 
         private void Awake()
         {
+            if (Instance == null) Instance = this;
             _ui = UIManager.Instance;
         }
 

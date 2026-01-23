@@ -5,6 +5,7 @@ using System.Linq;
 using chore;
 using player_controls;
 using PlayerControls;
+using scene_loading;
 using ScriptableObjects.Gamestate;
 using time;
 using UnityEngine;
@@ -64,11 +65,12 @@ namespace gamestate
             _movementController = _player.GetComponent<MovementController>();
             _cameraController = _player.GetComponentInChildren<CameraController>();
             _currentActivity = activities[0];
-            HandleStartActivity();
+            SceneLoadingManager.OnFinish += HandleStartActivity;
         }
 
         private void Update()
         {
+            if (!SceneLoadingManager.Finished) return;
             if (_currentActivity == null) return;
             foreach (var gameplayEvent in _currentActivity.events)
             {
@@ -80,6 +82,7 @@ namespace gamestate
                     CheckBooleansTrue(gameplayEvent);
                 }
             }
+
         }
 
         private void CheckBooleansTrue(GameplayEvent gameplayEvent)

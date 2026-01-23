@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using scene_loading;
 using UnityEngine;
 
 namespace time
@@ -25,7 +26,10 @@ namespace time
 
         private void Awake()
         {
-            _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+            SceneLoadingManager.OnFinish += () =>
+            {
+                _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+            };
         }
 
         public void ChangeTime(int day, int hour)
@@ -48,6 +52,7 @@ namespace time
         {
             foreach (var transition in transitions.Where(transition => transition.day == day && transition.hour == hour))
             {
+                
                 Debug.Log($"Starting transition for Day {day}, Hour {hour}");
                 StartCoroutine(LerpSkybox(transition.fromSkybox, transition.toSkybox, transition.duration));
                 StartCoroutine(LerpLight(transition.lightGradient, transition.duration));

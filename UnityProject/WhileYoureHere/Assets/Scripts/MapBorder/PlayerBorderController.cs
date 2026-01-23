@@ -44,7 +44,7 @@ namespace MapBorder
             foreach (var borderObject in _borderObjects)
             {
                 borderObject.TryGetComponent<Collider>(out _collider);
-                distances.Add((_player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider,
+                 distances.Add((_player.transform.position - Physics.ClosestPoint(_player.transform.position, _collider,
                     _collider.transform.position, _collider.transform.rotation)).sqrMagnitude);
             }
 

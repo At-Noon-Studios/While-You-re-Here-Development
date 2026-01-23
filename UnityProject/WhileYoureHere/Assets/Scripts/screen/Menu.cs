@@ -16,7 +16,7 @@ namespace screen
             ResetPauseState();
             ChairInteractable.ResetChairState();
             SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene("Day1");
+            SceneManager.LoadScene("Scene");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -49,7 +49,6 @@ namespace Interactable.Holdable
                 if (cam != null)
                     _playerCamera = cam.transform;
             }
-
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -217,7 +216,7 @@ namespace Interactable.Holdable
         {
             if (!IsGameplayScene(scene.name))
             {
-                Destroy(gameObject);
+                // Destroy(gameObject);
             }
         }
 

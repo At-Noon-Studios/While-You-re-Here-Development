@@ -2,6 +2,7 @@ using System;
 using ScriptableObjects.Controls;
 using ScriptableObjects.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PlayerControls
 {

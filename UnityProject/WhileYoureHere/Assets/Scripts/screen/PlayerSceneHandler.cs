@@ -21,7 +21,7 @@ namespace screen
         {
             if (!IsGameplayScene(scene.name))
             {
-                Destroy(gameObject);
+                // Destroy(gameObject);
             }
         }
 
